@@ -112,17 +112,67 @@ def governance_blockers(
     bracket: dict[str, object],
     playoff_calendar: dict[str, object],
     fcs: dict[str, object],
+    hfa_ruling_applied: bool = False,
+    fcs_ruling_applied: bool = False,
+    thirteen_game_exceptions_validated: bool = False,
+    a8_ecl_ordering_resolved: bool = False,
+    sos_semantics_governed: bool = False,
+    fcs_unified_scale_governed: bool = False,
+    quarterfinal_mapping_ruling_applied: bool = False,
 ) -> list[str]:
+    """Governed-evidence blockers.
+
+    Each ``*_applied`` / ``*_validated`` flag is supplied by the caller only
+    after the corresponding R2 ruling has been encoded **and** its deterministic
+    validation has passed. A ruling on its own never clears anything here; the
+    default for every flag is the pre-ruling, fail-closed state.
+    """
     blockers: list[str] = []
+
+    # R2-HFA-3P5 settles which value V3 uses. The registers still disagree and
+    # are not edited; the ruling is what makes the disagreement non-blocking.
     if model_parameters["hfa_v2_legacy_points"] != model_parameters["hfa_team_master_locked_points"]:
-        blockers.append("governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5")
+        if not hfa_ruling_applied:
+            blockers.append("governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5")
+
+    # ENG-CAL-MARGIN stays OPEN: no ruling can substitute for calibration evidence.
     if model_parameters["margin_sd_calibration_status"] == "OPEN":
         blockers.append("governance.GAME_SD_CALIBRATION_OPEN")
+
+    # OI-SCHED-13 stays OPEN in the register; R2-SCHED-13GAME approves the five
+    # schedules and the mounted rows must validate before it clears.
     if model_parameters["schedule_13_game_exception_status"] == "OPEN":
-        blockers.append("governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED")
-    if not fcs["model_use_authorized"]:
+        if not thirteen_game_exceptions_validated:
+            blockers.append("governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED")
+
+    # The POWER_CRUNCH Build Manifest still records FALSE. R2-FCS-ELO-1250
+    # supersedes it for V3 use; the manifest itself is left unedited.
+    if not fcs["model_use_authorized"] and not fcs_ruling_applied:
         blockers.append("governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE")
+
+    # R2-NO-RESEED rules out reseeding and binds every edge the official artifact
+    # states, but Bracket_Flow never says which R1 winner fills E/F/G/H. That
+    # remains true of the artifact — the flag below is deliberately still False.
+    # Ruling R3-CFP-FIXED-TOPOLOGY fills the gap by successor Chairman authority,
+    # which is a separate flag precisely so the workbook is never recorded as
+    # having contained a mapping it does not contain.
     if not bracket["quarterfinal_opponent_mapping_explicit"]:
-        blockers.append("governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT")
-    blockers.append("governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT")
+        if not quarterfinal_mapping_ruling_applied:
+            blockers.append("governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT")
+
+    # R2-A8-ECL-ORDER breaks the cycle causally rather than by picking a tiebreak.
+    if not a8_ecl_ordering_resolved:
+        blockers.append("governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT")
+
+    # R2-SOS fixes the weights; nothing in the repository defines the OWP/OOWP
+    # denominator, exclusion or instance-weighting rules they are applied to.
+    if not sos_semantics_governed:
+        blockers.append("governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED")
+
+    # R2-FCS-ELO-1250 fixes an Elo and the rating policy is settled. What is
+    # missing is the model-scale adapter onto the unified neutral-points axis,
+    # so this is namespaced model_scale. rather than governance.
+    if not fcs_unified_scale_governed:
+        blockers.append("model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER")
+
     return blockers

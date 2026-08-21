@@ -1,0 +1,422 @@
+{
+  "artifact": "V3_GOVERNANCE_STATUS_R4.json",
+  "artifact_status": "SUCCESSOR_LIVE_GOVERNANCE_STATUS",
+  "supersedes": "V3_GOVERNANCE_STATUS_R3.json (retained unedited as the R3 record)",
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "note": "PR #3 final common-opponent authority binding. One narrow remediation: the exact common-opponent formula is bound as governed under direct Chairman authority and an affirmative production gate is added. No blocker was retired, none was opened, no calibration value was promoted, no FCS point adapter was constructed, no season simulation was run and no probability artifact was produced.",
+  "scope": "AUTHORITY_REPRESENTATION_ONLY",
+  "base_sha": "3b46e561b8d939e10ba5d6ff2f69923d963a148e",
+  "starting_candidate_sha": "d5320c68e995e46848ee04bbb0acac97eb61371b",
+  "starting_candidate_sha_role": "R3 candidate head of PR #3, independently re-verified before any edit: 352 full tests, 293 V3 tests, pip check clean, diff-check exit 0, blocker set exactly nine.",
+  "r2_parent_sha": "bbc353e823f8c5e49ee241d412a265481daf9cb0",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it; the final candidate SHA belongs to the external handoff receipt returned after commit, not to this file.",
+  "chairman_ruling_ids_supplied": false,
+  "chairman_ruling_id_note": "The instruction issued the common-opponent formula ruling directly but supplied no Chairman ruling ID. The entry carries a locally assigned convergence_id (DERIVED, stable, prefixed R4-) and a chairman_ruling_id that stays null. No historical Chairman ruling ID was fabricated.",
+  "chairman_rulings": [
+    {
+      "convergence_id": "R4-COMMON-OPP-FORMULA",
+      "chairman_ruling_id": null,
+      "subject": "Performance against common opponents — the exact scoring formula",
+      "decision": "COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common. These exact weights are the governed rule, not a configurable production parameter: 0.20/0.60/0.20, 0.25/0.25/0.50 and every other weighting are refused for governed use. The formula is applied to the common-opponent subset under the OWP/OOWP denominator and exclusion semantics already governed by ruling R3-SOS-OWP-OOWP-SEMANTICS, which this ruling does not reopen or alter. UNAVAILABLE propagation stays fail-closed: an unavailable WP_common, OWP_common or OOWP_common makes the score UNAVAILABLE and the tiebreak advances to the next already-governed criterion rather than inventing 0, 0.0 or 0.500.",
+      "evidence": [
+        "OPERATION SYTHALAX CHAIRMAN RULING — COMMON-OPPONENT PERFORMANCE FORMULA. Issued APPROVED: 'For all governed common-opponent performance comparisons, use exactly: COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common.' The ruling states in terms that 'the coefficients 0.25 / 0.50 / 0.25 are canonical and exact', and carries the human authorization line 'DIRECT CHAIRMAN AUTHORITY'.",
+        "The same ruling states that it supersedes any earlier wording describing the formula as 'some formula that looks like' this structure. The exactness of the coefficients is therefore issued, not inferred from the earlier text.",
+        "The same ruling holds the separately governed OWP/OOWP construction semantics unchanged, keeps UNAVAILABLE inputs fail-closed and advancing to the next governed tiebreak criterion, and states that it changes none of SOS, CCG rules, postseason topology, G5 seed #5, FCS Elo policy, calibration parameters, Board authority, SOR or SRS.",
+        "Weights are the SOS shape of ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP), restricted to the common-opponent subset; convergence ruling R2-COMMON-OPP carried the same shape forward before this direct approval was issued.",
+        "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-08 records the common-opponent question as OPEN / REQUIRES RULING. That entry predates this ruling and is preserved unedited as evidence of the prior state; it is not authority against the later direct approval."
+      ],
+      "retires": [],
+      "supersedes": [
+        "18_ACC_POLICY_REFERENCE ACC-EXT-08 read as leaving the common-opponent formula OPEN / REQUIRES RULING — superseded to exactly the extent that the exact 0.25/0.50/0.25 formula is now directly approved. The workbook row itself is preserved unedited.",
+        "COMMON_OPPONENT_FORMULA_IS_CANONICAL = False and the CONVERGENCE_RULING_ONLY status carried under ruling R2-COMMON-OPP, which predate this direct approval.",
+        "Earlier Chairman wording describing the common-opponent formula as 'some formula that looks like the following' — superseded by the issued ruling, which states the coefficients are canonical and exact. The earlier wording is preserved as the prior record and is not edited.",
+        "RESULT_WEIGHTED_OPPONENT_STRENGTH as a candidate common-opponent formula."
+      ],
+      "provenance": "FACT",
+      "instruction": "OPERATION SYTHALAX — PR #3 FINAL COMMON-OPPONENT AUTHORITY BINDING",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY"
+    }
+  ],
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blocker_count_before": 9,
+  "resolved_blockers": [],
+  "opened_blockers": [],
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "live_blocker_count": 9,
+  "live_blocker_classification": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "inputs.board_of_record_i_k": "ARTIFACT_CUSTODY",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "blocker_accounting": {
+    "unchanged": true,
+    "retired_by_r4": [],
+    "opened_by_r4": [],
+    "classification_counts": {
+      "CALIBRATION": 7,
+      "ARTIFACT_CUSTODY": 1,
+      "ENGINEERING_MODEL_SCALE": 1,
+      "HUMAN_GOVERNANCE": 0
+    },
+    "note": "This patch resolves an authority representation defect. It resolves none of the nine project execution blockers, and creates no common-opponent blocker merely because the authority classification changed."
+  },
+  "common_opponents": {
+    "formula": "COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common",
+    "formula_authority": "R4-COMMON-OPP-FORMULA",
+    "formula_authority_class": "DIRECT_CHAIRMAN_AUTHORITY",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "formula_is_canonical": true,
+    "formula_is_canonical_before": false,
+    "status": "GOVERNED — COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common, approved directly by the Chairman under ruling R4-COMMON-OPP-FORMULA. Ruling R3-SOS-OWP-OOWP-SEMANTICS separately governs the OWP/OOWP denominator semantics applied underneath it.",
+    "status_before": "CONVERGENCE_RULING_ONLY — the 0.25/0.50/0.25 common-opponent shape is not stated by any mounted artifact. Ruling R3-SOS-OWP-OOWP-SEMANTICS governs the OWP/OOWP denominator semantics applied here and did not govern this formula.",
+    "weights": {
+      "wp_common": 0.25,
+      "owp_common": 0.5,
+      "oowp_common": 0.25
+    },
+    "weights_are_the_governed_rule": true,
+    "weights_are_a_runtime_parameter": false,
+    "refused_weightings": [
+      [
+        0.2,
+        0.6,
+        0.2
+      ],
+      [
+        0.25,
+        0.25,
+        0.5
+      ],
+      [
+        0.5,
+        0.25,
+        0.25
+      ],
+      [
+        1.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "production_gate": "common_opponents.require_governed_common_opponent_formula",
+    "production_gate_location": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/common_opponents.py",
+    "governed_accessors": [
+      "common_opponents.governed_common_opponent_score",
+      "common_opponents.governed_compare_common_opponents"
+    ],
+    "gate_checks": [
+      "formula status is GOVERNED",
+      "authority source is direct Chairman / successor authority",
+      "weights are exactly 0.25 / 0.50 / 0.25",
+      "the weights the module applies still match the governed record",
+      "the bound OWP/OOWP semantics are the governed R3-SOS-OWP-OOWP-SEMANTICS ones",
+      "UNAVAILABLE remains fail-closed",
+      "TEST_FIXTURE cannot promote itself",
+      "PROPOSAL cannot promote itself",
+      "OPEN / UNRESOLVED historical evidence cannot promote itself",
+      "pre-ruling historical evidence cannot override the successor authority"
+    ],
+    "denominator_semantics_ruling": "R3-SOS-OWP-OOWP-SEMANTICS",
+    "denominator_semantics_changed": false,
+    "denominator_semantics_reopened": false,
+    "layers_kept_distinct": "Layer A (formula authority) and Layer B (OWP/OOWP construction) are asserted separately and in both directions: a governed formula over ungoverned semantics fails closed, and governed semantics under an ungoverned formula fails closed.",
+    "unavailable_behaviour": "UNAVAILABLE / NULL — never 0, 0.0 or 0.500; fail-closed",
+    "unpromoted_alternatives": [
+      "RESULT_WEIGHTED_OPPONENT_STRENGTH (opponent strength multiplied by a 1/0 result)"
+    ],
+    "historical_sources_rewritten": false,
+    "historical_pre_ruling_evidence": [
+      "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-08 — common-opponent question recorded OPEN / REQUIRES RULING (pre-ruling).",
+      "Convergence ruling R2-COMMON-OPP — carried the shape forward before any direct approval existed (pre-ruling)."
+    ],
+    "historical_chairman_ruling_id_fabricated": false,
+    "authority_hierarchy": [
+      "older artifact state / open item (ACC-EXT-08 OPEN / REQUIRES RULING)",
+      "later direct Chairman ruling (R4-COMMON-OPP-FORMULA)",
+      "successor governed authority"
+    ],
+    "production_consumer_wired_by_r4": false,
+    "production_consumer_note": "No production decision path was invented to exercise the gate. The committee and A8/ECL tiebreak chains still receive an injected scorer, exactly as before. The affirmative gate exists so future production wiring cannot legitimately obtain governed authority without validation.",
+    "formula_ruling": {
+      "title": "OPERATION SYTHALAX CHAIRMAN RULING — COMMON-OPPONENT PERFORMANCE FORMULA",
+      "disposition": "APPROVED",
+      "issued_directly": true,
+      "coefficients_declared_canonical_and_exact": true,
+      "human_authorization": "DIRECT CHAIRMAN AUTHORITY",
+      "supersedes_hedged_wording": "Supersedes any earlier wording describing the formula as 'some formula that looks like' this structure. The earlier wording is preserved as the prior record and was not edited.",
+      "scope_carve_outs_stated_by_the_ruling": [
+        "SOS",
+        "CCG rules",
+        "postseason topology",
+        "G5 seed #5",
+        "FCS Elo policy",
+        "calibration parameters",
+        "Board authority",
+        "SOR",
+        "SRS"
+      ],
+      "owp_oowp_semantics_held_unchanged": true,
+      "unavailable_remains_fail_closed": true
+    },
+    "formula_exactness_is_issued_not_inferred": true
+  },
+  "sos_semantics": {
+    "ruling": "R3-SOS-OWP-OOWP-SEMANTICS",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "weights": {
+      "wp": 0.25,
+      "owp": 0.5,
+      "oowp": 0.25
+    },
+    "weights_changed_by_r3": false,
+    "governed_semantics": {
+      "semantics_id": "R3-SOS-OWP-OOWP-SEMANTICS",
+      "authority": "Direct Chairman authority, ruling R3-SOS-OWP-OOWP-SEMANTICS (OPERATION SYTHALAX — PR #3 FINAL CONVERGENCE)",
+      "exclude_rated_team_from_owp": true,
+      "instance_weighting": "PER_GAME",
+      "exclude_rated_team_from_oowp": false,
+      "oowp_construction": "MEAN_OF_OPPONENT_OWP",
+      "schedule_only_fcs_treatment": "INCLUDE_WHERE_GOVERNED_RECORD_EXISTS",
+      "zero_qualifying_games": "UNAVAILABLE"
+    },
+    "zero_qualifying_observations": "UNAVAILABLE / NULL — never 0, 0.0 or 0.500",
+    "tiebreak_rule": "A criterion whose required governed component is UNAVAILABLE does not resolve the tie; processing advances to the next already-governed tiebreak stage."
+  },
+  "cfp_topology": {
+    "ruling": "R3-CFP-FIXED-TOPOLOGY",
+    "resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+    "quarterfinal_slot_edges_stated_in_artifact": false,
+    "playoff_workbook_rewritten": false,
+    "playoff_workbook_reinterpreted": false,
+    "playoff_workbook_provenance": "2026 Playoff Calendar OFFICIAL 2.xlsx supplied prior structural evidence. Its generic W(R1) labels did not bind the four Round-1 winners to QF E/F/G/H. Direct successor Chairman authority now fills that ambiguity. The historical workbook was not rewritten and was not reinterpreted as containing information absent from it.",
+    "topology": {
+      "rulings": [
+        "R2-G5-SEED5",
+        "R2-NO-RESEED",
+        "R3-CFP-FIXED-TOPOLOGY"
+      ],
+      "reseeding_permitted": false,
+      "bye_seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "play_in_seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "play_in_edges": {
+        "PI_A": [
+          12,
+          13
+        ],
+        "PI_B": [
+          11,
+          14
+        ]
+      },
+      "round_1_edges": {
+        "R1_A": [
+          7,
+          10
+        ],
+        "R1_B": [
+          8,
+          9
+        ],
+        "R1_C": [
+          6,
+          "PI_B"
+        ],
+        "R1_D": [
+          5,
+          "PI_A"
+        ]
+      },
+      "quarterfinal_hosts": {
+        "QF_E": 1,
+        "QF_F": 2,
+        "QF_G": 3,
+        "QF_H": 4
+      },
+      "quarterfinal_slot_edges": {
+        "QF_E": "R1_B",
+        "QF_F": "R1_A",
+        "QF_G": "R1_C",
+        "QF_H": "R1_D"
+      },
+      "semifinal_edges": {
+        "SEMI_A": [
+          "QF_E",
+          "QF_H"
+        ],
+        "SEMI_B": [
+          "QF_F",
+          "QF_G"
+        ]
+      },
+      "slot_order": [
+        "PI_A",
+        "PI_B",
+        "R1_A",
+        "R1_B",
+        "R1_C",
+        "R1_D",
+        "QF_E",
+        "QF_F",
+        "QF_G",
+        "QF_H",
+        "SEMI_A",
+        "SEMI_B",
+        "CHAMPIONSHIP"
+      ],
+      "g5_automatic_bid_seed": 5,
+      "quarterfinal_slot_edges_stated_in_artifact": false,
+      "quarterfinal_mapping_resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+      "bracket_regime_s4_round_1_text": "First Round 5v12, 6v11, 7v10, 8v9"
+    }
+  },
+  "g5_automatic_bid": {
+    "ruling": "R2-G5-SEED5",
+    "seed": 5,
+    "reopened_by_r3": false,
+    "interaction": "The G5 automatic-bid champion is seed 5 exactly and therefore always meets Winner(PI-A) in R1-D. It never enters PI-A or PI-B, stays seed 5 even when its natural committee rank is top four, and is not reseeded after any result."
+  },
+  "sor": {
+    "governed_2026_r_ref": 1893.3,
+    "superseded": 1901.0,
+    "stale_library_default": 1684.9,
+    "reopened_by_r3": false,
+    "unratified_items": [
+      "P_TO_STRENGTH_TRANSFORM",
+      "REFERENCE_HFA"
+    ],
+    "report_status": "RESEARCH_REPORT_ONLY"
+  },
+  "srs": {
+    "mathematical_status": "MATHEMATICALLY_VERIFIED",
+    "canonical_anchor_validation": "NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS",
+    "canonical_spec_mounted": false,
+    "canonical_validation_anchors": [],
+    "evidence_mount_attempted": true,
+    "evidence_mount_result": "CANONICAL_SRS_EVIDENCE_NOT_ACCESSIBLE_TO_AGENT",
+    "evidence_searched_for": [
+      "srs_spec.md",
+      "compute_srs.py",
+      "srs_2025.csv",
+      "srs_validation_2025.txt"
+    ],
+    "claim_boundary_changed_by_r3": false,
+    "note": "Absence here is absence from this environment, not a claim that canonical SRS does not exist in the broader project. No new execution blocker was created: governed execution does not currently require the anchors."
+  },
+  "board_of_record": {
+    "blocker": "inputs.board_of_record_i_k",
+    "classification": "ARTIFACT_CUSTODY",
+    "required_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "required_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "mounted": false,
+    "mount_result": "BOARD_IK_ARTIFACT_NOT_ACCESSIBLE_TO_AGENT",
+    "historical_board_substituted": false,
+    "note": "The approved binary is not present in this environment; a filesystem-wide SHA-256 sweep of every workbook found no match. The only files bearing the name are ephemeral pytest fixtures (49 bytes, sha256 f20b2fa5cd69598935c5d3e4b8323ffdf6ba3eebc8349991182719fbd378ebbc) and a test fixture is never promoted to production authority. Board I-H was not substituted and nothing was fabricated, so the blocker stays open."
+  },
+  "fcs": {
+    "fixed_elo": 1250.0,
+    "policy_resolved": true,
+    "policy_reopened_by_r3": false,
+    "scale_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+    "adapter_constructed": false
+  },
+  "calibration": {
+    "values_promoted_by_r3": [],
+    "all_values_null": true,
+    "game_sd_20_2_promoted": false,
+    "lane": "Quick Core historical-calibration / model-scale lanes",
+    "values_promoted_by_r4": []
+  },
+  "governed_reference_inputs_unchanged": true,
+  "artifact_hashes": {
+    "2026 Bracket Regime LOCKED.xlsx": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab",
+    "2026 Playoff Calendar OFFICIAL 2.xlsx": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20",
+    "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+    "2026_FBS_Schedule_LOCKED_v5.xlsx": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "Model_Parameters_v2_5_APPROVED.xlsx": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+    "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b",
+    "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+  },
+  "v2_1_static_control_sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a",
+  "parent_build_manifest": {
+    "artifact": "V3_BUILD_MANIFEST.json",
+    "edited": false,
+    "execution_blocker_count": 18,
+    "test_count": 74
+  },
+  "parent_status_artifact": {
+    "artifact": "V3_GOVERNANCE_STATUS_R3.json",
+    "edited": false,
+    "live_blocker_count": 9
+  },
+  "simulation_run": false,
+  "output_probabilities_generated": false,
+  "canonical_config": {
+    "writes_canonical_config": false
+  },
+  "test_counts": {
+    "total": 409,
+    "v3": 350,
+    "predecessor_r3_total": 352,
+    "predecessor_r3_v3": 293,
+    "measured_at": "final authority-binding candidate, before commit",
+    "note": "Counted at artifact generation time on the working tree that became the final candidate. Not the SHA of the commit containing this file."
+  },
+  "provenance_class": {
+    "FACT": "Reproduced from a mounted artifact or issued verbatim by the Chairman.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "ASSUMPTION": "None recorded."
+  },
+  "precheck": {
+    "result": "PASS",
+    "candidate_sha": "d5320c68e995e46848ee04bbb0acac97eb61371b",
+    "reproduced_total_tests": 352,
+    "reproduced_v3_tests": 293,
+    "pip_check": "clean",
+    "diff_check_exit": 0,
+    "working_tree": "clean",
+    "python": "3.12.3",
+    "blocker_set_equality_both_directions": true
+  }
+}

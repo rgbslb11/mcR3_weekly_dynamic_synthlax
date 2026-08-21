@@ -26,10 +26,21 @@ def test_governed_architecture_and_blockers_are_explicit():
     assert "calibration.blowout_treatment" in blockers
     assert "calibration.game_sd_points" in blockers
     assert "calibration.sample_size_regularization" in blockers
-    assert "hfa_baseline_points" in blockers
-    assert "fcs_translation_policy" in blockers
-    assert "committee_tiebreak_strength_source" in blockers
-    assert "inputs.aac_divisions_csv" in blockers
+    # Retired by R2 rulings, each encoded as a value the config must actually carry.
+    assert cfg.hfa_baseline_points == 3.5
+    assert cfg.fcs_translation_policy == "FIXED_ELO_1250"
+    assert cfg.committee_tiebreak_strength_source is None
+    assert cfg.committee_tiebreak_policy == "DETERMINISTIC_COMMITTEE_TIEBREAK_CHAIN_R2"
+    assert cfg.inputs.aac_divisions_csv is not None
+    for retired in (
+        "hfa_baseline_points",
+        "fcs_translation_policy",
+        "committee_tiebreak_strength_source",
+        "inputs.aac_divisions_csv",
+    ):
+        assert retired not in blockers
+    # Opened by R2: the Board of Record it names is not mounted.
+    assert "inputs.board_of_record_i_k" in blockers
     with pytest.raises(GovernanceBlock):
         cfg.require_executable()
 
@@ -45,8 +56,17 @@ def test_real_inputs_pass_structural_preflight():
     assert report["schedule"]["regular_games"] == 736
     assert report["schedule"]["ccg_templates"] == 7
     assert report["schedule"]["schedule_games_sha256_certified"] == "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221"
-    assert "SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH" in report["schedule"]["provenance_anomalies"]
+    # The Games-sheet content hash now reproduces the certification exactly; the
+    # binary artifact still is not the registered v5 upload.
+    assert report["schedule"]["schedule_games_sha256_reproduced"] == report["schedule"]["schedule_games_sha256_certified"]
+    assert "SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH" not in report["schedule"]["provenance_anomalies"]
+    # The binary observation is preserved even though a ruling now accepts it.
     assert "SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5" in report["schedule"]["provenance_anomalies"]
+    assert report["schedule"]["blocking_provenance_anomalies"] == []
+    assert (
+        report["schedule"]["governed_binary_disposition"]
+        == "ACCEPTED_SOURCE_COPY_UNDER_R2_SCHED_V5_AUTH"
+    )
 
 
 def test_canonical_team_index_is_exactly_134():

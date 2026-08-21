@@ -27,12 +27,29 @@ def test_governance_inspections_are_fail_closed_and_visible():
     assert governed["fcs_authority"]["model_use_authorized"] is False
     assert governed["bracket"]["quarterfinal_opponent_mapping_explicit"] is False
 
-    assert "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5" in blockers
+    # The governed registers are unchanged: the register rows above still say
+    # exactly what they said before R2. What changed is that rulings now make
+    # four of them non-blocking, which is visible as an absence here.
+    for retired in (
+        "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+        "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+        "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+        "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+    ):
+        assert retired not in blockers
+
+    # Calibration evidence cannot be ruled away. It is still here.
     assert "governance.GAME_SD_CALIBRATION_OPEN" in blockers
-    assert "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED" in blockers
-    assert "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE" in blockers
-    assert "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT" in blockers
-    assert "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT" in blockers
+    assert "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER" in blockers
+
+    # Retired by the R3 final convergence. The register row above is unchanged --
+    # quarterfinal_opponent_mapping_explicit is still False, because the workbook
+    # still does not state the mapping. Successor Chairman authority does.
+    for retired_by_r3 in (
+        "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+        "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    ):
+        assert retired_by_r3 not in blockers
 
 
 def test_schedule_phase_partition_preserves_selection_freeze_boundary():

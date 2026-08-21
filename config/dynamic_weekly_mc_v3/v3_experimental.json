@@ -1,10 +1,27 @@
 {
   "model_name": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
   "model_version": "3.0.0-experimental-harness",
-  "configuration_version": "V3-PLACEHOLDER-2026-08-20-001",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
   "paths": 10000,
   "base_seed": 20260803,
-  "weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  "weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
   "first_promoted_rerating_after_week": 2,
   "prior_decay": {
     "0": 1.0,
@@ -14,11 +31,12 @@
     "4": 0.2,
     "5": 0.0
   },
-  "hfa_baseline_points": null,
+  "hfa_baseline_points": 3.5,
   "freeze_strength_after_selection": true,
   "write_path_level_parquet": true,
-  "fcs_translation_policy": null,
+  "fcs_translation_policy": "FIXED_ELO_1250",
   "committee_tiebreak_strength_source": null,
+  "committee_tiebreak_policy": "DETERMINISTIC_COMMITTEE_TIEBREAK_CHAIN_R2",
   "calibration": {
     "weekly_performance_residual_coefficient": null,
     "weekly_movement_cap_points": null,
@@ -36,6 +54,7 @@
     "playoff_calendar_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
     "fcs_reconciled_master_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
     "v2_1_control_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
-    "aac_divisions_csv": null
+    "aac_divisions_csv": "governed/aac_divisions_2026_R2_SUCCESSOR.csv",
+    "board_of_record_xlsx": null
   }
 }

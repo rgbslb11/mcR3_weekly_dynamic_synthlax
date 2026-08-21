@@ -1,0 +1,413 @@
+{
+  "artifact": "V3_GOVERNANCE_STATUS_R3.json",
+  "artifact_status": "SUCCESSOR_LIVE_GOVERNANCE_STATUS",
+  "supersedes": "V3_GOVERNANCE_STATUS_R2.json (retained unedited as the R2 record)",
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "note": "PR #3 final convergence. Two governance rulings encoded and retired; no calibration value promoted, no FCS point adapter constructed, no season simulation and no 2026 probabilities produced.",
+  "base_sha": "3b46e561b8d939e10ba5d6ff2f69923d963a148e",
+  "converged_from_head_sha": "bbc353e823f8c5e49ee241d412a265481daf9cb0",
+  "converged_from_head_sha_role": "R2 adjudicated candidate, independently re-verified in Phase A",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it; the final candidate SHA belongs to the external handoff receipt returned after commit, not to this file.",
+  "chairman_ruling_ids_supplied": false,
+  "chairman_ruling_id_note": "The instruction issued both rulings but supplied no Chairman ruling IDs. Each carries a locally assigned convergence_id (DERIVED, stable, prefixed R3-) and a chairman_ruling_id of null. The local identifier is a handle for code and tests and is not a governance ID.",
+  "chairman_rulings": [
+    {
+      "convergence_id": "R3-SOS-OWP-OOWP-SEMANTICS",
+      "chairman_ruling_id": null,
+      "subject": "Committee SOS — OWP / OOWP denominator and exclusion semantics",
+      "decision": "SOS(T) = 0.25*WP(T) + 0.50*OWP(T) + 0.25*OOWP(T), unchanged. WP(T) = wins by T / completed qualifying games played by T, through the applicable week only. OWP(T): for every completed qualifying schedule instance T-vs-O, take O's qualifying completed-game record through that week, EXCLUDE all completed games O played against T, and include the resulting winning percentage once for EACH actual completed meeting between T and O; OWP(T) is the arithmetic mean of those schedule-instance values. OOWP(T): for every completed qualifying schedule instance T-vs-O, take O's own governed OWP under the same exclusion and schedule-instance rules and include it once for that schedule instance; OOWP(T) is the arithmetic mean of those schedule-instance OWP(O) values. OWP and OOWP are schedule-instance weighted: a repeated opponent counts once per meeting, two meetings contribute twice, and unique-opponent averaging is not substituted. Future games are excluded. Schedule-only FCS entities contribute only governed available qualifying completed-game records; where sufficient governed record data does not exist the required component is UNAVAILABLE, never invented as a win, a loss, .500 or 0. A component with zero qualifying observations is UNAVAILABLE / NULL, never 0, 0.0 or 0.500. For reporting, unavailability is stamped with provenance; for tiebreaks, a criterion that cannot be evaluated because a required governed component is unavailable does not resolve the tie and processing advances to the next already-governed tiebreak stage.",
+      "evidence": [
+        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL CONVERGENCE B1.",
+        "Weights unchanged from ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP)."
+      ],
+      "retires": [
+        "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED"
+      ],
+      "supersedes": [],
+      "provenance": "FACT",
+      "instruction": "OPERATION SYTHALAX — PR #3 FINAL CONVERGENCE",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY"
+    },
+    {
+      "convergence_id": "R3-CFP-FIXED-TOPOLOGY",
+      "chairman_ruling_id": null,
+      "subject": "2026 synthetic 14-team CFP bracket topology",
+      "decision": "PI-A = seed 12 v seed 13; PI-B = seed 11 v seed 14. R1-A = seed 7 v seed 10; R1-B = seed 8 v seed 9; R1-C = seed 6 v Winner(PI-B); R1-D = seed 5 v Winner(PI-A). QF-E = seed 1 v Winner(R1-B); QF-F = seed 2 v Winner(R1-A); QF-G = seed 3 v Winner(R1-C); QF-H = seed 4 v Winner(R1-D). SF-A = Winner(QF-E) v Winner(QF-H); SF-B = Winner(QF-F) v Winner(QF-G). There is no reseeding. The bracket consumes final assigned seeds, not natural committee ranks, and an upset never alters future slot topology.",
+      "evidence": [
+        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL CONVERGENCE B4.",
+        "2026 Playoff Calendar OFFICIAL 2.xlsx!Bracket_Flow supplied prior structural evidence only: 'E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)'. Those generic W(R1) labels never bound the four Round-1 winners to E/F/G/H."
+      ],
+      "retires": [
+        "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
+      ],
+      "supersedes": [
+        "2026 Bracket Regime LOCKED.xlsx!S4 'First Round 5v12, 6v11, 7v10, 8v9' read as fixed seed-versus-seed Round-1 pairings — superseded to exactly the extent that seeds 5 and 6 meet play-in winners in a 14-team field."
+      ],
+      "provenance": "FACT",
+      "instruction": "OPERATION SYTHALAX — PR #3 FINAL CONVERGENCE",
+      "resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
+    }
+  ],
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blocker_count_before": 11,
+  "resolved_blockers": [
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
+  ],
+  "resolution_reasons": {
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED": "DIRECT_CHAIRMAN_AUTHORITY",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
+  },
+  "opened_blockers": [],
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "live_blocker_count": 9,
+  "live_blocker_classification": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "inputs.board_of_record_i_k": "ARTIFACT_CUSTODY",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "convergence_delta": {
+    "r1_baseline_count": 18,
+    "r1_audited_live_count": 17,
+    "r2_expected_live_count": 11,
+    "retired_by_r2": [
+      "committee_tiebreak_strength_source",
+      "fcs_translation_policy",
+      "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+      "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+      "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+      "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+      "hfa_baseline_points",
+      "inputs.aac_divisions_csv",
+      "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5"
+    ],
+    "opened_by_r2": [
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "carried_forward": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
+    ],
+    "expected_live": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "retired_by_r3": [
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
+    ],
+    "opened_by_r3": [],
+    "r3_expected_live_count": 9,
+    "r3_expected_live": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "r3_expected_live_if_board_mounted": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "r3_retirement_reasons": {
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED": "DIRECT_CHAIRMAN_AUTHORITY",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
+    }
+  },
+  "sos_semantics": {
+    "ruling": "R3-SOS-OWP-OOWP-SEMANTICS",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "weights": {
+      "wp": 0.25,
+      "owp": 0.5,
+      "oowp": 0.25
+    },
+    "weights_changed_by_r3": false,
+    "governed_semantics": {
+      "semantics_id": "R3-SOS-OWP-OOWP-SEMANTICS",
+      "authority": "Direct Chairman authority, ruling R3-SOS-OWP-OOWP-SEMANTICS (OPERATION SYTHALAX — PR #3 FINAL CONVERGENCE)",
+      "exclude_rated_team_from_owp": true,
+      "instance_weighting": "PER_GAME",
+      "exclude_rated_team_from_oowp": false,
+      "oowp_construction": "MEAN_OF_OPPONENT_OWP",
+      "schedule_only_fcs_treatment": "INCLUDE_WHERE_GOVERNED_RECORD_EXISTS",
+      "zero_qualifying_games": "UNAVAILABLE"
+    },
+    "zero_qualifying_observations": "UNAVAILABLE / NULL — never 0, 0.0 or 0.500",
+    "tiebreak_rule": "A criterion whose required governed component is UNAVAILABLE does not resolve the tie; processing advances to the next already-governed tiebreak stage."
+  },
+  "common_opponents": {
+    "formula_authority": "R2-COMMON-OPP",
+    "formula_is_canonical": false,
+    "status": "CONVERGENCE_RULING_ONLY — the 0.25/0.50/0.25 common-opponent shape is not stated by any mounted artifact. Ruling R3-SOS-OWP-OOWP-SEMANTICS governs the OWP/OOWP denominator semantics applied here and did not govern this formula.",
+    "changed_by_r3": "Denominator semantics only. The 0.25/0.50/0.25 shape was neither introduced nor newly promoted here, and no result-weighted alternative was adopted.",
+    "unpromoted_alternatives": [
+      "RESULT_WEIGHTED_OPPONENT_STRENGTH (opponent strength multiplied by a 1/0 result)"
+    ]
+  },
+  "cfp_topology": {
+    "ruling": "R3-CFP-FIXED-TOPOLOGY",
+    "resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+    "quarterfinal_slot_edges_stated_in_artifact": false,
+    "playoff_workbook_rewritten": false,
+    "playoff_workbook_reinterpreted": false,
+    "playoff_workbook_provenance": "2026 Playoff Calendar OFFICIAL 2.xlsx supplied prior structural evidence. Its generic W(R1) labels did not bind the four Round-1 winners to QF E/F/G/H. Direct successor Chairman authority now fills that ambiguity. The historical workbook was not rewritten and was not reinterpreted as containing information absent from it.",
+    "topology": {
+      "rulings": [
+        "R2-G5-SEED5",
+        "R2-NO-RESEED",
+        "R3-CFP-FIXED-TOPOLOGY"
+      ],
+      "reseeding_permitted": false,
+      "bye_seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "play_in_seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "play_in_edges": {
+        "PI_A": [
+          12,
+          13
+        ],
+        "PI_B": [
+          11,
+          14
+        ]
+      },
+      "round_1_edges": {
+        "R1_A": [
+          7,
+          10
+        ],
+        "R1_B": [
+          8,
+          9
+        ],
+        "R1_C": [
+          6,
+          "PI_B"
+        ],
+        "R1_D": [
+          5,
+          "PI_A"
+        ]
+      },
+      "quarterfinal_hosts": {
+        "QF_E": 1,
+        "QF_F": 2,
+        "QF_G": 3,
+        "QF_H": 4
+      },
+      "quarterfinal_slot_edges": {
+        "QF_E": "R1_B",
+        "QF_F": "R1_A",
+        "QF_G": "R1_C",
+        "QF_H": "R1_D"
+      },
+      "semifinal_edges": {
+        "SEMI_A": [
+          "QF_E",
+          "QF_H"
+        ],
+        "SEMI_B": [
+          "QF_F",
+          "QF_G"
+        ]
+      },
+      "slot_order": [
+        "PI_A",
+        "PI_B",
+        "R1_A",
+        "R1_B",
+        "R1_C",
+        "R1_D",
+        "QF_E",
+        "QF_F",
+        "QF_G",
+        "QF_H",
+        "SEMI_A",
+        "SEMI_B",
+        "CHAMPIONSHIP"
+      ],
+      "g5_automatic_bid_seed": 5,
+      "quarterfinal_slot_edges_stated_in_artifact": false,
+      "quarterfinal_mapping_resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+      "bracket_regime_s4_round_1_text": "First Round 5v12, 6v11, 7v10, 8v9"
+    }
+  },
+  "g5_automatic_bid": {
+    "ruling": "R2-G5-SEED5",
+    "seed": 5,
+    "reopened_by_r3": false,
+    "interaction": "The G5 automatic-bid champion is seed 5 exactly and therefore always meets Winner(PI-A) in R1-D. It never enters PI-A or PI-B, stays seed 5 even when its natural committee rank is top four, and is not reseeded after any result."
+  },
+  "sor": {
+    "governed_2026_r_ref": 1893.3,
+    "superseded": 1901.0,
+    "stale_library_default": 1684.9,
+    "reopened_by_r3": false,
+    "unratified_items": [
+      "P_TO_STRENGTH_TRANSFORM",
+      "REFERENCE_HFA"
+    ],
+    "report_status": "RESEARCH_REPORT_ONLY"
+  },
+  "srs": {
+    "mathematical_status": "MATHEMATICALLY_VERIFIED",
+    "canonical_anchor_validation": "NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS",
+    "canonical_spec_mounted": false,
+    "canonical_validation_anchors": [],
+    "evidence_mount_attempted": true,
+    "evidence_mount_result": "CANONICAL_SRS_EVIDENCE_NOT_ACCESSIBLE_TO_AGENT",
+    "evidence_searched_for": [
+      "srs_spec.md",
+      "compute_srs.py",
+      "srs_2025.csv",
+      "srs_validation_2025.txt"
+    ],
+    "claim_boundary_changed_by_r3": false,
+    "note": "Absence here is absence from this environment, not a claim that canonical SRS does not exist in the broader project. No new execution blocker was created: governed execution does not currently require the anchors."
+  },
+  "board_of_record": {
+    "blocker": "inputs.board_of_record_i_k",
+    "classification": "ARTIFACT_CUSTODY",
+    "required_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "required_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "mounted": false,
+    "mount_result": "BOARD_IK_ARTIFACT_NOT_ACCESSIBLE_TO_AGENT",
+    "historical_board_substituted": false,
+    "note": "The approved binary is not present in this environment; a filesystem-wide SHA-256 sweep of every workbook found no match. The only files bearing the name are ephemeral pytest fixtures (49 bytes, sha256 f20b2fa5cd69598935c5d3e4b8323ffdf6ba3eebc8349991182719fbd378ebbc) and a test fixture is never promoted to production authority. Board I-H was not substituted and nothing was fabricated, so the blocker stays open."
+  },
+  "fcs": {
+    "fixed_elo": 1250.0,
+    "policy_resolved": true,
+    "policy_reopened_by_r3": false,
+    "scale_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+    "adapter_constructed": false
+  },
+  "calibration": {
+    "values_promoted_by_r3": [],
+    "all_values_null": true,
+    "game_sd_20_2_promoted": false,
+    "lane": "Quick Core historical-calibration / model-scale lanes"
+  },
+  "governed_reference_inputs_unchanged": true,
+  "artifact_hashes": {
+    "2026 Bracket Regime LOCKED.xlsx": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab",
+    "2026 Playoff Calendar OFFICIAL 2.xlsx": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20",
+    "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+    "2026_FBS_Schedule_LOCKED_v5.xlsx": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "Model_Parameters_v2_5_APPROVED.xlsx": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+    "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b",
+    "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+  },
+  "v2_1_static_control_sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a",
+  "parent_build_manifest": {
+    "artifact": "V3_BUILD_MANIFEST.json",
+    "edited": false,
+    "execution_blocker_count": 18,
+    "test_count": 74
+  },
+  "parent_status_artifact": {
+    "artifact": "V3_GOVERNANCE_STATUS_R2.json",
+    "edited": false,
+    "live_blocker_count": 11
+  },
+  "simulation_run": false,
+  "output_probabilities_generated": false,
+  "canonical_config": {
+    "writes_canonical_config": false
+  },
+  "test_counts": {
+    "total": 352,
+    "v3": 293,
+    "measured_at": "final convergence candidate, before commit",
+    "predecessor_r2_total": 286,
+    "predecessor_r2_v3": 227,
+    "note": "Counted at artifact generation time on the working tree that became the final candidate. Not the SHA of the commit containing this file."
+  },
+  "provenance_class": {
+    "FACT": "Reproduced from a mounted artifact or issued verbatim by the Chairman.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "ASSUMPTION": "None recorded."
+  },
+  "phase_a_independent_precheck": {
+    "result": "PASS",
+    "candidate_sha": "bbc353e823f8c5e49ee241d412a265481daf9cb0",
+    "reproduced_total_tests": 286,
+    "reproduced_v3_tests": 227,
+    "pip_check": "clean",
+    "diff_check_exit": 0,
+    "working_tree": "clean",
+    "python": "3.12.3",
+    "blocker_set_equality_both_directions": true
+  }
+}

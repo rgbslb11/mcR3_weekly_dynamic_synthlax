@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from . import board_of_record, committee_policy, fcs, hfa
 from .errors import GovernanceBlock
 
 
@@ -54,6 +55,8 @@ class InputPaths:
     fcs_reconciled_master_xlsx: Path
     v2_1_control_xlsx: Path
     aac_divisions_csv: Path | None = None
+    #: Board of Record named by ruling R2-BOARD-OF-RECORD. Not mounted here.
+    board_of_record_xlsx: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -72,7 +75,10 @@ class V3Config:
     inputs: InputPaths
     calibration: ReratingCalibration
     fcs_translation_policy: str | None = None
+    #: Retired by ruling R2-COMMITTEE-TB. Accepted only as ``None``.
     committee_tiebreak_strength_source: str | None = None
+    #: The structured deterministic chain that replaces it.
+    committee_tiebreak_policy: str | None = None
 
     @classmethod
     def from_json(cls, path: str | Path) -> "V3Config":
@@ -85,11 +91,15 @@ class V3Config:
             value = Path(ip[name])
             return value if value.is_absolute() else (base / value).resolve()
 
-        aac_value = ip.get("aac_divisions_csv")
-        aac_path = None
-        if aac_value:
-            candidate = Path(aac_value)
-            aac_path = candidate if candidate.is_absolute() else (base / candidate).resolve()
+        def optional(name: str) -> Path | None:
+            value = ip.get(name)
+            if not value:
+                return None
+            candidate = Path(value)
+            return candidate if candidate.is_absolute() else (base / candidate).resolve()
+
+        aac_path = optional("aac_divisions_csv")
+        board_path = optional("board_of_record_xlsx")
 
         cal = raw.get("calibration", {})
         weights = cal.get("recent_form_weights")
@@ -115,6 +125,7 @@ class V3Config:
                 fcs_reconciled_master_xlsx=p("fcs_reconciled_master_xlsx"),
                 v2_1_control_xlsx=p("v2_1_control_xlsx"),
                 aac_divisions_csv=aac_path,
+                board_of_record_xlsx=board_path,
             ),
             calibration=ReratingCalibration(
                 weekly_performance_residual_coefficient=cal.get("weekly_performance_residual_coefficient"),
@@ -126,6 +137,7 @@ class V3Config:
             ),
             fcs_translation_policy=raw.get("fcs_translation_policy"),
             committee_tiebreak_strength_source=raw.get("committee_tiebreak_strength_source"),
+            committee_tiebreak_policy=raw.get("committee_tiebreak_policy"),
         )
 
     def prior_weight_after_week(self, week: int) -> float:
@@ -137,15 +149,30 @@ class V3Config:
         return week < self.first_promoted_rerating_after_week
 
     def execution_blockers(self) -> list[str]:
+        """Execution blockers produced by the configuration itself.
+
+        Each governed field clears only when it carries the value its ruling
+        sets, not merely when it is non-null. A configuration holding the legacy
+        HFA, or an invented FCS policy, is still blocked.
+        """
         blockers = [f"calibration.{x}" for x in self.calibration.blockers()]
-        if self.hfa_baseline_points is None:
+        if not hfa.hfa_conflict_resolved(self.hfa_baseline_points):
             blockers.append("hfa_baseline_points")
-        if not self.fcs_translation_policy:
+        if self.fcs_translation_policy != fcs.FCS_FIXED_ELO_POLICY:
             blockers.append("fcs_translation_policy")
-        if not self.committee_tiebreak_strength_source:
-            blockers.append("committee_tiebreak_strength_source")
+        # The retired strength-source concept must stay null; the structured
+        # chain replaces it. A populated retired field is a hard refusal, not a
+        # blocker, so it cannot be mistaken for progress.
+        committee_policy.reject_retired_strength_source(self.committee_tiebreak_strength_source)
+        if self.committee_tiebreak_policy != committee_policy.COMMITTEE_TIEBREAK_POLICY:
+            blockers.append("committee_tiebreak_policy")
         if self.inputs.aac_divisions_csv is None or not self.inputs.aac_divisions_csv.exists():
             blockers.append("inputs.aac_divisions_csv")
+        if (
+            self.inputs.board_of_record_xlsx is None
+            or not self.inputs.board_of_record_xlsx.exists()
+        ):
+            blockers.append(board_of_record.BOARD_OF_RECORD_BLOCKER)
         return blockers
 
     def require_executable(self) -> None:

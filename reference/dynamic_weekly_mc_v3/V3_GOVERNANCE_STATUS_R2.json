@@ -1,0 +1,805 @@
+{
+  "aac_divisions_artifact": {
+    "blocker": null,
+    "identity": "aac_divisions_2026_R2_SUCCESSOR.csv",
+    "is_governed": true,
+    "legacy": {
+      "bytes": 577,
+      "custody": "NOT_MOUNTED_IN_REPOSITORY",
+      "filename": "aac_divisions_2026_RATIFIED.csv",
+      "lineage_preserved": true,
+      "reproduction_attempted": false,
+      "sha256": "e0f674b4d0bab13ff943d0ced6364c70df40d4e4a1f1a2cde2a4479a13b2cd0f"
+    },
+    "mounted_path": "/home/user/mcR3_weekly_dynamic_synthlax/config/dynamic_weekly_mc_v3/governed/aac_divisions_2026_R2_SUCCESSOR.csv",
+    "mounted_sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+    "ruling": "R2-AAC-SUCCESSOR",
+    "successor": {
+      "bytes": 554,
+      "filename": "aac_divisions_2026_R2_SUCCESSOR.csv",
+      "sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+      "source_rule": "R-CCG-07",
+      "status": "GOVERNED_SUCCESSOR"
+    }
+  },
+  "artifact": "V3_GOVERNANCE_STATUS_R2.json",
+  "artifact_hashes": {
+    "reference/dynamic_weekly_mc_v3/inputs/2026 Bracket Regime LOCKED.xlsx": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab",
+    "reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20",
+    "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+    "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+    "reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b",
+    "reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+  },
+  "artifact_status": "SUCCESSOR_GOVERNANCE_STATUS",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "base_sha": "3b46e561b8d939e10ba5d6ff2f69923d963a148e",
+  "blocker_count_before_r1_audited": 17,
+  "blocker_count_before_r1_baseline": 18,
+  "board_of_record": {
+    "blocker": "inputs.board_of_record_i_k",
+    "historical_board_location": "08_BOARD_IH_TOP25",
+    "historical_board_retained": "Board I-H v2",
+    "historical_board_substitutable": false,
+    "identity": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "mounted": false,
+    "package": "Board I-K R1-R3 FINAL / re-issued governance lineage",
+    "path": null,
+    "ruling": "R2-BOARD-OF-RECORD",
+    "sha256": null
+  },
+  "canonical_config": {
+    "calibration_values_all_null": true,
+    "path": "config/dynamic_weekly_mc_v3/v3_experimental.json",
+    "sha256": "384d8960f692d2142ff468f665263ac8cadfb202d3b0388e25ee0424ffdf6484"
+  },
+  "chairman_ruling_id_note": "The R2 instruction issued these rulings without ruling IDs. Each entry carries a locally assigned convergence_id (DERIVED) and a null chairman_ruling_id. The local identifier is a code handle and is not a governance ID.",
+  "chairman_ruling_ids_supplied": false,
+  "chairman_rulings": [
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-SCHED-V5-AUTH",
+      "decision": "Schedule v5 is authoritative. A binary-copy identity difference does not block V3 when the source is the verified v5 schedule and its certified Games content reproduces exactly. All historical binary hashes are preserved unedited.",
+      "evidence": [
+        "2026_FBS_Schedule_LOCKED_v5.xlsx!Certification integrity_sha256=bd8089f7\u2026",
+        "2026_FBS_Schedule_LOCKED_v5.xlsx!Certification integrity_method (canonical CSV serialization)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!19_SCHEDULE_V5_CHANGE schedule_binary_sha256=db26c3ff\u2026",
+        "Model_Parameters_v2_5_APPROVED.xlsx!01_SOURCE_REGISTER schedule_v5"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5"
+      ],
+      "subject": "2026 Schedule v5 authority and binary source-copy identity",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-SCHED-13GAME",
+      "decision": "ARK, GAST, UK, VAN and WVU are approved to play 13 regular-season games, subject to deterministic validation of each schedule.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!12_OPEN_ITEMS OI-SCHED-13 (ARK, GAST, UK, VAN, WVU)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!14_RATIFICATION RAT-002"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED"
+      ],
+      "subject": "Five 13-game regular-season schedules",
+      "supersedes": [
+        "RAT-002 safe_default_if_deferred 'Block final season run'"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-BOARD-OF-RECORD",
+      "decision": "Board of Record is 2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx (Board I-K R1-R3 FINAL / re-issued governance lineage). Board I-H is retained as historical/superseded evidence only and must not be substituted for it.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!08_BOARD_IH_TOP25 (Board I-H v2, historical)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Board of Record",
+      "supersedes": [
+        "Board I-H v2 as Board of Record"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-HFA-3P5",
+      "decision": "V3 football-point HFA = 3.5 points. Legacy 4.0 is preserved as HISTORICAL / NOT CURRENT. Separately governed Elo-layer HFA stays a separate parameter. V2.1 is unchanged.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER SCHED-HFA-BASE=3.5 (LOCKED)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER ENG-HOME-FIELD=4.0 (HISTORICAL / NOT CURRENT)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!ENGINE_PARAMS HOME_FIELD_PTS=4 (VERIFIED, cfb_sim.py)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER CCG-HFA_ELO=65 (separate Elo parameter)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "hfa_baseline_points",
+        "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5"
+      ],
+      "subject": "V3 football-point home-field advantage",
+      "supersedes": [
+        "ENG-HOME-FIELD 4.0 as a V3 candidate baseline"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-FCS-ELO-1250",
+      "decision": "FCS Elo = 1250, fixed, as the current V3 treatment for schedule-only FCS opponents. It requires no later toggle. No Board equivalent (.294/.297) and no inverted Elo/Board transform may be used as an FCS conversion rule.",
+      "evidence": [
+        "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx!Build Manifest 'Model use authorized: FALSE' (superseded by this ruling)",
+        "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx!Build Manifest 'Board columns for FCS: BLANK \u2014 Board-equivalent recorded not issued'"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "fcs_translation_policy",
+        "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE"
+      ],
+      "subject": "Schedule-only FCS opponent treatment",
+      "supersedes": [
+        "POWER_CRUNCH Build Manifest 'Model use authorized: FALSE' for V3 use"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-AAC-SUCCESSOR",
+      "decision": "R-CCG-07 is authoritative. The missing 577-byte ratified CSV must not be faked. A NEW governed successor artifact is issued, derived from R-CCG-07 and the canonical team master, carrying a new identity, new SHA and full provenance. The legacy artifact's lineage is preserved as missing.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!04_CCG_RULES R-CCG-07 (RATIFIED, 8 American / 8 Athletic)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!01_SOURCE_REGISTER aac_divisions 577 B e0f674b4\u2026 (not mounted)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!13_SUPERSESSION_LOG SUP-010",
+        "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md 2026_conference_division (8/8)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "inputs.aac_divisions_csv"
+      ],
+      "subject": "AAC division membership artifact",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-CCG-SEVEN",
+      "decision": "Exactly seven CCGs: SEC, Big Ten, Big 12, ACC, Pac-12, Mountain West, AAC. Atlantic-8 and ECL play none. Six conferences select the two best CONFERENCE win-percentage teams; AAC selects one winner per division. Ties are resolved by the CCG participant chain CCG-TB1 head-to-head, CCG-TB2 mini round-robin, CCG-TB3 last committee board published before Championship Saturday.",
+      "evidence": [
+        "2026_FBS_Schedule_LOCKED_v5.xlsx!Games seven W15 CCG template rows",
+        "Model_Parameters_v2_5_APPROVED.xlsx!04_CCG_RULES R-CCG-01, R-CCG-05, R-CCG-07",
+        "2026_FBS_Schedule_LOCKED_v5.xlsx!Certification ccg_count '7 \u2014 \u2026 NONE for Atlantic-8, ECL, Independent.'"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Conference championship games and participant selection",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-COMMITTEE-TB",
+      "decision": "From Nov 1 through the board following the seven CCGs, publish a Top 25 ordering and the current playoff bracket only \u2014 never a raw strength number, committee score or hidden power value. General committee ranking ties resolve by COMMITTEE-TB1 head-to-head, TB2 performance against common opponents, TB3 SOS, TB4 previous week's committee board. The PRESEASON_STRENGTH / FINAL_WEEKLY_FOOTBALL_STRENGTH framing is retired.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!COMMITTEE (UNPATCHED, D-09 'No deterministic tiebreak rule')"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "committee_tiebreak_strength_source"
+      ],
+      "subject": "Weekly committee product and general ranking tiebreak",
+      "supersedes": [
+        "committee_tiebreak_strength_source = PRESEASON_STRENGTH | FINAL_WEEKLY_FOOTBALL_STRENGTH"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-SOS",
+      "decision": "SOS = 0.25 * WP + 0.50 * OWP + 0.25 * OOWP. One quantity, one direction, one definition.",
+      "evidence": [
+        "2026 Bracket Regime LOCKED.xlsx!Deferred Register DEF-2 sos_index 'REPORTED, never scored'",
+        "2026 Bracket Regime LOCKED.xlsx!Deferred Register DEF-1, DEF-4 (RETIRED, no double counting)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Committee strength of schedule",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-COMMON-OPP",
+      "decision": "COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common, using the same WP/OWP/OOWP semantics as approved SOS, restricted to the common-opponent subset.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-08 (common-opponent gap)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Performance against common opponents",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-A8-ECL-ORDER",
+      "decision": "A8 and ECL play no CCG and each determines its own champion independently. Intra-conference championship ties resolve by A8/ECL-TB1 head-to-head, A8/ECL-TB2 approved common-opponent performance, A8/ECL-TB3 the post-CCG committee board computed before any G5 automatic-bid seeding is applied. This is not an A8-versus-ECL comparison.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!04_CCG_RULES R-CCG-08, TB-ECL/A8"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [
+        "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT"
+      ],
+      "subject": "Atlantic-8 and ECL champion determination",
+      "supersedes": [
+        "TB-ECL/A8 read as a bracket-dependent terminal tiebreak"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-G5-SEED5",
+      "decision": "G5 = AAC, Mountain West, Pac-12, Atlantic-8, ECL. Exactly one G5 team receives an automatic bid: the highest-ranked G5 CONFERENCE CHAMPION, seeded exactly #5. That team therefore never appears in a play-in game.",
+      "evidence": [
+        "2026 Bracket Regime LOCKED.xlsx!Bracket Regime LOCKED AB2 (highest-ranked G5, champion status irrelevant)",
+        "2026 Playoff Calendar OFFICIAL 2.xlsx!Playoff_Calendar 'G5 auto-bid = seed 14 (academy game)' (superseded)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Group-of-5 automatic bid",
+      "supersedes": [
+        "Playoff Calendar PLAY-IN G2 note 'G5 auto-bid = seed 14 (academy game)'",
+        "Bracket Regime AB2 read as conferring no seed constraint"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-NO-RESEED",
+      "decision": "There is no reseeding. The fixed bracket topology of the official 2026 Playoff Calendar governs. Only edges the official artifact actually states may be bound.",
+      "evidence": [
+        "2026 Playoff Calendar OFFICIAL 2.xlsx!Bracket_Flow (byes, play-in, R1, QF slots, semifinals, P-3)",
+        "2026 Bracket Regime LOCKED.xlsx!Bracket Regime LOCKED S4 (R1 5v12, 6v11, 7v10, 8v9)",
+        "2026 Playoff Calendar OFFICIAL 2.xlsx!Rulings_Register P-2, P-3"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Playoff topology",
+      "supersedes": [
+        "RESEED_BY_ORIGINAL_SEED as a candidate quarterfinal mapping"
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-SOR-REPORT",
+      "decision": "Produce a weekly SOR report as its own named resume metric using the SOR-B / record-strength methodology. SOR is an output and never replaces committee SOS. The stale compute_sor_b.py default R_ref=1684.9 may never silently control a run: an explicit governed season R_ref is required. The MC-domain R_ref namespace stays separate.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER CCG-R_REF=1893.3 (MC/CCG domain, LOCKED)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!16_REJECTED_ITEMS REJ-012 ('Keep domains separate')",
+        "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-12 (BWI PROPOSAL ONLY / NOT ADOPTED)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Weekly SOR report",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-SRS-WITNESS",
+      "decision": "SRS remains a separate deterministic opponent-adjusted capped-margin model (per-game margin cap +/-24, opponent schedule adjustment, centered field rating). It is a calibration/validation witness alongside Baxter Rating and Colley Matrix, and is never committee SOS and never SOR.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-12 (z(SRS capped +/-24), NOT ADOPTED as BWI)"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "SRS",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "R2-CAL-OBJECTIVE",
+      "decision": "Primary mathematical calibration criterion is Baxter Rating RMSE, minimised out-of-sample. Colley Matrix and SRS are independent witnesses reported separately; no weighted composite of the three is authorised. Training, validation and holdout stay separated. Promotion requires either governed mathematical justification or explicit Chairman justification, and the provenance record must name which. Public betting flow is never belief evidence.",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!12_OPEN_ITEMS ENG-CAL-MARGIN (OPEN)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!CALIBRATION ('Do not tune the committee engine against an unvalidated stat universe')"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 GOVERNANCE CONVERGENCE R2",
+      "provenance": "FACT",
+      "retires": [],
+      "subject": "Calibration governance",
+      "supersedes": []
+    }
+  ],
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "converged_from_head_sha": "e3e1e41bcec3b8c8e00e90087914824afaec7897",
+  "convergence_delta": {
+    "carried_forward": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
+    ],
+    "expected_live": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "opened_by_r2": [
+      "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "r1_audited_live_count": 17,
+    "r1_baseline_count": 18,
+    "r2_expected_live_count": 11,
+    "retired_by_r2": [
+      "committee_tiebreak_strength_source",
+      "fcs_translation_policy",
+      "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+      "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+      "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+      "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+      "hfa_baseline_points",
+      "inputs.aac_divisions_csv",
+      "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5"
+    ]
+  },
+  "governed_reference_inputs_unchanged": true,
+  "governed_values": {
+    "a8_ecl_ordering": {
+      "causal_sequence": [
+        "COMPLETE_SEVEN_CCGS",
+        "COMPUTE_POST_CCG_COMMITTEE_BOARD",
+        "RESOLVE_A8_CHAMPION",
+        "RESOLVE_ECL_CHAMPION",
+        "COMPARE_FIVE_G5_CHAMPIONS",
+        "APPLY_G5_AUTOMATIC_BID_SEEDING"
+      ],
+      "cross_conference_comparison_permitted": false,
+      "governed_resolution": "POST_CCG_BOARD_BEFORE_G5_SEEDING_R2",
+      "historical_candidate_options_never_selected": [
+        "PRELIMINARY_BOARD_BEFORE_CHAMPION_FLAG",
+        "CHAMPION_RESOLUTION_BEFORE_FINAL_BOARD_WITH_CHAMPION_BLIND_TIE_BOARD",
+        "EXPLICIT_SOURCE_SUPPORTED_ALTERNATIVE"
+      ],
+      "historical_cycle_path": [
+        "A8_ECL_CHAMPION",
+        "FINAL_COMMITTEE_BOARD",
+        "CONFERENCE_CHAMPION_FLAG",
+        "A8_ECL_CHAMPION"
+      ],
+      "historical_cycle_status": "SUPERSEDED_BY_R2_CAUSAL_SEQUENCING",
+      "ruling": "R2-A8-ECL-ORDER",
+      "standings_only_conferences": [
+        "Atlantic-8",
+        "ECL"
+      ],
+      "tiebreak_chain": [
+        "A8_ECL-TB1_HEAD_TO_HEAD",
+        "A8_ECL-TB2_COMMON_OPPONENT_PERFORMANCE",
+        "A8_ECL-TB3_POST_CCG_BOARD_BEFORE_G5_SEEDING"
+      ]
+    },
+    "calibration": {
+      "automatic_promotion": false,
+      "dataset_mounted": false,
+      "disposition": "BLOCKED_ON_CALIBRATION_DATA",
+      "independent_witnesses": [
+        "colley_matrix",
+        "srs"
+      ],
+      "observation_allowlist": [
+        "game_id",
+        "season",
+        "week",
+        "event_time",
+        "team",
+        "opponent",
+        "venue",
+        "pregame_team_rating",
+        "pregame_opponent_rating",
+        "expected_margin",
+        "actual_margin",
+        "game_result",
+        "prior_rating_state",
+        "subsequent_outcomes",
+        "source_provenance",
+        "observed_at",
+        "recorded_at",
+        "model_version",
+        "configuration_version",
+        "split"
+      ],
+      "primary_direction": "minimize",
+      "primary_metric": "out_of_sample_baxter_rating_rmse",
+      "promotion_authorities": [
+        "GOVERNED_CALIBRATION_EVIDENCE",
+        "EXPLICIT_CHAIRMAN_JUSTIFICATION"
+      ],
+      "public_money_admissible": false,
+      "ruling": "R2-CAL-OBJECTIVE",
+      "splits": [
+        "training",
+        "validation",
+        "holdout"
+      ],
+      "supported_dataset_formats": [
+        "csv",
+        "tsv",
+        "json"
+      ],
+      "supporting_diagnostics": [
+        "brier_score",
+        "log_loss",
+        "probability_calibration",
+        "rating_stability",
+        "blowout_sensitivity",
+        "week_to_week_movement_distribution"
+      ],
+      "weighted_composite_authorised": false
+    },
+    "ccg": {
+      "conferences": [
+        "ACC",
+        "American",
+        "Big 12",
+        "Big Ten",
+        "Mountain West",
+        "Pac-12",
+        "SEC"
+      ],
+      "count": 7
+    },
+    "committee_tiebreak": {
+      "chain": [
+        "COMMITTEE-TB1_HEAD_TO_HEAD",
+        "COMMITTEE-TB2_COMMON_OPPONENT_PERFORMANCE",
+        "COMMITTEE-TB3_STRENGTH_OF_SCHEDULE",
+        "COMMITTEE-TB4_PREVIOUS_WEEK_BOARD"
+      ],
+      "first_november_board_tb4_blocker": "governance.COMMITTEE_TB4_FIRST_NOVEMBER_BOARD_FALLBACK_AUTHORITY_ABSENT",
+      "first_november_board_tb4_fallback": null,
+      "never_publishes": [
+        "strength",
+        "strength_points",
+        "committee_score",
+        "power",
+        "power_index",
+        "rating",
+        "elo",
+        "sos",
+        "score"
+      ],
+      "policy": "DETERMINISTIC_COMMITTEE_TIEBREAK_CHAIN_R2",
+      "publication_window_opens": "2026-11-01",
+      "publishes": [
+        "top_25_ordering",
+        "current_playoff_bracket"
+      ],
+      "retired_framing": [
+        "PRESEASON_STRENGTH",
+        "FINAL_WEEKLY_FOOTBALL_STRENGTH"
+      ],
+      "ruling": "R2-COMMITTEE-TB"
+    },
+    "fcs": {
+      "fixed_elo": 1250.0,
+      "layer": "ELO",
+      "model_scale_adapter_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+      "model_use_authorized_by_ruling": true,
+      "policy": "FIXED_ELO_1250",
+      "rating_policy_resolved": true,
+      "requires_future_toggle": false,
+      "ruling": "R2-FCS-ELO-1250",
+      "superseded_v2_1_bridge": "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite translated from Board I-H equivalent to unified points.",
+      "supersedes": [
+        "POWER_CRUNCH Build Manifest 'Model use authorized: FALSE' for V3 use"
+      ],
+      "unified_points_equivalent": null
+    },
+    "hfa": {
+      "elo_layer_hfa": 65.0,
+      "elo_layer_is_separate_parameter": true,
+      "legacy_status": "HISTORICAL",
+      "legacy_v2_drive_engine_hfa": 4.0,
+      "legacy_validation_status": "NOT CURRENT",
+      "register": [
+        {
+          "governed_for_v3": true,
+          "layer": "FOOTBALL_POINTS",
+          "note": "V3 football-point HFA baseline adopted by ruling R2-HFA-3P5.",
+          "parameter_id": "SCHED-HFA-BASE",
+          "status": "LOCKED",
+          "value": 3.5
+        },
+        {
+          "governed_for_v3": false,
+          "layer": "FOOTBALL_POINTS",
+          "note": "Legacy V2 drive-engine constant, VERIFIED in ENGINE_PARAMS and HISTORICAL / NOT CURRENT in the master parameter register. Preserved unedited.",
+          "parameter_id": "ENG-HOME-FIELD",
+          "status": "HISTORICAL",
+          "value": 4.0
+        },
+        {
+          "governed_for_v3": true,
+          "layer": "ELO",
+          "note": "Elo-layer home-field advantage. A separate parameter; not a V3 point baseline.",
+          "parameter_id": "CCG-HFA_ELO",
+          "status": "LOCKED",
+          "value": 65.0
+        }
+      ],
+      "ruling": "R2-HFA-3P5",
+      "v3_football_point_hfa": 3.5
+    },
+    "playoff_topology": {
+      "bye_seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "g5_automatic_bid_count": 1,
+      "g5_automatic_bid_seed": 5,
+      "play_in_edges": {
+        "PLAYIN_G1": [
+          12,
+          13
+        ],
+        "PLAYIN_G2": [
+          11,
+          14
+        ]
+      },
+      "play_in_seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "quarterfinal_hosts": {
+        "QF_E": 1,
+        "QF_F": 2,
+        "QF_G": 3,
+        "QF_H": 4
+      },
+      "quarterfinal_mapping_blocker": "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+      "quarterfinal_slot_edges_stated_in_artifact": false,
+      "reseeding_permitted": false,
+      "round_1_edges": {
+        "R1_A_5_12": [
+          5,
+          12
+        ],
+        "R1_B_6_11": [
+          6,
+          11
+        ],
+        "R1_C_7_10": [
+          7,
+          10
+        ],
+        "R1_D_8_9": [
+          8,
+          9
+        ]
+      },
+      "rulings": [
+        "R2-G5-SEED5",
+        "R2-NO-RESEED"
+      ],
+      "semifinal_edges": {
+        "SEMI_A": [
+          "QF_E",
+          "QF_H"
+        ],
+        "SEMI_B": [
+          "QF_F",
+          "QF_G"
+        ]
+      }
+    },
+    "sor": {
+      "governed_2026_r_ref": 1893.3,
+      "governed_2026_r_ref_authority": "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25 (CCG-R_REF, LOCKED, SOURCE-VERIFIED); ruling R-MC-V2",
+      "governed_2026_r_ref_parameter_id": "CCG-R_REF",
+      "is_committee_input": false,
+      "namespaces_separate": true,
+      "report_status": "RESEARCH_REPORT_ONLY",
+      "stale_library_default_refused": 1684.9,
+      "superseded_by": "R-MC-V2 (2026-07-14): R_ref 1901 -> 1893.3",
+      "superseded_r_ref": 1901.0,
+      "unratified_items": [
+        "P_TO_STRENGTH_TRANSFORM",
+        "REFERENCE_HFA"
+      ]
+    },
+    "sos": {
+      "blocker": "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "nearest_authority": "V2_1_STATIC_CONTROL...xlsx!Methodology!A11 (defines none of the six)",
+      "required_rulings": [
+        "Are an opponent's games against the evaluated team removed from that opponent's record when computing OWP?",
+        "Is OWP team-averaged or schedule-instance-weighted?",
+        "How is a repeated opponent treated - once, or once per meeting?",
+        "How is OOWP constructed - the mean of each opponent's OWP, or the mean over every opponent-of-opponent directly?",
+        "How do schedule-only FCS opponent records enter WP, OWP and OOWP?",
+        "What happens to a team with zero qualifying games?"
+      ],
+      "semantics_governed": false,
+      "weights": {
+        "oowp": 0.25,
+        "owp": 0.5,
+        "wp": 0.25
+      }
+    },
+    "srs": {
+      "canonical_spec_mounted": false,
+      "canonical_validation_anchors": [],
+      "canonical_validation_blocker": "governance.SRS_CANONICAL_VALIDATION_ANCHORS_NOT_MOUNTED",
+      "canonical_validation_status": "NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS",
+      "cross_checked_against": "GAUSS_SEIDEL_ITERATION_WHERE_CONVERGED",
+      "is_committee_sos": false,
+      "is_sor": false,
+      "margin_cap": 24.0,
+      "role": "CALIBRATION_VALIDATION_WITNESS",
+      "solver": "EXACT_LINEAR_SOLVE_PER_CONNECTED_COMPONENT",
+      "srs_over_40_semantics": null
+    }
+  },
+  "head_sha": null,
+  "head_sha_note": "Null by construction: the commit that carries this file cannot contain its own hash. The head SHA is reported in the convergence handoff and by git.",
+  "live_blocker_count": 11,
+  "live_blockers": [
+    "calibration.weekly_performance_residual_coefficient",
+    "calibration.weekly_movement_cap_points",
+    "calibration.recent_form_weights",
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.sample_size_regularization",
+    "inputs.board_of_record_i_k",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "model": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "note": "This is a successor status record, not a replacement for V3_BUILD_MANIFEST.json. The build manifest is the frozen record of the tested R1 build and is left unedited; its counts still describe that build. Where the two disagree, the manifest is history and this file is current state.",
+  "opened_blockers": [
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "output_probabilities_generated": false,
+  "parent_build_manifest": {
+    "configuration_version": "V3-PLACEHOLDER-2026-08-20-001",
+    "execution_blocker_count": 18,
+    "path": "reference/dynamic_weekly_mc_v3/V3_BUILD_MANIFEST.json",
+    "sha256": "814f8ad79f9e3158d734245b372342bcf546495c202c799cdad9179135f8fdab",
+    "status": "FROZEN_HISTORICAL_RECORD_UNEDITED",
+    "test_count": 74
+  },
+  "r2_audit_challenge_adjudications": {
+    "1_sor_r_ref": {
+      "1901_status": "SUPERSEDED",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25 = 1893.3 (LOCKED, SOURCE-VERIFIED)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST!C15 'R_ref 1901 now stale'",
+        "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST!B24 'R_ref 1901->1893.3'",
+        "Model_Parameters_v2_5_APPROVED.xlsx!11_VALIDATION_REGISTER!D15"
+      ],
+      "is_execution_blocker": false,
+      "remaining_unratified": [
+        "P_TO_STRENGTH_TRANSFORM",
+        "REFERENCE_HFA"
+      ],
+      "superseding_authority": "R-MC-V2, 2026-07-14",
+      "verdict": "R_REF_IS_GOVERNED_AT_1893.3"
+    },
+    "2_srs_solver": {
+      "canonical_reference_implementation_mounted": false,
+      "canonical_spec_mounted": false,
+      "canonical_validation_anchors_mounted": false,
+      "is_execution_blocker": false,
+      "verdict": "EQUIVALENCE_PROVEN_FOR_THE_MATHEMATICS_NOT_FOR_CANONICAL_ANCHORS"
+    },
+    "3_g5_seed_five": {
+      "bracket_regime_s2_disposition": "SUPERSEDED_TO_THE_EXTENT_OF_THE_CONFLICT",
+      "tested_natural_ranks": [
+        1,
+        3,
+        5,
+        8,
+        14
+      ],
+      "verdict": "SEED_5_EXACT_AT_EVERY_NATURAL_RANK"
+    },
+    "4_quarterfinal_mapping": {
+      "comments_or_notes": "none",
+      "defined_names": "none",
+      "external_relationships": "none",
+      "formulas": "none outside Rest_Integrity!D3:D5 (date arithmetic)",
+      "hidden_rows_cols_sheets": "none",
+      "source_cells": {
+        "Bracket_Flow!B6": "E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)",
+        "Playoff_Calendar!C12": "Seed 1 v W(R1)",
+        "Playoff_Calendar!C13": "Seed 4 v W(R1)",
+        "Playoff_Calendar!C14": "Seed 2 v W(R1)",
+        "Playoff_Calendar!C15": "Seed 3 v W(R1)"
+      },
+      "verdict": "SOURCE_DOES_NOT_BIND_THE_SLOT_EDGES_BLOCKER_RETAINED"
+    },
+    "5_fcs_scale": {
+      "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+      "superseded_v2_1_bridge": "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite translated from Board I-H equivalent to unified points.",
+      "verdict": "RATING_POLICY_RESOLVED_MODEL_SCALE_ADAPTER_MISSING"
+    },
+    "6_owp_oowp": {
+      "blocker": "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "required_rulings": [
+        "Are an opponent's games against the evaluated team removed from that opponent's record when computing OWP?",
+        "Is OWP team-averaged or schedule-instance-weighted?",
+        "How is a repeated opponent treated - once, or once per meeting?",
+        "How is OOWP constructed - the mean of each opponent's OWP, or the mean over every opponent-of-opponent directly?",
+        "How do schedule-only FCS opponent records enter WP, OWP and OOWP?",
+        "What happens to a team with zero qualifying games?"
+      ],
+      "verdict": "NO_AUTHORITY_ONE_NARROW_BLOCKER_RETAINED"
+    }
+  },
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "resolved_blockers": [
+    "committee_tiebreak_strength_source",
+    "fcs_translation_policy",
+    "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+    "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+    "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+    "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+    "hfa_baseline_points",
+    "inputs.aac_divisions_csv",
+    "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5"
+  ],
+  "schedule_v5": {
+    "binary_sha256_mounted": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "binary_sha256_registered_v5": "db26c3fff15a61ce8e7efa3b93100fa017e02248c96076d291495b55e855da12",
+    "binary_sha256_superseded_v4": "8d4d5112aa52cfb51895c95d104e3c5e1821813e3b481a4f1b3067668d0af57b",
+    "content_sha256_certified": "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221",
+    "content_sha256_reproduced": "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221",
+    "governed_binary_disposition": "ACCEPTED_SOURCE_COPY_UNDER_R2_SCHED_V5_AUTH",
+    "historical_hashes_preserved": true,
+    "historical_hashes_rewritten": false,
+    "identity": "2026_FBS_Schedule_LOCKED_v5.xlsx"
+  },
+  "simulation_run": false,
+  "supersedes_nothing": true,
+  "test_counts": {
+    "full_suite": 250,
+    "manifest_frozen_test_count": 74,
+    "r1_audited_full_suite": 128,
+    "r1_audited_v3_suite": 69,
+    "v3_suite": 191
+  },
+  "v2_1_static_control_sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+}

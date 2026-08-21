@@ -53,10 +53,23 @@ def rank_committee_results_first(
 
 
 def require_v3_strength_tiebreak_policy(policy: str | None) -> str:
-    allowed = {"PRESEASON_STRENGTH", "FINAL_WEEKLY_FOOTBALL_STRENGTH"}
-    if policy not in allowed:
+    """Retired by ruling R2-COMMITTEE-TB. Refuses every input, including the old ones.
+
+    The question this asked — which hidden strength number breaks a committee
+    tie — presumed a board that ranks on a number it never publishes. Both of
+    its former answers are now refused by name so a caller cannot drift back to
+    the retired framing, and the function is kept rather than deleted so that
+    refusal is visible at the old call site.
+    """
+    from .committee_policy import COMMITTEE_TIEBREAK_POLICY, RETIRED_STRENGTH_SOURCE_VALUES
+
+    if policy in RETIRED_STRENGTH_SOURCE_VALUES:
         raise GovernanceBlock(
-            "V3 committee final tiebreak strength source is not governed. "
-            "Choose explicitly from PRESEASON_STRENGTH or FINAL_WEEKLY_FOOTBALL_STRENGTH."
+            f"committee_tiebreak_strength_source={policy!r} is retired by ruling "
+            f"R2-COMMITTEE-TB. Use the structured chain {COMMITTEE_TIEBREAK_POLICY} via "
+            "committee_policy.require_committee_tiebreak_policy."
         )
-    return policy
+    raise GovernanceBlock(
+        "V3 committee final tiebreak strength source is a retired concept. Ruling "
+        f"R2-COMMITTEE-TB replaces it with {COMMITTEE_TIEBREAK_POLICY}."
+    )

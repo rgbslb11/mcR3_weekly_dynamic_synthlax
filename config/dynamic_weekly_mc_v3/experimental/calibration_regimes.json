@@ -1,0 +1,29 @@
+{
+  "_purpose": "Candidate calibration regimes for V3 experimentation ONLY.",
+  "_governance": [
+    "Values here are EXPERIMENTAL and are never canonical.",
+    "The canonical V3 config (../v3_experimental.json) keeps every calibration value null.",
+    "Nothing in this file may be promoted without an explicit human approval token.",
+    "This file ships with zero regimes on purpose: no candidate coefficient values",
+    "have been authored, because authoring them would invent calibration data.",
+    "Populate it only from a governed calibration program."
+  ],
+  "_schema": {
+    "regimes": [
+      {
+        "regime_id": "<string, unique>",
+        "status": "EXPERIMENTAL",
+        "rationale": "<why this candidate is worth testing>",
+        "values": {
+          "weekly_performance_residual_coefficient": "<float|null>",
+          "weekly_movement_cap_points": "<float|null>",
+          "recent_form_weights": "<array[float]|null>",
+          "blowout_treatment": "<object|null>",
+          "game_sd_points": "<float|null>",
+          "sample_size_regularization": "<object|null>"
+        }
+      }
+    ]
+  },
+  "regimes": []
+}
