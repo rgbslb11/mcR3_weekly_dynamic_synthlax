@@ -1,0 +1,1223 @@
+{
+  "$defs": {
+    "CapperPickObserved": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "capper.pick.observed",
+          "default": "capper.pick.observed",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/CapperPickObservedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "CapperPickObserved",
+      "type": "object"
+    },
+    "CapperPickObservedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "pick_id": {
+          "format": "uuid",
+          "title": "Pick Id",
+          "type": "string"
+        },
+        "capper_id": {
+          "format": "uuid",
+          "title": "Capper Id",
+          "type": "string"
+        },
+        "game_id": {
+          "format": "uuid",
+          "title": "Game Id",
+          "type": "string"
+        },
+        "market": {
+          "enum": [
+            "ATS",
+            "TOTAL"
+          ],
+          "title": "Market",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pick_id",
+        "capper_id",
+        "game_id",
+        "market"
+      ],
+      "title": "CapperPickObservedPayload",
+      "type": "object"
+    },
+    "ContractCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "contract.created",
+          "default": "contract.created",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ContractCreatedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "ContractCreated",
+      "type": "object"
+    },
+    "ContractCreatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "game_id": {
+          "format": "uuid",
+          "title": "Game Id",
+          "type": "string"
+        },
+        "market_type": {
+          "$ref": "#/$defs/MarketType"
+        },
+        "source_observation_id": {
+          "format": "uuid",
+          "title": "Source Observation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "game_id",
+        "market_type",
+        "source_observation_id"
+      ],
+      "title": "ContractCreatedPayload",
+      "type": "object"
+    },
+    "Direction": {
+      "enum": [
+        "YES",
+        "NO"
+      ],
+      "title": "Direction",
+      "type": "string"
+    },
+    "FillExecuted": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "fill.executed",
+          "default": "fill.executed",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/FillExecutedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "FillExecuted",
+      "type": "object"
+    },
+    "FillExecutedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "fill_id": {
+          "format": "uuid",
+          "title": "Fill Id",
+          "type": "string"
+        },
+        "order_id": {
+          "format": "uuid",
+          "title": "Order Id",
+          "type": "string"
+        },
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "market_probability_before": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Market Probability Before",
+          "type": "number"
+        },
+        "market_probability_after": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Market Probability After",
+          "type": "number"
+        },
+        "belief_probability_at_execution": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Belief Probability At Execution",
+          "type": "number"
+        },
+        "expected_edge_at_entry": {
+          "title": "Expected Edge At Entry",
+          "type": "number"
+        }
+      },
+      "required": [
+        "fill_id",
+        "order_id",
+        "contract_id",
+        "market_probability_before",
+        "market_probability_after",
+        "belief_probability_at_execution",
+        "expected_edge_at_entry"
+      ],
+      "title": "FillExecutedPayload",
+      "type": "object"
+    },
+    "IdentityStatus": {
+      "enum": [
+        "VERIFIED",
+        "PROVISIONAL",
+        "AMBIGUOUS",
+        "BLOCKED"
+      ],
+      "title": "IdentityStatus",
+      "type": "string"
+    },
+    "MarketObservationCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "market.observation.created",
+          "default": "market.observation.created",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/MarketObservationCreatedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "MarketObservationCreated",
+      "type": "object"
+    },
+    "MarketObservationCreatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "observation_id": {
+          "format": "uuid",
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "game_id": {
+          "format": "uuid",
+          "title": "Game Id",
+          "type": "string"
+        },
+        "market_type": {
+          "$ref": "#/$defs/MarketType"
+        }
+      },
+      "required": [
+        "observation_id",
+        "game_id",
+        "market_type"
+      ],
+      "title": "MarketObservationCreatedPayload",
+      "type": "object"
+    },
+    "MarketType": {
+      "enum": [
+        "SIDE",
+        "TOTAL"
+      ],
+      "title": "MarketType",
+      "type": "string"
+    },
+    "ModelVersionActivated": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "model.version.activated",
+          "default": "model.version.activated",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ModelVersionActivatedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "ModelVersionActivated",
+      "type": "object"
+    },
+    "ModelVersionActivatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "model_version": {
+          "title": "Model Version",
+          "type": "string"
+        },
+        "configuration_hash": {
+          "title": "Configuration Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_version",
+        "configuration_hash"
+      ],
+      "title": "ModelVersionActivatedPayload",
+      "type": "object"
+    },
+    "OracleConflictDetected": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "oracle.conflict.detected",
+          "default": "oracle.conflict.detected",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/OracleConflictDetectedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "OracleConflictDetected",
+      "type": "object"
+    },
+    "OracleConflictDetectedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "oracle_packet_id": {
+          "format": "uuid",
+          "title": "Oracle Packet Id",
+          "type": "string"
+        },
+        "game_id": {
+          "format": "uuid",
+          "title": "Game Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "oracle_packet_id",
+        "game_id"
+      ],
+      "title": "OracleConflictDetectedPayload",
+      "type": "object"
+    },
+    "OrderAccepted": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "order.accepted",
+          "default": "order.accepted",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/OrderAcceptedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "OrderAccepted",
+      "type": "object"
+    },
+    "OrderAcceptedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "order_id": {
+          "format": "uuid",
+          "title": "Order Id",
+          "type": "string"
+        },
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "participant_id": {
+          "format": "uuid",
+          "title": "Participant Id",
+          "type": "string"
+        },
+        "direction": {
+          "$ref": "#/$defs/Direction"
+        },
+        "quantity": {
+          "exclusiveMinimum": 0,
+          "title": "Quantity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "order_id",
+        "contract_id",
+        "participant_id",
+        "direction",
+        "quantity"
+      ],
+      "title": "OrderAcceptedPayload",
+      "type": "object"
+    },
+    "OrderRejected": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "order.rejected",
+          "default": "order.rejected",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/OrderRejectedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "OrderRejected",
+      "type": "object"
+    },
+    "OrderRejectedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "order_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Order Id"
+        },
+        "idempotency_key": {
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "contract_id",
+        "reason"
+      ],
+      "title": "OrderRejectedPayload",
+      "type": "object"
+    },
+    "PublicMoneySnapshotCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "public_money.snapshot.created",
+          "default": "public_money.snapshot.created",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PublicMoneySnapshotCreatedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "PublicMoneySnapshotCreated",
+      "type": "object"
+    },
+    "PublicMoneySnapshotCreatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "format": "uuid",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "source_team_label": {
+          "title": "Source Team Label",
+          "type": "string"
+        },
+        "team_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team Id"
+        },
+        "identity_status": {
+          "$ref": "#/$defs/IdentityStatus"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "source_team_label",
+        "identity_status"
+      ],
+      "title": "PublicMoneySnapshotCreatedPayload",
+      "type": "object"
+    },
+    "SettlementFinalized": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "settlement.finalized",
+          "default": "settlement.finalized",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SettlementFinalizedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "SettlementFinalized",
+      "type": "object"
+    },
+    "SettlementFinalizedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "settlement_id": {
+          "format": "uuid",
+          "title": "Settlement Id",
+          "type": "string"
+        },
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/SettlementResult"
+        }
+      },
+      "required": [
+        "settlement_id",
+        "contract_id",
+        "result"
+      ],
+      "title": "SettlementFinalizedPayload",
+      "type": "object"
+    },
+    "SettlementResult": {
+      "enum": [
+        "YES",
+        "NO",
+        "PUSH",
+        "VOID"
+      ],
+      "title": "SettlementResult",
+      "type": "string"
+    },
+    "TeamIdentityBlocked": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Event Version",
+          "type": "integer"
+        },
+        "event_time": {
+          "format": "date-time",
+          "title": "Event Time",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "producer": {
+          "title": "Producer",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "event_type": {
+          "const": "team.identity.blocked",
+          "default": "team.identity.blocked",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/TeamIdentityBlockedPayload"
+        }
+      },
+      "required": [
+        "event_time",
+        "observed_at",
+        "recorded_at",
+        "producer",
+        "correlation_id",
+        "payload"
+      ],
+      "title": "TeamIdentityBlocked",
+      "type": "object"
+    },
+    "TeamIdentityBlockedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "source_team_label": {
+          "title": "Source Team Label",
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "AMBIGUOUS_NICKNAME_NO_STABLE_ID",
+            "NO_STABLE_ID"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_team_label",
+        "reason"
+      ],
+      "title": "TeamIdentityBlockedPayload",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "capper.pick.observed": "#/$defs/CapperPickObserved",
+      "contract.created": "#/$defs/ContractCreated",
+      "fill.executed": "#/$defs/FillExecuted",
+      "market.observation.created": "#/$defs/MarketObservationCreated",
+      "model.version.activated": "#/$defs/ModelVersionActivated",
+      "oracle.conflict.detected": "#/$defs/OracleConflictDetected",
+      "order.accepted": "#/$defs/OrderAccepted",
+      "order.rejected": "#/$defs/OrderRejected",
+      "public_money.snapshot.created": "#/$defs/PublicMoneySnapshotCreated",
+      "settlement.finalized": "#/$defs/SettlementFinalized",
+      "team.identity.blocked": "#/$defs/TeamIdentityBlocked"
+    },
+    "propertyName": "event_type"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/TeamIdentityBlocked"
+    },
+    {
+      "$ref": "#/$defs/MarketObservationCreated"
+    },
+    {
+      "$ref": "#/$defs/PublicMoneySnapshotCreated"
+    },
+    {
+      "$ref": "#/$defs/CapperPickObserved"
+    },
+    {
+      "$ref": "#/$defs/ContractCreated"
+    },
+    {
+      "$ref": "#/$defs/OrderAccepted"
+    },
+    {
+      "$ref": "#/$defs/OrderRejected"
+    },
+    {
+      "$ref": "#/$defs/FillExecuted"
+    },
+    {
+      "$ref": "#/$defs/OracleConflictDetected"
+    },
+    {
+      "$ref": "#/$defs/SettlementFinalized"
+    },
+    {
+      "$ref": "#/$defs/ModelVersionActivated"
+    }
+  ]
+}
