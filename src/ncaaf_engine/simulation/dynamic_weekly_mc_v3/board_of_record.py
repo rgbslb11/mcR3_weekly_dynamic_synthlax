@@ -4,11 +4,9 @@ Ruling R2-BOARD-OF-RECORD names
 ``2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx`` as the Board of Record and
 forbids substituting Board I-H for it.
 
-That artifact is **not mounted in this repository**. Board I-H v2 is, as sheet
-``08_BOARD_IH_TOP25`` of Model Parameters v2.5, and it stays exactly where it is
-as historical/superseded evidence. Any operation that needs actual Board rows —
-CCG-TB3, COMMITTEE-TB4, A8/ECL-TB3, CFP selection — therefore fails closed on a
-missing Board-of-Record artifact rather than silently ranking on the old board.
+Artifact custody is fail-closed. A candidate is governed only when both its
+canonical mount name and its SHA-256 identity match the approved Board I-K
+artifact. Mere file existence is never sufficient to clear the blocker.
 """
 
 from __future__ import annotations
@@ -20,7 +18,11 @@ from pathlib import Path
 from .errors import GovernanceBlock
 from .rulings import R2_BOARD_OF_RECORD
 
+
 BOARD_OF_RECORD_FILENAME = "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx"
+BOARD_OF_RECORD_SHA256 = (
+    "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a"
+)
 BOARD_OF_RECORD_PACKAGE = "Board I-K R1-R3 FINAL / re-issued governance lineage"
 
 #: Historical board, retained as evidence and never substituted for I-K.
@@ -38,15 +40,31 @@ class BoardOfRecord:
     rows: int
 
 
+def _sha256_file(path: Path) -> str:
+    """Return the SHA-256 identity of the exact bytes on disk."""
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def board_of_record_status(path: Path | None) -> dict[str, object]:
-    mounted = bool(path and path.exists())
+    """Report custody status without treating existence as governance approval."""
+    exists = bool(path is not None and path.is_file())
+    name_matches = bool(exists and path is not None and path.name == BOARD_OF_RECORD_FILENAME)
+    digest = _sha256_file(path) if exists and path is not None else None
+    digest_matches = digest == BOARD_OF_RECORD_SHA256
+
+    mounted = bool(exists and name_matches and digest_matches)
+
     return {
         "ruling": R2_BOARD_OF_RECORD.convergence_id,
         "identity": BOARD_OF_RECORD_FILENAME,
         "package": BOARD_OF_RECORD_PACKAGE,
+        "required_sha256": BOARD_OF_RECORD_SHA256,
         "mounted": mounted,
         "path": str(path) if path else None,
-        "sha256": hashlib.sha256(path.read_bytes()).hexdigest() if mounted else None,
+        "sha256": digest,
+        "exists": exists,
+        "canonical_filename_matches": name_matches,
+        "approved_digest_matches": digest_matches,
         "historical_board_retained": HISTORICAL_BOARD_LABEL,
         "historical_board_location": HISTORICAL_BOARD_SHEET,
         "historical_board_substitutable": False,
@@ -55,7 +73,7 @@ def board_of_record_status(path: Path | None) -> dict[str, object]:
 
 
 def require_board_of_record(path: Path | None) -> BoardOfRecord:
-    """Fail closed unless the named Board-of-Record artifact is mounted."""
+    """Fail closed unless the canonical, digest-verified Board I-K is mounted."""
     if path is None:
         raise GovernanceBlock(
             f"{BOARD_OF_RECORD_BLOCKER}: Board of Record {BOARD_OF_RECORD_FILENAME} "
@@ -63,21 +81,32 @@ def require_board_of_record(path: Path | None) -> BoardOfRecord:
             f"{R2_BOARD_OF_RECORD.convergence_id} forbids substituting "
             f"{HISTORICAL_BOARD_LABEL}."
         )
-    if not path.exists():
+
+    if not path.is_file():
         raise GovernanceBlock(
             f"{BOARD_OF_RECORD_BLOCKER}: Board of Record artifact is not mounted at {path}."
         )
+
     if path.name != BOARD_OF_RECORD_FILENAME:
         raise GovernanceBlock(
-            f"Configured Board of Record {path.name!r} is not {BOARD_OF_RECORD_FILENAME}. "
-            f"Ruling {R2_BOARD_OF_RECORD.convergence_id} names one artifact and forbids "
-            "substitution."
+            f"{BOARD_OF_RECORD_BLOCKER}: configured Board of Record {path.name!r} "
+            f"is not the canonical mount name {BOARD_OF_RECORD_FILENAME!r}. "
+            f"Ruling {R2_BOARD_OF_RECORD.convergence_id} forbids substitution."
         )
-    data = path.read_bytes()
+
+    digest = _sha256_file(path)
+
+    if digest != BOARD_OF_RECORD_SHA256:
+        raise GovernanceBlock(
+            f"{BOARD_OF_RECORD_BLOCKER}: mounted Board of Record has sha256 "
+            f"{digest}, but the approved {BOARD_OF_RECORD_FILENAME} requires "
+            f"sha256 {BOARD_OF_RECORD_SHA256}."
+        )
+
     return BoardOfRecord(
         identity=BOARD_OF_RECORD_FILENAME,
         path=path,
-        sha256=hashlib.sha256(data).hexdigest(),
+        sha256=digest,
         rows=0,
     )
 

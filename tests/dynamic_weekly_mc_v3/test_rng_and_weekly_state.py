@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from ncaaf_engine.simulation.dynamic_weekly_mc_v3.board_of_record import BOARD_OF_RECORD_FILENAME
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.config import InputPaths, ReratingCalibration, V3Config, DEFAULT_PRIOR_DECAY
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.engine import DynamicWeeklyMCV3
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.models import ScheduledGame, Team
@@ -13,8 +12,7 @@ def _cfg(tmp_path: Path) -> V3Config:
     aac.write_text("schedule_id,division\nA,American\nB,Athletic\n", encoding="utf-8")
     # The R2 gates require the governed values, so the harness config carries
     # them. Both fixture games are NEUTRAL, so HFA never enters the arithmetic.
-    board = tmp_path / BOARD_OF_RECORD_FILENAME
-    board.write_text("harness stand-in for the Board of Record artifact", encoding="utf-8")
+    board = None
     dummy = tmp_path / "dummy"
     return V3Config(
         model_name="SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
@@ -53,8 +51,11 @@ def test_rng_is_path_isolated_and_order_independent():
     assert a1 != b
 
 
-def test_week1_candidate_is_audit_only_and_week2_is_first_promotion(tmp_path):
+def test_week1_candidate_is_audit_only_and_week2_is_first_promotion(tmp_path, monkeypatch):
     cfg = _cfg(tmp_path)
+    # This unit test isolates weekly-state/rerating mechanics. Execution
+    # governance, including Board I-K custody, is tested independently.
+    monkeypatch.setattr(V3Config, "require_executable", lambda self: None)
     teams = {
         "A": Team("A", "Alpha", "Test", "FBS_MEMBER", True, 100.0, 10.0, 1.0),
         "B": Team("B", "Beta", "Test", "FBS_MEMBER", True, 100.0, 0.0, 1.0),

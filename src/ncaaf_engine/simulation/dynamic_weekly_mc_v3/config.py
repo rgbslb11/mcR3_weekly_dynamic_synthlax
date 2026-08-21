@@ -168,10 +168,10 @@ class V3Config:
             blockers.append("committee_tiebreak_policy")
         if self.inputs.aac_divisions_csv is None or not self.inputs.aac_divisions_csv.exists():
             blockers.append("inputs.aac_divisions_csv")
-        if (
-            self.inputs.board_of_record_xlsx is None
-            or not self.inputs.board_of_record_xlsx.exists()
-        ):
+        board_status = board_of_record.board_of_record_status(
+            self.inputs.board_of_record_xlsx
+        )
+        if board_status["blocker"] is not None:
             blockers.append(board_of_record.BOARD_OF_RECORD_BLOCKER)
         return blockers
 
