@@ -945,3 +945,132 @@ it, and reports `unrelated_vanished` so a silent disappearance cannot hide behin
 Seven of the eight are calibration; one is engineering/model-scale. **Artifact custody has
 left the live set** — but the model is no closer to running. Calibration data still does not
 exist, and a mounted board is not a runnable model.
+
+---
+
+# F1 — FCS model-scale adapter lane
+
+Lane scope: `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`, and nothing else. The FCS
+*rating policy* is settled — ruling `R2-FCS-ELO-1250` fixes Elo 1250 — and is not reopened.
+
+**Outcome: blocker RETAINED.** No governed mapping among Elo, Board rating and unified neutral
+points exists in the mounted artifacts. The adapter *interface* and an experimental calibration
+harness are implemented; the canonical point value stays unset.
+
+## What the search covered
+
+Every string cell of all eight mounted governed workbooks and the canonical team master, plus
+every register, ruling and open item. Two transforms touch these axes. **Both reproduce exactly
+from this repository, and neither is quoted rather than recomputed.**
+
+| Transform | Source | Reproduction |
+| --- | --- | --- |
+| `primary_elo = 999.986237 × board_power_H + 1099.999878` | `POWER_CRUNCH…v2_2.xlsx!Build Manifest` | 121 board-rated rows, max residual `0.014932610474716057`, rounding to the manifest's own `0.0149` |
+| `points = 14 × UnifiedMasterZ` | `2026_CFB…Unified_Power_Ratings.xlsx!Ensemble Parameters`, `!Data Dictionary` | 121 FBS rows, error `0.0` for Z, points and power index |
+
+where `UnifiedMasterZ = 0.25·z(TrueSkill) + 0.25·z(Litkenhous) + 0.25·z(PureBaxter) +
+0.25·mean(z(Board I-H), z(Board J-B))`.
+
+## Why they do not compose into an Elo → points rule
+
+Three independent reasons, each sufficient on its own.
+
+1. **The direction is closed.** The manifest issues Board → Elo. Ruling `R2-FCS-ELO-1250`
+   forbids inverting it and forbids the Board equivalent as a conversion rule.
+2. **Board I-H is one eighth of the composite.** Even with the inversion permitted, the output is
+   a Board I-H power value carrying 12.5% weight. TrueSkill, Litkenhous and Pure Baxter supply
+   **no value for any FCS entity**, and the ratings workbook holds 121 FBS rows and zero FCS
+   rows. A Unified Master Z cannot be formed from one eighth of its inputs.
+3. **The Board axis is blank by canonical policy for exactly these entities.**
+   `Board columns for FCS: BLANK — Board-equivalent recorded not issued`; all 13 rows carry
+   `board_power_H = 'UNRATED'`.
+
+Reproduced and recorded so the closed route is unmistakable: the "recorded not issued" Board
+equivalent `0.297514` **is** the inverted transform applied to the superseded composite —
+`(1397.51 − 1099.999878) / 999.986237 = 0.2975142166881642`. Applying the same inversion to the
+newly ruled Elo yields `0.15000218648009245`. That is the same closed route with a new number,
+and `fcs_scale.reject_manufactured_board_equivalent` refuses it by name.
+
+## The gap is two gaps
+
+| Gap | Extent | Evidence |
+| --- | --- | --- |
+| Unified points for an FCS entity | all 13 identities, all 15 FBS-v-FCS games (weeks 2, 3, 4, 5, 12) | `preseason_strength_points = None`; `engine._initialize_states` raises |
+| HFA modifier for an FCS entity **hosting** | 3 games: `G0019` SJSU@EMU, `G0213` SDSU@TOL, `G0224` BOISE@WMU | `Team.hfa_modifier = None`; `SCHED-HFA-BASE` is `modifier × 3.5`; the engine reads `home_team.hfa_modifier or 1.0`, which would silently grant an ungoverned entity the full FBS home edge |
+
+The second gap was not previously surfaced. It is recorded as evidence requirement `FCS-SCALE-C1`
+rather than patched, because choosing a modifier is exactly the invention this lane refuses.
+
+## Exact evidence required to close the blocker
+
+Either route closes it. Both need `FCS-SCALE-C1` and `FCS-SCALE-C2`.
+
+**Route A — issued scale rule**
+
+- `FCS-SCALE-A1` — the exact unified neutral-field points value at Elo 1250, or an explicit
+  Elo-to-points function with its coefficients stated in the ruling itself.
+- `FCS-SCALE-A2` — an express statement that the value is *issued*, and derived neither from the
+  Board I-H equivalent nor from inverting the Elo/Board transform.
+- `FCS-SCALE-A3` — whether one value covers all 13 entities or each is rated separately. Every
+  mounted source treats the 13 as undifferentiated; carrying that onto the points axis would be
+  an assumption, and refusing to carry it would be another.
+- `FCS-SCALE-A4` — whether the value participates in weekly rerating or stays fixed. V2.1 froze
+  ratings for the season; V3 reretes weekly, and an FCS entity plays exactly one game.
+
+**Route B — calibrated scale rule**
+
+- `FCS-SCALE-B1` — a mounted governed **historical** observation set of completed FBS-v-FCS games
+  with actual margins, passing `calibration.register_dataset`. None is mounted. The 15 fixtures in
+  this repository are 2026 games that have not been played; they are the thing to be predicted and
+  can never be their own training data.
+- `FCS-SCALE-B2` — a named evaluation objective for this parameter.
+- `FCS-SCALE-B3` — training / validation / holdout separation, promotion evidence from holdout.
+
+**Both routes**
+
+- `FCS-SCALE-C1` — the FCS home-venue HFA modifier (above).
+- `FCS-SCALE-C2` — the explicit human token `APPROVE_V3_FCS_POINT_SCALE_PROMOTION::<RULING_ID>`
+  plus a named promotion authority. The calibration token is a separate namespace and does not
+  authorise this parameter.
+
+## Explicitly insufficient
+
+Recorded in `fcs_scale.INSUFFICIENT_EVIDENCE` so a reviewer can see each was considered and
+rejected rather than overlooked: inverting the Elo/Board transform; the Board equivalents
+`0.294` / `0.297` / `0.297514`; the Board equivalent computable from Elo 1250; reading `1250` or
+`1397.51` as football points; running the four-family ensemble for an entity supplying none of the
+families; fitting any affine, logistic or inverse transform on the 121 FBS rows and extrapolating
+it outside that population; and V2.1's bridge, which is the closed route itself.
+
+## What was built
+
+- `fcs_scale.py` — the reproductions, the recorded search result, the `FcsPointScaleAdapter`
+  interface, the fail-closed `GovernedFcsPointScaleAdapter`, the never-consumable
+  `ExperimentalFcsPointScaleAdapter`, the refusal surface, the evidence register, and the
+  experimental promotion gate.
+- `config/dynamic_weekly_mc_v3/experimental/fcs_point_scale_regimes.json` — ships with **zero**
+  regimes. Authoring a candidate points value would invent the calibration the blocker records as
+  missing.
+- `CANONICAL_FCS_UNIFIED_POINTS` and `CANONICAL_FCS_HOME_HFA_MODIFIER` are `None`, and no harness
+  path can set either. Promotion never writes canonical config.
+- 100 lane tests: both reproductions, all 13 identities individually, all 15 FBS-v-FCS games
+  individually, the three FCS-hosted games, every refusal, the interface, the harness, the
+  promotion gate, and the two blocker epochs below.
+
+No blocker was retired, none was opened, no calibration value was promoted, no simulation was run
+and no probability artifact was produced.
+
+## Lane epoch — this section was written against the nine-blocker base
+
+Lane F1 ran on frozen base `eb5e3e7`, where the live set was the nine listed under *Live
+blockers after R3*. Lane B1 ran independently on the same base and retired exactly one id,
+`inputs.board_of_record_i_k`, on artifact-custody evidence. Both are recorded above.
+
+F1 retired nothing and opened nothing, so the integrated live set is B1's eight — the seven
+calibration items plus `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`. This lane's own
+blocker is live in both epochs and is unaffected by the mount: a Board-of-Record artifact
+carries no FCS row and no Elo-to-points rule. `blocker_report.f1_integration_delta()` computes
+the lane-base → integrated transition rather than stating it, and
+`V3_GOVERNANCE_STATUS_F1.json` records the nine as
+`live_blockers_at_lane_base` and the eight as `integrated_live_blockers`, so the historical
+observation is not read as the current state.

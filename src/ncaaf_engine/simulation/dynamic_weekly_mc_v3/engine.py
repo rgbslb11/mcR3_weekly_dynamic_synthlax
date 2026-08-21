@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from . import fcs as fcs_policy
+from . import fcs_scale
 from . import (
     aac_divisions,
     board_of_record,
@@ -97,6 +98,7 @@ class DynamicWeeklyMCV3:
             "board_of_record": board_status,
             "a8_ecl_ordering": ordering.resolution_as_dict(),
             "sos_semantics_governed": sos.GOVERNED_SOS_SEMANTICS is not None,
+            "fcs_point_scale_adapter": fcs_scale.fcs_point_scale_status(),
         }
 
         blockers = self.config.execution_blockers() + [
@@ -115,6 +117,7 @@ class DynamicWeeklyMCV3:
             sos_semantics_governed=sos.GOVERNED_SOS_SEMANTICS is not None,
             fcs_unified_scale_governed=(
                 fcs_policy.GOVERNED_FCS_POLICY.unified_points_equivalent is not None
+                and fcs_scale.GOVERNED_FCS_POINT_SCALE_ADAPTER.governed_for_execution
             ),
             quarterfinal_mapping_ruling_applied=(
                 postseason.QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY

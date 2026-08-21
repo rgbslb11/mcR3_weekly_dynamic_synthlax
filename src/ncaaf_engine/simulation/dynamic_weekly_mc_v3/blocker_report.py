@@ -560,3 +560,66 @@ def convergence_delta() -> dict[str, object]:
         "b1_expected_live": sorted(B1_EXPECTED_LIVE_BLOCKERS),
         "b1_retirement_reasons": dict(sorted(B1_RETIREMENT_REASONS.items())),
     }
+
+
+# --- F1 FCS model-scale adapter lane -------------------------------------------
+#
+# Lane F1 ran on the same frozen base as B1 and reached it independently. It
+# retired nothing and opened nothing: it recorded that no governed Elo-to-points
+# rule exists and left model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER live.
+#
+# Because the two lanes ran in parallel, F1's own observation of the live set is
+# epoch-specific — it saw the nine that were live at eb5e3e7, board custody
+# included. That observation is history and stays exactly as F1 recorded it. It
+# is not the integrated live set, and the constants below keep the two apart so
+# neither can be read as the other.
+
+#: The blocker F1 addresses. Live before the lane and live after it.
+F1_MODEL_SCALE_BLOCKER = "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+
+#: HISTORICAL — what lane F1 observed live at its own frozen base eb5e3e7. Nine.
+F1_LANE_BASE_LIVE_BLOCKERS: frozenset[str] = R3_EXPECTED_LIVE_BLOCKERS
+
+#: F1 retired nothing. An engineering lane cannot issue the rule this needs.
+F1_RETIRED_BLOCKERS: frozenset[str] = frozenset()
+
+#: F1 opened nothing. FCS-SCALE-C1 is recorded evidence, not a new blocker.
+F1_OPENED_BLOCKERS: frozenset[str] = frozenset()
+
+#: DERIVED — the live set after F1, integrated on top of B1. Eight.
+F1_INTEGRATED_LIVE_BLOCKERS: frozenset[str] = (
+    B1_EXPECTED_LIVE_BLOCKERS - F1_RETIRED_BLOCKERS
+) | F1_OPENED_BLOCKERS
+
+
+def f1_integration_delta() -> dict[str, object]:
+    """The lane-base -> integrated transition for F1, computed rather than stated.
+
+    F1's nine-blocker observation and the integrated eight-blocker state are both
+    true, of different epochs. The single difference between them is B1's custody
+    retirement, which F1 neither performed nor depends on. ``attributable_to_f1``
+    is the audit that matters: it must stay empty, because a lane that retires
+    nothing must not appear to have moved the live set.
+    """
+    lane_base = F1_LANE_BASE_LIVE_BLOCKERS
+    integrated = F1_INTEGRATED_LIVE_BLOCKERS
+    difference = lane_base - integrated
+    return {
+        "lane_base_sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+        "lane_base_count": len(lane_base),
+        "lane_base_set": sorted(lane_base),
+        "integrated_count": len(integrated),
+        "integrated_set": sorted(integrated),
+        "retired_by_f1": sorted(F1_RETIRED_BLOCKERS),
+        "opened_by_f1": sorted(F1_OPENED_BLOCKERS),
+        "difference_from_lane_base": sorted(difference),
+        "attributable_to_f1": sorted(difference & (F1_RETIRED_BLOCKERS | F1_OPENED_BLOCKERS)),
+        "attributable_to_b1": sorted(difference & B1_RETIRED_BLOCKERS),
+        "unexplained": sorted(difference - B1_RETIRED_BLOCKERS - F1_RETIRED_BLOCKERS),
+        "f1_blocker_live_at_lane_base": F1_MODEL_SCALE_BLOCKER in lane_base,
+        "f1_blocker_live_when_integrated": F1_MODEL_SCALE_BLOCKER in integrated,
+        "board_custody_live_at_lane_base": R3_BOARD_OF_RECORD_MOUNT_BLOCKER in lane_base,
+        "board_custody_live_when_integrated": (
+            R3_BOARD_OF_RECORD_MOUNT_BLOCKER in integrated
+        ),
+    }

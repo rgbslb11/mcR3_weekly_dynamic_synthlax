@@ -1,0 +1,30 @@
+{
+  "_purpose": "Candidate Elo-1250 -> unified-neutral-points scale rules for schedule-only FCS entities. EXPERIMENTATION ONLY.",
+  "_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+  "_governance": [
+    "Values here are EXPERIMENTAL and are never canonical.",
+    "The FCS rating policy is settled: ruling R2-FCS-ELO-1250 fixes Elo 1250. That is not reopened.",
+    "fcs_scale.CANONICAL_FCS_UNIFIED_POINTS stays None; no harness path can set it.",
+    "Promotion requires the explicit human token APPROVE_V3_FCS_POINT_SCALE_PROMOTION::<RULING_ID>.",
+    "The calibration promotion token is a different namespace and does not authorise this parameter.",
+    "This file ships with zero regimes on purpose: authoring a candidate points value would",
+    "invent the very calibration the blocker records as missing. Populate it only from an",
+    "issued scale rule or a governed calibration program.",
+    "Refused by name at authoring time: 0.294, 0.297, 0.297514, the Board equivalent computable",
+    "from Elo 1250, and any Elo-layer constant presented as a football-point value."
+  ],
+  "_schema": {
+    "regimes": [
+      {
+        "regime_id": "<string, unique>",
+        "status": "EXPERIMENTAL",
+        "rationale": "<why this candidate is worth testing, and which evidence requirement it addresses>",
+        "values": {
+          "fcs_unified_points_equivalent": "<float|null>",
+          "fcs_home_hfa_modifier": "<float|null>"
+        }
+      }
+    ]
+  },
+  "regimes": []
+}

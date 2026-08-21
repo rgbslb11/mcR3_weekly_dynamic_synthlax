@@ -65,7 +65,8 @@ Every preflight emits SHA-256 input hashes. The V2.1 control reference copy is b
 ### Governance / data blockers
 
 - V3 HFA baseline: V2.1 legacy engine records `4.0`, while current schedule/team-master governance records `3.5`; V3 does not silently choose either.
-- Exact FCS Board-equivalent -> unified-points translation policy is not configured.
+- FCS model scale (`model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`): ruling `R2-FCS-ELO-1250` fixes FCS at Elo 1250 and that policy is settled. No governed mapping carries an Elo onto the unified neutral-points axis the engine rates on. `fcs_scale.py` implements the adapter interface and an experimental harness; the canonical value stays unset. See the F1 packet in `v3_governance_decision_packets.md` for the exact evidence required.
+- Three of the 15 FBS-v-FCS games (`G0019`, `G0213`, `G0224`) have the FCS entity as nominal home team, and no HFA modifier is governed for one; `SCHED-HFA-BASE` is `modifier * 3.5` and `Team.hfa_modifier` is `None`.
 - The FCS reconciliation workbook explicitly records `Model use authorized = FALSE`, despite V2.1 referring to its R-FCS-RATING-01 construct; V3 requires an explicit authority resolution.
 - Final committee strength tiebreak source is not governed for V3: preserve V2.1 preseason strength or use final weekly football strength.
 - Ratified American/Athletic 8/8 division membership is referenced by Model Parameters, but the membership-row artifact is not mounted.

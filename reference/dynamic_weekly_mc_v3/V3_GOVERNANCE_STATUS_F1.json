@@ -1,0 +1,437 @@
+{
+  "artifact": "V3_GOVERNANCE_STATUS_F1.json",
+  "artifact_status": "LANE_STATUS_RECORD",
+  "epoch_specific": true,
+  "epoch_note": "This record is epoch-specific. It was written on frozen base eb5e3e7f546217809a94692bf0e502882b7d51c0, where the live execution blocker set was nine. Lane B1 ran independently on that same base and retired exactly one id, inputs.board_of_record_i_k, on artifact-custody evidence. Every blocker figure this record carries is therefore labelled by epoch: the nine F1 observed are recorded as live_blockers_at_lane_base and are history; the eight live in the integrated tree are recorded as integrated_live_blockers. Neither is edited to look like the other.",
+  "supersedes": null,
+  "supersedes_note": "Supersedes nothing. V3_GOVERNANCE_STATUS_R4.json remains the live governance status record; this file records one engineering lane against it and is retained alongside it.",
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "lane": "F1 — FCS point-scale adapter",
+  "scope": "MODEL_SCALE_ADAPTER_LANE_ONLY",
+  "note": "Lane F1 addressed model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER. An exhaustive search of every mounted governed artifact found no reproducible mapping carrying an Elo onto the unified neutral-field points axis. The two transforms that do exist were reproduced independently and are recorded here; they do not compose. The adapter interface and an experimental calibration harness are implemented, the canonical point value stays unset, and the blocker is RETAINED. No blocker was retired, none was opened, no calibration value was promoted, no governance or data was invented, the 10,000-path Monte Carlo was not run and no probability artifact was produced.",
+  "outcome": "BLOCKER_RETAINED",
+  "base_sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+  "base_sha_role": "Frozen base for lane F1, verified as HEAD on a clean tree before any edit.",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it; the candidate SHA belongs to the handoff receipt returned after commit.",
+  "chairman_ruling_ids_supplied": false,
+  "chairman_rulings": [],
+  "chairman_rulings_note": "This lane issued no ruling and represents none. Closing this blocker requires either an issued scale rule or a governed calibration program; an engineering lane can produce neither.",
+  "fcs_rating_policy": {
+    "ruling": "R2-FCS-ELO-1250",
+    "fixed_elo": 1250.0,
+    "policy_resolved": true,
+    "policy_reopened_by_f1": false
+  },
+  "mapping_search": {
+    "outcome": "NO_GOVERNED_ELO_TO_UNIFIED_POINTS_MAPPING_EXISTS",
+    "governed_mapping_exists": false,
+    "reproducible_mappings": [
+      "Board I-H -> Elo: primary_elo = 999.986237 * board_power_H + 1099.999878 (POWER_CRUNCH…v2_2.xlsx!Build Manifest; reproduced on 121 rows, max residual 0.014933)",
+      "four-family ensemble -> unified points: points = 14 * UnifiedMasterZ (2026_CFB…Unified_Power_Ratings.xlsx!Ensemble Parameters + !Data Dictionary; reproduced on 121 FBS rows to 0.0 error)"
+    ],
+    "missing_link": "Elo -> unified neutral-field points, for an entity with no rating family values",
+    "reasons_not_composable": [
+      "Ruling R2-FCS-ELO-1250 forbids inverting the Elo/Board transform and forbids the Board equivalent as a conversion rule. The manifest issues Board -> Elo only.",
+      "Board I-H carries 12.5% of the unified composite. The other three families — TrueSkill, Litkenhous, Pure Baxter — supply no value for any schedule-only FCS entity, so no Unified Master Z can be formed even if the inversion were permitted.",
+      "The unified ratings workbook holds 121 FBS rows and no FCS row, so there is nothing to read the missing families from.",
+      "POWER_CRUNCH!Build Manifest records 'Board columns for FCS: BLANK — Board-equivalent recorded not issued', and all 13 FCS rows carry board_power_H = 'UNRATED'.",
+      "No register, ruling or workbook row anywhere in the mounted set states a points-per-Elo rate, an Elo-to-points table, or an FCS unified-points value."
+    ],
+    "artifacts_searched": [
+      "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx (all 5 sheets)",
+      "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx (all 3 sheets)",
+      "Model_Parameters_v2_5_APPROVED.xlsx (all 27 sheets)",
+      "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx (all 7 sheets)",
+      "2026 Bracket Regime LOCKED.xlsx (all 3 sheets)",
+      "2026 Playoff Calendar OFFICIAL 2.xlsx (all 5 sheets)",
+      "2026_FBS_Schedule_LOCKED_v5.xlsx (Games, Certification)",
+      "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md"
+    ]
+  },
+  "reproduced_transforms": {
+    "elo_from_board_power_h": {
+      "formula": "primary_elo = 999.986237 * board_power_H + 1099.999878",
+      "source": "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx!Build Manifest",
+      "rows_reproduced": 121,
+      "recorded_max_residual": 0.0149,
+      "reproduced_max_residual": 0.014932610474716057,
+      "provenance": "FACT reproduced; DERIVED residual"
+    },
+    "unified_neutral_field_points": {
+      "formula": "points = 14 * UnifiedMasterZ",
+      "unified_master_z": "0.25*z(TrueSkill) + 0.25*z(Litkenhous) + 0.25*z(PureBaxter) + 0.25*mean(z(Board I-H), z(Board J-B))",
+      "source": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Ensemble Parameters and !Data Dictionary",
+      "rows_reproduced": 121,
+      "max_absolute_error": 0.0,
+      "provenance": "FACT reproduced"
+    },
+    "do_they_compose": false,
+    "reasons_not_composable": [
+      "Ruling R2-FCS-ELO-1250 forbids inverting the Elo/Board transform and forbids the Board equivalent as a conversion rule. The manifest issues Board -> Elo only.",
+      "Board I-H carries 12.5% of the unified composite. The other three families — TrueSkill, Litkenhous, Pure Baxter — supply no value for any schedule-only FCS entity, so no Unified Master Z can be formed even if the inversion were permitted.",
+      "The unified ratings workbook holds 121 FBS rows and no FCS row, so there is nothing to read the missing families from.",
+      "POWER_CRUNCH!Build Manifest records 'Board columns for FCS: BLANK — Board-equivalent recorded not issued', and all 13 FCS rows carry board_power_H = 'UNRATED'.",
+      "No register, ruling or workbook row anywhere in the mounted set states a points-per-Elo rate, an Elo-to-points table, or an FCS unified-points value."
+    ]
+  },
+  "closed_routes_refused_by_name": {
+    "recorded_not_issued_board_equivalent": 0.297514,
+    "derived_inverse_of_superseded_composite": 0.2975142166881642,
+    "manufactured_board_equivalent_for_elo_1250": 0.15000218648009245,
+    "manufactured_value_provenance": "DERIVED_AND_REFUSED",
+    "manufactured_value_note": "Computed once so it can be refused by name. Nothing consumes it. The recorded 0.297514 is itself this inversion applied to the superseded composite 1397.51, which is why the ruling closes the route rather than merely rejecting a number.",
+    "elo_layer_constants_refused_as_points": {
+      "R2-FCS-ELO-1250 fixed FCS Elo": 1250.0,
+      "R-FCS-RATING-01 operator composite (superseded)": 1397.51,
+      "CCG-R_REF SOR reference Elo": 1893.3,
+      "CCG-HFA_ELO Elo-layer home-field advantage": 65.0,
+      "CCG-SIGMA_ELO rating uncertainty": 68.0
+    },
+    "insufficient_evidence": [
+      "Inverting the POWER_CRUNCH Elo/Board transform to obtain a Board power value — forbidden by ruling R2-FCS-ELO-1250.",
+      "The recorded Board equivalents 0.294 / 0.297 / 0.297514 — 'recorded not issued', and forbidden as a conversion rule by the same ruling.",
+      "The Board equivalent 0.15000218648009245 computable from Elo 1250 — the same closed route with a new number.",
+      "Reading 1250, or the superseded 1397.51, as a football-point value — a category error between the Elo and unified-points axes.",
+      "Running the four-family unified ensemble for an FCS entity — three of four families supply no value and Board I-H is recorded UNRATED.",
+      "Fitting any affine, logistic or inverse transform between the axes from the 121 FBS rows and extrapolating it to an entity outside that population — an invented rule no source issued.",
+      "V2.1's bridge, which is the Board I-H equivalent route the ruling closes."
+    ]
+  },
+  "coverage": {
+    "schedule_only_fcs_identities": [
+      "ARST",
+      "CHAR",
+      "CP",
+      "DUQ",
+      "EMU",
+      "IDHO",
+      "SAC",
+      "SUU",
+      "TOL",
+      "ULL",
+      "ULM",
+      "WKU",
+      "WMU"
+    ],
+    "schedule_only_fcs_identity_count": 13,
+    "identities_resolvable_on_points_axis": 0,
+    "fbs_v_fcs_game_ids": [
+      "G0019",
+      "G0045",
+      "G0056",
+      "G0071",
+      "G0074",
+      "G0096",
+      "G0123",
+      "G0144",
+      "G0151",
+      "G0168",
+      "G0193",
+      "G0213",
+      "G0214",
+      "G0224",
+      "G0575"
+    ],
+    "fbs_v_fcs_game_count": 15,
+    "games_simulatable": 0,
+    "weeks_affected": [
+      2,
+      3,
+      4,
+      5,
+      12
+    ],
+    "fcs_hosted_game_ids": [
+      "G0019",
+      "G0213",
+      "G0224"
+    ],
+    "second_gap": "Three scheduled games have a schedule-only FCS entity as nominal home team and no HFA modifier is governed for one. SCHED-HFA-BASE is modifier * 3.5 and Team.hfa_modifier is None for all 13 entities. Surfaced as FCS-SCALE-C1 rather than defaulted."
+  },
+  "adapter": {
+    "interface_implemented": true,
+    "adapter_constructed": false,
+    "module": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/fcs_scale.py",
+    "canonical_unified_points": null,
+    "canonical_home_hfa_modifier": null,
+    "governed_for_execution": false,
+    "experimental_adapter_consumable_by_a_run": false
+  },
+  "experimental_harness": {
+    "config": "config/dynamic_weekly_mc_v3/experimental/fcs_point_scale_regimes.json",
+    "regimes_authored": 0,
+    "regimes_authored_note": "Ships empty on purpose: authoring a candidate points value would invent the calibration the blocker records as missing.",
+    "promotion_token_namespace": "APPROVE_V3_FCS_POINT_SCALE_PROMOTION::<RULING_ID>",
+    "calibration_token_authorises_this_parameter": false,
+    "automatic_promotion": false,
+    "writes_canonical_config": false,
+    "dataset_mounted": false
+  },
+  "closure_routes": [
+    "ISSUED_SCALE_RULE",
+    "CALIBRATED_SCALE_RULE"
+  ],
+  "evidence_requirements": [
+    {
+      "requirement_id": "FCS-SCALE-A1",
+      "route": "ISSUED_SCALE_RULE",
+      "requirement": "An issued rule stating either (a) the exact unified neutral-field points value a schedule-only FCS entity carries at Elo 1250, or (b) an explicit Elo-to-points function with its coefficients stated in the ruling itself.",
+      "why_required": "The engine consumes a points value. No mounted artifact states one, and no artifact states a points-per-Elo rate from which one could be computed.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-A2",
+      "route": "ISSUED_SCALE_RULE",
+      "requirement": "The ruling must state that the value is issued, and not derived from the Board I-H equivalent nor from inverting the POWER_CRUNCH Elo/Board transform.",
+      "why_required": "Ruling R2-FCS-ELO-1250 closes both routes. A value that silently arrived by the closed route would satisfy the engine while violating the ruling.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-A3",
+      "route": "ISSUED_SCALE_RULE",
+      "requirement": "Whether one value covers all 13 entities or each is rated separately, stated explicitly.",
+      "why_required": "Every mounted source treats the 13 as undifferentiated: one sim_rating, one Board equivalent, one ruling. Assuming that carries onto the points axis would be an assumption, and assuming it does not would be another.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-A4",
+      "route": "ISSUED_SCALE_RULE",
+      "requirement": "Whether an FCS entity's points value participates in weekly rerating or stays fixed for the season.",
+      "why_required": "V2.1 recorded 'Power ratings do not update for injuries or simulated results during a season'. V3 reretes weekly. An FCS entity plays one game and the rerating treatment of a one-game entity is not governed.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-B1",
+      "route": "CALIBRATED_SCALE_RULE",
+      "requirement": "A mounted governed historical calibration observation set of completed FBS-versus-FCS games with actual margins, passing calibration.register_dataset.",
+      "why_required": "No observation set is mounted anywhere in this repository. The 15 mounted FBS-v-FCS fixtures are 2026 games that have not been played, so they are the thing to be predicted and can never be their own training data.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-B2",
+      "route": "CALIBRATED_SCALE_RULE",
+      "requirement": "A named evaluation objective for this parameter, consistent with ruling R2-CAL-OBJECTIVE.",
+      "why_required": "Ranking candidates against an unstated goal is how an arbitrary choice acquires the appearance of evidence.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-B3",
+      "route": "CALIBRATED_SCALE_RULE",
+      "requirement": "Training / validation / holdout separation, with promotion evidence from holdout.",
+      "why_required": "Ruling R2-CAL-OBJECTIVE keeps the three splits separated and requires out-of-sample evidence.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-C1",
+      "route": "EITHER_ROUTE",
+      "requirement": "An HFA modifier for a schedule-only FCS entity as nominal home team, for the three scheduled games G0019 (SJSU@EMU), G0213 (SDSU@TOL) and G0224 (BOISE@WMU).",
+      "why_required": "Team.hfa_modifier is None for all 13 FCS entities and SCHED-HFA-BASE defines team_home_edge_points = modifier * 3.5. The engine currently reads `home_team.hfa_modifier or 1.0`, which would silently default an ungoverned entity to the full FBS home edge.",
+      "satisfied": false
+    },
+    {
+      "requirement_id": "FCS-SCALE-C2",
+      "route": "EITHER_ROUTE",
+      "requirement": "An explicit human promotion token, APPROVE_V3_FCS_POINT_SCALE_PROMOTION::<RULING_ID>, plus a named promotion authority.",
+      "why_required": "No experiment and no ranking promotes itself. This mirrors the calibration promotion gate and is refused by default.",
+      "satisfied": false
+    }
+  ],
+  "unsatisfied_evidence_requirement_ids": [
+    "FCS-SCALE-A1",
+    "FCS-SCALE-A2",
+    "FCS-SCALE-A3",
+    "FCS-SCALE-A4",
+    "FCS-SCALE-B1",
+    "FCS-SCALE-B2",
+    "FCS-SCALE-B3",
+    "FCS-SCALE-C1",
+    "FCS-SCALE-C2"
+  ],
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blocker_count_before": 9,
+  "resolved_blockers": [],
+  "opened_blockers": [],
+  "live_blockers_at_lane_base": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "live_blockers_at_lane_base_note": "HISTORICAL. Exactly what lane F1 observed live at base eb5e3e7, recorded verbatim and not rewritten. Superseded as a statement of the current live set by V3_GOVERNANCE_STATUS_B1.json; still true of the epoch it names. Renamed from 'live_blockers' during F1 integration so a nine-blocker observation cannot be read as the current eight-blocker state. The value is unchanged.",
+  "live_blocker_count_at_lane_base": 9,
+  "live_blocker_classification_at_lane_base": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "inputs.board_of_record_i_k": "ARTIFACT_CUSTODY",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "integrated_live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "integrated_live_blocker_count": 8,
+  "integrated_live_blocker_classification": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "blocker_epochs": {
+    "lane_base": {
+      "sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+      "source_constant": "blocker_report.F1_LANE_BASE_LIVE_BLOCKERS",
+      "count": 9,
+      "set": [
+        "calibration.blowout_treatment",
+        "calibration.game_sd_points",
+        "calibration.recent_form_weights",
+        "calibration.sample_size_regularization",
+        "calibration.weekly_movement_cap_points",
+        "calibration.weekly_performance_residual_coefficient",
+        "governance.GAME_SD_CALIBRATION_OPEN",
+        "inputs.board_of_record_i_k",
+        "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+      ]
+    },
+    "integrated": {
+      "sha": "00014d538849c8cfd774f3dbd3b7d535bc24b9ee",
+      "sha_role": "Integration base this successor candidate was built on.",
+      "source_constant": "blocker_report.F1_INTEGRATED_LIVE_BLOCKERS",
+      "count": 8,
+      "set": [
+        "calibration.blowout_treatment",
+        "calibration.game_sd_points",
+        "calibration.recent_form_weights",
+        "calibration.sample_size_regularization",
+        "calibration.weekly_movement_cap_points",
+        "calibration.weekly_performance_residual_coefficient",
+        "governance.GAME_SD_CALIBRATION_OPEN",
+        "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+      ]
+    },
+    "difference": [
+      "inputs.board_of_record_i_k"
+    ],
+    "retired_by_f1": [],
+    "opened_by_f1": [],
+    "attributable_to_f1": [],
+    "attributable_to_b1": [
+      "inputs.board_of_record_i_k"
+    ],
+    "unexplained": [],
+    "f1_blocker_live_at_lane_base": true,
+    "f1_blocker_live_when_integrated": true,
+    "board_custody_live_at_lane_base": true,
+    "board_custody_live_when_integrated": false,
+    "computed_by": "blocker_report.f1_integration_delta()",
+    "note": "The single difference between the two epochs is B1's custody retirement. F1 retired nothing and opened nothing, so attributable_to_f1 is empty and stays empty. The F1 blocker is live in both epochs: a mounted Board-of-Record artifact carries no FCS row and issues no Elo-to-points rule, so the mount neither closes nor advances this lane."
+  },
+  "governed_reference_inputs_unchanged": true,
+  "artifact_hashes": {
+    "2026 Bracket Regime LOCKED.xlsx": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab",
+    "2026 Playoff Calendar OFFICIAL 2.xlsx": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20",
+    "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+    "2026_FBS_Schedule_LOCKED_v5.xlsx": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "Model_Parameters_v2_5_APPROVED.xlsx": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+    "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b",
+    "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+  },
+  "parent_status_artifact": "V3_GOVERNANCE_STATUS_R4.json",
+  "simulation_run": false,
+  "output_probabilities_generated": false,
+  "monte_carlo_10000_path_run": false,
+  "canonical_config": {
+    "writes_canonical_config": false,
+    "modified_by_f1": false
+  },
+  "test_counts": {
+    "total": 502,
+    "v3": 443,
+    "f1_lane": 93,
+    "predecessor_r4_total": 409,
+    "predecessor_r4_v3": 350,
+    "measured_at": "final F1 candidate working tree, before commit",
+    "note": "Counted at artifact generation time on the working tree that became the final candidate. Not the SHA of the commit containing this file."
+  },
+  "provenance_class": {
+    "FACT": "Reproduced from a mounted repository artifact.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "ASSUMPTION": "None recorded.",
+    "BLOCKED": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER — no governed Elo-to-unified-points mapping exists; adapter interface implemented, canonical value unset."
+  },
+  "integration": {
+    "integration_base_sha": "00014d538849c8cfd774f3dbd3b7d535bc24b9ee",
+    "original_f1_candidate_sha": "0507dbe99e23b5b067e3af9305f4551194c2f83d",
+    "original_f1_base_sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+    "successor_head_sha": null,
+    "successor_head_sha_note": "Deliberately null, for the same reason head_sha is: a committed artifact cannot carry the SHA of the commit containing it.",
+    "relationship_to_original": "Successor integration-compatible candidate. The original F1 candidate 0507dbe is not rewritten, not reverted and not superseded as history; it remains the record of what lane F1 did against its own frozen base.",
+    "integrated_lanes_between_base_and_this_candidate": [
+      "B1",
+      "C1",
+      "C3",
+      "C2"
+    ],
+    "b1_effect_on_this_record": "B1 retired inputs.board_of_record_i_k on SHA-256 custody evidence after F1's base was frozen. That made F1's present-tense 'live_blockers' assertion stale — not wrong about its own epoch, but no longer a description of the live set. The figures were relabelled by epoch rather than overwritten or deleted.",
+    "b1_custody_closure_preserved": true,
+    "board_of_record_i_k_reopened_by_f1": false,
+    "f1_blocker_retained": true,
+    "conflict_resolved": {
+      "file": "docs/v3_governance_decision_packets.md",
+      "cause": "Lanes B1 and F1 each appended a new packet section at the same point, immediately after 'Live blockers after R3 (9)'. A textual conflict only; the two sections describe different blockers and share no claim.",
+      "resolution": "Both sections retained in full, in integrated order — B1 then F1 — with neither side taken wholesale. A 'Lane epoch' subsection was added to the F1 packet stating that F1 was written against the nine-blocker base and that the integrated live set is B1's eight.",
+      "ours_or_theirs_wholesale": false
+    },
+    "governance_authority_changed": false,
+    "new_ruling_issued": false,
+    "calibration_value_promoted": false,
+    "elo_to_points_transform_invented": false,
+    "blockers_retired_by_this_candidate": [],
+    "blockers_opened_by_this_candidate": []
+  },
+  "integrated_test_counts": {
+    "total": 674,
+    "v3": 615,
+    "f1_lane": 100,
+    "predecessor_integrated_base_total": 574,
+    "predecessor_integrated_base_v3": 515,
+    "measured_at": "final F1 integration-remediation candidate working tree, before commit",
+    "note": "Measured on the integrated base 00014d5 (B1 + C1 + C3 + C2) with this candidate applied. The historical test_counts block above is F1's own measurement at eb5e3e7 and is left exactly as F1 recorded it."
+  }
+}
