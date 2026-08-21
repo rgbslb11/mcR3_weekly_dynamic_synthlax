@@ -1,0 +1,57 @@
+{
+  "_purpose": "Versioned data contract between the C1 calibration-data lane and the C2 Baxter Rating RMSE harness.",
+  "_governance": [
+    "This document is EXPERIMENTAL. Nothing it points at becomes canonical V3 configuration.",
+    "It ships unfilled on purpose: no observation set has been delivered, and inventing a",
+    "path or a hash here would give an absent dataset the appearance of provenance.",
+    "While observations.path is null the harness returns READY_FOR_DATA and no metrics.",
+    "C1 fills observations.*, split_policy and hfa; C3 fills witnesses. Neither may add a",
+    "column outside the governed observation allowlist, and betting-flow and injury signals",
+    "are refused under any spelling."
+  ],
+  "contract_id": "C2-BAXTER-RMSE-DATA-CONTRACT",
+  "contract_version": "1.0.0",
+  "produced_by": "LANE_C1_CALIBRATION_DATA",
+  "consumed_by": "LANE_C2_BAXTER_RMSE_HARNESS",
+  "status": "AWAITING_DATA",
+  "observations": {
+    "path": null,
+    "format": null,
+    "dataset_id": null,
+    "sha256": null
+  },
+  "split_policy": {
+    "mode": "column",
+    "_alternatives": {
+      "temporal_week": {
+        "mode": "temporal_week",
+        "training_through": {"season": 0, "week": 0},
+        "validation_through": {"season": 0, "week": 0}
+      },
+      "temporal_season": {
+        "mode": "temporal_season",
+        "training_seasons": [],
+        "validation_seasons": [],
+        "holdout_seasons": []
+      }
+    }
+  },
+  "metric": {
+    "baxter_rmse_definition_id": "BAXTER_MARGIN_PREDICTION_RMSE_V1",
+    "_note": "Operational definition proposed by the C2 harness. Ruling R2-CAL-OBJECTIVE names Baxter Rating RMSE as the primary criterion but does not state its formula, so this definition is DERIVED and is not admissible as promotion evidence until a ruling adopts it."
+  },
+  "hfa": {
+    "points": null,
+    "source": "V3_CONFIG_HFA_BASELINE_POINTS",
+    "_note": "Deferred to governed V3 configuration so the harness carries no copy of a governed value. Set points only alongside source=CONTRACT_LITERAL."
+  },
+  "witnesses": {
+    "colley_matrix": null,
+    "srs": null
+  },
+  "notes": [
+    "Independent witnesses are reported beside the primary criterion and are never blended into it.",
+    "Holdout is scored only in a single-regime confirmation run.",
+    "No candidate calibration values are authored by this contract or by the harness."
+  ]
+}
