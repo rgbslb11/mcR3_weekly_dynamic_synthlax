@@ -1,0 +1,6 @@
+# OPERATION SYTHALAX
+# SHA-bound governed artifacts must retain byte-exact repository content.
+# Do not allow Git checkout/commit newline conversion.
+
+config/dynamic_weekly_mc_v3/governed/** -text
+reference/dynamic_weekly_mc_v3/** -text
