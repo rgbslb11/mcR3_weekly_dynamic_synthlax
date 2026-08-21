@@ -67,3 +67,43 @@ def bracket_games_from_seeds(selection: CFPSelection) -> dict[str, tuple[str, st
         "R1_7_10": (s[7], s[10]),
         "R1_8_9": (s[8], s[9]),
     }
+
+
+# --- Quarterfinal opponent mapping (governance-gated) -------------------------
+#
+# The Playoff Calendar's Bracket_Flow sheet fixes the quarterfinal *slots* and the
+# semifinal pairing:
+#
+#     E = 1 v W(R1)   F = 2 v W(R1)   G = 3 v W(R1)   H = 4 v W(R1)
+#     Semi A = W(E) v W(H)            Semi B = W(F) v W(G)
+#
+# What it never states is *which* first-round winner lands in E, F, G or H. Both
+# candidate rules below satisfy every recorded constraint, including integrity
+# item P-3 (seeds 1 and 2 in opposite halves), and they disagree whenever an
+# upset changes the surviving seed order. The mapping is therefore genuinely
+# unresolved rather than merely unstated, and inferring one would silently pick a
+# bracket shape that the governed sources do not endorse.
+
+QUARTERFINAL_MAPPING_OPTIONS = (
+    # Fixed bracket: quarterfinal opponent determined by the bracket slot a first
+    # round game occupies, irrespective of which team wins it.
+    "FIXED_BRACKET_MAPPING",
+    # Reseeding: the highest remaining seed plays the lowest remaining seed.
+    "RESEED_BY_ORIGINAL_SEED",
+)
+
+
+def require_governed_quarterfinal_mapping(mapping_policy: str | None) -> str:
+    """Fail closed until the R1-winner to quarterfinal mapping is governed."""
+    if mapping_policy is None:
+        raise GovernanceBlock(
+            "CFP quarterfinal R1-winner mapping is not explicit in the Bracket Regime "
+            "or Playoff Calendar. Bracket_Flow fixes only 'E = 1 v W(R1)' style slots. "
+            f"An explicit ruling is required, from {sorted(QUARTERFINAL_MAPPING_OPTIONS)}."
+        )
+    if mapping_policy not in QUARTERFINAL_MAPPING_OPTIONS:
+        raise GovernanceBlock(
+            f"Unknown quarterfinal mapping policy {mapping_policy!r}; "
+            f"expected one of {sorted(QUARTERFINAL_MAPPING_OPTIONS)}."
+        )
+    return mapping_policy

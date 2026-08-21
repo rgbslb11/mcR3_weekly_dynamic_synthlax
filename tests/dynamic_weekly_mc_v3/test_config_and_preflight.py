@@ -45,7 +45,10 @@ def test_real_inputs_pass_structural_preflight():
     assert report["schedule"]["regular_games"] == 736
     assert report["schedule"]["ccg_templates"] == 7
     assert report["schedule"]["schedule_games_sha256_certified"] == "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221"
-    assert "SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH" in report["schedule"]["provenance_anomalies"]
+    # The Games-sheet content hash now reproduces the certification exactly; the
+    # binary artifact still is not the registered v5 upload.
+    assert report["schedule"]["schedule_games_sha256_reproduced"] == report["schedule"]["schedule_games_sha256_certified"]
+    assert "SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH" not in report["schedule"]["provenance_anomalies"]
     assert "SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5" in report["schedule"]["provenance_anomalies"]
 
 

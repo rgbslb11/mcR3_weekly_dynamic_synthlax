@@ -10,6 +10,12 @@ from openpyxl import load_workbook
 
 from .errors import InputValidationError
 from .models import ScheduledGame, Team
+from .provenance import (
+    BINARY_MISMATCH,
+    CERTIFIED_GAMES_CONTENT_SHA256,
+    CONTENT_MISMATCH,
+    GOVERNED_SCHEDULE_BINARY_SHA256,
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -170,14 +176,29 @@ def load_schedule(path: Path) -> list[ScheduledGame]:
 
 
 def schedule_content_hash(path: Path) -> str:
+    """Reproduce the certified Games-sheet content hash.
+
+    The canonical method is documented on the schedule workbook's Certification
+    sheet: "SHA-256 of Games sheet serialized as UTF-8 CSV with header, LF line
+    endings, and blank for null."
+
+    A row that ends short of the header width has trailing *null* cells, so the
+    canonical serialization emits them as blanks. 735 of the 743 data rows omit
+    the trailing ``venue_rule`` cell; writing them ragged produces a different
+    CSV and therefore a different digest. Every row is padded to the header
+    width before serialization so the reproduction matches the certified value.
+    """
     wb = load_workbook(path, read_only=True, data_only=True)
     ws = wb["Games"]
+    rows = [list(r) for r in ws.iter_rows(values_only=True) if any(v is not None for v in r)]
+    if not rows:
+        raise InputValidationError("Games sheet is empty")
+    width = len(rows[0])
     sio = io.StringIO(newline="")
     writer = csv.writer(sio, lineterminator="\n")
-    for row in ws.iter_rows(values_only=True):
-        if not any(v is not None for v in row):
-            continue
-        writer.writerow(["" if v is None else v for v in row])
+    for row in rows:
+        padded = (row + [None] * (width - len(row))) if len(row) < width else row[:width]
+        writer.writerow(["" if v is None else v for v in padded])
     return hashlib.sha256(sio.getvalue().encode("utf-8")).hexdigest()
 
 
@@ -193,14 +214,14 @@ def validate_schedule(path: Path, teams: dict[str, Team]) -> dict[str, object]:
             f"Schedule count mismatch total={len(games)} regular={len(regular)} ccg={len(ccg)}"
         )
     content_hash = schedule_content_hash(path)
-    certified_content_hash = "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221"
-    governed_binary_hash = "db26c3fff15a61ce8e7efa3b93100fa017e02248c96076d291495b55e855da12"
+    certified_content_hash = CERTIFIED_GAMES_CONTENT_SHA256
+    governed_binary_hash = GOVERNED_SCHEDULE_BINARY_SHA256
     actual_binary_hash = sha256_file(path)
     anomalies: list[str] = []
     if content_hash != certified_content_hash:
-        anomalies.append("SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH")
+        anomalies.append(CONTENT_MISMATCH)
     if actual_binary_hash != governed_binary_hash:
-        anomalies.append("SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5")
+        anomalies.append(BINARY_MISMATCH)
     return {
         "games_total": len(games),
         "regular_games": len(regular),
