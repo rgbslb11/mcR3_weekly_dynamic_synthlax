@@ -328,13 +328,21 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
             "The FCS rating policy is NOT in question: ruling R2-FCS-ELO-1250 fixes Elo 1250 "
             "and that stands. What is missing is a model-scale adapter. All 13 schedule-only "
             "FCS entities carry preseason_strength_points=None, they appear in 15 regular-season "
-            "games across weeks 2-5 and 12, and engine._initialize_states raises on the first of "
-            "them. V2.1 bridged this via the Board I-H equivalent "
-            "(V2_1_STATIC_CONTROL!Methodology!A8), the exact route this ruling forbids."
+            "games across weeks 2-5 and 12, and engine._initialize_states refuses, naming all "
+            "13. V2.1 bridged this via the Board I-H equivalent "
+            "(V2_1_STATIC_CONTROL!Methodology!A8), the exact route this ruling forbids. "
+            "The forbidden route is also independently insufficient: the target axis is "
+            "14 x a Z-score over the 121-team FBS population, of which Board I-H supplies "
+            "0.125; the other 0.875 (TrueSkill, Litkenhous, Pure Baxter, Board J-B) has no "
+            "governed value for any FCS entity. No register in the mounted corpus issues an "
+            "Elo-to-unified-points relation, and the 14 points/SD scale is itself recorded as "
+            "'initial scale pending margin calibration'."
         ),
         required_to_clear=(
             "Issue an Elo-to-unified-points scale rule, or calibrate one, for schedule-only FCS "
-            "entities. This is a model-scale/calibration item, not an FCS policy question."
+            "entities, and install it through fcs.register_fcs_scale_adapter with complete "
+            "issued provenance and an approval token. This is a model-scale/calibration item, "
+            "not an FCS policy question."
         ),
         governance_group=GROUP_FCS_SCALE,
     ),
