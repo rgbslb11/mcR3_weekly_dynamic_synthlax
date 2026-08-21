@@ -684,3 +684,118 @@ R-FCS-RATING-01 operator composite **translated from Board I-H equivalent to uni
 
 See packet 11 above. `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED` is retained, and
 the required ruling is stated in full rather than inferred.
+
+---
+
+# R3 — PR #3 final convergence
+
+Converged against the R2 adjudicated candidate
+`bbc353e823f8c5e49ee241d412a265481daf9cb0`, base
+`3b46e561b8d939e10ba5d6ff2f69923d963a148e`.
+
+Two Chairman rulings were issued and both are encoded. Nothing else moved: no calibration value
+was promoted, the FCS point-scale adapter was not constructed, and no simulation was run. The
+live blocker set goes **11 → 9**, and the two that left are exactly the two the rulings retire.
+
+| Checkpoint | Blockers | Tests |
+| --- | ---: | ---: |
+| R2-A head `bbc353e` (independently re-verified) | 11 | 286 (227 V3) |
+| **R3 final convergence candidate** | **9** | **352** (293 V3) |
+
+## R3-SOS-OWP-OOWP-SEMANTICS — OWP / OOWP semantics
+
+**DIRECT_CHAIRMAN_AUTHORITY.** Retires
+`governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED`.
+
+The R2-SOS weights are unchanged — `SOS = 0.25·WP + 0.50·OWP + 0.25·OOWP`. What the ruling
+supplies is the semantics underneath them, answering all six open questions:
+
+| # | Question | Ruling |
+| --- | --- | --- |
+| 1 | Opponent's games against the evaluated team | **Excluded** from OWP |
+| 2 | OWP averaging | **Schedule-instance weighted**, not team-averaged |
+| 3 | Repeated opponent | **Once per completed meeting** — two meetings, two contributions |
+| 4 | OOWP construction | **Mean of each opponent's own governed OWP**, once per instance |
+| 5 | Schedule-only FCS records | Governed available records only; otherwise **UNAVAILABLE** |
+| 6 | Zero qualifying observations | **UNAVAILABLE / NULL** — never `0`, `0.0` or `0.500` |
+
+Only games completed through the applicable week participate, so no future result can leak into a
+weekly value.
+
+**Unavailability is a value, not a number.** `sos.UNAVAILABLE` (`None`) propagates: an unavailable
+WP, OWP or OOWP makes the SOS itself unavailable rather than silently becoming numeric.
+`sos_report_row()` stamps it with provenance; `rank_by_sos()` fails closed rather than ordering on
+a component that does not exist. For tiebreaks, a criterion that cannot be evaluated because a
+required governed component is unavailable **does not resolve the tie** — `break_committee_tie`
+advances to the next already-governed stage, which is deliberately distinct from the two sides
+being equal.
+
+**The common-opponent guardrail held.** The `0.25 / 0.50 / 0.25` common-opponent shape was *not*
+newly promoted on the strength of this ruling, and no result-weighted alternative was adopted
+either. It remains carried forward from convergence ruling `R2-COMMON-OPP`, whose nearest
+repository evidence (`18_ACC_POLICY_REFERENCE` ACC-EXT-08) records the question as
+OPEN / REQUIRES RULING rather than stating a formula. The module now records itself as
+`COMMON_OPPONENT_FORMULA_IS_CANONICAL = False`. What did change there is only the denominator
+semantics, which the ruling explicitly governs. The implementation still distinguishes two teams
+with identical common-opponent records where the underlying strength evidence supports it, and
+that fixture is a behavioural check — not governance authority.
+
+## R3-CFP-FIXED-TOPOLOGY — fixed 2026 bracket
+
+**SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY.** Retires
+`governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT`.
+
+```
+PI-A = 12 v 13          R1-A = 7 v 10           QF-E = 1 v W(R1-B)      SF-A = W(QF-E) v W(QF-H)
+PI-B = 11 v 14          R1-B = 8 v 9            QF-F = 2 v W(R1-A)      SF-B = W(QF-F) v W(QF-G)
+                        R1-C = 6 v W(PI-B)      QF-G = 3 v W(R1-C)
+                        R1-D = 5 v W(PI-A)      QF-H = 4 v W(R1-D)
+```
+
+No reseeding. The bracket consumes **final assigned seeds**, not natural committee ranks, and an
+upset never alters future slot topology.
+
+**Provenance, stated precisely.** The official playoff workbook is preserved unchanged and is not
+reinterpreted. `postseason.QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT` **stays `False`** and
+`governance.inspect_bracket` still reports `quarterfinal_opponent_mapping_explicit: False`,
+because `Bracket_Flow!B6` really does say only `E = 1 v W(R1); F = 2 v W(R1); …`. The workbook
+supplied prior structural evidence; its generic `W(R1)` labels never bound the four Round-1
+winners to E/F/G/H. Direct successor Chairman authority fills that ambiguity through a *separate*
+flag, so the resolution reason is recorded as `SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY` and never as
+`SOURCE_WORKBOOK_CONTAINED_MAPPING`.
+
+Bracket Regime LOCKED `S4` ("First Round 5v12, 6v11, 7v10, 8v9") is preserved verbatim in
+`BRACKET_REGIME_S4_ROUND_1_TEXT` and superseded to exactly one extent: in a 14-team field seeds
+11–14 play in, so seeds 5 and 6 meet play-in winners rather than fixed seed opponents.
+
+**G5 interaction.** `R2-G5-SEED5` is not reopened. The automatic-bid champion is seed 5 exactly
+and therefore always meets `Winner(PI-A)` in R1-D. It never enters PI-A or PI-B, stays seed 5 even
+when its natural committee rank is top four, and is not reseeded after any result.
+
+## What was attempted and could not be completed
+
+| Item | Result |
+| --- | --- |
+| Board I-K artifact mount | **`BOARD_IK_ARTIFACT_NOT_ACCESSIBLE_TO_AGENT`** |
+| Canonical SRS evidence mount | **`CANONICAL_SRS_EVIDENCE_NOT_ACCESSIBLE_TO_AGENT`** |
+
+The approved Board-of-Record binary is not present in this environment. A filesystem-wide SHA-256
+sweep of every workbook found no match for
+`6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a`. The only files bearing that
+name are ephemeral pytest fixtures of 49 bytes; a test fixture is never promoted to production
+authority. Board I-H was not substituted and nothing was fabricated, so
+`inputs.board_of_record_i_k` stays open and the expected count is 9 rather than 8.
+
+No canonical SRS specification, reference implementation or validation anchor is present either.
+The SRS claim boundary is therefore **unchanged**: `MATHEMATICALLY_VERIFIED`, explicitly
+`NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS`. Absence here is absence from this environment, not a
+claim that canonical SRS does not exist in the broader project. No new execution blocker was
+created, because governed execution does not currently require those anchors.
+
+## Live blockers after R3 (9)
+
+Six `calibration.*` · `governance.GAME_SD_CALIBRATION_OPEN` ·
+`model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER` · `inputs.board_of_record_i_k`
+
+Seven are calibration, one is engineering/model-scale, one is artifact custody. **No governance
+blocker remains** — governance work is off the primary critical path.

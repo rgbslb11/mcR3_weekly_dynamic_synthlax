@@ -58,6 +58,11 @@ class ChairmanRuling:
     provenance: Provenance = "FACT"
     chairman_ruling_id: str | None = None
     instruction: str = R2_INSTRUCTION
+    #: Why the blockers in ``retires`` may be retired. ``DIRECT_CHAIRMAN_AUTHORITY``
+    #: means the Chairman issued the rule itself; ``SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY``
+    #: means a later authority filled a gap the mounted source genuinely never stated.
+    #: It is never ``SOURCE_WORKBOOK_CONTAINED_MAPPING`` — no workbook was reinterpreted.
+    resolution_reason: str | None = None
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -70,6 +75,7 @@ class ChairmanRuling:
             "supersedes": list(self.supersedes),
             "provenance": self.provenance,
             "instruction": self.instruction,
+            "resolution_reason": self.resolution_reason,
         }
 
 
@@ -339,6 +345,80 @@ R2_CALIBRATION = ChairmanRuling(
 )
 
 
+#: Issued as one instruction for the PR #3 final convergence.
+R3_INSTRUCTION = "OPERATION SYTHALAX — PR #3 FINAL CONVERGENCE"
+
+
+R3_SOS_SEMANTICS = ChairmanRuling(
+    convergence_id="R3-SOS-OWP-OOWP-SEMANTICS",
+    subject="Committee SOS — OWP / OOWP denominator and exclusion semantics",
+    decision=(
+        "SOS(T) = 0.25*WP(T) + 0.50*OWP(T) + 0.25*OOWP(T), unchanged. "
+        "WP(T) = wins by T / completed qualifying games played by T, through the "
+        "applicable week only. "
+        "OWP(T): for every completed qualifying schedule instance T-vs-O, take O's "
+        "qualifying completed-game record through that week, EXCLUDE all completed "
+        "games O played against T, and include the resulting winning percentage once "
+        "for EACH actual completed meeting between T and O; OWP(T) is the arithmetic "
+        "mean of those schedule-instance values. "
+        "OOWP(T): for every completed qualifying schedule instance T-vs-O, take O's own "
+        "governed OWP under the same exclusion and schedule-instance rules and include "
+        "it once for that schedule instance; OOWP(T) is the arithmetic mean of those "
+        "schedule-instance OWP(O) values. "
+        "OWP and OOWP are schedule-instance weighted: a repeated opponent counts once "
+        "per meeting, two meetings contribute twice, and unique-opponent averaging is "
+        "not substituted. Future games are excluded. "
+        "Schedule-only FCS entities contribute only governed available qualifying "
+        "completed-game records; where sufficient governed record data does not exist "
+        "the required component is UNAVAILABLE, never invented as a win, a loss, .500 "
+        "or 0. A component with zero qualifying observations is UNAVAILABLE / NULL, "
+        "never 0, 0.0 or 0.500. For reporting, unavailability is stamped with "
+        "provenance; for tiebreaks, a criterion that cannot be evaluated because a "
+        "required governed component is unavailable does not resolve the tie and "
+        "processing advances to the next already-governed tiebreak stage."
+    ),
+    evidence=(
+        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL CONVERGENCE B1.",
+        "Weights unchanged from ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP).",
+    ),
+    retires=("governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",),
+    supersedes=(),
+    provenance="FACT",
+    instruction=R3_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+R3_CFP_FIXED_TOPOLOGY = ChairmanRuling(
+    convergence_id="R3-CFP-FIXED-TOPOLOGY",
+    subject="2026 synthetic 14-team CFP bracket topology",
+    decision=(
+        "PI-A = seed 12 v seed 13; PI-B = seed 11 v seed 14. "
+        "R1-A = seed 7 v seed 10; R1-B = seed 8 v seed 9; "
+        "R1-C = seed 6 v Winner(PI-B); R1-D = seed 5 v Winner(PI-A). "
+        "QF-E = seed 1 v Winner(R1-B); QF-F = seed 2 v Winner(R1-A); "
+        "QF-G = seed 3 v Winner(R1-C); QF-H = seed 4 v Winner(R1-D). "
+        "SF-A = Winner(QF-E) v Winner(QF-H); SF-B = Winner(QF-F) v Winner(QF-G). "
+        "There is no reseeding. The bracket consumes final assigned seeds, not natural "
+        "committee ranks, and an upset never alters future slot topology."
+    ),
+    evidence=(
+        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL CONVERGENCE B4.",
+        "2026 Playoff Calendar OFFICIAL 2.xlsx!Bracket_Flow supplied prior structural "
+        "evidence only: 'E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)'. "
+        "Those generic W(R1) labels never bound the four Round-1 winners to E/F/G/H.",
+    ),
+    retires=("governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",),
+    supersedes=(
+        "2026 Bracket Regime LOCKED.xlsx!S4 'First Round 5v12, 6v11, 7v10, 8v9' read as "
+        "fixed seed-versus-seed Round-1 pairings — superseded to exactly the extent that "
+        "seeds 5 and 6 meet play-in winners in a 14-team field.",
+    ),
+    provenance="FACT",
+    instruction=R3_INSTRUCTION,
+    resolution_reason="SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+
 R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_SCHEDULE_V5_AUTHORITY,
     R2_THIRTEEN_GAME_EXCEPTIONS,
@@ -358,7 +438,16 @@ R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_CALIBRATION,
 )
 
-_BY_ID = {r.convergence_id: r for r in R2_RULINGS}
+R3_RULINGS: tuple[ChairmanRuling, ...] = (
+    R3_SOS_SEMANTICS,
+    R3_CFP_FIXED_TOPOLOGY,
+)
+
+#: Every ruling issued across both convergences. R2_RULINGS stays exactly as the
+#: audited R2 record; R3 adds to it rather than editing it.
+ALL_RULINGS: tuple[ChairmanRuling, ...] = R2_RULINGS + R3_RULINGS
+
+_BY_ID = {r.convergence_id: r for r in ALL_RULINGS}
 
 
 def ruling(convergence_id: str) -> ChairmanRuling:
@@ -375,7 +464,7 @@ def retirable_blockers() -> dict[str, str]:
     deterministic validation to pass before the blocker actually goes away.
     """
     out: dict[str, str] = {}
-    for r in R2_RULINGS:
+    for r in ALL_RULINGS:
         for blocker in r.retires:
             if blocker in out:
                 raise GovernanceBlock(
@@ -386,4 +475,4 @@ def retirable_blockers() -> dict[str, str]:
 
 
 def as_dicts() -> list[dict[str, object]]:
-    return [r.as_dict() for r in R2_RULINGS]
+    return [r.as_dict() for r in ALL_RULINGS]

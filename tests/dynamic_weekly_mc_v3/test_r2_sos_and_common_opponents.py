@@ -96,8 +96,16 @@ def test_sos_weights_are_the_ruled_weights():
     assert sos.WP_WEIGHT + sos.OWP_WEIGHT + sos.OOWP_WEIGHT == 1.0
 
 
-def test_sos_semantics_are_not_governed_and_fail_closed():
-    assert sos.GOVERNED_SOS_SEMANTICS is None
+def test_sos_semantics_are_now_governed_and_a_fixture_still_cannot_pass():
+    """R3-SOS-OWP-OOWP-SEMANTICS governs the semantics; fixtures still cannot.
+
+    The gate that used to refuse everything now accepts exactly the governed
+    instance. A test fixture's authority is still not a governed source, so a
+    fixture can never be promoted to production authority.
+    """
+    governed = sos.GOVERNED_SOS_SEMANTICS
+    assert governed is not None
+    assert sos.require_governed_sos_semantics(governed) is governed
     with pytest.raises(GovernanceBlock, match=sos.SOS_SEMANTICS_BLOCKER):
         sos.require_governed_sos_semantics(None)
     with pytest.raises(GovernanceBlock, match="not a governed source"):

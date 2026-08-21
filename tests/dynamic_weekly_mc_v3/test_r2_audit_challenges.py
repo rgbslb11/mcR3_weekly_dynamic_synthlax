@@ -250,10 +250,19 @@ def test_the_quarterfinal_rows_never_name_a_specific_first_round_game():
         assert f"W({game})" not in flow["B6"].value
 
 
-def test_the_blocker_is_retained_because_the_source_fails_to_bind_the_edges():
+def test_the_source_still_fails_to_bind_the_edges_and_is_not_reinterpreted():
+    """R2-A's finding stands: the workbook never bound the four R1 winners.
+
+    The R3 ruling fills that gap by successor Chairman authority. It does not
+    make the workbook say something it never said, so this flag stays False.
+    """
     assert postseason.QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT is False
-    with pytest.raises(GovernanceBlock, match="never states which first-round winner"):
-        postseason.require_governed_quarterfinal_slot_edges(None)
+    assert postseason.QUARTERFINAL_MAPPING_RESOLUTION_REASON == (
+        "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
+    )
+    assert postseason.QUARTERFINAL_MAPPING_RESOLUTION_REASON != (
+        "SOURCE_WORKBOOK_CONTAINED_MAPPING"
+    )
 
 
 # --- Challenge 5: FCS scale, not FCS policy ----------------------------------

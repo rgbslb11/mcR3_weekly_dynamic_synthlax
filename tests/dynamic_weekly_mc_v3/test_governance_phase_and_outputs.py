@@ -38,13 +38,18 @@ def test_governance_inspections_are_fail_closed_and_visible():
     ):
         assert retired not in blockers
 
-    # Calibration evidence and an unstated bracket edge cannot be ruled away.
+    # Calibration evidence cannot be ruled away. It is still here.
     assert "governance.GAME_SD_CALIBRATION_OPEN" in blockers
-    assert "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT" in blockers
-
-    # Opened by R2, narrowly.
-    assert "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED" in blockers
     assert "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER" in blockers
+
+    # Retired by the R3 final convergence. The register row above is unchanged --
+    # quarterfinal_opponent_mapping_explicit is still False, because the workbook
+    # still does not state the mapping. Successor Chairman authority does.
+    for retired_by_r3 in (
+        "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+        "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+    ):
+        assert retired_by_r3 not in blockers
 
 
 def test_schedule_phase_partition_preserves_selection_freeze_boundary():

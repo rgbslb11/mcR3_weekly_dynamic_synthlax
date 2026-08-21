@@ -250,15 +250,22 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     ),
     BlockerDisposition(
         blocker_id="governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "Bracket_Flow fixes quarterfinal slots as 'E = 1 v W(R1)' and the semifinal "
-            "pairing W(E)vW(H), W(F)vW(G), but never states which first-round winner fills "
-            "which slot. Fixed-bracket and reseeding both satisfy every recorded constraint "
-            "including integrity item P-3."
+            "Bracket_Flow fixed quarterfinal slots as 'E = 1 v W(R1)' and never stated which "
+            "first-round winner fills which slot — that remains true of the workbook, which is "
+            "neither rewritten nor reinterpreted, and "
+            "postseason.QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT stays False. Ruling "
+            "R3-CFP-FIXED-TOPOLOGY fills the gap by direct successor Chairman authority: "
+            "QF-E = 1 v W(R1-B), QF-F = 2 v W(R1-A), QF-G = 3 v W(R1-C), QF-H = 4 v W(R1-D), "
+            "with no reseeding and the bracket consuming final assigned seeds."
         ),
-        required_to_clear="Ruling selecting FIXED_BRACKET_MAPPING or RESEED_BY_ORIGINAL_SEED.",
+        required_to_clear=(
+            "Cleared by SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY, not because the source workbook "
+            "contained the mapping. "
+        ),
         governance_group=GROUP_BRACKET,
+        ruling="R3-CFP-FIXED-TOPOLOGY",
     ),
     BlockerDisposition(
         blocker_id="governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
@@ -297,27 +304,22 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     ),
     BlockerDisposition(
         blocker_id="governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "Ruling R2-SOS fixes the weights 0.25 WP / 0.50 OWP / 0.25 OOWP. No mounted "
-            "artifact answers any of the six semantics questions underneath them. The nearest "
-            "authority, V2_1_STATIC_CONTROL!Methodology!A11, records V2.1's chain as "
-            "'Winning percentage -> average opponents winning percentage -> conference champion "
-            "-> head-to-head -> unified preseason power': it names an OWP-like quantity, defines "
-            "none of the six, has no OOWP at all, and belongs to a chain R2-COMMITTEE-TB "
-            "replaced. 18_ACC_POLICY_REFERENCE marks ACC-EXT-03/08/09 OPEN - REQUIRES RULING. "
-            "On the Chairman's own common-opponent example the two resumes are numerically "
-            "identical under one answer and separate cleanly under the other."
+            "Ruling R3-SOS-OWP-OOWP-SEMANTICS answers all six questions by direct Chairman "
+            "authority, leaving the R2-SOS weights unchanged: opponent-versus-evaluated-team "
+            "games are excluded from OWP; OWP and OOWP are schedule-instance weighted so a "
+            "repeated opponent contributes once per completed meeting; OOWP is the mean of each "
+            "opponent's own governed OWP; schedule-only FCS entities contribute only governed "
+            "available records; and a component with zero qualifying observations is "
+            "UNAVAILABLE / NULL rather than 0, 0.0 or 0.500."
         ),
         required_to_clear=(
-            "Issue one ruling answering all six: (1) are an opponent's games against the "
-            "evaluated team removed from OWP; (2) is OWP team-averaged or "
-            "schedule-instance-weighted; (3) how is a repeated opponent treated; (4) how is "
-            "OOWP constructed; (5) how do schedule-only FCS opponent records enter WP/OWP/OOWP; "
-            "(6) what happens to a team with zero qualifying games. See "
-            "sos.required_ruling_text()."
+            "Cleared by DIRECT_CHAIRMAN_AUTHORITY with a deterministic implementation and "
+            "tests. "
         ),
         governance_group=GROUP_SOS_SEMANTICS,
+        ruling="R3-SOS-OWP-OOWP-SEMANTICS",
     ),
     BlockerDisposition(
         blocker_id="model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
@@ -432,6 +434,56 @@ R2_EXPECTED_LIVE_BLOCKERS: frozenset[str] = (
 ) | R2_OPENED_BLOCKERS
 
 
+#: Retired by the R3 final-convergence rulings, each with its deterministic
+#: validation passing. Exactly two — both governance, neither calibration.
+R3_RETIRED_BLOCKERS: frozenset[str] = frozenset(
+    {
+        "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+        "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+    }
+)
+
+#: Why each R3 retirement is permitted. Recorded so an auditor never has to infer
+#: that a source artifact was reinterpreted — it was not.
+R3_RETIREMENT_REASONS: dict[str, str] = {
+    "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED": "DIRECT_CHAIRMAN_AUTHORITY",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT": (
+        "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
+    ),
+}
+
+#: R3 opened nothing. Governance closure never invents a new gate.
+R3_OPENED_BLOCKERS: frozenset[str] = frozenset()
+
+#: DERIVED — the exact live set expected after R3 governance closure alone,
+#: before any artifact mount. Nine.
+R3_EXPECTED_LIVE_BLOCKERS: frozenset[str] = (
+    R2_EXPECTED_LIVE_BLOCKERS - R3_RETIRED_BLOCKERS
+) | R3_OPENED_BLOCKERS
+
+#: Retired only if the exact approved Board-of-Record binary mounts and its
+#: SHA-256 verifies. Custody, not policy.
+R3_BOARD_OF_RECORD_MOUNT_BLOCKER = "inputs.board_of_record_i_k"
+
+#: DERIVED — the eight that would remain if the Board-of-Record mount succeeded.
+R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED: frozenset[str] = (
+    R3_EXPECTED_LIVE_BLOCKERS - {R3_BOARD_OF_RECORD_MOUNT_BLOCKER}
+)
+
+#: The lanes the remaining work belongs to. No governance item is left.
+R3_REMAINING_CLASSIFICATION: dict[str, str] = {
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE",
+    "inputs.board_of_record_i_k": "ARTIFACT_CUSTODY",
+}
+
+
 def convergence_delta() -> dict[str, object]:
     """The exact before/after blocker accounting, computed rather than asserted."""
     return {
@@ -442,4 +494,12 @@ def convergence_delta() -> dict[str, object]:
         "opened_by_r2": sorted(R2_OPENED_BLOCKERS),
         "carried_forward": sorted(R1_AUDITED_LIVE_BLOCKERS - R2_RETIRED_BLOCKERS),
         "expected_live": sorted(R2_EXPECTED_LIVE_BLOCKERS),
+        "retired_by_r3": sorted(R3_RETIRED_BLOCKERS),
+        "opened_by_r3": sorted(R3_OPENED_BLOCKERS),
+        "r3_expected_live_count": len(R3_EXPECTED_LIVE_BLOCKERS),
+        "r3_expected_live": sorted(R3_EXPECTED_LIVE_BLOCKERS),
+        "r3_expected_live_if_board_mounted": sorted(
+            R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
+        ),
+        "r3_retirement_reasons": dict(sorted(R3_RETIREMENT_REASONS.items())),
     }

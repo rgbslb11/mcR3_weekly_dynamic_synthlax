@@ -3,7 +3,16 @@ from __future__ import annotations
 from pathlib import Path
 
 from . import fcs as fcs_policy
-from . import aac_divisions, board_of_record, ccg, hfa as hfa_policy, ordering, schedule_exceptions, sos
+from . import (
+    aac_divisions,
+    board_of_record,
+    ccg,
+    hfa as hfa_policy,
+    ordering,
+    postseason,
+    schedule_exceptions,
+    sos,
+)
 from .config import V3Config
 from .errors import GovernanceBlock, InputValidationError
 from .game import simulate_game
@@ -17,7 +26,7 @@ from .governance import (
     inspect_playoff_calendar,
 )
 from .phase_plan import validate_phase_plan
-from .rulings import R2_RULINGS
+from .rulings import ALL_RULINGS
 from .models import GameObservation, Team, TeamPathState, WeeklyStrengthSnapshot
 from .rerating import BlockedGovernedRerater, WeeklyRerater
 
@@ -79,7 +88,7 @@ class DynamicWeeklyMCV3:
             self.config.inputs.board_of_record_xlsx
         )
         r2_evidence = {
-            "rulings_applied": [r.convergence_id for r in R2_RULINGS],
+            "rulings_applied": [r.convergence_id for r in ALL_RULINGS],
             "hfa": hfa_policy.as_dict(),
             "fcs": fcs_policy.GOVERNED_FCS_POLICY.as_dict(),
             "thirteen_game_exceptions": thirteen_game,
@@ -106,6 +115,9 @@ class DynamicWeeklyMCV3:
             sos_semantics_governed=sos.GOVERNED_SOS_SEMANTICS is not None,
             fcs_unified_scale_governed=(
                 fcs_policy.GOVERNED_FCS_POLICY.unified_points_equivalent is not None
+            ),
+            quarterfinal_mapping_ruling_applied=(
+                postseason.QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY
             ),
         )
         if aac_status["blocker"]:

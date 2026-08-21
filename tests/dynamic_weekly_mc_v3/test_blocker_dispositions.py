@@ -54,19 +54,19 @@ def test_every_disposition_is_from_the_governed_vocabulary():
     assert all(d.disposition in br.DISPOSITIONS for d in br.dispositions())
 
 
-def test_resolved_is_exactly_the_reconciliation_plus_the_r2_rulings():
-    """`RESOLVED` stays reserved: one reconciliation, nine rulings, nothing inferred."""
+def test_resolved_is_exactly_the_reconciliation_plus_the_issued_rulings():
+    """`RESOLVED` stays reserved: one reconciliation, eleven rulings, nothing inferred."""
     resolved = {d.blocker_id for d in br.dispositions() if d.resolved}
     assert resolved == {
         "provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH"
-    } | br.R2_RETIRED_BLOCKERS
+    } | br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS
 
 
 def test_every_ruling_resolution_names_its_ruling():
     for d in br.dispositions():
         if d.disposition == "RESOLVED_BY_CHAIRMAN_RULING":
             assert d.ruling, f"{d.blocker_id} claims a ruling resolution without naming one"
-            assert d.blocker_id in br.R2_RETIRED_BLOCKERS
+            assert d.blocker_id in br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS
 
 
 def test_a_ruling_resolution_cannot_omit_its_ruling():
@@ -96,8 +96,8 @@ def test_governed_field_blockers_resolve_only_by_named_ruling():
 def test_summary_counts_are_consistent():
     s = br.summary()
     assert s["total"] == 21
-    assert s["resolved_count"] == 10
-    assert s["remaining_count"] == 11
+    assert s["resolved_count"] == 12
+    assert s["remaining_count"] == 9
     assert s["resolved_count"] + s["remaining_count"] == s["total"]
 
 

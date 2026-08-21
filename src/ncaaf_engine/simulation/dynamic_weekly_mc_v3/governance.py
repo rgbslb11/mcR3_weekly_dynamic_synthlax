@@ -118,6 +118,7 @@ def governance_blockers(
     a8_ecl_ordering_resolved: bool = False,
     sos_semantics_governed: bool = False,
     fcs_unified_scale_governed: bool = False,
+    quarterfinal_mapping_ruling_applied: bool = False,
 ) -> list[str]:
     """Governed-evidence blockers.
 
@@ -150,9 +151,14 @@ def governance_blockers(
         blockers.append("governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE")
 
     # R2-NO-RESEED rules out reseeding and binds every edge the official artifact
-    # states, but Bracket_Flow never says which R1 winner fills E/F/G/H.
+    # states, but Bracket_Flow never says which R1 winner fills E/F/G/H. That
+    # remains true of the artifact — the flag below is deliberately still False.
+    # Ruling R3-CFP-FIXED-TOPOLOGY fills the gap by successor Chairman authority,
+    # which is a separate flag precisely so the workbook is never recorded as
+    # having contained a mapping it does not contain.
     if not bracket["quarterfinal_opponent_mapping_explicit"]:
-        blockers.append("governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT")
+        if not quarterfinal_mapping_ruling_applied:
+            blockers.append("governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT")
 
     # R2-A8-ECL-ORDER breaks the cycle causally rather than by picking a tiebreak.
     if not a8_ecl_ordering_resolved:

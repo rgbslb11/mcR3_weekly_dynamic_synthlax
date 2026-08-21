@@ -396,27 +396,44 @@ def test_reseeding_is_forbidden():
         postseason.require_no_reseeding(True)
 
 
-def test_every_bracket_edge_the_official_artifact_states_is_bound():
-    edges = postseason.governed_bracket_edges(_r2_selection())
+def test_every_bracket_edge_is_bound_under_the_fixed_topology_ruling():
     selection = _r2_selection()
-    assert edges["PLAYIN_G1"] == (selection.seeds[12], selection.seeds[13])
-    assert edges["PLAYIN_G2"] == (selection.seeds[11], selection.seeds[14])
-    assert edges["R1_C_7_10"] == (selection.seeds[7], selection.seeds[10])
-    assert edges["QF_E"] == selection.seeds[1]
-    assert edges["SEMI_A"] == ("QF_E", "QF_H")
-    assert edges["SEMI_B"] == ("QF_F", "QF_G")
+    edges = postseason.governed_bracket_edges(selection)
+    assert edges["PI_A"] == (selection.seeds[12], selection.seeds[13])
+    assert edges["PI_B"] == (selection.seeds[11], selection.seeds[14])
+    assert edges["R1_A"] == (selection.seeds[7], selection.seeds[10])
+    assert edges["R1_B"] == (selection.seeds[8], selection.seeds[9])
+    assert edges["R1_C"] == (selection.seeds[6], "WINNER(PI_B)")
+    assert edges["R1_D"] == (selection.seeds[5], "WINNER(PI_A)")
+    assert edges["QF_E"] == (selection.seeds[1], "WINNER(R1_B)")
+    assert edges["QF_F"] == (selection.seeds[2], "WINNER(R1_A)")
+    assert edges["QF_G"] == (selection.seeds[3], "WINNER(R1_C)")
+    assert edges["QF_H"] == (selection.seeds[4], "WINNER(R1_D)")
+    assert edges["SEMI_A"] == ("WINNER(QF_E)", "WINNER(QF_H)")
+    assert edges["SEMI_B"] == ("WINNER(QF_F)", "WINNER(QF_G)")
     assert edges["reseeding_permitted"] is False
 
 
-def test_the_unstated_quarterfinal_slot_edges_are_still_refused():
+def test_the_quarterfinal_slot_edges_now_resolve_to_the_ruling():
+    # The artifact still does not state them; the ruling does.
     assert postseason.QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT is False
-    with pytest.raises(GovernanceBlock, match="never states which first-round winner"):
-        postseason.require_governed_quarterfinal_slot_edges(None)
+    assert postseason.QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY is True
+    assert postseason.require_governed_quarterfinal_slot_edges(None) == {
+        "QF_E": "R1_B",
+        "QF_F": "R1_A",
+        "QF_G": "R1_C",
+        "QF_H": "R1_D",
+    }
     with pytest.raises(GovernanceBlock, match="bijection"):
         postseason.require_governed_quarterfinal_slot_edges(
-            {"QF_E": "R1_A_5_12", "QF_F": "R1_A_5_12", "QF_G": "R1_C_7_10", "QF_H": "R1_D_8_9"}
+            {"QF_E": "R1_A", "QF_F": "R1_A", "QF_G": "R1_C", "QF_H": "R1_D"}
+        )
+    # A complete bijection that is not the ruled one is refused too.
+    with pytest.raises(GovernanceBlock, match="contradict ruling"):
+        postseason.require_governed_quarterfinal_slot_edges(
+            {"QF_E": "R1_A", "QF_F": "R1_B", "QF_G": "R1_C", "QF_H": "R1_D"}
         )
     bound = postseason.require_governed_quarterfinal_slot_edges(
-        {"QF_E": "R1_D_8_9", "QF_F": "R1_C_7_10", "QF_G": "R1_B_6_11", "QF_H": "R1_A_5_12"}
+        {"QF_E": "R1_B", "QF_F": "R1_A", "QF_G": "R1_C", "QF_H": "R1_D"}
     )
     assert len(set(bound.values())) == 4

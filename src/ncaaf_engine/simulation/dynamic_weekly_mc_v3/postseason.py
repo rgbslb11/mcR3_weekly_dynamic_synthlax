@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping, Sequence
+from typing import Callable, Mapping, Sequence
 
-from .errors import GovernanceBlock
+from .errors import GovernanceBlock, InputValidationError
 
 P4 = {"SEC", "Big Ten", "Big 12", "ACC"}
 G5 = {"Pac-12", "Mountain West", "American", "Atlantic-8", "ECL"}
@@ -127,7 +127,11 @@ def require_governed_quarterfinal_mapping(mapping_policy: str | None) -> str:
 # thing neither artifact states — which first-round winner fills quarterfinal
 # slot E, F, G or H — is still not stated, so it is still refused.
 
-from .rulings import R2_G5_AUTO_BID, R2_NO_RESEEDING  # noqa: E402
+from .rulings import (  # noqa: E402
+    R2_G5_AUTO_BID,
+    R2_NO_RESEEDING,
+    R3_CFP_FIXED_TOPOLOGY,
+)
 
 #: FACT — the five Group-of-5 conferences. Identical to :data:`G5`, named
 #: separately because the ruling enumerates them and the count is load-bearing.
@@ -148,25 +152,53 @@ PLAY_IN_SEEDS: tuple[int, ...] = (11, 12, 13, 14)
 BYE_SEEDS: tuple[int, ...] = (1, 2, 3, 4)
 
 #: FACT — Playoff Calendar Bracket_Flow: "G1 = 12 v 13 (Minneapolis);
-#: G2 = 11 v 14 (Atlanta)"; Bracket Regime S4: "First Round 5v12, 6v11, 7v10, 8v9".
-GOVERNED_PLAY_IN_EDGES = {"PLAYIN_G1": (12, 13), "PLAYIN_G2": (11, 14)}
-GOVERNED_ROUND_1_EDGES = {
-    "R1_A_5_12": (5, 12),
-    "R1_B_6_11": (6, 11),
-    "R1_C_7_10": (7, 10),
-    "R1_D_8_9": (8, 9),
+#: G2 = 11 v 14 (Atlanta)". Ruling R3-CFP-FIXED-TOPOLOGY names them PI-A / PI-B.
+GOVERNED_PLAY_IN_EDGES = {"PI_A": (12, 13), "PI_B": (11, 14)}
+
+#: FACT — what Bracket Regime LOCKED S4 actually says, preserved verbatim and
+#: unedited: "First Round 5v12, 6v11, 7v10, 8v9". In a 14-team field seeds 11-14
+#: play in, so 12 and 11 cannot also be fixed Round-1 opponents unless they win.
+#: Ruling R3-CFP-FIXED-TOPOLOGY supersedes this reading to exactly that extent.
+BRACKET_REGIME_S4_ROUND_1_TEXT = "First Round 5v12, 6v11, 7v10, 8v9"
+
+#: GOVERNED — ruling R3-CFP-FIXED-TOPOLOGY. A ``str`` opponent is the winner of
+#: that earlier slot, not a seed.
+GOVERNED_ROUND_1_EDGES: dict[str, tuple[int, int | str]] = {
+    "R1_A": (7, 10),
+    "R1_B": (8, 9),
+    "R1_C": (6, "PI_B"),
+    "R1_D": (5, "PI_A"),
 }
 
 #: FACT — Bracket_Flow: "E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)".
 GOVERNED_QUARTERFINAL_HOSTS = {"QF_E": 1, "QF_F": 2, "QF_G": 3, "QF_H": 4}
 
+#: GOVERNED — ruling R3-CFP-FIXED-TOPOLOGY fills the edge the artifact's generic
+#: ``W(R1)`` labels never bound: QF-E = 1 v W(R1-B), QF-F = 2 v W(R1-A),
+#: QF-G = 3 v W(R1-C), QF-H = 4 v W(R1-D).
+GOVERNED_QUARTERFINAL_SLOT_EDGES = {
+    "QF_E": "R1_B",
+    "QF_F": "R1_A",
+    "QF_G": "R1_C",
+    "QF_H": "R1_D",
+}
+
 #: FACT — Bracket_Flow / Rulings_Register P-3.
 GOVERNED_SEMIFINAL_EDGES = {"SEMI_A": ("QF_E", "QF_H"), "SEMI_B": ("QF_F", "QF_G")}
 
-#: DERIVED — ruling R2-NO-RESEED removes reseeding from the option set. What
-#: remains unstated is the slot assignment, not the mapping family.
+#: DERIVED — ruling R2-NO-RESEED removes reseeding from the option set; ruling
+#: R3-CFP-FIXED-TOPOLOGY fixes the whole bracket, so an upset cannot move a slot.
 RESEEDING_PERMITTED = False
+
+#: FACT — and it stays False. The official workbook supplied prior structural
+#: evidence only; its generic ``W(R1)`` labels never bound the four Round-1
+#: winners to E/F/G/H. The workbook is not rewritten and is not reinterpreted as
+#: containing information absent from it.
 QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT = False
+
+#: GOVERNED — direct successor Chairman authority now fills that ambiguity.
+QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY = True
+QUARTERFINAL_MAPPING_RESOLUTION_REASON = "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY"
 QUARTERFINAL_MAPPING_BLOCKER = "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT"
 
 
@@ -272,27 +304,96 @@ def g5_automatic_bid_audit(
 
 
 def governed_bracket_edges(selection: CFPSelection) -> dict[str, object]:
-    """Bind every bracket edge the official artifacts actually state.
+    """Every bracket edge, now that ruling R3-CFP-FIXED-TOPOLOGY binds them all.
 
-    Quarterfinal *hosts* are stated. Quarterfinal *opponents* are not, so they
-    are absent from the result rather than filled in.
+    A participant is either a team (resolved from its **final assigned seed**) or
+    a ``WINNER(<slot>)`` reference to an earlier slot. Nothing is reseeded, so
+    the references are fixed before any game is played.
     """
-    s = selection.seeds
+    s_ = selection.seeds
     edges: dict[str, object] = {}
     for seed in BYE_SEEDS:
-        edges[f"BYE_{seed}"] = s[seed]
+        edges[f"BYE_{seed}"] = s_[seed]
     for slot, (a, b) in sorted(GOVERNED_PLAY_IN_EDGES.items()):
-        edges[slot] = (s[a], s[b])
-    for slot, (a, b) in sorted(GOVERNED_ROUND_1_EDGES.items()):
-        edges[slot] = (s[a], s[b])
+        edges[slot] = (s_[a], s_[b])
+    for slot, (seed, opponent) in sorted(GOVERNED_ROUND_1_EDGES.items()):
+        rival = s_[opponent] if isinstance(opponent, int) else f"WINNER({opponent})"
+        edges[slot] = (s_[seed], rival)
     for slot, seed in sorted(GOVERNED_QUARTERFINAL_HOSTS.items()):
-        edges[slot] = s[seed]
-    for slot, pair in sorted(GOVERNED_SEMIFINAL_EDGES.items()):
-        edges[slot] = pair
-    edges["CHAMPIONSHIP"] = ("SEMI_A", "SEMI_B")
+        edges[slot] = (s_[seed], f"WINNER({GOVERNED_QUARTERFINAL_SLOT_EDGES[slot]})")
+    for slot, (a, b) in sorted(GOVERNED_SEMIFINAL_EDGES.items()):
+        edges[slot] = (f"WINNER({a})", f"WINNER({b})")
+    edges["CHAMPIONSHIP"] = ("WINNER(SEMI_A)", "WINNER(SEMI_B)")
     edges["reseeding_permitted"] = RESEEDING_PERMITTED
-    edges["quarterfinal_r1_winner_slot_edges"] = None
+    edges["quarterfinal_r1_winner_slot_edges"] = dict(GOVERNED_QUARTERFINAL_SLOT_EDGES)
     return edges
+
+
+#: Slot -> the two slots or seeds feeding it. The whole fixed topology, in one
+#: place, in the order it is played.
+def bracket_topology() -> dict[str, tuple[object, object]]:
+    """The fixed 2026 topology as ``slot -> (participant, participant)``.
+
+    An ``int`` is a final assigned seed; a ``str`` is the winner of that slot.
+    """
+    topo: dict[str, tuple[object, object]] = {}
+    for slot, (a, b) in GOVERNED_PLAY_IN_EDGES.items():
+        topo[slot] = (a, b)
+    for slot, (seed, opponent) in GOVERNED_ROUND_1_EDGES.items():
+        topo[slot] = (seed, opponent)
+    for slot, seed in GOVERNED_QUARTERFINAL_HOSTS.items():
+        topo[slot] = (seed, GOVERNED_QUARTERFINAL_SLOT_EDGES[slot])
+    for slot, (a, b) in GOVERNED_SEMIFINAL_EDGES.items():
+        topo[slot] = (a, b)
+    topo["CHAMPIONSHIP"] = ("SEMI_A", "SEMI_B")
+    return topo
+
+
+#: The order slots are played. Fixed; an upset never reorders it.
+BRACKET_SLOT_ORDER: tuple[str, ...] = (
+    "PI_A",
+    "PI_B",
+    "R1_A",
+    "R1_B",
+    "R1_C",
+    "R1_D",
+    "QF_E",
+    "QF_F",
+    "QF_G",
+    "QF_H",
+    "SEMI_A",
+    "SEMI_B",
+    "CHAMPIONSHIP",
+)
+
+
+def advance_bracket(
+    selection: CFPSelection, pick_winner: Callable[[str, str, str], str]
+) -> dict[str, tuple[str, str, str]]:
+    """Walk the fixed bracket, returning ``slot -> (a, b, winner)``.
+
+    ``pick_winner(slot, a, b)`` decides each game. The topology it is walked
+    through is fixed in advance: whoever wins, the next slot a winner reports to
+    never changes, because there is no reseeding.
+    """
+    topo = bracket_topology()
+    results: dict[str, tuple[str, str, str]] = {}
+
+    def participant(ref: object) -> str:
+        if isinstance(ref, int):
+            return selection.seeds[ref]
+        return results[str(ref)][2]
+
+    for slot in BRACKET_SLOT_ORDER:
+        a_ref, b_ref = topo[slot]
+        a, b = participant(a_ref), participant(b_ref)
+        winner = pick_winner(slot, a, b)
+        if winner not in (a, b):
+            raise InputValidationError(
+                f"{slot}: winner {winner!r} is neither {a!r} nor {b!r}"
+            )
+        results[slot] = (a, b, winner)
+    return results
 
 
 def require_no_reseeding(reseeding_requested: bool) -> None:
@@ -304,24 +405,19 @@ def require_no_reseeding(reseeding_requested: bool) -> None:
 
 
 def require_governed_quarterfinal_slot_edges(
-    slot_edges: Mapping[str, str] | None,
+    slot_edges: Mapping[str, str] | None = None,
 ) -> Mapping[str, str]:
-    """Fail closed on the one bracket edge the official artifact never states.
+    """The quarterfinal slot edges, now governed by successor Chairman authority.
 
-    Ruling R2-NO-RESEED removed reseeding from the candidate set, which narrows
-    the question but does not answer it: ``Bracket_Flow`` fixes "E = 1 v W(R1)"
-    and never says which first-round winner that is. Binding an edge here would
-    invent bracket topology, which the ruling forbids in the same breath.
+    ``Bracket_Flow`` states "E = 1 v W(R1)" and never says which first-round
+    winner that is — :data:`QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT` stays
+    ``False`` and the workbook is not reinterpreted. Ruling
+    R3-CFP-FIXED-TOPOLOGY supplies the mapping directly, so ``None`` now resolves
+    to that ruling rather than failing closed. Explicitly supplied edges are
+    still validated, and any mapping that disagrees with the ruling is refused.
     """
     if slot_edges is None:
-        raise GovernanceBlock(
-            f"{QUARTERFINAL_MAPPING_BLOCKER}: the official 2026 Playoff Calendar "
-            "Bracket_Flow sheet states quarterfinal slots as 'E = 1 v W(R1)' and never "
-            "states which first-round winner fills E, F, G or H. Ruling "
-            f"{R2_NO_RESEEDING.convergence_id} rules out reseeding and binds every edge the "
-            "artifact does state, but the slot edges themselves remain unstated. Supply them "
-            "from the artifact; do not invent them."
-        )
+        return dict(GOVERNED_QUARTERFINAL_SLOT_EDGES)
     missing = sorted(set(GOVERNED_QUARTERFINAL_HOSTS) - set(slot_edges))
     if missing:
         raise GovernanceBlock(f"Quarterfinal slot edges are incomplete: missing {missing}")
@@ -334,21 +430,36 @@ def require_governed_quarterfinal_slot_edges(
         raise GovernanceBlock(f"Quarterfinal slot edges reference unknown first-round games: {bad}")
     if len(set(slot_edges.values())) != len(GOVERNED_QUARTERFINAL_HOSTS):
         raise GovernanceBlock("Quarterfinal slot edges must be a bijection onto the four R1 games")
+    if dict(slot_edges) != dict(GOVERNED_QUARTERFINAL_SLOT_EDGES):
+        raise GovernanceBlock(
+            f"{QUARTERFINAL_MAPPING_BLOCKER}: supplied quarterfinal slot edges "
+            f"{dict(sorted(slot_edges.items()))} contradict ruling "
+            f"{R3_CFP_FIXED_TOPOLOGY.convergence_id}, which fixes "
+            f"{dict(sorted(GOVERNED_QUARTERFINAL_SLOT_EDGES.items()))}."
+        )
     return slot_edges
 
 
 def topology_as_dict() -> dict[str, object]:
     return {
-        "rulings": [R2_G5_AUTO_BID.convergence_id, R2_NO_RESEEDING.convergence_id],
+        "rulings": [
+            R2_G5_AUTO_BID.convergence_id,
+            R2_NO_RESEEDING.convergence_id,
+            R3_CFP_FIXED_TOPOLOGY.convergence_id,
+        ],
         "reseeding_permitted": RESEEDING_PERMITTED,
         "bye_seeds": list(BYE_SEEDS),
         "play_in_seeds": list(PLAY_IN_SEEDS),
         "play_in_edges": {k: list(v) for k, v in sorted(GOVERNED_PLAY_IN_EDGES.items())},
         "round_1_edges": {k: list(v) for k, v in sorted(GOVERNED_ROUND_1_EDGES.items())},
         "quarterfinal_hosts": dict(sorted(GOVERNED_QUARTERFINAL_HOSTS.items())),
+        "quarterfinal_slot_edges": dict(sorted(GOVERNED_QUARTERFINAL_SLOT_EDGES.items())),
         "semifinal_edges": {k: list(v) for k, v in sorted(GOVERNED_SEMIFINAL_EDGES.items())},
+        "slot_order": list(BRACKET_SLOT_ORDER),
         "g5_automatic_bid_seed": G5_AUTOMATIC_BID_SEED,
-        "g5_automatic_bid_count": G5_AUTOMATIC_BID_COUNT,
-        "quarterfinal_slot_edges_stated_in_artifact": QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT,
-        "quarterfinal_mapping_blocker": QUARTERFINAL_MAPPING_BLOCKER,
+        "quarterfinal_slot_edges_stated_in_artifact": (
+            QUARTERFINAL_SLOT_EDGES_STATED_IN_ARTIFACT
+        ),
+        "quarterfinal_mapping_resolution_reason": QUARTERFINAL_MAPPING_RESOLUTION_REASON,
+        "bracket_regime_s4_round_1_text": BRACKET_REGIME_S4_ROUND_1_TEXT,
     }

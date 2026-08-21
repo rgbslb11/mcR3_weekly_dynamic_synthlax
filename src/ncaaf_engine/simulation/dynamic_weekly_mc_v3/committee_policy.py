@@ -29,6 +29,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Sequence
 
+from .sos import criterion_resolves
 from .errors import GovernanceBlock, InputValidationError
 from .rulings import R2_COMMITTEE_TIEBREAK
 
@@ -169,8 +170,10 @@ class CommitteeTiebreakInputs:
     """Everything the chain may consult, and nothing else."""
 
     head_to_head: Callable[[str, str], str | None]
-    common_opponent_score: Callable[[str, str], tuple[float, float]]
-    strength_of_schedule: Callable[[str], float]
+    #: May return ``None`` for either side when a required governed component is
+    #: UNAVAILABLE under ruling R3-SOS-OWP-OOWP-SEMANTICS.
+    common_opponent_score: Callable[[str, str], tuple[float | None, float | None]]
+    strength_of_schedule: Callable[[str], float | None]
     previous_board: tuple[str, ...] | None
 
 
@@ -182,6 +185,11 @@ def break_committee_tie(
     is_first_november_board: bool = False,
 ) -> tuple[str, str]:
     """Return ``(winner, step)`` for one pairwise committee tie.
+
+    A stage that cannot be evaluated because a required governed component is
+    UNAVAILABLE does not resolve the tie — processing advances to the next
+    already-governed stage. That is ruling R3-SOS-OWP-OOWP-SEMANTICS, and it is
+    deliberately different from the two sides being equal, which also advances.
 
     TB4 consults the previous week's board. On the very first November board no
     previous board exists. The repository contains no authority for what stands
@@ -196,12 +204,15 @@ def break_committee_tie(
             )
         return winner, COMMITTEE_TIEBREAK_CHAIN[0]
 
+    # A criterion whose required governed component is UNAVAILABLE does not
+    # resolve the tie: ruling R3-SOS-OWP-OOWP-SEMANTICS sends processing on to
+    # the next already-governed stage rather than letting an absent value decide.
     score_a, score_b = inputs.common_opponent_score(team_a, team_b)
-    if score_a != score_b:
+    if criterion_resolves(score_a, score_b):
         return (team_a if score_a > score_b else team_b), COMMITTEE_TIEBREAK_CHAIN[1]
 
     sos_a, sos_b = inputs.strength_of_schedule(team_a), inputs.strength_of_schedule(team_b)
-    if sos_a != sos_b:
+    if criterion_resolves(sos_a, sos_b):
         return (team_a if sos_a > sos_b else team_b), COMMITTEE_TIEBREAK_CHAIN[2]
 
     if inputs.previous_board is None:
