@@ -18,6 +18,7 @@ Two things this suite is careful about:
   hand and checks the implementation still lands on the same values.
 """
 
+import dataclasses
 import json
 from dataclasses import replace
 from pathlib import Path
@@ -359,12 +360,158 @@ def test_unavailability_still_propagates_through_the_governed_path():
 
 
 def test_the_governed_and_ungoverned_paths_agree_numerically(shared_ledger):
-    """The gate authorises; it does not rescore."""
+    """The gate authorises; it does not rescore.
+
+    Tightened rather than relaxed: the gate now stamps provenance onto the row it
+    authorised, so the two paths are no longer identical objects. Every field
+    that is not provenance is still asserted equal, one by one, and the set of
+    differing fields is pinned to exactly ``governed_formula``. A gate that
+    quietly rescored anything would fail here.
+    """
     gated = common_opponents.governed_common_opponent_score(
         shared_ledger, "A", "B", GOVERNED
     )
     direct = common_opponents.common_opponent_score(shared_ledger, "A", "B", GOVERNED)
-    assert gated == direct
+
+    differing = {
+        f.name
+        for f in dataclasses.fields(common_opponents.CommonOpponentResult)
+        if getattr(gated, f.name) != getattr(direct, f.name)
+    }
+    assert differing == {"governed_formula"}
+
+    # Spelled out, so the arithmetic is pinned and not merely inferred.
+    assert gated.wp_common == direct.wp_common
+    assert gated.owp_common == direct.owp_common
+    assert gated.oowp_common == direct.oowp_common
+    assert gated.score == direct.score
+    assert gated.wins == direct.wins and gated.losses == direct.losses
+    assert gated.common_opponents == direct.common_opponents
+    assert gated.semantics_id == direct.semantics_id == GOVERNED.semantics_id
+    # Only the gated row may claim the authority.
+    assert gated.is_governed is True
+    assert direct.is_governed is False
+
+
+def test_an_ungated_result_serializes_no_governed_provenance(shared_ledger):
+    """The helper is ungated, so its row may not claim the R4 authority.
+
+    ``common_opponent_score`` stays deliberately open so pre-ruling and
+    alternative semantics remain testable. That is only safe while its output
+    says so: a row nobody gated must not serialize a formula authority, a
+    canonicality flag or a resolution reason.
+    """
+    payload = common_opponents.common_opponent_score(
+        shared_ledger, "A", "B", GOVERNED
+    ).as_dict()
+
+    assert payload["governed"] is False
+    assert payload["provenance"] == common_opponents.UNGATED_RESULT_PROVENANCE
+    assert "claims no governance" in payload["provenance"]
+    for claim in (
+        "formula_authority",
+        "formula_authority_source",
+        "formula_is_canonical",
+        "formula_resolution_reason",
+        "formula_weights",
+    ):
+        assert payload[claim] is None, claim
+    # Passing the governed semantics in by hand is not the same as being gated.
+    assert payload["semantics_ruling"] == GOVERNED.semantics_id
+    assert payload["semantics_are_governed"] is False
+    # The arithmetic really did apply the governed weights; saying so is a fact
+    # about the code path and must not be mistaken for authority.
+    assert payload["weights_applied"] == [0.25, 0.50, 0.25]
+    assert payload["common_opponent_score"] is not None
+
+
+def test_a_gated_result_serializes_the_authority_it_was_granted(shared_ledger):
+    payload = common_opponents.governed_common_opponent_score(
+        shared_ledger, "A", "B", GOVERNED
+    ).as_dict()
+
+    assert payload["governed"] is True
+    assert payload["provenance"] == common_opponents.GOVERNED_RESULT_PROVENANCE
+    assert payload["formula_authority"] == "R4-COMMON-OPP-FORMULA"
+    assert payload["formula_is_canonical"] is True
+    assert payload["formula_resolution_reason"] == "DIRECT_CHAIRMAN_AUTHORITY"
+    assert payload["formula_weights"] == [0.25, 0.50, 0.25]
+    assert payload["weights_applied"] == payload["formula_weights"]
+    assert payload["semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
+    assert payload["semantics_are_governed"] is True
+    assert "DIRECT CHAIRMAN" in payload["formula_authority_source"].upper()
+
+
+def test_both_sides_of_a_gated_comparison_carry_the_authority(shared_ledger):
+    """The two-sided entry point must not stamp only the first row."""
+    a, b = common_opponents.governed_compare_common_opponents(
+        shared_ledger, "A", "B", GOVERNED
+    )
+    assert a.is_governed and b.is_governed
+    assert a.as_dict()["governed"] is True
+    assert b.as_dict()["governed"] is True
+    # And the ungated two-sided helper still claims nothing.
+    for result in common_opponents.compare_common_opponents(
+        shared_ledger, "A", "B", GOVERNED
+    ):
+        assert result.is_governed is False
+        assert result.as_dict()["formula_authority"] is None
+
+
+def test_a_refused_formula_never_reaches_serialization(shared_ledger):
+    """A blocked gate yields no row at all — not an unstamped one."""
+    impostor = replace(
+        common_opponents.GOVERNED_COMMON_OPPONENT_FORMULA,
+        status="PROPOSAL",
+        resolution_reason=None,
+    )
+    with pytest.raises(GovernanceBlock):
+        common_opponents.governed_common_opponent_score(
+            shared_ledger, "A", "B", GOVERNED, formula=impostor
+        )
+    with pytest.raises(GovernanceBlock):
+        common_opponents.governed_compare_common_opponents(
+            shared_ledger, "A", "B", GOVERNED, formula=impostor
+        )
+
+
+def test_the_pre_ruling_formula_cannot_stamp_itself_into_a_row(shared_ledger):
+    """Carrying the right numbers is still not carrying the authority."""
+    with pytest.raises(GovernanceBlock):
+        common_opponents.governed_common_opponent_score(
+            shared_ledger,
+            "A",
+            "B",
+            GOVERNED,
+            formula=common_opponents.PRE_RULING_COMMON_OPPONENT_FORMULA,
+        )
+    # The pre-ruling shape is still computable, and still says so.
+    payload = common_opponents.common_opponent_score(
+        shared_ledger, "A", "B", GOVERNED
+    ).as_dict()
+    assert payload["governed"] is False
+
+
+def test_hand_constructing_a_result_claims_nothing_by_default():
+    """The honest default is the ungoverned one, so forgetting fails closed."""
+    bare = common_opponents.CommonOpponentResult(
+        team="A",
+        other="B",
+        common_opponents=("C",),
+        wins=1,
+        losses=0,
+        wp_common=1.0,
+        owp_common=0.5,
+        oowp_common=0.5,
+        score=0.625,
+    )
+    assert bare.is_governed is False
+    assert bare.semantics_id is None
+    payload = bare.as_dict()
+    assert payload["governed"] is False
+    assert payload["formula_authority"] is None
+    assert payload["semantics_ruling"] is None
+    assert payload["semantics_are_governed"] is False
 
 
 def test_the_governed_comparison_returns_both_sides(shared_ledger):

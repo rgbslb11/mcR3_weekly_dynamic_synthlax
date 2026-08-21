@@ -365,10 +365,36 @@ def test_r3_did_not_itself_promote_the_common_opponent_formula():
 
 
 def test_the_common_opponent_comparison_uses_the_governed_semantics(repeat_ledger):
-    result = common_opponents.common_opponent_score(repeat_ledger, "O", "P", GOVERNED)
-    assert result.as_dict()["semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
-    assert result.as_dict()["formula_is_canonical"] is True
-    assert result.as_dict()["formula_authority"] == "R4-COMMON-OPP-FORMULA"
+    """The semantics applied are recorded; the formula authority is not assumed.
+
+    This test previously read the R4 authority off an *ungated* row. The
+    arithmetic it was guarding is unchanged, but the row itself was making a
+    claim nothing had granted it, so the claim is now asserted where it is
+    earned — on the gated path — and its absence is asserted on the ungated one.
+    """
+    direct = common_opponents.common_opponent_score(
+        repeat_ledger, "O", "P", GOVERNED
+    ).as_dict()
+    # What semantics were applied is a fact about the computation, and is kept.
+    assert direct["semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
+    # Formula authority is not, and the ungated helper has none to report.
+    assert direct["governed"] is False
+    assert direct["formula_is_canonical"] is None
+    assert direct["formula_authority"] is None
+    assert direct["semantics_are_governed"] is False
+
+    gated = common_opponents.governed_common_opponent_score(
+        repeat_ledger, "O", "P", GOVERNED
+    ).as_dict()
+    assert gated["semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
+    assert gated["formula_is_canonical"] is True
+    assert gated["formula_authority"] == "R4-COMMON-OPP-FORMULA"
+    assert gated["semantics_are_governed"] is True
+    # The gate stamped provenance and did not touch the numbers.
+    assert gated["common_opponent_score"] == direct["common_opponent_score"]
+    assert gated["wp_common"] == direct["wp_common"]
+    assert gated["owp_common"] == direct["owp_common"]
+    assert gated["oowp_common"] == direct["oowp_common"]
 
 
 def test_the_common_opponent_comparison_propagates_unavailability():

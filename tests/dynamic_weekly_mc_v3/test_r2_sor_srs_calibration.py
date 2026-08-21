@@ -85,6 +85,111 @@ def test_the_stale_compute_sor_b_default_cannot_silently_execute():
         _row(reference=None)
 
 
+# --- the bare-float callable boundary ----------------------------------------
+#
+# ``SorReferenceElo`` refuses the stale and superseded values at construction,
+# but ``p_reference_at_least_w`` is public and also takes a plain number. These
+# tests exist because that second door was the only one without a lock: a caller
+# could reach the Poisson-binomial with 1684.9 or 1901 and never touch the
+# governed dataclass at all.
+
+
+@pytest.mark.parametrize(
+    "refused",
+    [
+        1684.9,                       # the stale compute_sor_b.py default
+        1901.0,                       # the superseded 2026 predecessor
+        1901,                         # the same value as an int
+        1684.9 + 1e-9,                # a reparsed / rounded copy
+        1901.0 - 1e-9,
+    ],
+)
+def test_a_bare_refused_r_ref_cannot_enter_the_poisson_binomial(refused):
+    with pytest.raises(GovernanceBlock):
+        sor.p_reference_at_least_w(refused, OPPONENTS, 2)
+    with pytest.raises(GovernanceBlock):
+        sor.check_r_ref_value(refused)
+
+
+def test_the_boundary_names_which_refusal_it_applied():
+    """A blocked run has to say whether the value was stale or superseded."""
+    with pytest.raises(GovernanceBlock, match="stale"):
+        sor.p_reference_at_least_w(1684.9, OPPONENTS, 2)
+    with pytest.raises(GovernanceBlock, match="superseded"):
+        sor.p_reference_at_least_w(1901.0, OPPONENTS, 2)
+    # And the dataclass door reports the same two refusals.
+    with pytest.raises(GovernanceBlock, match="stale"):
+        sor.check_r_ref_value(sor.STALE_COMPUTE_SOR_B_DEFAULT_R_REF)
+    with pytest.raises(GovernanceBlock, match="superseded"):
+        sor.check_r_ref_value(sor.SUPERSEDED_2026_SOR_R_REF)
+
+
+@pytest.mark.parametrize(
+    "bad", [float("nan"), float("inf"), float("-inf"), True, "1893.3", None, object()]
+)
+def test_a_non_numeric_or_non_finite_r_ref_is_refused_not_propagated(bad):
+    """NaN would otherwise flow through p, raw_sor and normalized_sor unnoticed."""
+    with pytest.raises(InputValidationError):
+        sor.p_reference_at_least_w(bad, OPPONENTS, 2)
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), True, "1600"])
+def test_a_non_finite_opponent_rating_is_refused_at_the_same_boundary(bad):
+    poisoned = [sor.SorOpponent("X", bad, True), sor.SorOpponent("Y", 1500.0, True)]
+    with pytest.raises(InputValidationError):
+        sor.p_reference_at_least_w(1725.0, poisoned, 1)
+
+
+def test_the_governed_reference_still_passes_the_boundary_unchanged():
+    """The point of the lock is that it does not move 1893.3."""
+    assert sor.check_r_ref_value(1893.3) == 1893.3
+    assert sor.check_r_ref_value(sor.GOVERNED_2026_SOR_R_REF) == 1893.3
+    governed = sor.governed_2026_sor_reference_elo()
+    assert governed.value == 1893.3
+
+    # Bare float, the authorised object, and the MC-namespace tag all agree with
+    # each other and with an independent hand recomputation of the same
+    # Poisson-binomial, so the boundary check demonstrably did not move a number.
+    by_float = sor.p_reference_at_least_w(1893.3, OPPONENTS, 2)
+    by_object = sor.p_reference_at_least_w(governed, OPPONENTS, 2)
+    by_mc = sor.p_reference_at_least_w(sor.mc_domain_reference_elo(), OPPONENTS, 2)
+    assert by_float == by_object == by_mc
+    assert by_float == pytest.approx(0.930704679899576, abs=1e-12)
+
+    # A published row is unaffected, including its report-only limitations.
+    row = _row(reference=governed).as_dict()
+    assert row["r_ref"] == 1893.3
+    assert row["report_status"] == "RESEARCH_REPORT_ONLY"
+    assert row["provenance"]["unratified_sor_b_items"] == [
+        "P_TO_STRENGTH_TRANSFORM", "REFERENCE_HFA"
+    ]
+
+
+def test_the_boundary_check_is_the_same_one_the_dataclass_runs():
+    """One refusal set, two doors — neither may refuse less than the other."""
+    for refused in (
+        sor.STALE_COMPUTE_SOR_B_DEFAULT_R_REF,
+        sor.SUPERSEDED_2026_SOR_R_REF,
+    ):
+        with pytest.raises(GovernanceBlock):
+            sor.SorReferenceElo(
+                value=refused, parameter_id="X", authority="Y", source_artifact="Z"
+            )
+        with pytest.raises(GovernanceBlock):
+            sor.p_reference_at_least_w(refused, OPPONENTS, 2)
+    with pytest.raises(InputValidationError):
+        sor.SorReferenceElo(
+            value=float("nan"), parameter_id="X", authority="Y", source_artifact="Z"
+        )
+    # An int reference is normalised, so the annotation is not a fiction.
+    assert isinstance(
+        sor.SorReferenceElo(
+            value=1893, parameter_id="X", authority="Y", source_artifact="Z"
+        ).value,
+        float,
+    )
+
+
 def test_the_mc_domain_r_ref_stays_in_its_own_namespace():
     mc = sor.mc_domain_reference_elo()
     assert mc.value == 1893.3

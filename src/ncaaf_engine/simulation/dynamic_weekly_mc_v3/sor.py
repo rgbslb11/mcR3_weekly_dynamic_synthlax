@@ -18,6 +18,16 @@ inherited it would be computing against a number nobody governs. Every entry
 point here requires an explicit :class:`SorReferenceElo` carrying its own
 authority, and the stale value is refused by name.
 
+The bare-float callable boundary
+--------------------------------
+:class:`SorReferenceElo` performs those refusals at construction, but
+:func:`p_reference_at_least_w` is a public callable that also accepts a plain
+number. A caller reaching it directly would otherwise skip the dataclass
+entirely and compute against whatever float it was handed. Both routes now run
+:func:`check_r_ref_value`, so the refusals are properties of the boundary rather
+than of one convenient wrapper, and the governed 1893.3 passes through both
+unchanged.
+
 What *is* governed, and what is not
 -----------------------------------
 The 2026 reference Elo **is governed**: ``CCG-R_REF`` = 1893.3, LOCKED and
@@ -94,6 +104,55 @@ REPORT_STATUS_RESEARCH = "RESEARCH_REPORT_ONLY"
 SOR_REPORT_NAMESPACE = "SOR_B_REPORT"
 MC_NAMESPACE = "MONTE_CARLO_CCG"
 
+#: Absolute window used when matching a value against a refused reference Elo.
+#:
+#: Deliberately inclusive rather than exact. A refusal that only fired on ``==``
+#: would let a rounded, reparsed or unit-shifted copy of a stale number through,
+#: and the failure direction of a wider window is to refuse a value nobody
+#: governs anyway. The governed 1893.3 sits 7.7 Elo points from the nearer
+#: refused constant (1901.0), so a window this small cannot reach it.
+REFUSED_R_REF_TOLERANCE = 1e-6
+
+
+def _matches_refused_r_ref(value: float, refused: float) -> bool:
+    return abs(value - refused) <= REFUSED_R_REF_TOLERANCE
+
+
+def check_r_ref_value(value: object, *, where: str = "SOR reference Elo") -> float:
+    """Refuse an ungoverned reference Elo at a bare-float callable boundary.
+
+    The single place the refusals live. :class:`SorReferenceElo` calls it at
+    construction and :func:`p_reference_at_least_w` calls it on a bare argument,
+    so neither route can refuse less than the other.
+
+    Returns the value as a ``float``; the governed
+    :data:`GOVERNED_2026_SOR_R_REF` passes through unchanged.
+    """
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise InputValidationError(
+            f"{where} must be a real number; got {value!r}"
+        )
+    numeric = float(value)
+    if not math.isfinite(numeric):
+        raise InputValidationError(
+            f"{where} must be finite; got {value!r}. A non-finite reference Elo "
+            "would propagate silently through the Poisson-binomial into a "
+            "published row."
+        )
+    if _matches_refused_r_ref(numeric, STALE_COMPUTE_SOR_B_DEFAULT_R_REF):
+        raise GovernanceBlock(
+            f"R_ref {value} is the stale compute_sor_b.py default. Ruling "
+            f"{R2_SOR.convergence_id} forbids it silently controlling a weekly run; "
+            f"the governed 2026 value is {GOVERNED_2026_SOR_R_REF}."
+        )
+    if _matches_refused_r_ref(numeric, SUPERSEDED_2026_SOR_R_REF):
+        raise GovernanceBlock(
+            f"R_ref {value} is superseded. {SUPERSEDED_2026_SOR_R_REF_SUPERSEDED_BY}; "
+            "20_CANON_MANIFEST_INGEST records the artifact carrying it as SUPERSEDED "
+            f"HISTORY, \"do not use for decisions\". Use {GOVERNED_2026_SOR_R_REF}."
+        )
+    return numeric
+
 
 @dataclass(frozen=True)
 class SorReferenceElo:
@@ -106,18 +165,11 @@ class SorReferenceElo:
     namespace: str = SOR_REPORT_NAMESPACE
 
     def __post_init__(self) -> None:
-        if self.value == STALE_COMPUTE_SOR_B_DEFAULT_R_REF:
-            raise GovernanceBlock(
-                f"R_ref {self.value} is the stale compute_sor_b.py default. Ruling "
-                f"{R2_SOR.convergence_id} forbids it silently controlling a weekly run; "
-                f"the governed 2026 value is {GOVERNED_2026_SOR_R_REF}."
-            )
-        if self.value == SUPERSEDED_2026_SOR_R_REF:
-            raise GovernanceBlock(
-                f"R_ref {self.value} is superseded. {SUPERSEDED_2026_SOR_R_REF_SUPERSEDED_BY}; "
-                "20_CANON_MANIFEST_INGEST records the artifact carrying it as SUPERSEDED "
-                f"HISTORY, \"do not use for decisions\". Use {GOVERNED_2026_SOR_R_REF}."
-            )
+        # Same boundary check the bare-float callables run, so constructing the
+        # dataclass and calling straight into the Poisson-binomial refuse the
+        # same set of values. The normalised float is written back so the
+        # annotation is honest about what downstream arithmetic receives.
+        object.__setattr__(self, "value", check_r_ref_value(self.value))
         if not self.authority or not self.parameter_id:
             raise InputValidationError("SOR reference Elo requires a parameter_id and an authority")
 
@@ -189,15 +241,44 @@ def _reference_win_probability(r_ref: float, opponent_elo: float) -> float:
     return 1.0 / (1.0 + 10.0 ** ((opponent_elo - r_ref) / 400.0))
 
 
-def p_reference_at_least_w(r_ref: float, opponents: Sequence[SorOpponent], wins: int) -> float:
-    """Poisson-binomial P(reference team wins >= ``wins`` of this same schedule)."""
+def p_reference_at_least_w(
+    r_ref: SorReferenceElo | float,
+    opponents: Sequence[SorOpponent],
+    wins: int,
+) -> float:
+    """Poisson-binomial P(reference team wins >= ``wins`` of this same schedule).
+
+    ``r_ref`` may be an authorised :class:`SorReferenceElo` or a bare number.
+    Either way it crosses :func:`check_r_ref_value` first: this is a public
+    callable, and reaching it directly must not be a way around the refusals
+    :class:`SorReferenceElo` applies. The arithmetic below is unchanged.
+    """
+    if isinstance(r_ref, SorReferenceElo):
+        reference_elo = r_ref.value
+    else:
+        reference_elo = check_r_ref_value(
+            r_ref, where="p_reference_at_least_w() R_ref"
+        )
     if wins < 0 or wins > len(opponents):
         raise InputValidationError(
             f"wins={wins} is outside 0..{len(opponents)} for this schedule"
         )
+    for opponent in opponents:
+        if isinstance(opponent.rating_elo, bool) or not isinstance(
+            opponent.rating_elo, (int, float)
+        ):
+            raise InputValidationError(
+                f"Opponent {opponent.schedule_id!r} carries a non-numeric rating_elo "
+                f"{opponent.rating_elo!r}"
+            )
+        if not math.isfinite(float(opponent.rating_elo)):
+            raise InputValidationError(
+                f"Opponent {opponent.schedule_id!r} carries a non-finite rating_elo "
+                f"{opponent.rating_elo!r}; it would propagate into the published row."
+            )
     dist = [1.0]
     for opponent in opponents:
-        p = _reference_win_probability(r_ref, opponent.rating_elo)
+        p = _reference_win_probability(reference_elo, opponent.rating_elo)
         nxt = [0.0] * (len(dist) + 1)
         for k, mass in enumerate(dist):
             nxt[k] += mass * (1.0 - p)
@@ -277,7 +358,7 @@ def weekly_sor_row(
         raise InputValidationError(f"{team} has no counted opponents for week {week}")
     wins = sum(1 for o in opponents if o.won)
     losses = len(opponents) - wins
-    p = p_reference_at_least_w(ref.value, opponents, wins)
+    p = p_reference_at_least_w(ref, opponents, wins)
     raw = -math.log(p) if p > 0 else float("inf")
     return WeeklySorRow(
         week=week,

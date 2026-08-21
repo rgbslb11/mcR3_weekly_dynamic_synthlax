@@ -42,6 +42,17 @@ weights this module actually applies still match them, that the bound semantics
 are the governed ones, and that UNAVAILABLE stays fail-closed. Governed use goes
 through :func:`governed_common_opponent_score`, never around it.
 
+Serialization may not claim what the gate did not grant
+-------------------------------------------------------
+:func:`common_opponent_score` is deliberately ungated, so pre-ruling and
+alternative semantics stay testable. Its results therefore carry no formula
+authority, and :meth:`CommonOpponentResult.as_dict` must not stamp one on them:
+a row that was never gated reports ``governed: False`` and leaves every
+``formula_*`` claim ``None``. Only the governed entry points attach the formula
+the gate actually authorised, and only such a row may serialize the R4
+authority. The arithmetic is identical on both paths — the difference is
+entirely in what the row is allowed to say about itself.
+
 Why the exclusion rule carries the whole comparison
 ---------------------------------------------------
 The Chairman's example is two 11-1 teams that are each 2-1 against the same
@@ -56,7 +67,7 @@ raises it for the other. That is precisely the semantics question
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from .errors import GovernanceBlock, InputValidationError
 from .rulings import (
@@ -141,6 +152,20 @@ GOVERNING_RESOLUTION_REASONS = (
     "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
 )
 
+#: What a serialized result is allowed to say about how it was produced.
+GOVERNED_RESULT_PROVENANCE = (
+    "GOVERNED — produced through require_governed_common_opponent_formula(): the "
+    f"{R4_COMMON_OPPONENT_FORMULA.convergence_id} formula authority and the "
+    f"{R3_SOS_SEMANTICS.convergence_id} denominator semantics were both verified "
+    "before anything was computed."
+)
+UNGATED_RESULT_PROVENANCE = (
+    "UNGATED_HELPER_RESULT — produced by common_opponent_score() without passing "
+    "require_governed_common_opponent_formula(). The arithmetic is the same, but "
+    "no formula authority was established and the OWP/OOWP semantics were not "
+    "verified as the governed ones. This row claims no governance."
+)
+
 
 @dataclass(frozen=True)
 class CommonOpponentFormula:
@@ -211,6 +236,14 @@ PRE_RULING_COMMON_OPPONENT_FORMULA = CommonOpponentFormula(
 
 @dataclass(frozen=True)
 class CommonOpponentResult:
+    """One scored comparison, plus an honest record of how it was produced.
+
+    The two provenance fields are not inputs to the arithmetic. They exist so a
+    serialized row cannot claim authority the gate never granted: an ungated
+    helper result reports the semantics it happened to be handed and nothing
+    more, while a gated result carries the formula the gate returned.
+    """
+
     team: str
     other: str
     common_opponents: tuple[str, ...]
@@ -220,8 +253,22 @@ class CommonOpponentResult:
     owp_common: float | None
     oowp_common: float | None
     score: float | None
+    #: The id of the semantics actually applied. A statement of what was used,
+    #: not a claim that it was verified — an impostor carrying the governed id
+    #: reports that id here and is still ``governed: False``.
+    semantics_id: str | None = None
+    #: The formula the gate authorised. ``None`` means no gate ran, and no
+    #: formula authority may be serialized for this row.
+    governed_formula: CommonOpponentFormula | None = None
+
+    @property
+    def is_governed(self) -> bool:
+        """True only for results issued through the governed entry points."""
+        return self.governed_formula is not None
 
     def as_dict(self) -> dict[str, object]:
+        governed = self.is_governed
+        formula = self.governed_formula
         return {
             "ruling": R2_COMMON_OPPONENTS.convergence_id,
             "team": self.team,
@@ -233,11 +280,26 @@ class CommonOpponentResult:
             "owp_common": self.owp_common,
             "oowp_common": self.oowp_common,
             "common_opponent_score": self.score,
-            "formula_authority": COMMON_OPPONENT_FORMULA_AUTHORITY,
-            "formula_is_canonical": COMMON_OPPONENT_FORMULA_IS_CANONICAL,
-            "formula_resolution_reason": COMMON_OPPONENT_FORMULA_RESOLUTION_REASON,
-            "formula_weights": list(GOVERNED_COMMON_OPPONENT_WEIGHTS),
-            "semantics_ruling": R3_SOS_SEMANTICS.convergence_id,
+            # --- provenance. Every claim below is conditioned on the gate. ---
+            "governed": governed,
+            "provenance": (
+                GOVERNED_RESULT_PROVENANCE if governed else UNGATED_RESULT_PROVENANCE
+            ),
+            "formula_authority": formula.formula_id if governed else None,
+            "formula_authority_source": formula.authority if governed else None,
+            "formula_is_canonical": (
+                COMMON_OPPONENT_FORMULA_IS_CANONICAL if governed else None
+            ),
+            "formula_resolution_reason": (
+                formula.resolution_reason if governed else None
+            ),
+            "formula_weights": list(formula.weights) if governed else None,
+            # A fact about the code path either way: these are the weights the
+            # arithmetic above applied. Carrying the governed values does not
+            # make an ungated row governed, which is why it is a separate key.
+            "weights_applied": list(_weights_applied()),
+            "semantics_ruling": self.semantics_id,
+            "semantics_are_governed": governed,
             "unavailable_components": sorted(
                 name
                 for name, value in (
@@ -337,6 +399,10 @@ def common_opponent_score(
         owp_common=owp_common,
         oowp_common=oowp_common,
         score=score,
+        # What was used, recorded as such. No formula authority is attached:
+        # this helper is ungated and has none to give.
+        semantics_id=semantics.semantics_id,
+        governed_formula=None,
     )
 
 
@@ -348,6 +414,18 @@ def compare_common_opponents(
         common_opponent_score(ledger, team, other, semantics),
         common_opponent_score(ledger, other, team, semantics),
     )
+
+
+def _issue_governed(
+    result: CommonOpponentResult, formula: CommonOpponentFormula
+) -> CommonOpponentResult:
+    """Attach the gate-authorised formula to a result the gate just produced.
+
+    The only way ``governed_formula`` is ever set. Nothing is recomputed and no
+    component value is touched — this stamps provenance onto arithmetic that
+    already happened, under semantics the gate verified first.
+    """
+    return replace(result, governed_formula=formula)
 
 
 def _weights_applied() -> tuple[float, float, float]:
@@ -461,8 +539,10 @@ def governed_common_opponent_score(
     stays ungated so pre-ruling and alternative semantics remain testable; it
     carries no authority on its own.
     """
-    _, checked = require_governed_common_opponent_formula(formula, semantics)
-    return common_opponent_score(ledger, team, other, checked)
+    authorised, checked = require_governed_common_opponent_formula(formula, semantics)
+    return _issue_governed(
+        common_opponent_score(ledger, team, other, checked), authorised
+    )
 
 
 def governed_compare_common_opponents(
@@ -473,5 +553,8 @@ def governed_compare_common_opponents(
     formula: CommonOpponentFormula | None = GOVERNED_COMMON_OPPONENT_FORMULA,
 ) -> tuple[CommonOpponentResult, CommonOpponentResult]:
     """Both sides of one governed comparison, over the same shared opponent set."""
-    _, checked = require_governed_common_opponent_formula(formula, semantics)
-    return compare_common_opponents(ledger, team, other, checked)
+    authorised, checked = require_governed_common_opponent_formula(formula, semantics)
+    return tuple(  # type: ignore[return-value]
+        _issue_governed(result, authorised)
+        for result in compare_common_opponents(ledger, team, other, checked)
+    )
