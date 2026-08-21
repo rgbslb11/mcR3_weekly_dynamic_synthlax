@@ -585,9 +585,24 @@ def test_the_board_of_record_blocker_is_custody_not_policy():
 
 
 def test_no_board_workbook_was_fabricated_into_the_governed_inputs():
+    """The one Board workbook present is the approved binary, byte for byte.
+
+    R3 recorded that no Board I-K artifact was mounted, and guarded that by
+    asserting none existed. Lane A mounted the approved artifact, so the guard
+    now has to say the stronger thing: any Board workbook among the governed
+    inputs must carry the approved digest. A fabricated, regenerated or
+    stand-in board still fails this, which is what the guard was for.
+    """
     names = {p.name for p in INPUTS.iterdir()}
-    assert not any("Board_I-K" in n for n in names)
-    assert len(names) == 8
+    assert len(names) == 9
+    boards = sorted(n for n in names if "Board_I-K" in n)
+    assert boards == [board_of_record.BOARD_OF_RECORD_FILENAME]
+    mounted = INPUTS / boards[0]
+    assert (
+        hashlib.sha256(mounted.read_bytes()).hexdigest()
+        == board_of_record.BOARD_OF_RECORD_APPROVED_SHA256
+    )
+    assert mounted.stat().st_size == board_of_record.BOARD_OF_RECORD_APPROVED_BYTES
 
 
 def test_the_srs_claim_boundary_is_unchanged():
@@ -640,13 +655,24 @@ def test_the_blocker_set_before_this_convergence_was_exactly_eleven():
 
 
 def test_governance_closure_retires_exactly_two_and_leaves_nine(live_blockers):
+    """R3's governance closure is unchanged; the live set moved only by the mount.
+
+    R3 retired exactly two governance blockers and left nine. Lane A then
+    mounted the approved Board-of-Record binary, which clears the ninth on
+    custody grounds — the case ``R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED``
+    was defined for. R3's own accounting below is asserted unchanged.
+    """
     assert br.R3_RETIRED_BLOCKERS == {
         "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
         "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
     }
     assert len(br.R3_EXPECTED_LIVE_BLOCKERS) == 9
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED)
+    assert len(live_blockers) == 8
+    # The only difference from R3's nine is the Board mount, nothing else.
+    assert set(br.R3_EXPECTED_LIVE_BLOCKERS) - set(live_blockers) == {
+        "inputs.board_of_record_i_k"
+    }
 
 
 def test_a_successful_board_mount_would_leave_exactly_eight():
@@ -657,8 +683,14 @@ def test_a_successful_board_mount_would_leave_exactly_eight():
 
 
 def test_only_the_two_authorized_blocker_ids_disappeared(live_blockers):
+    """Two went by ruling, one by artifact custody, and nothing else moved."""
     vanished = set(br.R2_EXPECTED_LIVE_BLOCKERS) - set(live_blockers)
-    assert vanished == set(br.R3_RETIRED_BLOCKERS)
+    assert vanished == set(br.R3_RETIRED_BLOCKERS) | {
+        br.R3_BOARD_OF_RECORD_MOUNT_BLOCKER
+    }
+    # The custody retirement is not a ruling, and must never be recorded as one.
+    assert br.R3_BOARD_OF_RECORD_MOUNT_BLOCKER not in br.R3_RETIRED_BLOCKERS
+    assert br.R3_BOARD_OF_RECORD_MOUNT_BLOCKER not in br.R3_RETIREMENT_REASONS
 
 
 def test_no_genuinely_new_blocker_appeared(live_blockers):
@@ -719,7 +751,9 @@ def test_no_season_run_or_probability_output_exists():
 
 
 def test_the_remaining_blockers_are_only_calibration_model_scale_and_custody(live_blockers):
+    """With the Board mounted, the artifact-custody lane is empty."""
     lanes = {br.R3_REMAINING_CLASSIFICATION[b] for b in live_blockers}
-    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE", "ARTIFACT_CUSTODY"}
+    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE"}
+    assert "ARTIFACT_CUSTODY" not in lanes
     assert not any(b.startswith("governance.") and "CALIBRATION" not in b
                    for b in live_blockers)

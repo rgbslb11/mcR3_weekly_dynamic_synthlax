@@ -1,0 +1,121 @@
+{
+  "artifact": "V3_BOARD_IK_CUSTODY.json",
+  "lane": "POST_FREEZE_LANE_A_BOARD_IK_ARTIFACT_CUSTODY",
+  "recorded_at": "2026-08-21",
+  "base_sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+  "note": "Custody record for the Board of Record. This artifact records a mount event only. It does not restate, amend or supersede the R2, R3 or R4 governance status records, which are preserved exactly as written and which correctly record the pre-mount state.",
+  "ruling": "R2-BOARD-OF-RECORD",
+  "authority_model": {
+    "authoritative": "CONTENT_IDENTITY",
+    "not_authoritative": "FILENAME",
+    "rationale": "The approved bytes are delivered under several names, including browser de-duplication variants such as '(3)' and '(3)(1)'. A filename match is neither necessary nor sufficient; the registered digests are both."
+  },
+  "mount": {
+    "mounted": true,
+    "path": "reference/dynamic_weekly_mc_v3/inputs/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "mounted_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "source_name_in_governance_brief": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "filename_discrepancy_resolution": "The '(3)' suffix is a download de-duplication artifact, not part of the governed identity. Board_I-K_Artifact_Register_R1-R3_FINAL.xlsx registers the artifact without it. Four differently-named copies were found and all four carry the identical approved digest, which is what settles it."
+  },
+  "binary_identity": {
+    "expected_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "computed_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "verified": true,
+    "expected_bytes": 57179,
+    "computed_bytes": 57179,
+    "registered_in": "Board_I-K_Artifact_Register_R1-R3_FINAL.xlsx (APPROVED CANONICAL - CURRENT)",
+    "corroborated_by": "reference/dynamic_weekly_mc_v3/V3_GOVERNANCE_STATUS_R3.json required_sha256"
+  },
+  "content_identity": {
+    "method": "HASH-SPEC-V1",
+    "worksheet": "Board I-K",
+    "range": "A3:Q124",
+    "expected_sha256": "23f83a347582655986f59d69e0205349996d1c0f9db294701e8112e49a11ecde",
+    "computed_sha256": "23f83a347582655986f59d69e0205349996d1c0f9db294701e8112e49a11ecde",
+    "verified": true,
+    "serialization": "RFC 4180 CSV, UTF-8 without BOM, header included, declared column order, nulls as empty string, LF line endings, one trailing LF, floats at round-trip precision (%.17g).",
+    "reproduced_independently": true
+  },
+  "schema_status": {
+    "status": "VALIDATED",
+    "declared_columns": [
+      "Rank I-K",
+      "Team",
+      "Short",
+      "Conference",
+      "Committee",
+      "Power",
+      "Baseline",
+      "Returning",
+      "Movement",
+      "Talent",
+      "Coaching",
+      "Market (Schedule-Neutral)",
+      "Futures Overlay (Context Only)",
+      "Market Status",
+      "Prior Rank I-I",
+      "Shift",
+      "Master Team ID"
+    ],
+    "column_count": 17,
+    "header_row": 3,
+    "data_rows": 121,
+    "expected_data_rows": 121
+  },
+  "identity_status": {
+    "status": "VALIDATED",
+    "board_rows": 121,
+    "unique_master_team_ids": 121,
+    "ranks": "1..121 contiguous",
+    "governed_universe_preserved": {
+      "schedule_identities": 134,
+      "fbs_member": 121,
+      "schedule_only_fcs": 13
+    },
+    "board_ids_equal_governed_fbs_ids": true,
+    "unexpected_fcs_entities": 0,
+    "missing_fbs_ids": 0,
+    "duplicate_team_ids": 0
+  },
+  "custody_status": "BOARD_IK_APPROVED_ARTIFACT_VERIFIED",
+  "refusals_enforced": [
+    "correct filename over wrong digest",
+    "Board I-H substitution",
+    "pytest fixture stand-in",
+    "synthetic workbook with correct shape",
+    "truncated workbook",
+    "corrupted workbook",
+    "re-saved approved workbook (content intact, binary differs)",
+    "superseded predecessor and unapproved candidate digests",
+    "duplicate master team ids",
+    "missing FBS ids",
+    "unexpected FCS entities",
+    "renamed or reordered columns",
+    "wrong row count"
+  ],
+  "blockers": {
+    "owned": "inputs.board_of_record_i_k",
+    "before_count": 9,
+    "retired": [
+      "inputs.board_of_record_i_k"
+    ],
+    "retirement_reason": "APPROVED_ARTIFACT_MOUNTED_AND_CONTENT_VERIFIED",
+    "retirement_is_not_a_ruling": true,
+    "after": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "after_count": 8,
+    "other_blockers_retired": []
+  },
+  "explicitly_not_decided": [
+    "governance.COMMITTEE_TB4_FIRST_NOVEMBER_BOARD_FALLBACK_AUTHORITY_ABSENT - no authority designates Board I-K as the TB4 fallback and this mount does not.",
+    "Board I-H remains historical evidence at 08_BOARD_IH_TOP25 and was not substituted."
+  ]
+}

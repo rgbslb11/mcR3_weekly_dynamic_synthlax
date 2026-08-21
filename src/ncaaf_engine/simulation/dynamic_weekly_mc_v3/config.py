@@ -168,11 +168,11 @@ class V3Config:
             blockers.append("committee_tiebreak_policy")
         if self.inputs.aac_divisions_csv is None or not self.inputs.aac_divisions_csv.exists():
             blockers.append("inputs.aac_divisions_csv")
-        if (
-            self.inputs.board_of_record_xlsx is None
-            or not self.inputs.board_of_record_xlsx.exists()
-        ):
-            blockers.append(board_of_record.BOARD_OF_RECORD_BLOCKER)
+        # Custody is decided by the Board module, not by file existence: a
+        # present-but-wrong artifact must not clear the gate.
+        blockers.extend(
+            board_of_record.board_of_record_blockers(self.inputs.board_of_record_xlsx)
+        )
         return blockers
 
     def require_executable(self) -> None:
