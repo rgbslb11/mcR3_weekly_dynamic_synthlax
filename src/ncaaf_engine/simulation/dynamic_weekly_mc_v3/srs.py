@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from typing import Iterable, Sequence
 
 from .errors import GovernanceBlock, InputValidationError
+from .linalg import solve_exact
 from .rulings import R2_SRS
 
 #: FACT — ACC-EXT-12 records the cap as +/-24; ruling R2-SRS-WITNESS restates it.
@@ -43,33 +44,25 @@ def cap_margin(margin: float, cap: float = SRS_MARGIN_CAP) -> float:
 
 
 def _solve(matrix: list[list[float]], rhs: list[float]) -> list[float]:
-    """Gaussian elimination with partial pivoting, in fixed order.
+    """Exact solve of the schedule-adjustment system.
 
     Written out rather than iterated to a fixed point: the Jacobi sweep the
     schedule-adjustment equations invite does not converge on small or
     lopsided schedules, and a solver that quietly returns its last oscillation
-    would hand back a plausible ordering that is simply wrong.
+    would hand back a plausible ordering that is simply wrong. The arithmetic
+    itself lives in :mod:`linalg`, shared with the Colley witness, so the two
+    witnesses cannot disagree about linear algebra while appearing to disagree
+    about football.
     """
-    n = len(rhs)
-    aug = [row[:] + [rhs[i]] for i, row in enumerate(matrix)]
-    for col in range(n):
-        pivot = max(range(col, n), key=lambda r: abs(aug[r][col]))
-        if abs(aug[pivot][col]) < SRS_PIVOT_EPSILON:
-            raise InputValidationError(
-                "SRS schedule-adjustment system is singular; the schedule graph is "
-                "disconnected or degenerate"
-            )
-        if pivot != col:
-            aug[col], aug[pivot] = aug[pivot], aug[col]
-        scale = aug[col][col]
-        aug[col] = [v / scale for v in aug[col]]
-        for row in range(n):
-            if row == col:
-                continue
-            factor = aug[row][col]
-            if factor:
-                aug[row] = [v - factor * w for v, w in zip(aug[row], aug[col])]
-    return [aug[i][n] for i in range(n)]
+    return solve_exact(
+        matrix,
+        rhs,
+        singular_message=(
+            "SRS schedule-adjustment system is singular; the schedule graph is "
+            "disconnected or degenerate"
+        ),
+        pivot_epsilon=SRS_PIVOT_EPSILON,
+    )
 
 
 def _components(adjacency: dict[str, set[str]], teams: list[str]) -> list[list[str]]:
