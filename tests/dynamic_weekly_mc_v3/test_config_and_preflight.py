@@ -39,8 +39,11 @@ def test_governed_architecture_and_blockers_are_explicit():
         "inputs.aac_divisions_csv",
     ):
         assert retired not in blockers
-    # Opened by R2: the Board of Record it names is not mounted.
-    assert "inputs.board_of_record_i_k" in blockers
+    # Opened by R2, cleared by mounting the approved artifact: the gate now
+    # tests content identity, so it clears only because the digest verifies.
+    assert cfg.inputs.board_of_record_xlsx is not None
+    assert "inputs.board_of_record_i_k" not in blockers
+    # Calibration still blocks execution; the Board mount cleared one gate only.
     with pytest.raises(GovernanceBlock):
         cfg.require_executable()
 
