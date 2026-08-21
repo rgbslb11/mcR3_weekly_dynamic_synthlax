@@ -113,9 +113,12 @@ class DynamicWeeklyMCV3:
             thirteen_game_exceptions_validated=bool(thirteen_game["validated"]),
             a8_ecl_ordering_resolved=ordering.a8_ecl_ordering_resolved(),
             sos_semantics_governed=sos.GOVERNED_SOS_SEMANTICS is not None,
-            fcs_unified_scale_governed=(
-                fcs_policy.GOVERNED_FCS_POLICY.unified_points_equivalent is not None
-            ),
+            # Consult the adapter registry, not just the policy attribute. The
+            # blocker clears only when an adapter has actually been installed
+            # through register_fcs_scale_adapter, which is the gate that checks
+            # provenance and authority; reading the attribute alone would let a
+            # value set any other way clear the blocker unexamined.
+            fcs_unified_scale_governed=fcs_policy.fcs_unified_scale_governed(),
             quarterfinal_mapping_ruling_applied=(
                 postseason.QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY
             ),
@@ -152,16 +155,36 @@ class DynamicWeeklyMCV3:
 
     def _initialize_states(self, teams: dict[str, Team]) -> dict[str, TeamPathState]:
         states: dict[str, TeamPathState] = {}
+        # Report the whole unrated set, not just whichever entity sorts first.
+        # Failing on ARST alone made a 13-entity structural gap look like one bad
+        # row and hid that the same refusal applies to every one of them.
+        unrated = sorted(sid for sid, t in teams.items() if t.preseason_strength_points is None)
+        fcs_points: float | None = None
+        if unrated:
+            try:
+                # The single governed accessor, and the engine's only route to an
+                # FCS point value. It raises unless an adapter has been installed
+                # through the registry, so there is no path by which the engine
+                # can supply one of its own.
+                fcs_points = fcs_policy.require_fcs_unified_points()
+            except GovernanceBlock as exc:
+                raise GovernanceBlock(
+                    f"{len(unrated)} entities have no unified preseason strength points "
+                    f"({', '.join(unrated)}). {exc}"
+                ) from exc
         for sid, team in teams.items():
-            if team.preseason_strength_points is None:
+            points = team.preseason_strength_points
+            if points is None:
+                points = fcs_points
+            if points is None:
                 raise GovernanceBlock(
                     f"{sid} has no unified preseason strength points. Exact governed FCS-to-unified translation must be configured."
                 )
             states[sid] = TeamPathState(
                 schedule_id=sid,
-                preseason_strength_points=team.preseason_strength_points,
-                current_strength_points=team.preseason_strength_points,
-                promoted_strength_points=team.preseason_strength_points,
+                preseason_strength_points=points,
+                current_strength_points=points,
+                promoted_strength_points=points,
             )
         return states
 
@@ -201,7 +224,15 @@ class DynamicWeeklyMCV3:
                     home=home,
                     away=away,
                     hfa_baseline_points=self.config.hfa_baseline_points,
-                    home_hfa_modifier=float(home_team.hfa_modifier or 1.0),
+                    # Not ``or 1.0``. The 13 FCS entities carry
+                    # home_field_advantage_modifier=UNRESOLVED in POWER_CRUNCH,
+                    # and three scheduled games (G0019, G0213, G0224) put one of
+                    # them at a HOME venue, so the old default would have
+                    # invented an ungoverned quantity for real games. It also
+                    # silently rewrote a legitimate 0.0 modifier to 1.0.
+                    home_hfa_modifier=(
+                        fcs_policy.require_fcs_hfa_modifier(home_team.hfa_modifier, game.home_team)
+                    ),
                     game_sd_points=self.config.calibration.game_sd_points,
                     rating_state_version=state_version,
                 )
