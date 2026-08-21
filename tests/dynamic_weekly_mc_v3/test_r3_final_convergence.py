@@ -346,11 +346,20 @@ def test_a_test_fixture_can_never_become_production_authority():
 # --- B2: the common-opponent guardrail ---------------------------------------
 
 
-def test_the_common_opponent_formula_was_not_newly_promoted():
-    assert common_opponents.COMMON_OPPONENT_FORMULA_IS_CANONICAL is False
-    assert common_opponents.COMMON_OPPONENT_FORMULA_AUTHORITY == "R2-COMMON-OPP"
+def test_r3_did_not_itself_promote_the_common_opponent_formula():
+    """R3 governed the denominators only; the formula was governed later, by R4.
+
+    The guardrail this test was written for still holds — nothing was promoted on
+    the strength of ``R3-SOS-OWP-OOWP-SEMANTICS``. The formula is governed now
+    because a *later* direct Chairman ruling approved it, and the pre-ruling
+    status is preserved verbatim rather than edited away.
+    """
+    assert "R3-SOS-OWP-OOWP-SEMANTICS" not in (
+        common_opponents.COMMON_OPPONENT_FORMULA_AUTHORITY
+    )
+    assert common_opponents.COMMON_OPPONENT_FORMULA_AUTHORITY == "R4-COMMON-OPP-FORMULA"
     assert "not stated by any mounted artifact" in (
-        common_opponents.COMMON_OPPONENT_FORMULA_STATUS
+        common_opponents.COMMON_OPPONENT_FORMULA_PRIOR_STATUS
     )
     assert common_opponents.UNPROMOTED_COMMON_OPPONENT_ALTERNATIVES
 
@@ -358,7 +367,8 @@ def test_the_common_opponent_formula_was_not_newly_promoted():
 def test_the_common_opponent_comparison_uses_the_governed_semantics(repeat_ledger):
     result = common_opponents.common_opponent_score(repeat_ledger, "O", "P", GOVERNED)
     assert result.as_dict()["semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
-    assert result.as_dict()["formula_is_canonical"] is False
+    assert result.as_dict()["formula_is_canonical"] is True
+    assert result.as_dict()["formula_authority"] == "R4-COMMON-OPP-FORMULA"
 
 
 def test_the_common_opponent_comparison_propagates_unavailability():

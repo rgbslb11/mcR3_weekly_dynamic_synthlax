@@ -732,13 +732,11 @@ being equal.
 
 **The common-opponent guardrail held.** The `0.25 / 0.50 / 0.25` common-opponent shape was *not*
 newly promoted on the strength of this ruling, and no result-weighted alternative was adopted
-either. It remains carried forward from convergence ruling `R2-COMMON-OPP`, whose nearest
-repository evidence (`18_ACC_POLICY_REFERENCE` ACC-EXT-08) records the question as
-OPEN / REQUIRES RULING rather than stating a formula. The module now records itself as
-`COMMON_OPPONENT_FORMULA_IS_CANONICAL = False`. What did change there is only the denominator
-semantics, which the ruling explicitly governs. The implementation still distinguishes two teams
-with identical common-opponent records where the underlying strength evidence supports it, and
-that fixture is a behavioural check — not governance authority.
+either. What changed here is only the denominator semantics, which this ruling explicitly
+governs. The formula itself was governed later, by `R4-COMMON-OPP-FORMULA` — see below. The
+implementation still distinguishes two teams with identical common-opponent records where the
+underlying strength evidence supports it, and that fixture is a behavioural check — not
+governance authority.
 
 ## R3-CFP-FIXED-TOPOLOGY — fixed 2026 bracket
 
@@ -771,6 +769,56 @@ Bracket Regime LOCKED `S4` ("First Round 5v12, 6v11, 7v10, 8v9") is preserved ve
 **G5 interaction.** `R2-G5-SEED5` is not reopened. The automatic-bid champion is seed 5 exactly
 and therefore always meets `Winner(PI-A)` in R1-D. It never enters PI-A or PI-B, stays seed 5 even
 when its natural committee rank is top four, and is not reseeded after any result.
+
+
+## R4-COMMON-OPP-FORMULA — the exact common-opponent formula
+
+**DIRECT_CHAIRMAN_AUTHORITY.** Retires nothing — this is an authority representation
+correction, not project execution work.
+
+```
+COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common
+```
+
+**What was wrong.** The module recorded `COMMON_OPPONENT_FORMULA_IS_CANONICAL = False` on the
+grounds that no *mounted workbook* states the formula. Those workbooks predate the direct
+Chairman approval of this exact formula, and older artifact state does not outrank a later
+direct ruling. The authority hierarchy is:
+
+```
+older artifact state / open item  ->  later direct Chairman ruling  ->  successor governed authority
+```
+
+**Two layers, kept apart.** Layer A is the formula, governed here. Layer B is the OWP/OOWP
+denominator and exclusion construction, governed separately by `R3-SOS-OWP-OOWP-SEMANTICS` and
+**not reopened**. The two are asserted independently in both directions: a governed formula over
+ungoverned semantics fails closed, and governed semantics under an ungoverned formula fails
+closed too.
+
+**The weights are the rule, not a parameter.** `require_governed_common_opponent_formula()` is
+the affirmative gate. It checks the formula's status is `GOVERNED`, that the authority source is
+the direct Chairman ruling (or a successor to it), that the weights are exactly
+`0.25 / 0.50 / 0.25`, that the weights the module actually applies still match that record, that
+the bound semantics are the governed R3 ones, and that `UNAVAILABLE` is still fail-closed.
+`0.20/0.60/0.20`, `0.25/0.25/0.50` and a weight a hair off all raise. `TEST_FIXTURE`,
+`PROPOSAL`, `OPEN`, `UNRESOLVED` and pre-ruling historical evidence cannot promote themselves
+whatever numbers they carry. Governed use goes through `governed_common_opponent_score()`;
+nothing reads a boolean and hopes.
+
+**Nothing historical was rewritten.** `18_ACC_POLICY_REFERENCE` ACC-EXT-08 stays exactly as it
+is and is cited as evidence of the prior state, not as authority against the later ruling. The
+previous status string is preserved verbatim as `COMMON_OPPONENT_FORMULA_PRIOR_STATUS`, and
+`PRE_RULING_COMMON_OPPONENT_FORMULA` keeps the pre-ruling record constructible so a test can
+prove it cannot promote itself. No Chairman ruling ID was fabricated — `chairman_ruling_id`
+stays `null`, and `R4-COMMON-OPP-FORMULA` is a locally assigned convergence handle.
+
+**No production path was invented.** The committee and A8/ECL tiebreak chains still receive an
+injected scorer exactly as before. The gate exists so future production wiring cannot
+legitimately obtain governed authority without validating it first.
+
+**Blockers unchanged at nine** — seven calibration, one Board I-K artifact custody, one FCS
+model-scale adapter. None retired, none opened, and no common-opponent blocker was created
+because the classification changed.
 
 ## What was attempted and could not be completed
 

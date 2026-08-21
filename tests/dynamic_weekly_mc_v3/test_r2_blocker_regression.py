@@ -119,7 +119,7 @@ def test_v3_remains_experimental_and_no_output_is_produced(live_blockers):
 
 def test_every_ruling_is_recorded_with_its_provenance_class():
     for ruling in rulings.ALL_RULINGS:
-        assert ruling.convergence_id.startswith(("R2-", "R3-"))
+        assert ruling.convergence_id.startswith(("R2-", "R3-", "R4-"))
         assert ruling.decision
         assert ruling.provenance in ("FACT", "DERIVED")
         # No Chairman ruling IDs were supplied; none is invented.

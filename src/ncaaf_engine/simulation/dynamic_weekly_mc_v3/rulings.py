@@ -419,6 +419,55 @@ R3_CFP_FIXED_TOPOLOGY = ChairmanRuling(
 )
 
 
+#: Issued as one instruction for the PR #3 final common-opponent authority binding.
+R4_INSTRUCTION = "OPERATION SYTHALAX — PR #3 FINAL COMMON-OPPONENT AUTHORITY BINDING"
+
+
+R4_COMMON_OPPONENT_FORMULA = ChairmanRuling(
+    convergence_id="R4-COMMON-OPP-FORMULA",
+    subject="Performance against common opponents — the exact scoring formula",
+    decision=(
+        "COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common. "
+        "These exact weights are the governed rule, not a configurable production "
+        "parameter: 0.20/0.60/0.20, 0.25/0.25/0.50 and every other weighting are "
+        "refused for governed use. The formula is applied to the common-opponent "
+        "subset under the OWP/OOWP denominator and exclusion semantics already "
+        "governed by ruling R3-SOS-OWP-OOWP-SEMANTICS, which this ruling does not "
+        "reopen or alter. UNAVAILABLE propagation stays fail-closed: an unavailable "
+        "WP_common, OWP_common or OOWP_common makes the score UNAVAILABLE and the "
+        "tiebreak advances to the next already-governed criterion rather than "
+        "inventing 0, 0.0 or 0.500."
+    ),
+    evidence=(
+        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL COMMON-OPPONENT "
+        "AUTHORITY BINDING — the exact formula was approved directly.",
+        "Weights are the SOS shape of ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP), "
+        "restricted to the common-opponent subset; convergence ruling R2-COMMON-OPP "
+        "carried the same shape forward before this direct approval was issued.",
+        "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-08 "
+        "records the common-opponent question as OPEN / REQUIRES RULING. That entry "
+        "predates this ruling and is preserved unedited as evidence of the prior "
+        "state; it is not authority against the later direct approval.",
+    ),
+    # Authority representation only. The nine live project execution blockers are
+    # calibration, artifact-custody and model-scale work that no ruling can close.
+    retires=(),
+    supersedes=(
+        "18_ACC_POLICY_REFERENCE ACC-EXT-08 read as leaving the common-opponent "
+        "formula OPEN / REQUIRES RULING — superseded to exactly the extent that the "
+        "exact 0.25/0.50/0.25 formula is now directly approved. The workbook row "
+        "itself is preserved unedited.",
+        "COMMON_OPPONENT_FORMULA_IS_CANONICAL = False and the "
+        "CONVERGENCE_RULING_ONLY status carried under ruling R2-COMMON-OPP, which "
+        "predate this direct approval.",
+        "RESULT_WEIGHTED_OPPONENT_STRENGTH as a candidate common-opponent formula.",
+    ),
+    provenance="FACT",
+    instruction=R4_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+
 R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_SCHEDULE_V5_AUTHORITY,
     R2_THIRTEEN_GAME_EXCEPTIONS,
@@ -443,9 +492,12 @@ R3_RULINGS: tuple[ChairmanRuling, ...] = (
     R3_CFP_FIXED_TOPOLOGY,
 )
 
-#: Every ruling issued across both convergences. R2_RULINGS stays exactly as the
-#: audited R2 record; R3 adds to it rather than editing it.
-ALL_RULINGS: tuple[ChairmanRuling, ...] = R2_RULINGS + R3_RULINGS
+R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
+
+#: Every ruling issued across all three convergences. R2_RULINGS and R3_RULINGS
+#: stay exactly as the audited records; each later round adds to them rather than
+#: editing them, so the succession stays readable in one place.
+ALL_RULINGS: tuple[ChairmanRuling, ...] = R2_RULINGS + R3_RULINGS + R4_RULINGS
 
 _BY_ID = {r.convergence_id: r for r in ALL_RULINGS}
 
