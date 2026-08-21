@@ -340,16 +340,16 @@
       "calibration.sample_size_regularization",
       "calibration.weekly_movement_cap_points",
       "calibration.weekly_performance_residual_coefficient",
-      "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
       "governance.GAME_SD_CALIBRATION_OPEN",
       "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
       "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
-      "inputs.board_of_record_i_k"
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
     ],
     "opened_by_r2": [
-      "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
       "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
-      "inputs.board_of_record_i_k"
+      "inputs.board_of_record_i_k",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
     ],
     "r1_audited_live_count": 17,
     "r1_baseline_count": 18,
@@ -507,10 +507,13 @@
     "fcs": {
       "fixed_elo": 1250.0,
       "layer": "ELO",
+      "model_scale_adapter_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
       "model_use_authorized_by_ruling": true,
       "policy": "FIXED_ELO_1250",
+      "rating_policy_resolved": true,
       "requires_future_toggle": false,
       "ruling": "R2-FCS-ELO-1250",
+      "superseded_v2_1_bridge": "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite translated from Board I-H equivalent to unified points.",
       "supersedes": [
         "POWER_CRUNCH Build Manifest 'Model use authorized: FALSE' for V3 use"
       ],
@@ -619,15 +622,31 @@
       }
     },
     "sor": {
+      "governed_2026_r_ref": 1893.3,
+      "governed_2026_r_ref_authority": "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25 (CCG-R_REF, LOCKED, SOURCE-VERIFIED); ruling R-MC-V2",
+      "governed_2026_r_ref_parameter_id": "CCG-R_REF",
       "is_committee_input": false,
-      "mc_domain_parameter_id": "CCG-R_REF",
-      "mc_domain_r_ref": 1893.3,
       "namespaces_separate": true,
       "report_status": "RESEARCH_REPORT_ONLY",
-      "stale_default_r_ref_refused": 1684.9
+      "stale_library_default_refused": 1684.9,
+      "superseded_by": "R-MC-V2 (2026-07-14): R_ref 1901 -> 1893.3",
+      "superseded_r_ref": 1901.0,
+      "unratified_items": [
+        "P_TO_STRENGTH_TRANSFORM",
+        "REFERENCE_HFA"
+      ]
     },
     "sos": {
       "blocker": "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "nearest_authority": "V2_1_STATIC_CONTROL...xlsx!Methodology!A11 (defines none of the six)",
+      "required_rulings": [
+        "Are an opponent's games against the evaluated team removed from that opponent's record when computing OWP?",
+        "Is OWP team-averaged or schedule-instance-weighted?",
+        "How is a repeated opponent treated - once, or once per meeting?",
+        "How is OOWP constructed - the mean of each opponent's OWP, or the mean over every opponent-of-opponent directly?",
+        "How do schedule-only FCS opponent records enter WP, OWP and OOWP?",
+        "What happens to a team with zero qualifying games?"
+      ],
       "semantics_governed": false,
       "weights": {
         "oowp": 0.25,
@@ -636,10 +655,17 @@
       }
     },
     "srs": {
+      "canonical_spec_mounted": false,
+      "canonical_validation_anchors": [],
+      "canonical_validation_blocker": "governance.SRS_CANONICAL_VALIDATION_ANCHORS_NOT_MOUNTED",
+      "canonical_validation_status": "NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS",
+      "cross_checked_against": "GAUSS_SEIDEL_ITERATION_WHERE_CONVERGED",
       "is_committee_sos": false,
       "is_sor": false,
       "margin_cap": 24.0,
-      "role": "CALIBRATION_VALIDATION_WITNESS"
+      "role": "CALIBRATION_VALIDATION_WITNESS",
+      "solver": "EXACT_LINEAR_SOLVE_PER_CONNECTED_COMPONENT",
+      "srs_over_40_semantics": null
     }
   },
   "head_sha": null,
@@ -656,15 +682,15 @@
     "governance.GAME_SD_CALIBRATION_OPEN",
     "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
     "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
-    "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED"
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
   ],
   "model": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
   "model_version": "3.0.0-experimental-harness",
   "note": "This is a successor status record, not a replacement for V3_BUILD_MANIFEST.json. The build manifest is the frozen record of the tested R1 build and is left unedited; its counts still describe that build. Where the two disagree, the manifest is history and this file is current state.",
   "opened_blockers": [
-    "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
     "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
-    "inputs.board_of_record_i_k"
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
   ],
   "output_probabilities_generated": false,
   "parent_build_manifest": {
@@ -674,6 +700,74 @@
     "sha256": "814f8ad79f9e3158d734245b372342bcf546495c202c799cdad9179135f8fdab",
     "status": "FROZEN_HISTORICAL_RECORD_UNEDITED",
     "test_count": 74
+  },
+  "r2_audit_challenge_adjudications": {
+    "1_sor_r_ref": {
+      "1901_status": "SUPERSEDED",
+      "evidence": [
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25 = 1893.3 (LOCKED, SOURCE-VERIFIED)",
+        "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST!C15 'R_ref 1901 now stale'",
+        "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST!B24 'R_ref 1901->1893.3'",
+        "Model_Parameters_v2_5_APPROVED.xlsx!11_VALIDATION_REGISTER!D15"
+      ],
+      "is_execution_blocker": false,
+      "remaining_unratified": [
+        "P_TO_STRENGTH_TRANSFORM",
+        "REFERENCE_HFA"
+      ],
+      "superseding_authority": "R-MC-V2, 2026-07-14",
+      "verdict": "R_REF_IS_GOVERNED_AT_1893.3"
+    },
+    "2_srs_solver": {
+      "canonical_reference_implementation_mounted": false,
+      "canonical_spec_mounted": false,
+      "canonical_validation_anchors_mounted": false,
+      "is_execution_blocker": false,
+      "verdict": "EQUIVALENCE_PROVEN_FOR_THE_MATHEMATICS_NOT_FOR_CANONICAL_ANCHORS"
+    },
+    "3_g5_seed_five": {
+      "bracket_regime_s2_disposition": "SUPERSEDED_TO_THE_EXTENT_OF_THE_CONFLICT",
+      "tested_natural_ranks": [
+        1,
+        3,
+        5,
+        8,
+        14
+      ],
+      "verdict": "SEED_5_EXACT_AT_EVERY_NATURAL_RANK"
+    },
+    "4_quarterfinal_mapping": {
+      "comments_or_notes": "none",
+      "defined_names": "none",
+      "external_relationships": "none",
+      "formulas": "none outside Rest_Integrity!D3:D5 (date arithmetic)",
+      "hidden_rows_cols_sheets": "none",
+      "source_cells": {
+        "Bracket_Flow!B6": "E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)",
+        "Playoff_Calendar!C12": "Seed 1 v W(R1)",
+        "Playoff_Calendar!C13": "Seed 4 v W(R1)",
+        "Playoff_Calendar!C14": "Seed 2 v W(R1)",
+        "Playoff_Calendar!C15": "Seed 3 v W(R1)"
+      },
+      "verdict": "SOURCE_DOES_NOT_BIND_THE_SLOT_EDGES_BLOCKER_RETAINED"
+    },
+    "5_fcs_scale": {
+      "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+      "superseded_v2_1_bridge": "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite translated from Board I-H equivalent to unified points.",
+      "verdict": "RATING_POLICY_RESOLVED_MODEL_SCALE_ADAPTER_MISSING"
+    },
+    "6_owp_oowp": {
+      "blocker": "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+      "required_rulings": [
+        "Are an opponent's games against the evaluated team removed from that opponent's record when computing OWP?",
+        "Is OWP team-averaged or schedule-instance-weighted?",
+        "How is a repeated opponent treated - once, or once per meeting?",
+        "How is OOWP constructed - the mean of each opponent's OWP, or the mean over every opponent-of-opponent directly?",
+        "How do schedule-only FCS opponent records enter WP, OWP and OOWP?",
+        "What happens to a team with zero qualifying games?"
+      ],
+      "verdict": "NO_AUTHORITY_ONE_NARROW_BLOCKER_RETAINED"
+    }
   },
   "recorded_at": "2026-08-21T00:00:00+00:00",
   "resolved_blockers": [

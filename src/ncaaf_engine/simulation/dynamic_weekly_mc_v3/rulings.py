@@ -269,6 +269,8 @@ R2_G5_AUTO_BID = ChairmanRuling(
     supersedes=(
         "Playoff Calendar PLAY-IN G2 note 'G5 auto-bid = seed 14 (academy game)'",
         "Bracket Regime AB2 read as conferring no seed constraint",
+        "Bracket Regime S2 'FOUR HIGHEST-RANKED TEAMS OVERALL receive a first-round bye', "
+        "to the extent it would keep a top-4-ranked G5 automatic-bid champion out of seed 5",
     ),
 )
 

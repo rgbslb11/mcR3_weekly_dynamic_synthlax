@@ -79,7 +79,7 @@ def test_the_stale_compute_sor_b_default_cannot_silently_execute():
         sor.SorReferenceElo(
             value=1684.9, parameter_id="X", authority="Y", source_artifact="Z"
         )
-    with pytest.raises(GovernanceBlock, match="explicit governed season R_ref"):
+    with pytest.raises(GovernanceBlock, match="explicit season R_ref"):
         sor.require_sor_reference_elo(None)
     with pytest.raises(GovernanceBlock):
         _row(reference=None)

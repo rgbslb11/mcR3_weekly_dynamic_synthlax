@@ -10,12 +10,25 @@ closed
 closed
     What value FCS opponents carry. A fixed Elo, with no toggle and no schedule
     of future changes.
-open
-    How Elo 1250 maps onto the unified neutral-points axis the V3 engine rates
-    teams on. The governed registers contain no such mapping. The only candidate
-    is the POWER_CRUNCH Elo/Board transform, and inverting it is exactly the ad
-    hoc conversion the ruling forbids. That gap is surfaced as one narrow
-    blocker rather than filled.
+open — but not a policy question
+    The FCS *rating policy* is settled and is not reopened here. What is missing
+    is a **model-scale adapter**: the V3 simulation layer rates teams in unified
+    neutral points (observed FBS range roughly -17.5 to +32.9), the ruling fixes
+    an Elo, and no mounted register bridges the two axes.
+
+    The bridge is genuinely required, not hypothetical. All 13 schedule-only FCS
+    entities carry ``preseason_strength_points = None``, they appear in 15
+    regular-season games across weeks 2, 3, 4, 5 and 12, and
+    ``engine._initialize_states`` raises on the first of them today.
+
+    The bridge V2.1 used is precisely the route now closed. Its Methodology sheet
+    (``V2_1_STATIC_CONTROL…xlsx!Methodology!A8``) records: "13 schedule-only
+    opponents use the canonical R-FCS-RATING-01 operator composite *translated
+    from Board I-H equivalent to unified points*." That is the Board equivalent,
+    and ruling R2-FCS-ELO-1250 forbids using it as a conversion rule.
+
+    So the gap is surfaced as one narrow **model-scale / calibration** blocker.
+    The FCS rating policy itself is not in question.
 """
 
 from __future__ import annotations
@@ -39,8 +52,19 @@ FORBIDDEN_BOARD_EQUIVALENTS = (0.294, 0.297, 0.297514)
 POWER_CRUNCH_ELO_BOARD_SLOPE = 999.986237
 POWER_CRUNCH_ELO_BOARD_INTERCEPT = 1099.999878
 
-#: Blocker for the one thing the ruling does not settle.
-FCS_UNIFIED_SCALE_BLOCKER = "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED"
+#: Blocker for the one thing the ruling does not settle. Namespaced
+#: ``model_scale.`` rather than ``governance.`` so it cannot be read as
+#: reopening the FCS rating policy: the policy is settled, the adapter is missing.
+FCS_UNIFIED_SCALE_BLOCKER = "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+
+#: The rating policy is closed. Recorded so the two are never conflated.
+FCS_RATING_POLICY_RESOLVED = True
+
+#: FACT — V2_1_STATIC_CONTROL…xlsx!Methodology!A8. The adapter V2.1 used, now closed.
+V2_1_FCS_BRIDGE = (
+    "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite "
+    "translated from Board I-H equivalent to unified points."
+)
 
 
 @dataclass(frozen=True)
@@ -62,6 +86,9 @@ class FcsPolicy:
             "unified_points_equivalent": self.unified_points_equivalent,
             "model_use_authorized_by_ruling": self.model_use_authorized_by_ruling,
             "requires_future_toggle": self.requires_future_toggle,
+            "rating_policy_resolved": FCS_RATING_POLICY_RESOLVED,
+            "model_scale_adapter_blocker": FCS_UNIFIED_SCALE_BLOCKER,
+            "superseded_v2_1_bridge": V2_1_FCS_BRIDGE,
             "supersedes": list(R2_FCS.supersedes),
         }
 
@@ -118,9 +145,11 @@ def require_fcs_unified_points(policy: FcsPolicy | None = None) -> float:
     active = policy or GOVERNED_FCS_POLICY
     if active.unified_points_equivalent is None:
         raise GovernanceBlock(
-            f"{FCS_UNIFIED_SCALE_BLOCKER}: ruling {R2_FCS.convergence_id} fixes FCS at Elo "
-            f"{active.fixed_elo}, but no governed register maps the Elo layer onto the "
-            "unified neutral-points axis the V3 engine rates on. Issue an explicit scale "
-            "rule; do not invert the Elo/Board transform."
+            f"{FCS_UNIFIED_SCALE_BLOCKER}: the FCS rating policy is settled — ruling "
+            f"{R2_FCS.convergence_id} fixes FCS at Elo {active.fixed_elo} and that is not "
+            "reopened. What is missing is a model-scale adapter onto the unified "
+            "neutral-points axis the V3 engine rates on. V2.1 bridged this through the "
+            "Board I-H equivalent, which the same ruling forbids. Issue an explicit "
+            "Elo-to-points scale rule; do not invert the Elo/Board transform."
         )
     return active.unified_points_equivalent

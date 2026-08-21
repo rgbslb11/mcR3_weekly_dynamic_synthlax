@@ -18,11 +18,23 @@ inherited it would be computing against a number nobody governs. Every entry
 point here requires an explicit :class:`SorReferenceElo` carrying its own
 authority, and the stale value is refused by name.
 
-The MC-domain reference Elo (``CCG-R_REF`` = 1893.3, LOCKED, paired with
-kappa 0.85 and sigma 68) lives in a **separate namespace**. ``16_REJECTED_ITEMS``
-REJ-012 says so in as many words: "Keep domains separate." It may be passed in
-explicitly, with provenance, but it is never substituted by default and the
-report never writes back into the MC parameter.
+What *is* governed, and what is not
+-----------------------------------
+The 2026 reference Elo **is governed**: ``CCG-R_REF`` = 1893.3, LOCKED and
+SOURCE-VERIFIED in ``02_PARAMETER_REGISTER!E25``, noted "SOR reference Elo". The
+earlier 1901 is its superseded predecessor, not an alternative:
+``20_CANON_MANIFEST_INGEST!C15`` records the artifact carrying it as SUPERSEDED
+with "R_ref 1901 now stale ... Retain for audit; do not use for decisions", and
+the change log at ``B24`` records "R_ref 1901->1893.3" under ruling R-MC-V2 on
+2026-07-14. Both 1901 and the stale library default 1684.9 are refused by name.
+
+Two SOR-B questions *do* remain unratified and are narrower than the reference
+Elo: the **P-to-strength transform** and the **reference HFA**. ``compute_sor_b.py``
+is not mounted here, so neither can be verified; both are stamped on every row.
+
+``16_REJECTED_ITEMS`` REJ-012 requires the Monte Carlo and SOR-report domains stay
+separate. One ratified value serves both, tagged by namespace, and neither may
+write the other.
 """
 
 from __future__ import annotations
@@ -37,10 +49,43 @@ from .rulings import R2_SOR
 #: FACT — the stale library default named in ruling R2-SOR-REPORT. Refused.
 STALE_COMPUTE_SOR_B_DEFAULT_R_REF = 1684.9
 
-#: FACT — 02_PARAMETER_REGISTER CCG-R_REF, LOCKED, "SOR reference Elo".
-#: MC/CCG domain. Available for explicit use; never a default.
-MC_DOMAIN_R_REF = 1893.3
-MC_DOMAIN_R_REF_PARAMETER_ID = "CCG-R_REF"
+#: FACT — the governed 2026 SOR reference Elo.
+#:
+#: Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25, parameter
+#: CCG-R_REF, current_value 1893.3, status LOCKED, validation SOURCE-VERIFIED,
+#: note "SOR reference Elo (unchanged)". Confirmed in
+#: 11_VALIDATION_REGISTER!D15 ("8000 / 20260714 / 0.85 / 68 / 65 / 1893.3").
+#:
+#: This value is *not* missing governance. It is the ratified successor to 1901.
+GOVERNED_2026_SOR_R_REF = 1893.3
+GOVERNED_2026_SOR_R_REF_PARAMETER_ID = "CCG-R_REF"
+GOVERNED_2026_SOR_R_REF_AUTHORITY = (
+    "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER!E25 (CCG-R_REF, LOCKED, "
+    "SOURCE-VERIFIED); ruling R-MC-V2"
+)
+
+#: FACT — the superseded predecessor, refused by name.
+#:
+#: 20_CANON_MANIFEST_INGEST!C15: "2026_HARDENED_Canonical_Run.xlsx | SUPERSEDED |
+#: ... R_ref 1901 now stale" superseded "by 2026_Board_I-H_v2 +
+#: 2026_HARDENED_Run_v2_IH (R-MC-V2)", disposition "ACCEPT AS SUPERSEDED HISTORY",
+#: note "Retain for audit; do not use for decisions."
+#: 20_CANON_MANIFEST_INGEST!B24 change log: "2026-07-14: ... R_ref 1901->1893.3".
+SUPERSEDED_2026_SOR_R_REF = 1901.0
+SUPERSEDED_2026_SOR_R_REF_SUPERSEDED_BY = "R-MC-V2 (2026-07-14): R_ref 1901 -> 1893.3"
+
+#: Alias retained for the MC/CCG chain. Same registered parameter; the SOR report
+#: and the Monte Carlo consume it in separate namespaces and neither writes the other.
+MC_DOMAIN_R_REF = GOVERNED_2026_SOR_R_REF
+MC_DOMAIN_R_REF_PARAMETER_ID = GOVERNED_2026_SOR_R_REF_PARAMETER_ID
+
+#: Ratification items that remain genuinely open for SOR-B, distinct from R_ref.
+#: ``compute_sor_b.py`` is not mounted in this repository, so neither can be
+#: verified here and both are stamped on every row rather than assumed.
+UNRATIFIED_SOR_B_ITEMS = (
+    "P_TO_STRENGTH_TRANSFORM",
+    "REFERENCE_HFA",
+)
 
 #: The SOR report is not a governed committee input.
 REPORT_STATUS_RESEARCH = "RESEARCH_REPORT_ONLY"
@@ -65,22 +110,44 @@ class SorReferenceElo:
             raise GovernanceBlock(
                 f"R_ref {self.value} is the stale compute_sor_b.py default. Ruling "
                 f"{R2_SOR.convergence_id} forbids it silently controlling a weekly run; "
-                "supply an explicit governed season reference Elo."
+                f"the governed 2026 value is {GOVERNED_2026_SOR_R_REF}."
+            )
+        if self.value == SUPERSEDED_2026_SOR_R_REF:
+            raise GovernanceBlock(
+                f"R_ref {self.value} is superseded. {SUPERSEDED_2026_SOR_R_REF_SUPERSEDED_BY}; "
+                "20_CANON_MANIFEST_INGEST records the artifact carrying it as SUPERSEDED "
+                f"HISTORY, \"do not use for decisions\". Use {GOVERNED_2026_SOR_R_REF}."
             )
         if not self.authority or not self.parameter_id:
             raise InputValidationError("SOR reference Elo requires a parameter_id and an authority")
 
 
-def mc_domain_reference_elo() -> SorReferenceElo:
-    """The MC-domain reference Elo, exposed read-only in its own namespace.
+def governed_2026_sor_reference_elo() -> SorReferenceElo:
+    """The governed 2026 SOR season reference Elo, in the SOR-report namespace.
 
-    Passing this into a SOR report is a deliberate, recorded act. It does not
-    make the report canonical and it never writes back to the MC parameter.
+    Read from the ratified parameter register rather than from a library default.
+    It must still be passed explicitly, so a weekly run always records which
+    reference it used.
+    """
+    return SorReferenceElo(
+        value=GOVERNED_2026_SOR_R_REF,
+        parameter_id=GOVERNED_2026_SOR_R_REF_PARAMETER_ID,
+        authority=GOVERNED_2026_SOR_R_REF_AUTHORITY,
+        source_artifact="Model_Parameters_v2_5_APPROVED.xlsx",
+        namespace=SOR_REPORT_NAMESPACE,
+    )
+
+
+def mc_domain_reference_elo() -> SorReferenceElo:
+    """The same registered parameter, tagged to the Monte Carlo namespace.
+
+    One ratified value, two consumers. Tagging keeps REJ-012's "keep domains
+    separate" enforceable: neither namespace may write the other.
     """
     return SorReferenceElo(
         value=MC_DOMAIN_R_REF,
         parameter_id=MC_DOMAIN_R_REF_PARAMETER_ID,
-        authority="Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER (LOCKED)",
+        authority=GOVERNED_2026_SOR_R_REF_AUTHORITY,
         source_artifact="Model_Parameters_v2_5_APPROVED.xlsx",
         namespace=MC_NAMESPACE,
     )
@@ -89,9 +156,11 @@ def mc_domain_reference_elo() -> SorReferenceElo:
 def require_sor_reference_elo(reference: SorReferenceElo | None) -> SorReferenceElo:
     if reference is None:
         raise GovernanceBlock(
-            f"Weekly SOR report requires an explicit governed season R_ref (ruling "
-            f"{R2_SOR.convergence_id}). The compute_sor_b.py default "
-            f"{STALE_COMPUTE_SOR_B_DEFAULT_R_REF} is stale and must never silently control a run."
+            f"Weekly SOR report requires an explicit season R_ref (ruling "
+            f"{R2_SOR.convergence_id}). The governed 2026 value is "
+            f"{GOVERNED_2026_SOR_R_REF} ({GOVERNED_2026_SOR_R_REF_PARAMETER_ID}); the "
+            f"compute_sor_b.py default {STALE_COMPUTE_SOR_B_DEFAULT_R_REF} is stale and "
+            "must never silently control a run."
         )
     return reference
 
@@ -244,9 +313,14 @@ def weekly_sor_row(
             # governed transforms, and are labelled so no reader mistakes them.
             "raw_sor_transform": "-ln(p_ref_ge_w) — REPORT CONVENTION, not a governed transform",
             "normalized_sor_transform": "1 - p_ref_ge_w — REPORT CONVENTION, not a governed transform",
+            # R_ref is governed and is NOT listed here. What remains unratified
+            # for SOR-B is narrower than the reference Elo and is named exactly.
+            "unratified_sor_b_items": list(UNRATIFIED_SOR_B_ITEMS),
             "unresolved_assumptions": list(unresolved_assumptions) + [
-                "compute_sor_b.py is not mounted in this repository; the SOR-B "
-                "transform and its HFA treatment are unverified here",
+                "P_TO_STRENGTH_TRANSFORM: compute_sor_b.py is not mounted, so the mapping "
+                "from reference win probability to a strength/resume scalar is unverified here",
+                "REFERENCE_HFA: whether and how home-field advantage enters the reference "
+                "team's per-game expectation is not recorded in any mounted artifact",
                 "raw/normalized SOR presentation is a report convention, not a governed transform",
             ],
             "not_committee_sos": True,

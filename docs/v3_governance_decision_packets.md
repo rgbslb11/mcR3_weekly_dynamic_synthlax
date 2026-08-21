@@ -490,16 +490,31 @@ One quantity, one direction, one definition. Mean opponent Elo is not it, and th
 `schedule_path_score` + `resume_ceiling_index` double count is not revived (both RETIRED in the
 Bracket Regime Deferred Register; DEF-2 records `sos_index` as "REPORTED, never scored").
 
-What no repository authority defines is what the weights are applied *to*:
+What no repository authority defines is what the weights are applied *to*. The precise ruling
+required, reproduced by `sos.required_ruling_text()`:
 
-1. does OWP exclude the rated team's own games from each opponent's record?
-2. is an opponent played twice weighted once or twice?
-3. does OOWP exclude the rated team when averaging each opponent's OWP?
+1. Are an opponent's games **against the evaluated team** removed from that opponent's record
+   when computing OWP?
+2. Is OWP **team-averaged** or **schedule-instance-weighted**?
+3. How is a **repeated opponent** treated — once, or once per meeting?
+4. How is **OOWP constructed** — the mean of each opponent's OWP, or the mean over every
+   opponent-of-opponent directly?
+5. How do **schedule-only FCS opponent records** enter WP, OWP and OOWP?
+6. What happens to a team with **zero qualifying games**?
 
-`18_ACC_POLICY_REFERENCE` comes closest and does not answer them: ACC-EXT-03 (alternate game-count
-tied sets) and ACC-EXT-08/09 (common-opponent and sweep cascades) are all recorded **OPEN —
-REQUIRES RULING**, and ACC-EXT-10 records that the external vendor ranking the ACC policy names
-"does not disclose variables, weights, or formula".
+Each is a live fork, not a formality: tests demonstrate that questions 1, 4, 5 and 6 each change
+the numbers, and question 1 alone decides the Chairman's own common-opponent example.
+
+**The nearest authority answers none of them.** `V2_1_STATIC_CONTROL…xlsx!Methodology!A11`
+records V2.1's committee chain as "Winning percentage → average opponents winning percentage →
+conference champion → head-to-head → unified preseason power". It names an OWP-like quantity,
+defines no denominator, exclusion or weighting rule, contains **no OOWP at all**, and belongs to
+a chain that ruling `R2-COMMITTEE-TB` has since replaced.
+
+`18_ACC_POLICY_REFERENCE` is next closest and also does not answer them: ACC-EXT-03 (alternate
+game-count tied sets) and ACC-EXT-08/09 (common-opponent and sweep cascades) are all recorded
+**OPEN — REQUIRES RULING**, and ACC-EXT-10 records that the external vendor ranking the ACC
+policy names "does not disclose variables, weights, or formula".
 
 **These are not cosmetic.** On the Chairman's own common-opponent example — Lehigh 11-1 and USF
 11-1, each 2-1 against Harvard 7-5, Rice 4-8 and UCF 9-2 — the two resumes are *numerically
@@ -525,8 +540,9 @@ than by a collapsed count.
    feed COMMITTEE-TB2, COMMITTEE-TB3 and A8/ECL-TB2.
 3. **`governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT`** — state the four R1-winner to
    quarterfinal slot edges, or supply an artifact that does. Independent of 1 and 2.
-4. **`governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED`** — issue an
-   Elo-to-unified-points scale rule for the 13 schedule-only FCS entities.
+4. **`model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`** — issue or calibrate an
+   Elo-to-unified-points scale rule for the 13 schedule-only FCS entities. A model-scale
+   item, not an FCS policy question.
 5. **The six `calibration.*` fields and `governance.GAME_SD_CALIBRATION_OPEN`** — last, and gated
    on calibration data existing at all. The objective is now governed; the observations are not
    mounted.
@@ -547,3 +563,124 @@ first November board, where no previous board exists and no authority designates
 The structural harness passes, 191 V3 tests and 250 tests overall are green, and the fail-closed
 gates are real and adversarially tested. V3 remains **EXPERIMENTAL**, every calibration value
 remains `null`, no probabilities were produced and no simulation was run.
+
+---
+
+## Appendix: R2 audit challenge adjudications
+
+Five specific convergence claims were challenged after the R2 handoff. Each was re-adjudicated
+against the mounted artifacts rather than against any prior summary. Two changed the outcome.
+
+### 1. SOR reference Elo — **corrected: R_ref is governed**
+
+The challenge supplies a SOR-B specification stating `2026 R_ref = 1901`, method "90th-percentile
+preseason canonical Elo, frozen at season start", and asks that R_ref not be reported as missing
+governance unless a higher authority explicitly supersedes it.
+
+**A higher authority does, and it is in the repository.**
+
+| Coordinate | Contents |
+| --- | --- |
+| `02_PARAMETER_REGISTER!E25` | `CCG-R_REF` = `1893.3`, status `LOCKED`, validation `SOURCE-VERIFIED`, note "SOR reference Elo (unchanged)." |
+| `20_CANON_MANIFEST_INGEST!C15` | "…fixed-rating in parts; **R_ref 1901 now stale**", artifact status `SUPERSEDED`, superseded "by 2026_Board_I-H_v2 + 2026_HARDENED_Run_v2_IH (**R-MC-V2**)", note "Retain for audit; **do not use for decisions**." |
+| `20_CANON_MANIFEST_INGEST!B24` | change log, "2026-07-14: … **R_ref 1901->1893.3**; field UNCHANGED." |
+| `11_VALIDATION_REGISTER!D15` | `8000 / 20260714 / 0.85 / 68 / 65 / 1893.3` |
+
+So the 2026 SOR reference Elo **is** governed, at **1893.3**, under ruling **R-MC-V2** dated
+2026-07-14. 1901 is its superseded predecessor. The prior handoff's phrasing — that a governed
+SOR-B season R_ref distinct from the MC-domain value was missing — is withdrawn: there is one
+ratified value serving both domains, tagged by namespace so neither can write the other
+(REJ-012, "Keep domains separate"). `sor.py` now carries 1893.3 as the governed 2026 value and
+refuses **both** 1901 (superseded) and 1684.9 (stale library default) by name.
+
+The spec's stated *method* ("90th-percentile preseason canonical Elo") is not verifiable here —
+the string `percentile` appears in no mounted workbook or in the canonical master.
+
+**Remaining SOR-B ratification items, distinct from R_ref and narrower than it:**
+`P_TO_STRENGTH_TRANSFORM` and `REFERENCE_HFA`. `compute_sor_b.py` is not mounted anywhere on this
+filesystem, so neither can be verified; both are stamped on every SOR row rather than assumed.
+Neither is an execution blocker — the report is `RESEARCH_REPORT_ONLY` and never committee input.
+
+### 2. SRS solver — **equivalence proven for the mathematics, not for canonical anchors**
+
+The challenge requires proof across seven properties before the exact solver may replace the
+iterative one, and says to request changes if equivalence cannot be demonstrated.
+
+| Property | Result |
+| --- | --- |
+| Solves the same governed system | **Proven.** Residuals of `n_i·r_i − Σ m_ij·r_j − margins_i` ≤ 2.8e-13 across leagues of 4 to 121 teams. |
+| Reproduces the iterative ordering | **Proven where the iteration converges.** Gauss-Seidel converged in every tested league; max value difference 9.6e-13; orderings identical wherever no two ratings sit closer than that. |
+| Reproduces historical validation anchors | **Cannot be demonstrated — no anchors are mounted.** |
+| Preserves centering | **Proven.** Per-component `|Σr|` ≤ 1.7e-14. |
+| Preserves the ±24 game-margin cap | **Proven.** A 300-point margin yields ratings identical to a 24-point one. |
+| Preserves `srs_over_40` semantics | **Cannot be demonstrated — the term appears in no mounted artifact.** |
+| No early-week disconnected-graph instability | **Fixed and proven.** The solver now works per connected component, so a week-1 graph of isolated pairs solves and centres cleanly instead of raising. |
+
+**Why the solver was changed at all:** on the three-team fixture A beat B by 30 (capped 24) and
+beat C by 7, the exact solution is A = 31/3, C = A−7, B = A−24, ordering `A, C, B`, residuals
+≈ 1e-16. A Jacobi sweep oscillates rather than converging; after 10,000 iterations it returns
+`A = 0.0, B = −8.5, C = 8.5` with residuals of −31.0, 15.5 and 15.5 and the ordering `C, A, B`.
+That is not a rounding difference — it is a wrong answer that a max-iteration cutoff presents as
+a result.
+
+**Two properties cannot be proven here because their evidence does not exist in this repository.**
+No canonical SRS specification, no `compute_srs.py`, and no historical validation anchor is
+mounted — searched across every cell of all eight governed workbooks, the canonical team master,
+and the whole filesystem. The only in-repo mention of SRS as a model is
+`18_ACC_POLICY_REFERENCE!C14`, "z(SRS capped ±24)" inside a Body-of-Work Index proposal marked
+**PROPOSAL ONLY / NOT ADOPTED**.
+
+Accordingly this module does **not** claim to be canonical SRS.
+`srs.require_canonical_validated_srs()` raises, `srs.require_srs_over_40()` raises, and the
+witness payload reports `canonical_validation_status: NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS`.
+Mount the specification and the anchors and the remaining two properties become checkable.
+
+### 3. G5 seed #5 — **corrected: the fail-closed guard is removed**
+
+The prior convergence raised a `GovernanceBlock` when the G5 automatic-bid champion ranked inside
+the top four, on the grounds that seed-5-exact and Bracket Regime `S2` ("The FOUR HIGHEST-RANKED
+TEAMS OVERALL receive a first-round bye") disagreed. That was wrong: Chairman authority is
+explicit and later, so this is a **supersession**, not a fresh decision.
+
+`S2` is now recorded as superseded to exactly the extent of the conflict — the bye seeds remain
+1–4, and the team that would otherwise have been 5th moves up into the vacated bye.
+
+Verified at every natural committee position named in the challenge:
+
+| Natural rank | Assigned seed | Field a permutation | Others in rank order | In a play-in |
+| ---: | ---: | --- | --- | --- |
+| 1 | **5** | yes | yes | no |
+| 3 | **5** | yes | yes | no |
+| 5 | **5** | yes | yes | no |
+| 8 | **5** | yes | yes | no |
+| 14 | **5** | yes | yes | no |
+
+Seed 5 is exact in both directions: a champion ranked 1st is displaced *down* to it and one
+ranked 14th is pulled *up* to it. In every case the 14 seeds are a bijection onto the same field,
+with no duplication and no omission, and exactly one G5 automatic bid is issued.
+
+### 4. Quarterfinal source mapping — **unchanged: the blocker is correctly retained**
+
+See packet 8 above for the coordinate-level re-inspection. The source establishes quarterfinal
+*hosts* and no quarterfinal *opponents*; all 24 bijections remain consistent with everything the
+artifacts state.
+
+### 5. FCS 1250 versus the V3 point scale — **reclassified, policy not reopened**
+
+The Chairman policy `FCS Elo = 1250` is settled and is not reopened. What was previously
+namespaced `governance.` is now `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`, so it
+cannot be read as questioning the rating policy.
+
+The bridge is genuinely required, not hypothetical: all 13 schedule-only FCS entities carry
+`preseason_strength_points = None`, they appear in 15 regular-season games across weeks 2, 3, 4,
+5 and 12, and `engine._initialize_states` raises on the first of them today. The V3 engine rates
+in unified neutral points (observed FBS range −17.46 to +32.88); 1250 is an Elo.
+
+The bridge V2.1 used is precisely the route the ruling closes.
+`V2_1_STATIC_CONTROL…xlsx!Methodology!A8`: "13 schedule-only opponents use the canonical
+R-FCS-RATING-01 operator composite **translated from Board I-H equivalent to unified points**."
+
+### 6. OWP / OOWP — **unchanged: one narrow blocker, six questions**
+
+See packet 11 above. `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED` is retained, and
+the required ruling is stated in full rather than inferred.

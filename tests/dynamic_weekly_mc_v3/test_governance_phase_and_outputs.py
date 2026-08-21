@@ -44,7 +44,7 @@ def test_governance_inspections_are_fail_closed_and_visible():
 
     # Opened by R2, narrowly.
     assert "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED" in blockers
-    assert "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED" in blockers
+    assert "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER" in blockers
 
 
 def test_schedule_phase_partition_preserves_selection_freeze_boundary():

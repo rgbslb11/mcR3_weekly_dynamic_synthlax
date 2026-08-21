@@ -136,7 +136,8 @@ G5_CONFERENCES: tuple[str, ...] = ("AAC", "Atlantic-8", "ECL", "Mountain West", 
 #: The AAC appears in the schedule and team master as "American".
 G5_CONFERENCE_ALIASES = {"AAC": "American", "American": "American"}
 
-#: FACT — ruling R2-G5-SEED5. Exact, not a floor.
+#: FACT — ruling R2-G5-SEED5. Exact, not a floor, and not a ceiling either: a
+#: champion ranked 1st and a champion ranked 14th both land on seed 5.
 G5_AUTOMATIC_BID_SEED = 5
 G5_AUTOMATIC_BID_COUNT = 1
 
@@ -218,14 +219,12 @@ def apply_g5_automatic_bid_seed(
             f"G5 automatic-bid champion {champion} is not in the selected field"
         )
 
-    if rank[champion] < len(BYE_SEEDS):
-        raise GovernanceBlock(
-            f"G5 automatic-bid champion {champion} is ranked "
-            f"{rank[champion] + 1} overall. Ruling {R2_G5_AUTO_BID.convergence_id} fixes that "
-            f"team at seed {G5_AUTOMATIC_BID_SEED} exactly, while Bracket Regime S2 gives byes "
-            "to the four highest-ranked teams overall. Two governed rules disagree on this "
-            "board; refusing to pick one by inference."
-        )
+    # A G5 champion ranked inside the top four is still seeded 5. Bracket Regime
+    # S2 ("The FOUR HIGHEST-RANKED TEAMS OVERALL receive a first-round bye") is
+    # the older language and is superseded to exactly that extent: the bye seeds
+    # stay 1-4, and the team that would otherwise have been 5th moves up into
+    # the vacated bye. This is a supersession, not a fresh governance question --
+    # ruling R2-G5-SEED5 says seed 5 exactly, not seed 5 or lower.
 
     others = sorted((t for t in field if t != champion), key=lambda t: rank[t])
     seeds: dict[int, str] = {}

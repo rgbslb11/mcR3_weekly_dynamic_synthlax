@@ -163,9 +163,10 @@ def governance_blockers(
     if not sos_semantics_governed:
         blockers.append("governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED")
 
-    # R2-FCS-ELO-1250 fixes an Elo; no register maps it onto the unified
-    # neutral-points axis the engine rates on.
+    # R2-FCS-ELO-1250 fixes an Elo and the rating policy is settled. What is
+    # missing is the model-scale adapter onto the unified neutral-points axis,
+    # so this is namespaced model_scale. rather than governance.
     if not fcs_unified_scale_governed:
-        blockers.append("governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED")
+        blockers.append("model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER")
 
     return blockers

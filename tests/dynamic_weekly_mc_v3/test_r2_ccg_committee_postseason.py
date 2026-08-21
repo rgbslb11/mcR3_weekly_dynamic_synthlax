@@ -347,14 +347,46 @@ def test_a_higher_ranked_non_champion_does_not_take_the_g5_bid():
     assert postseason.g5_automatic_bid_champion(order, CHAMPS) == "P12_C"
 
 
-def test_a_top_four_g5_champion_fails_closed_against_the_bye_rule():
-    order = [
-        "P12_C", "SEC_C", "B10_C", "B12_C", "ACC_C", "ND",
-        "MW_C", "AAC_C", "A8_C", "ECL_C",
-    ] + [f"X{i}" for i in range(1, 11)]
+@pytest.mark.parametrize("natural_rank", [1, 3, 5, 8, 14])
+def test_the_g5_champion_lands_on_seed_five_from_every_natural_position(natural_rank):
+    """Seed 5 exactly: not a floor, not a ceiling.
+
+    A champion ranked 1st is displaced *down* to 5 and one ranked 14th is pulled
+    *up* to 5. Bracket Regime S2's top-4-overall bye language is superseded to
+    exactly that extent -- the bye seeds stay 1-4 and the next team moves up.
+    """
+    others = ["SEC_C", "B10_C", "B12_C", "ACC_C", "ND"]
+    tail = ["MW_C", "AAC_C", "A8_C", "ECL_C"]
+    filler = [f"X{i:02d}" for i in range(1, 40)]
+    body, fi = [], 0
+    while len(body) < natural_rank - 1:
+        if others:
+            body.append(others.pop(0))
+        else:
+            body.append(filler[fi])
+            fi += 1
+    order = body + ["P12_C"] + others + tail
+    while len(order) < 24:
+        order.append(filler[fi])
+        fi += 1
+    assert order.index("P12_C") + 1 == natural_rank
+
     base = select_governed_14_team_cfp(order, {t: "Other" for t in order}, CHAMPS)
-    with pytest.raises(GovernanceBlock, match="Two governed rules disagree"):
-        postseason.apply_g5_automatic_bid_seed(base, order, CHAMPS)
+    out = postseason.apply_g5_automatic_bid_seed(base, order, CHAMPS)
+
+    assert out.seeds[5] == "P12_C"
+    audit = postseason.g5_automatic_bid_audit(out, {t: "Other" for t in order})
+    assert audit["seed"] == 5 and audit["automatic_bids"] == 1
+    assert "P12_C" not in {out.seeds[n] for n in postseason.PLAY_IN_SEEDS}
+
+    # Deterministic displacement: a permutation of the same field, no duplication
+    # or omission, every other qualifier still in committee-rank order.
+    assert sorted(out.seeds) == list(range(1, 15))
+    assert len(set(out.seeds.values())) == 14
+    assert set(out.seeds.values()) == set(base.seeds.values())
+    rank = {t: i for i, t in enumerate(order)}
+    others_in_order = [out.seeds[n] for n in sorted(out.seeds) if n != 5]
+    assert others_in_order == sorted(others_in_order, key=lambda t: rank[t])
 
 
 def test_reseeding_is_forbidden():

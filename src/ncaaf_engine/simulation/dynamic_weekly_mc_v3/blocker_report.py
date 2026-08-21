@@ -24,6 +24,7 @@ DISPOSITIONS = (
     "HUMAN_RULING_REQUIRED",
     "MISSING_AUTHORITATIVE_DATA",
     "CALIBRATION_EXPERIMENT_REQUIRED",
+    "MODEL_SCALE_ADAPTER_REQUIRED",
     "REMAINS_BLOCKED",
 )
 
@@ -70,7 +71,7 @@ GROUP_A8_ECL = "A8_ECL_ORDERING"
 GROUP_CALIBRATION = "RERATING_CALIBRATION_PROGRAM"
 GROUP_BOARD_OF_RECORD = "BOARD_OF_RECORD_ARTIFACT"
 GROUP_SOS_SEMANTICS = "SOS_DENOMINATOR_SEMANTICS"
-GROUP_FCS_SCALE = "FCS_ELO_TO_UNIFIED_POINTS_SCALE"
+GROUP_FCS_SCALE = "FCS_MODEL_SCALE_ADAPTER"
 
 
 DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
@@ -298,29 +299,40 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
         blocker_id="governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
         disposition="HUMAN_RULING_REQUIRED",
         evidence=(
-            "Ruling R2-SOS fixes the weights 0.25 WP / 0.50 OWP / 0.25 OOWP, but no repository "
-            "authority defines whether OWP excludes the rated team's own games, whether a twice "
-            "played opponent counts twice, or whether OOWP excludes the rated team. On the "
-            "Chairman's own common-opponent example the two resumes are numerically identical "
-            "under one answer and separate cleanly under the other."
+            "Ruling R2-SOS fixes the weights 0.25 WP / 0.50 OWP / 0.25 OOWP. No mounted "
+            "artifact answers any of the six semantics questions underneath them. The nearest "
+            "authority, V2_1_STATIC_CONTROL!Methodology!A11, records V2.1's chain as "
+            "'Winning percentage -> average opponents winning percentage -> conference champion "
+            "-> head-to-head -> unified preseason power': it names an OWP-like quantity, defines "
+            "none of the six, has no OOWP at all, and belongs to a chain R2-COMMITTEE-TB "
+            "replaced. 18_ACC_POLICY_REFERENCE marks ACC-EXT-03/08/09 OPEN - REQUIRES RULING. "
+            "On the Chairman's own common-opponent example the two resumes are numerically "
+            "identical under one answer and separate cleanly under the other."
         ),
         required_to_clear=(
-            "Issue the OWP/OOWP denominator, opponent-exclusion and schedule-instance "
-            "weighting semantics. The weights alone do not determine a committee."
+            "Issue one ruling answering all six: (1) are an opponent's games against the "
+            "evaluated team removed from OWP; (2) is OWP team-averaged or "
+            "schedule-instance-weighted; (3) how is a repeated opponent treated; (4) how is "
+            "OOWP constructed; (5) how do schedule-only FCS opponent records enter WP/OWP/OOWP; "
+            "(6) what happens to a team with zero qualifying games. See "
+            "sos.required_ruling_text()."
         ),
         governance_group=GROUP_SOS_SEMANTICS,
     ),
     BlockerDisposition(
-        blocker_id="governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
-        disposition="HUMAN_RULING_REQUIRED",
+        blocker_id="model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+        disposition="MODEL_SCALE_ADAPTER_REQUIRED",
         evidence=(
-            "Ruling R2-FCS-ELO-1250 fixes FCS at Elo 1250. The V3 engine rates teams in unified "
-            "neutral points, and no governed register maps the Elo layer onto that axis. The "
-            "only candidate is the POWER_CRUNCH Elo/Board transform, which the same ruling "
-            "forbids inverting."
+            "The FCS rating policy is NOT in question: ruling R2-FCS-ELO-1250 fixes Elo 1250 "
+            "and that stands. What is missing is a model-scale adapter. All 13 schedule-only "
+            "FCS entities carry preseason_strength_points=None, they appear in 15 regular-season "
+            "games across weeks 2-5 and 12, and engine._initialize_states raises on the first of "
+            "them. V2.1 bridged this via the Board I-H equivalent "
+            "(V2_1_STATIC_CONTROL!Methodology!A8), the exact route this ruling forbids."
         ),
         required_to_clear=(
-            "Issue an explicit Elo-to-unified-points scale rule for schedule-only FCS entities."
+            "Issue an Elo-to-unified-points scale rule, or calibrate one, for schedule-only FCS "
+            "entities. This is a model-scale/calibration item, not an FCS policy question."
         ),
         governance_group=GROUP_FCS_SCALE,
     ),
@@ -410,7 +422,7 @@ R2_OPENED_BLOCKERS: frozenset[str] = frozenset(
     {
         "inputs.board_of_record_i_k",
         "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
-        "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
+        "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
     }
 )
 
