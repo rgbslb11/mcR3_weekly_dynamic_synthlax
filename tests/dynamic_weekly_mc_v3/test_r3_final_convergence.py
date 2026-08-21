@@ -645,8 +645,14 @@ def test_governance_closure_retires_exactly_two_and_leaves_nine(live_blockers):
         "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
     }
     assert len(br.R3_EXPECTED_LIVE_BLOCKERS) == 9
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+    # R3's own closure left nine. What is live now is that nine minus the single
+    # artifact-custody item the B1 board mount retired — governance closure is
+    # unchanged by the mount, and the mount added nothing.
+    assert set(br.R3_EXPECTED_LIVE_BLOCKERS) - set(live_blockers) == set(
+        br.B1_RETIRED_BLOCKERS
+    )
+    assert set(live_blockers) == set(br.B1_EXPECTED_LIVE_BLOCKERS)
+    assert len(live_blockers) == 8
 
 
 def test_a_successful_board_mount_would_leave_exactly_eight():
@@ -656,9 +662,12 @@ def test_a_successful_board_mount_would_leave_exactly_eight():
     )
 
 
-def test_only_the_two_authorized_blocker_ids_disappeared(live_blockers):
+def test_only_authorized_blocker_ids_disappeared(live_blockers):
+    """Three ids have gone since R2, each with its own recorded authority:
+    two retired by R3 rulings, one by verified B1 artifact custody."""
     vanished = set(br.R2_EXPECTED_LIVE_BLOCKERS) - set(live_blockers)
-    assert vanished == set(br.R3_RETIRED_BLOCKERS)
+    assert vanished == set(br.R3_RETIRED_BLOCKERS) | set(br.B1_RETIRED_BLOCKERS)
+    assert len(vanished) == 3
 
 
 def test_no_genuinely_new_blocker_appeared(live_blockers):
@@ -718,8 +727,11 @@ def test_no_season_run_or_probability_output_exists():
     assert status["canonical_config"]["writes_canonical_config"] is False
 
 
-def test_the_remaining_blockers_are_only_calibration_model_scale_and_custody(live_blockers):
+def test_the_remaining_blockers_are_only_calibration_and_model_scale(live_blockers):
+    """Artifact custody has left the live set: the Board of Record is mounted.
+    Calibration and model scale are what remain."""
     lanes = {br.R3_REMAINING_CLASSIFICATION[b] for b in live_blockers}
-    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE", "ARTIFACT_CUSTODY"}
+    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE"}
+    assert "ARTIFACT_CUSTODY" not in lanes
     assert not any(b.startswith("governance.") and "CALIBRATION" not in b
                    for b in live_blockers)

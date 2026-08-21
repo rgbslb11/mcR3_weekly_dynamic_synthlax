@@ -484,6 +484,58 @@ R3_REMAINING_CLASSIFICATION: dict[str, str] = {
 }
 
 
+# --- B1 board-of-record custody -----------------------------------------------
+#
+# The approved Board-of-Record binary was delivered and mounted under governed
+# custody. This retires exactly one blocker, and it retires it on custody
+# evidence — SHA-256 equality against a digest R3 and R4 had already recorded as
+# required — not on a new policy reading. Nothing was re-interpreted, and no
+# calibration, model-scale or governance item is touched.
+
+#: Retired by the B1 mount. Exactly one, and exactly the one R3 anticipated.
+B1_RETIRED_BLOCKERS: frozenset[str] = frozenset({R3_BOARD_OF_RECORD_MOUNT_BLOCKER})
+
+#: Mounting an artifact cannot open a gate. Nothing was opened.
+B1_OPENED_BLOCKERS: frozenset[str] = frozenset()
+
+#: Why the retirement is permitted. Custody proof, not a governance ruling.
+B1_RETIREMENT_REASONS: dict[str, str] = {
+    R3_BOARD_OF_RECORD_MOUNT_BLOCKER: "EXACT_ARTIFACT_CUSTODY_SHA256_VERIFIED",
+}
+
+#: DERIVED — the live set after the mount. Eight.
+B1_EXPECTED_LIVE_BLOCKERS: frozenset[str] = (
+    R3_EXPECTED_LIVE_BLOCKERS - B1_RETIRED_BLOCKERS
+) | B1_OPENED_BLOCKERS
+
+
+def board_mount_delta() -> dict[str, object]:
+    """The 9 -> 8 transition, computed from the recorded sets rather than stated.
+
+    ``unrelated_vanished`` is the audit that matters: every blocker live before
+    the mount is still live after it, except the single board-custody id. If any
+    other id disappeared, this reports it instead of hiding it behind a count.
+    """
+    before = R3_EXPECTED_LIVE_BLOCKERS
+    after = B1_EXPECTED_LIVE_BLOCKERS
+    vanished = before - after
+    return {
+        "count_before": len(before),
+        "count_after": len(after),
+        "set_before": sorted(before),
+        "set_after": sorted(after),
+        "retired": sorted(B1_RETIRED_BLOCKERS),
+        "opened": sorted(B1_OPENED_BLOCKERS),
+        "vanished": sorted(vanished),
+        "unrelated_vanished": sorted(vanished - B1_RETIRED_BLOCKERS),
+        "matches_r3_projection": after == R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED,
+        "retirement_reasons": dict(sorted(B1_RETIREMENT_REASONS.items())),
+        "classification_of_retired": {
+            b: R3_REMAINING_CLASSIFICATION[b] for b in sorted(B1_RETIRED_BLOCKERS)
+        },
+    }
+
+
 def convergence_delta() -> dict[str, object]:
     """The exact before/after blocker accounting, computed rather than asserted."""
     return {
@@ -502,4 +554,9 @@ def convergence_delta() -> dict[str, object]:
             R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
         ),
         "r3_retirement_reasons": dict(sorted(R3_RETIREMENT_REASONS.items())),
+        "retired_by_b1": sorted(B1_RETIRED_BLOCKERS),
+        "opened_by_b1": sorted(B1_OPENED_BLOCKERS),
+        "b1_expected_live_count": len(B1_EXPECTED_LIVE_BLOCKERS),
+        "b1_expected_live": sorted(B1_EXPECTED_LIVE_BLOCKERS),
+        "b1_retirement_reasons": dict(sorted(B1_RETIREMENT_REASONS.items())),
     }

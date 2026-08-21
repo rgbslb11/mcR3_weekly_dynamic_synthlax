@@ -1,0 +1,94 @@
+{
+  "artifact": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+  "artifact_status": "GOVERNED_BOARD_OF_RECORD",
+  "controlled_identity": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+  "package": "Board I-K R1-R3 FINAL / re-issued governance lineage",
+  "issued_under_ruling": "R2-BOARD-OF-RECORD",
+  "source_rule": "R2-BOARD-OF-RECORD names 2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx as the Board of Record and forbids substituting Board I-H",
+  "sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+  "bytes": 57179,
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "provenance_class": "FACT",
+  "custody_status": "MOUNTED_IN_REPOSITORY",
+  "identity_authority": "SHA256_DIGEST_EQUALITY",
+  "source": {
+    "source_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "source_path": "staging/board/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "source_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "source_bytes": 57179,
+    "transfer": "BYTE_IDENTICAL_COPY",
+    "bytes_altered_on_mount": false,
+    "renamed_on_mount": true,
+    "rename_note": "Mounted under the controlled identity named by R2-BOARD-OF-RECORD. The '(3)' in the delivered filename is a duplicate-download marker applied by the transferring client, not a revision number and not a distinct artifact: the delivered bytes hash to the digest the controlled identity already required. The delivery name is preserved in this record rather than erased, and no prior record was edited to match it."
+  },
+  "filename_reconciliation": {
+    "controlled_identity": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "controlled_identity_named_by": "R2-BOARD-OF-RECORD",
+    "delivered_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "delivered_filename_recorded_by": [
+      "reference/dynamic_weekly_mc_v3/V3_GOVERNANCE_STATUS_R3.json!board_of_record.required_filename",
+      "reference/dynamic_weekly_mc_v3/V3_GOVERNANCE_STATUS_R4.json!board_of_record.required_filename"
+    ],
+    "reconciled_by": "SHA256_DIGEST_EQUALITY",
+    "reconciliation_note": "Both names denote one binary. R3 and R4 recorded required_sha256 6b4cec1e...4c9a alongside the '(3)' filename before any artifact was available; the delivered bytes match that pre-existing expectation exactly. The two names are therefore reconciled by digest, not by preferring one spelling. Neither the R2 ruling text nor the R3/R4 status records were modified.",
+    "history_rewritten": false
+  },
+  "verification": {
+    "required_sha256_recorded_before_delivery": true,
+    "required_sha256_source": [
+      "reference/dynamic_weekly_mc_v3/V3_GOVERNANCE_STATUS_R3.json!board_of_record.required_sha256",
+      "reference/dynamic_weekly_mc_v3/V3_GOVERNANCE_STATUS_R4.json!board_of_record.required_sha256"
+    ],
+    "digest_recomputed_independently": true,
+    "digest_methods": ["coreutils sha256sum", "python hashlib.sha256 streaming"],
+    "digest_agreement": true,
+    "source_and_mount_bytes_identical": true
+  },
+  "workbook_facts": {
+    "sheets": [
+      "Board I-K",
+      "Top 25",
+      "Rank Movement",
+      "Near Ties",
+      "Component Source Status",
+      "Source Status Taxonomy",
+      "Rulings",
+      "Validation",
+      "Source Register",
+      "Change Log"
+    ],
+    "board_title": "2026 BOARD I-K — APPROVED CANONICAL — R1 REISSUE",
+    "board_rows": 121,
+    "unique_ranks": 121,
+    "rank_range": [1, 121],
+    "unique_teams": 121,
+    "self_reported_validation": "ALL_CHECKS_PASS",
+    "note": "Recorded as custody evidence that the mounted binary is the substantive approved board rather than a stub or a regenerated look-alike. No value above is consumed by the model; Board rows remain gated by their own governed authorities."
+  },
+  "observations": {
+    "schedule_binary_divergence": {
+      "board_source_register_entry": "2026_FBS_Schedule_LOCKED_v5.xlsx",
+      "board_registered_sha256": "db26c3fff15a61ce8e7efa3b93100fa017e02248c96076d291495b55e855da12",
+      "board_registered_bytes": 43381,
+      "repository_copy_sha256": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+      "repository_copy_bytes": 48641,
+      "disposition": "OBSERVED_NOT_RESOLVED",
+      "note": "The board's own source register names a schedule binary that differs from the repository's copy. This is consistent with the already-recorded provenance anomaly SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5, whose governed disposition is ACCEPTED_SOURCE_COPY_UNDER_R2_SCHED_V5_AUTH. Recorded here for audit completeness. It is not a Board-of-Record custody defect and was not acted on: schedule provenance is outside this lane."
+    }
+  },
+  "substitution_refusals": {
+    "board_i_h_substitutable": false,
+    "historical_board_retained_at": "Model_Parameters_v2_5_APPROVED.xlsx!08_BOARD_IH_TOP25",
+    "historical_board_modified": false,
+    "test_fixture_sha256_refused": "f20b2fa5cd69598935c5d3e4b8323ffdf6ba3eebc8349991182719fbd378ebbc",
+    "test_fixture_note": "The 49-byte pytest stand-in previously admitted by the existence-only gate is now refused by digest, and the harness that created it has been repointed at this governed artifact."
+  },
+  "scope": {
+    "canonical_config_modified": true,
+    "canonical_config_change": "inputs.board_of_record_xlsx repointed from null to this governed mount; no other field altered.",
+    "reference_tree_modified": false,
+    "calibration_values_populated": false,
+    "simulation_executed": false,
+    "probabilities_generated": false
+  }
+}

@@ -61,7 +61,7 @@ evidence that does not exist, or for a bracket edge the official artifact never 
 | [7. A8/ECL ordering](#7-a8ecl-ordering-circularity) | `governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT` | **Resolved** — `R2-A8-ECL-ORDER` |
 | [8. Quarterfinal mapping](#8-cfp-quarterfinal-mapping) | `governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT` | **Narrowed, still open** — `R2-NO-RESEED` removes reseeding; slot edges remain unstated |
 | [9. Calibration program](#9-rerating-calibration-program) | six `calibration.*`, `governance.GAME_SD_CALIBRATION_OPEN` | **Open** — objective now governed by `R2-CAL-OBJECTIVE`; no data mounted |
-| [10. Board of Record](#10-board-of-record) | `inputs.board_of_record_i_k` | **Open** — artifact not mounted |
+| [10. Board of Record](#10-board-of-record) | `inputs.board_of_record_i_k` | **Resolved** — artifact mounted and SHA-256 verified; see [B1 custody](#b1--board-of-record-artifact-custody) |
 | [11. SOS semantics](#11-sos-denominator-semantics) | `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED` | **Open** — weights ruled, semantics not |
 
 ---
@@ -477,7 +477,10 @@ and CFP selection itself. `require_board_of_record` therefore fails closed, and
 
 **Required to clear:** mount the named artifact.
 
-**Execution blocked:** yes — `inputs.board_of_record_i_k`.
+**Execution blocked:** ~~yes~~ — **cleared by the B1 mount.** The paragraphs above are
+preserved as the state R2 through R4 recorded. See
+[B1 — Board-of-Record artifact custody](#b1--board-of-record-artifact-custody) for the
+resolution.
 
 ---
 
@@ -857,3 +860,88 @@ Six `calibration.*` · `governance.GAME_SD_CALIBRATION_OPEN` ·
 
 Seven are calibration, one is engineering/model-scale, one is artifact custody. **No governance
 blocker remains** — governance work is off the primary critical path.
+
+
+---
+
+# B1 — Board-of-Record artifact custody
+
+**RESOLVED — by artifact custody, not by ruling.** Base `eb5e3e7`.
+
+`inputs.board_of_record_i_k` was never a policy question, and it is not closed by one. R2
+named a single artifact. R3 and R4 went further and recorded the SHA-256 that artifact must
+carry — `6b4cec1e…4c9a` — while recording, in the same breath, that a filesystem-wide sweep
+found no file with that digest. The approved binary has now been supplied. It hashes to
+exactly the digest that was written down before it arrived.
+
+| Item | Value |
+| --- | --- |
+| Controlled identity | `2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx` |
+| Delivered as | `2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx` |
+| SHA-256 | `6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a` |
+| Bytes | 57,179 |
+| Mounted at | `config/dynamic_weekly_mc_v3/governed/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx` |
+| Provenance | `…/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.provenance.json` |
+| Authority | SHA-256 digest equality |
+
+## The two filenames
+
+The delivered file carries a `(3)`. That is a duplicate-download marker applied by the
+transferring client — not a revision, and not a second artifact. The proof is the digest:
+the delivered bytes hash to the value the controlled identity already required, recorded
+independently by R3 and R4 before any file was in hand.
+
+Both spellings are therefore kept, and neither record is edited to agree with the other. The
+mount carries the controlled identity R2 names; the delivery name is preserved verbatim in
+the provenance record and remains what R3 and R4 say it is. Digest reconciles them; neither
+filename is authority for anything.
+
+## The gate that actually changed
+
+The custody defect was not the missing file. It was that the gate could not tell the
+difference.
+
+* `require_board_of_record` accepted **any** file carrying the controlled filename.
+* `config.execution_blockers` cleared the blocker whenever a file merely **existed** at the
+  configured path — it did not check the name at all.
+
+Between them, a 49-byte pytest stand-in named
+`2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx` — sha256 `f20b2fa5…78ebbc`, the very file
+R4's sweep found and dismissed — satisfied production authority. Both gates now require
+digest equality. The fixture is refused, and the harness that wrote it has been repointed at
+the governed mount, so no test manufactures a board any more.
+
+Rejections are tested, not asserted. Each of these passed the old gate:
+
+| Offered | Refused because |
+| --- | --- |
+| The 49-byte fixture, correctly named | digest |
+| The real board, re-saved through `openpyxl` | digest |
+| The real board with one byte flipped, identical size | digest |
+| Board I-H (`Model_Parameters_v2_5_APPROVED.xlsx`) under the board's name | digest |
+| The correct bytes under a foreign filename | controlled identity |
+| Unconfigured / non-existent path | fails closed |
+
+Board I-H remains exactly where it was, as sheet `08_BOARD_IH_TOP25`, historical and
+non-substitutable. Nothing about it changed.
+
+## What this does not do
+
+Custody proves *which* artifact is mounted. It does not read Board rows into anything.
+CCG-TB3, COMMITTEE-TB4, A8/ECL-TB3 and CFP selection remain governed by their own
+authorities and still fail closed on them. `BoardOfRecord.rows` is deliberately `0`.
+
+## Live blockers after B1 (8)
+
+Six `calibration.*` · `governance.GAME_SD_CALIBRATION_OPEN` ·
+`model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`
+
+Nine to eight, retiring exactly one id, opening none. R3 had already written down which
+eight would remain if the board ever mounted
+(`R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED`); the live set now equals that projection
+exactly. `blocker_report.board_mount_delta()` computes the transition rather than stating
+it, and reports `unrelated_vanished` so a silent disappearance cannot hide behind a count.
+
+Seven of the eight are calibration; one is engineering/model-scale. **Artifact custody has
+left the live set** — but the model is no closer to running. Calibration data still does not
+exist, and a mounted board is not a runnable model.

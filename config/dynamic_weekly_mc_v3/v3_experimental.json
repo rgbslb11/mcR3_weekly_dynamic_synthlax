@@ -55,6 +55,6 @@
     "fcs_reconciled_master_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
     "v2_1_control_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
     "aac_divisions_csv": "governed/aac_divisions_2026_R2_SUCCESSOR.csv",
-    "board_of_record_xlsx": null
+    "board_of_record_xlsx": "governed/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx"
   }
 }

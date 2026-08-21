@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import board_of_record
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.config import DEFAULT_PRIOR_DECAY, V3Config
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.engine import DynamicWeeklyMCV3
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import GovernanceBlock, InputValidationError
@@ -39,8 +40,13 @@ def test_governed_architecture_and_blockers_are_explicit():
         "inputs.aac_divisions_csv",
     ):
         assert retired not in blockers
-    # Opened by R2: the Board of Record it names is not mounted.
-    assert "inputs.board_of_record_i_k" in blockers
+    # Opened by R2, retired by the B1 mount: the Board of Record it names is now
+    # mounted under governed custody, and it is the digest that clears the gate.
+    assert cfg.inputs.board_of_record_xlsx is not None
+    assert board_of_record.is_governed_board_of_record(cfg.inputs.board_of_record_xlsx)
+    assert "inputs.board_of_record_i_k" not in blockers
+    # Execution stays blocked all the same: calibration evidence does not exist,
+    # and mounting an artifact never stands in for it.
     with pytest.raises(GovernanceBlock):
         cfg.require_executable()
 

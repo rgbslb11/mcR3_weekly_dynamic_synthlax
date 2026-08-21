@@ -1,0 +1,122 @@
+{
+  "artifact": "V3_GOVERNANCE_STATUS_B1.json",
+  "artifact_status": "LANE_B1_CUSTODY_RECORD",
+  "supersedes": null,
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "authority": "ARTIFACT_CUSTODY_ONLY",
+  "authority_note": "This record retires a blocker on custody evidence. It issues no ruling, interprets no ruling, and creates no governance authority. The prior status artifacts R2, R3 and R4 are history and are not edited by it.",
+  "model": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "scope": "Board-of-Record artifact custody. Nothing else.",
+  "base_sha": "eb5e3e7f546217809a94692bf0e502882b7d51c0",
+  "head_sha": null,
+  "head_sha_note": "A committed artifact cannot carry the SHA of the commit containing it.",
+  "parent_status_artifact": "V3_GOVERNANCE_STATUS_R4.json",
+  "chairman_ruling_ids_supplied": [],
+  "chairman_ruling_id_note": "None supplied; none invented. No ruling was needed: R2-BOARD-OF-RECORD already named the artifact and R3/R4 already recorded the digest it must carry.",
+  "board_of_record": {
+    "blocker": "inputs.board_of_record_i_k",
+    "classification": "ARTIFACT_CUSTODY",
+    "controlled_identity": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "delivered_filename": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+    "required_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "observed_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+    "digest_match": true,
+    "bytes": 57179,
+    "mounted": true,
+    "mount_result": "BOARD_IK_ARTIFACT_MOUNTED_AND_SHA256_VERIFIED",
+    "mount_path": "config/dynamic_weekly_mc_v3/governed/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+    "provenance_record": "config/dynamic_weekly_mc_v3/governed/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.provenance.json",
+    "identity_authority": "SHA256_DIGEST_EQUALITY",
+    "historical_board_substituted": false,
+    "historical_board_location_unchanged": "Model_Parameters_v2_5_APPROVED.xlsx!08_BOARD_IH_TOP25",
+    "required_digest_predates_delivery": true,
+    "required_digest_recorded_by": [
+      "V3_GOVERNANCE_STATUS_R3.json!board_of_record.required_sha256",
+      "V3_GOVERNANCE_STATUS_R4.json!board_of_record.required_sha256"
+    ],
+    "note": "R3 and R4 recorded both the required digest and the fact that no reachable file carried it. The delivered binary matches that pre-existing expectation exactly, verified independently by coreutils sha256sum and by streaming python hashlib. The mount is a byte-identical copy under the controlled identity; the '(3)' delivery name is preserved in the provenance record rather than erased, and neither the R2 ruling text nor the R3/R4 records were modified."
+  },
+  "gate_change": {
+    "before": "FILENAME_AND_EXISTENCE",
+    "after": "SHA256_DIGEST_EQUALITY",
+    "defect_closed": "config.execution_blockers cleared inputs.board_of_record_i_k whenever a file merely existed at the configured path, and require_board_of_record accepted any file carrying the controlled filename. A 49-byte pytest stand-in (sha256 f20b2fa5cd69598935c5d3e4b8323ffdf6ba3eebc8349991182719fbd378ebbc) satisfied both. That fixture is now refused, and the harness that created it was repointed at the governed mount.",
+    "rejections_tested": [
+      "49-byte pytest fixture under the controlled filename",
+      "regenerated workbook (openpyxl round-trip of the real board)",
+      "single flipped byte at identical size",
+      "Board I-H, via Model_Parameters_v2_5_APPROVED.xlsx, under the board's name",
+      "correct bytes under a foreign filename",
+      "unconfigured path",
+      "non-existent path"
+    ]
+  },
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "inputs.board_of_record_i_k",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blocker_count_before": 9,
+  "resolved_blockers": ["inputs.board_of_record_i_k"],
+  "opened_blockers": [],
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "live_blocker_count": 8,
+  "live_blocker_classification": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "blocker_accounting": {
+    "retired_by_b1": ["inputs.board_of_record_i_k"],
+    "opened_by_b1": [],
+    "unrelated_vanished": [],
+    "matches_r3_projection": true,
+    "projection_source": "blocker_report.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED",
+    "classification_counts": {
+      "CALIBRATION": 7,
+      "ARTIFACT_CUSTODY": 0,
+      "ENGINEERING_MODEL_SCALE": 1,
+      "HUMAN_GOVERNANCE": 0
+    },
+    "note": "R3 recorded in advance which eight blockers would remain if the board ever mounted. The live set now equals that projection exactly, computed rather than asserted by blocker_report.board_mount_delta(). Artifact custody has left the live set; every remaining item is calibration or model scale."
+  },
+  "out_of_scope_untouched": {
+    "calibration": "All six calibration fields remain null. No value was promoted.",
+    "fcs": "Untouched.",
+    "sor": "Untouched.",
+    "srs": "Untouched; claim boundary unchanged.",
+    "simulation": "Untouched. No Monte Carlo executed.",
+    "market": "Untouched.",
+    "common_opponents": "Untouched.",
+    "reference_inputs": "reference/dynamic_weekly_mc_v3/inputs unchanged; still eight files, none named Board_I-K."
+  },
+  "simulation_run": false,
+  "output_probabilities_generated": false,
+  "canonical_config": {
+    "modified": true,
+    "change": "inputs.board_of_record_xlsx repointed from null to the governed mount. No other field altered.",
+    "calibration_values_populated": false
+  },
+  "provenance_class": "FACT"
+}

@@ -29,8 +29,8 @@ def live_blockers() -> list[str]:
 
 
 def test_live_blocker_set_is_exactly_the_expected_set(live_blockers):
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+    assert set(live_blockers) == set(br.B1_EXPECTED_LIVE_BLOCKERS)
+    assert len(live_blockers) == 8
 
 
 def test_live_blockers_carry_no_duplicates(live_blockers):
@@ -38,21 +38,32 @@ def test_live_blockers_carry_no_duplicates(live_blockers):
 
 
 def test_every_retired_blocker_is_actually_gone(live_blockers):
-    retired = br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS
+    retired = br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS | br.B1_RETIRED_BLOCKERS
     assert sorted(retired & set(live_blockers)) == []
 
 
 def test_no_unrelated_blocker_disappeared(live_blockers):
     """Everything the audited state carried is either retired by a named ruling
     or still live. Nothing may vanish without an entry in the delta."""
-    retired = br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS
+    retired = br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS | br.B1_RETIRED_BLOCKERS
     for blocker in br.R1_AUDITED_LIVE_BLOCKERS:
         assert blocker in live_blockers or blocker in retired, blocker
 
 
 def test_every_retirement_is_claimed_by_a_ruling():
+    """Every retirement by *ruling* is claimed by a ruling.
+
+    The B1 board retirement is deliberately absent here: it was not earned by a
+    ruling at all, but by artifact custody — SHA-256 equality against a digest
+    R3 and R4 had already recorded as required. It is accounted for separately in
+    ``B1_RETIREMENT_REASONS`` so a custody event can never be read as governance.
+    """
     claimed = rulings.retirable_blockers()
     assert set(claimed) == set(br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS)
+    assert set(claimed) & set(br.B1_RETIRED_BLOCKERS) == set()
+    assert br.B1_RETIREMENT_REASONS == {
+        "inputs.board_of_record_i_k": "EXACT_ARTIFACT_CUSTODY_SHA256_VERIFIED"
+    }
     for blocker, convergence_id in claimed.items():
         assert rulings.ruling(convergence_id).convergence_id == convergence_id
 
@@ -80,9 +91,17 @@ def test_the_frozen_build_manifest_is_not_rewritten():
 
 
 def test_the_successor_status_artifact_matches_the_live_state(live_blockers):
+    """R3's record is history and is not rewritten to match the live state.
+
+    It recorded nine. The live set is eight. The difference must be exactly the
+    one blocker the B1 board mount retired — nothing else may have moved, in
+    either direction, since R3 was written.
+    """
     status = json.loads(STATUS_R3.read_text(encoding="utf-8"))
-    assert set(status["live_blockers"]) == set(live_blockers)
-    assert status["live_blocker_count"] == len(live_blockers)
+    assert set(status["live_blockers"]) - set(live_blockers) == set(br.B1_RETIRED_BLOCKERS)
+    assert set(live_blockers) - set(status["live_blockers"]) == set()
+    assert status["live_blocker_count"] == 9
+    assert status["live_blocker_count"] == len(live_blockers) + 1
     assert set(status["resolved_blockers"]) == set(br.R3_RETIRED_BLOCKERS)
     assert set(status["blocker_set_before"]) == set(br.R2_EXPECTED_LIVE_BLOCKERS)
     assert status["parent_build_manifest"]["execution_blocker_count"] == 18

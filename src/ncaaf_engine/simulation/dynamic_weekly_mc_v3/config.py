@@ -55,7 +55,8 @@ class InputPaths:
     fcs_reconciled_master_xlsx: Path
     v2_1_control_xlsx: Path
     aac_divisions_csv: Path | None = None
-    #: Board of Record named by ruling R2-BOARD-OF-RECORD. Not mounted here.
+    #: Board of Record named by ruling R2-BOARD-OF-RECORD. Accepted only when
+    #: its SHA-256 matches the approved artifact; see ``board_of_record``.
     board_of_record_xlsx: Path | None = None
 
 
@@ -168,10 +169,10 @@ class V3Config:
             blockers.append("committee_tiebreak_policy")
         if self.inputs.aac_divisions_csv is None or not self.inputs.aac_divisions_csv.exists():
             blockers.append("inputs.aac_divisions_csv")
-        if (
-            self.inputs.board_of_record_xlsx is None
-            or not self.inputs.board_of_record_xlsx.exists()
-        ):
+        # Custody, not presence. A file existing at the configured path proves
+        # nothing: the blocker clears only when the bytes hash to the approved
+        # Board-of-Record digest.
+        if not board_of_record.is_governed_board_of_record(self.inputs.board_of_record_xlsx):
             blockers.append(board_of_record.BOARD_OF_RECORD_BLOCKER)
         return blockers
 

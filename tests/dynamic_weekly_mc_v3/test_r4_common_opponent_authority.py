@@ -429,11 +429,18 @@ EXPECTED_LIVE_BLOCKERS = frozenset(
 )
 
 
-def test_the_live_blocker_set_is_exactly_the_same_nine(live_blockers):
+def test_the_live_blocker_set_moved_only_by_the_board_mount(live_blockers):
+    """R4's nine is preserved above as the R4-epoch record and is not edited.
+
+    Measured against it, the live set may still gain nothing, and may have lost
+    only the one blocker the B1 board mount retired on verified custody.
+    """
     live = frozenset(live_blockers)
     assert live - EXPECTED_LIVE_BLOCKERS == frozenset(), "a blocker was added"
-    assert EXPECTED_LIVE_BLOCKERS - live == frozenset(), "a blocker disappeared"
-    assert len(live_blockers) == 9
+    assert EXPECTED_LIVE_BLOCKERS - live == frozenset(br.B1_RETIRED_BLOCKERS), (
+        "a blocker disappeared that the B1 board mount did not retire"
+    )
+    assert len(live_blockers) == 8
 
 
 def test_no_common_opponent_blocker_was_created(live_blockers):

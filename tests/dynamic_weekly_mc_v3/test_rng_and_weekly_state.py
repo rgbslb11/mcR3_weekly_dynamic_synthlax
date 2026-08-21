@@ -8,13 +8,22 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3.rerating import FixtureResidua
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.rng import deterministic_standard_normal
 
 
+ROOT = Path(__file__).resolve().parents[2]
+GOVERNED_BOARD = (
+    ROOT / "config/dynamic_weekly_mc_v3/governed" / BOARD_OF_RECORD_FILENAME
+)
+
+
 def _cfg(tmp_path: Path) -> V3Config:
     aac = tmp_path / "aac.csv"
     aac.write_text("schedule_id,division\nA,American\nB,Athletic\n", encoding="utf-8")
     # The R2 gates require the governed values, so the harness config carries
     # them. Both fixture games are NEUTRAL, so HFA never enters the arithmetic.
-    board = tmp_path / BOARD_OF_RECORD_FILENAME
-    board.write_text("harness stand-in for the Board of Record artifact", encoding="utf-8")
+    #
+    # The Board of Record is the real governed mount, not a stand-in. A 49-byte
+    # placeholder used to satisfy this gate because the gate only checked that a
+    # file existed; it now checks the SHA-256, so the fixture that would have
+    # been silently promoted to production authority is refused outright.
     dummy = tmp_path / "dummy"
     return V3Config(
         model_name="SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
@@ -28,7 +37,9 @@ def _cfg(tmp_path: Path) -> V3Config:
         hfa_baseline_points=3.5,
         freeze_strength_after_selection=True,
         write_path_level_parquet=False,
-        inputs=InputPaths(dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, aac, board),
+        inputs=InputPaths(
+            dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, aac, GOVERNED_BOARD
+        ),
         calibration=ReratingCalibration(
             weekly_performance_residual_coefficient=0.1,
             weekly_movement_cap_points=2.0,
