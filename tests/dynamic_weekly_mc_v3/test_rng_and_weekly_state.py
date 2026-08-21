@@ -1,6 +1,14 @@
 from pathlib import Path
 
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.board_of_record import BOARD_OF_RECORD_FILENAME
+
+ROOT = Path(__file__).resolve().parents[2]
+#: The harness mounts the real approved Board of Record. A text stand-in named
+#: like the artifact used to clear the gate; custody validation now refuses it,
+#: which is the point — a fixture is never promoted to production authority.
+GOVERNED_BOARD = (
+    ROOT / "reference/dynamic_weekly_mc_v3/inputs" / BOARD_OF_RECORD_FILENAME
+)
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.config import InputPaths, ReratingCalibration, V3Config, DEFAULT_PRIOR_DECAY
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.engine import DynamicWeeklyMCV3
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.models import ScheduledGame, Team
@@ -13,8 +21,7 @@ def _cfg(tmp_path: Path) -> V3Config:
     aac.write_text("schedule_id,division\nA,American\nB,Athletic\n", encoding="utf-8")
     # The R2 gates require the governed values, so the harness config carries
     # them. Both fixture games are NEUTRAL, so HFA never enters the arithmetic.
-    board = tmp_path / BOARD_OF_RECORD_FILENAME
-    board.write_text("harness stand-in for the Board of Record artifact", encoding="utf-8")
+    board = GOVERNED_BOARD
     dummy = tmp_path / "dummy"
     return V3Config(
         model_name="SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",

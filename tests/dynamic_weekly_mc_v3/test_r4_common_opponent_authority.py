@@ -423,22 +423,30 @@ EXPECTED_LIVE_BLOCKERS = frozenset(
         "calibration.game_sd_points",
         "calibration.sample_size_regularization",
         "governance.GAME_SD_CALIBRATION_OPEN",
-        "inputs.board_of_record_i_k",
         "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
     }
 )
 
 
-def test_the_live_blocker_set_is_exactly_the_same_nine(live_blockers):
+def test_the_live_blocker_set_is_exactly_the_same_eight(live_blockers):
+    """R4 added and removed nothing; the Board mount cleared the custody gate.
+
+    R4 recorded nine live blockers. ``inputs.board_of_record_i_k`` has since
+    been retired by mounting the approved artifact, which is a custody event and
+    not a common-opponent one. The point of this test — that the R4 common-
+    opponent work moved no blocker — is unchanged.
+    """
     live = frozenset(live_blockers)
     assert live - EXPECTED_LIVE_BLOCKERS == frozenset(), "a blocker was added"
     assert EXPECTED_LIVE_BLOCKERS - live == frozenset(), "a blocker disappeared"
-    assert len(live_blockers) == 9
+    assert len(live_blockers) == 8
+    assert "inputs.board_of_record_i_k" not in live
 
 
 def test_no_common_opponent_blocker_was_created(live_blockers):
     assert not [b for b in live_blockers if "COMMON_OPP" in b.upper()]
-    assert br.R3_EXPECTED_LIVE_BLOCKERS == EXPECTED_LIVE_BLOCKERS
+    # R3's recorded nine, less the Board mount, is exactly this set.
+    assert br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED == EXPECTED_LIVE_BLOCKERS
 
 
 def test_the_blocker_classification_is_unchanged():
@@ -449,9 +457,10 @@ def test_the_blocker_classification_is_unchanged():
         )
     assert counts == {
         "CALIBRATION": 7,
-        "ARTIFACT_CUSTODY": 1,
         "ENGINEERING_MODEL_SCALE": 1,
     }
+    # The custody lane is empty now that the approved Board binary is mounted.
+    assert "ARTIFACT_CUSTODY" not in counts
     assert "HUMAN_GOVERNANCE" not in counts
 
 
@@ -490,7 +499,11 @@ def test_the_successor_status_record_states_the_binding():
     assert formula["denominator_semantics_changed"] is False
 
     assert status["live_blocker_count"] == 9
-    assert sorted(status["live_blockers"]) == sorted(EXPECTED_LIVE_BLOCKERS)
+    # R4's record is preserved as written: it recorded the state before the
+    # approved Board-of-Record artifact was mounted, so it carries that gate.
+    assert sorted(status["live_blockers"]) == sorted(
+        EXPECTED_LIVE_BLOCKERS | {"inputs.board_of_record_i_k"}
+    )
     assert status["resolved_blockers"] == []
     assert status["opened_blockers"] == []
     assert status["simulation_run"] is False

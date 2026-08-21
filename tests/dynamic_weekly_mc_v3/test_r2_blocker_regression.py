@@ -29,8 +29,10 @@ def live_blockers() -> list[str]:
 
 
 def test_live_blocker_set_is_exactly_the_expected_set(live_blockers):
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+    # The approved Board-of-Record binary is mounted and verifies, so the live
+    # set is R3's nine minus that one custody gate.
+    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED)
+    assert len(live_blockers) == 8
 
 
 def test_live_blockers_carry_no_duplicates(live_blockers):
@@ -81,8 +83,14 @@ def test_the_frozen_build_manifest_is_not_rewritten():
 
 def test_the_successor_status_artifact_matches_the_live_state(live_blockers):
     status = json.loads(STATUS_R3.read_text(encoding="utf-8"))
-    assert set(status["live_blockers"]) == set(live_blockers)
-    assert status["live_blocker_count"] == len(live_blockers)
+    # R3's record is preserved as written: it recorded the state before the
+    # Board-of-Record artifact was mounted. The live set differs from it by
+    # exactly that one custody gate and by nothing else.
+    assert set(status["live_blockers"]) - set(live_blockers) == {
+        "inputs.board_of_record_i_k"
+    }
+    assert set(live_blockers) - set(status["live_blockers"]) == set()
+    assert status["live_blocker_count"] == len(live_blockers) + 1
     assert set(status["resolved_blockers"]) == set(br.R3_RETIRED_BLOCKERS)
     assert set(status["blocker_set_before"]) == set(br.R2_EXPECTED_LIVE_BLOCKERS)
     assert status["parent_build_manifest"]["execution_blocker_count"] == 18
