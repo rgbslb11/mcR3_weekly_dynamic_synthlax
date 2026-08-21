@@ -1,0 +1,408 @@
+{
+  "artifact": "MISSING_CALIBRATION_EVIDENCE.json",
+  "calibration_blockers_retired_by_this_lane": [],
+  "canonical_values_written": [],
+  "code": "MISSING_CALIBRATION_EVIDENCE",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "data_plane_ready": true,
+  "data_plane_ready_note": "Loaders, normalization, identity, chronology, duplicate, leakage and split checks are implemented and tested against TEST_FIXTURE data. Working plumbing is not evidence: no calibration blocker is retired and no coefficient is proposed.",
+  "disposition": "BLOCKED_ON_CALIBRATION_DATA",
+  "flow_excluded_sources": [
+    "reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
+    "examples/week1_sample_seed.json"
+  ],
+  "flow_exclusion_basis": "Public money and market prices create flow, not belief. Excluded from BELIEF calibration at source registration and again at column admissibility.",
+  "governance_recorded_absent_artifacts": [
+    {
+      "artifact": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE(3).xlsx",
+      "blocker": "inputs.board_of_record_i_k",
+      "recorded_in": "V3_GOVERNANCE_STATUS_R4.json!board_of_record",
+      "relevance_to_calibration": "Board of record for rating authority. Not an observation source; listed so a reader does not mistake its absence for the calibration gap or the reverse.",
+      "required_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a"
+    },
+    {
+      "artifact": "srs_spec.md, compute_srs.py, srs_2025.csv, srs_validation_2025.txt",
+      "blocker": null,
+      "recorded_in": "V3_GOVERNANCE_STATUS_R4.json!srs.evidence_searched_for",
+      "relevance_to_calibration": "SRS is a named independent witness under ruling R2-CAL-OBJECTIVE. srs_2025.csv would be a 2025-season artifact, but a validation file of season ratings is still not the game-level observation set this lane requires.",
+      "required_sha256": null
+    }
+  ],
+  "missing_fields": {
+    "per_field": {
+      "actual_margin": {
+        "available_at_game_level": false,
+        "governed_column": "actual_margin",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "config_version": {
+        "available_at_game_level": false,
+        "governed_column": "configuration_version",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "event_time": {
+        "available_at_game_level": false,
+        "governed_column": "event_time",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "expected_margin": {
+        "available_at_game_level": false,
+        "governed_column": "expected_margin",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "game_id": {
+        "available_at_game_level": false,
+        "governed_column": "game_id",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "model_version": {
+        "available_at_game_level": false,
+        "governed_column": "model_version",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "observed_at": {
+        "available_at_game_level": false,
+        "governed_column": "observed_at",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "opponent_id": {
+        "available_at_game_level": false,
+        "governed_column": "opponent",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+          "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+          "reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "pregame_opponent_strength": {
+        "available_at_game_level": false,
+        "governed_column": "pregame_opponent_rating",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "pregame_team_strength": {
+        "available_at_game_level": false,
+        "governed_column": "pregame_team_rating",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "prior_rating_state": {
+        "available_at_game_level": false,
+        "governed_column": "prior_rating_state",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "recorded_at": {
+        "available_at_game_level": false,
+        "governed_column": "recorded_at",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "result": {
+        "available_at_game_level": false,
+        "governed_column": "game_result",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "season": {
+        "available_at_game_level": false,
+        "governed_column": "season",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "site": {
+        "available_at_game_level": false,
+        "governed_column": "venue",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "source_artifact_hash": {
+        "available_at_game_level": false,
+        "governed_column": "source_provenance",
+        "partially_supplied_by": [],
+        "required": true,
+        "status": "ABSENT"
+      },
+      "subsequent_outcomes": {
+        "available_at_game_level": false,
+        "governed_column": "subsequent_outcomes",
+        "partially_supplied_by": [],
+        "required": false,
+        "status": "ABSENT"
+      },
+      "team_id": {
+        "available_at_game_level": false,
+        "governed_column": "team",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+          "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+          "reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      },
+      "week": {
+        "available_at_game_level": false,
+        "governed_column": "week",
+        "partially_supplied_by": [
+          "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx"
+        ],
+        "required": true,
+        "status": "PARTIAL_NON_OBSERVATIONAL"
+      }
+    },
+    "required_but_unsupplied_at_game_level": [
+      "actual_margin",
+      "game_result",
+      "expected_margin",
+      "pregame_team_rating",
+      "pregame_opponent_rating",
+      "prior_rating_state",
+      "observed_at",
+      "recorded_at",
+      "source_provenance",
+      "model_version",
+      "configuration_version"
+    ]
+  },
+  "missing_files": [
+    {
+      "accepted_formats": [
+        "csv",
+        "tsv",
+        "json"
+      ],
+      "exists": false,
+      "note": "Path naming is DERIVED from this module's loader, not from a governed artifact register. Mounting a file here does not confer authority.",
+      "optional_columns": [
+        "subsequent_outcomes",
+        "split"
+      ],
+      "path": "reference/dynamic_weekly_mc_v3/inputs/calibration/historical_game_observations.csv",
+      "provenance_class": "DERIVED",
+      "required_columns": [
+        "game_id",
+        "season",
+        "week",
+        "event_time",
+        "team",
+        "opponent",
+        "venue",
+        "pregame_team_rating",
+        "pregame_opponent_rating",
+        "expected_margin",
+        "actual_margin",
+        "game_result",
+        "prior_rating_state",
+        "source_provenance",
+        "observed_at",
+        "recorded_at",
+        "model_version",
+        "configuration_version"
+      ],
+      "role": "historical game-level observation set the data plane loads"
+    }
+  ],
+  "model_version": "3.0.0-experimental-harness",
+  "observation_sets_mounted": 0,
+  "prior_season_fit_without_underlying_games": {
+    "implied_game_count_lower_bound": 757,
+    "note": "2025 Baxter Games is a count, not a record. No mounted artifact carries the individual 2025 games, their margins, their dates or their pregame ratings.",
+    "per_game_rows_mounted": 0,
+    "team_game_sides_recorded": 1514,
+    "teams_with_fitted_2025_rating": 119,
+    "teams_without_fitted_2025_rating": 2
+  },
+  "required_to_clear": [
+    "Mount a governed game-level historical observation set carrying every required column, with source artifact provenance and hashes per row.",
+    "Obtain a ruling fixing the train/validation/holdout split policy; the chronological default here is deterministic but not governed.",
+    "Run the experimental harness against the primary criterion named by ruling R2-CAL-OBJECTIVE, reporting Colley and SRS independently.",
+    "Promote only by explicit human approval token under a named authority."
+  ],
+  "scope": "HISTORICAL_CALIBRATION_DATA_PLANE",
+  "source_inventory": [
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 48641,
+      "content_class": "FORWARD_LOOKING_FIXTURES",
+      "mounted": true,
+      "reason": "Games sheet carries 743 fixtures for the unplayed 2026 season. Its columns are game_id, week, date, type, home_team, home_conf, away_team, away_conf, venue, conference_game, fcs_game, flex_rematch, venue_rule. There is no score column, so no actual_margin and no game_result can be derived from it.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+      "sha256": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": [
+        "game_id",
+        "week",
+        "event_time",
+        "team",
+        "opponent",
+        "venue"
+      ]
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 113260,
+      "content_class": "DERIVED_PRIOR_SEASON_RATINGS",
+      "mounted": true,
+      "reason": "Master Ratings carries 2025 Baxter Ridge Rating and 2025 Baxter Games for 121 teams, and Baxter Carryforward Status reads '2025 Baxter fitted rating' for 119 of them. These are season-level aggregates fitted from 2025 games that are not mounted anywhere in the repository. A fitted rating cannot be inverted back into the per-game margins that produced it.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+      "sha256": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": [
+        "pregame_team_rating",
+        "pregame_opponent_rating"
+      ]
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 83571,
+      "content_class": "PARAMETER_AND_GOVERNANCE_REGISTER",
+      "mounted": true,
+      "reason": "The CALIBRATION sheet records achieved aggregate metrics from the Jul 13-14 engine run (Margin SD 20.2 against a 16-18 band, OT rate 2.5 against 4-6), which are simulated engine behaviour rather than observed games. Sheet 17_V3_COMEBACK_RESEARCH labels every comeback target 'Research-only calibration target; not observed performance' and 'NOT IMPLEMENTED / NOT VALIDATED'.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx",
+      "sha256": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": []
+    },
+    {
+      "admissible_for_belief_calibration": false,
+      "bytes": 40243,
+      "content_class": "SIMULATED_ENGINE_OUTPUT",
+      "mounted": true,
+      "reason": "10,000 simulated paths over the 2026 schedule, reported as team-season probabilities. Simulated margins are engine output; calibrating the engine against them is circular and is not evidence about any played season.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
+      "sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": []
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 42155,
+      "content_class": "IDENTITY_RECONCILIATION",
+      "mounted": true,
+      "reason": "Reconciled Master resolves 134 schedule entities and their identifiers. It carries identity and rating-authority columns, and no game rows at all.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
+      "sha256": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": [
+        "team",
+        "opponent"
+      ]
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 278106,
+      "content_class": "IDENTITY_MASTER",
+      "mounted": true,
+      "reason": "Authoritative identity universe of 134 schedule_id values. Supplies the identity check for team and opponent; carries no game observations.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+      "sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": [
+        "team",
+        "opponent"
+      ]
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 9527,
+      "content_class": "POSTSEASON_STRUCTURE",
+      "mounted": true,
+      "reason": "Bracket rules and a projected 2026 field. No played games.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/2026 Bracket Regime LOCKED.xlsx",
+      "sha256": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": []
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 14709,
+      "content_class": "POSTSEASON_CALENDAR",
+      "mounted": true,
+      "reason": "2026-27 postseason dates and rulings. Future fixtures, no results.",
+      "relative_path": "reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
+      "sha256": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": [
+        "event_time"
+      ]
+    },
+    {
+      "admissible_for_belief_calibration": true,
+      "bytes": 554,
+      "content_class": "CONFERENCE_STRUCTURE",
+      "mounted": true,
+      "reason": "Governed 2026 AAC division assignment. Structure, not observation.",
+      "relative_path": "config/dynamic_weekly_mc_v3/governed/aac_divisions_2026_R2_SUCCESSOR.csv",
+      "sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": []
+    },
+    {
+      "admissible_for_belief_calibration": false,
+      "bytes": 802,
+      "content_class": "MARKET_FLOW_SNAPSHOT",
+      "mounted": true,
+      "reason": "Five 2026 Week 1 side and total lines from a Covers snapshot. Market lines are FLOW: they are excluded from BELIEF calibration by doctrine, and they are in any case forward-looking prices rather than results.",
+      "relative_path": "examples/week1_sample_seed.json",
+      "sha256": "eb23222ecc258ca6aad6ca2c9e061a59fee55faf0e7a1ac98f1a3c42b7b28e4e",
+      "supplies_game_level_observations": false,
+      "supplies_governed_columns": []
+    }
+  ],
+  "sources_supplying_game_level_observations": 0,
+  "split_policy": {
+    "governed": false,
+    "holdout_fraction": 0.2,
+    "method": "CHRONOLOGICAL",
+    "policy_id": "CHRONOLOGICAL_60_20_20",
+    "randomised": false,
+    "status": "NOT_GOVERNED_PENDING_RULING",
+    "tie_break": "game_id ascending",
+    "training_fraction": 0.6,
+    "validation_fraction": 0.2
+  },
+  "summary": "No mounted artifact carries game-level historical observations. Every source is either a 2026 fixture list for an unplayed season, a season-level rating derived from games that are not mounted, simulated engine output, identity or structure reference, or market flow excluded from belief calibration.",
+  "unresolved_calibration_fields": [
+    "weekly_performance_residual_coefficient",
+    "weekly_movement_cap_points",
+    "recent_form_weights",
+    "blowout_treatment",
+    "game_sd_points",
+    "sample_size_regularization"
+  ]
+}
