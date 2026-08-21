@@ -1,0 +1,32 @@
+{
+  "artifact": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+  "classification": "ARTIFACT_CUSTODY",
+  "canonical_path": "reference/dynamic_weekly_mc_v3/inputs/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+  "sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+  "mounted": true,
+  "approved_digest_matches": true,
+  "historical_board_substituted": false,
+  "retired_blocker": "inputs.board_of_record_i_k",
+  "live_blocker_count_before_mount": 9,
+  "live_blocker_count_after_mount": 8,
+  "remaining_live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "validation": {
+    "targeted_successor_tests_passed": 140,
+    "full_suite_passed": 418,
+    "v3_suite_passed": 359,
+    "git_diff_check_clean": true
+  },
+  "historical_status_records_rewritten": false,
+  "simulation_run": false,
+  "calibration_promoted": false,
+  "fcs_adapter_constructed": false
+}

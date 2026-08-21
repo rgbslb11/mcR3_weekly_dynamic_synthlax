@@ -429,11 +429,9 @@ EXPECTED_LIVE_BLOCKERS = frozenset(
 )
 
 
-def test_the_live_blocker_set_is_exactly_the_same_nine(live_blockers):
-    live = frozenset(live_blockers)
-    assert live - EXPECTED_LIVE_BLOCKERS == frozenset(), "a blocker was added"
-    assert EXPECTED_LIVE_BLOCKERS - live == frozenset(), "a blocker disappeared"
-    assert len(live_blockers) == 9
+def test_r4_historical_blocker_set_was_exactly_the_same_nine():
+    assert EXPECTED_LIVE_BLOCKERS == br.R3_EXPECTED_LIVE_BLOCKERS
+    assert len(EXPECTED_LIVE_BLOCKERS) == 9
 
 
 def test_no_common_opponent_blocker_was_created(live_blockers):

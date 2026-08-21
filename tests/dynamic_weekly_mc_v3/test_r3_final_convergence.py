@@ -584,10 +584,14 @@ def test_the_board_of_record_blocker_is_custody_not_policy():
     )
 
 
-def test_no_board_workbook_was_fabricated_into_the_governed_inputs():
-    names = {p.name for p in INPUTS.iterdir()}
-    assert not any("Board_I-K" in n for n in names)
-    assert len(names) == 8
+def test_current_governed_inputs_hold_only_the_exact_board_of_record():
+    boards = [p for p in INPUTS.iterdir() if "Board_I-K" in p.name]
+    assert [p.name for p in boards] == [
+        board_of_record.BOARD_OF_RECORD_FILENAME
+    ]
+    assert hashlib.sha256(boards[0].read_bytes()).hexdigest() == (
+        board_of_record.BOARD_OF_RECORD_SHA256
+    )
 
 
 def test_the_srs_claim_boundary_is_unchanged():
@@ -639,25 +643,27 @@ def test_the_blocker_set_before_this_convergence_was_exactly_eleven():
     assert len(br.R2_EXPECTED_LIVE_BLOCKERS) == 11
 
 
-def test_governance_closure_retires_exactly_two_and_leaves_nine(live_blockers):
+def test_r3_governance_closure_historically_retires_exactly_two_and_leaves_nine():
     assert br.R3_RETIRED_BLOCKERS == {
         "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
         "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
     }
     assert len(br.R3_EXPECTED_LIVE_BLOCKERS) == 9
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+    assert "inputs.board_of_record_i_k" in br.R3_EXPECTED_LIVE_BLOCKERS
 
 
-def test_a_successful_board_mount_would_leave_exactly_eight():
-    assert len(br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED) == 8
-    assert "inputs.board_of_record_i_k" not in (
+def test_verified_board_mount_leaves_exactly_eight(live_blockers):
+    assert set(live_blockers) == set(
         br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
     )
+    assert len(live_blockers) == 8
+    assert "inputs.board_of_record_i_k" not in live_blockers
 
 
-def test_only_the_two_authorized_blocker_ids_disappeared(live_blockers):
-    vanished = set(br.R2_EXPECTED_LIVE_BLOCKERS) - set(live_blockers)
+def test_only_the_two_authorized_governance_blocker_ids_disappeared_in_r3():
+    vanished = set(br.R2_EXPECTED_LIVE_BLOCKERS) - set(
+        br.R3_EXPECTED_LIVE_BLOCKERS
+    )
     assert vanished == set(br.R3_RETIRED_BLOCKERS)
 
 
@@ -718,8 +724,10 @@ def test_no_season_run_or_probability_output_exists():
     assert status["canonical_config"]["writes_canonical_config"] is False
 
 
-def test_the_remaining_blockers_are_only_calibration_model_scale_and_custody(live_blockers):
+def test_the_remaining_blockers_are_only_calibration_and_model_scale_after_board_mount(live_blockers):
     lanes = {br.R3_REMAINING_CLASSIFICATION[b] for b in live_blockers}
-    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE", "ARTIFACT_CUSTODY"}
-    assert not any(b.startswith("governance.") and "CALIBRATION" not in b
-                   for b in live_blockers)
+    assert lanes == {"CALIBRATION", "ENGINEERING_MODEL_SCALE"}
+    assert not any(
+        b.startswith("governance.") and "CALIBRATION" not in b
+        for b in live_blockers
+    )

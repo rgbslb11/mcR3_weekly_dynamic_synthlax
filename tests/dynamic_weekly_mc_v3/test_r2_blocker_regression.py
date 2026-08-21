@@ -28,9 +28,11 @@ def live_blockers() -> list[str]:
     return list(DynamicWeeklyMCV3(V3Config.from_json(CONFIG)).preflight()["execution_blockers"])
 
 
-def test_live_blocker_set_is_exactly_the_expected_set(live_blockers):
-    assert set(live_blockers) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
-    assert len(live_blockers) == 9
+def test_live_blocker_set_is_exactly_the_post_board_mount_set(live_blockers):
+    assert set(live_blockers) == set(
+        br.R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
+    )
+    assert len(live_blockers) == 8
 
 
 def test_live_blockers_carry_no_duplicates(live_blockers):
@@ -79,10 +81,10 @@ def test_the_frozen_build_manifest_is_not_rewritten():
     assert set(manifest["execution_blockers"]) == set(br.R1_BASELINE_BLOCKERS)
 
 
-def test_the_successor_status_artifact_matches_the_live_state(live_blockers):
+def test_the_r3_successor_status_artifact_is_preserved_as_historical_record():
     status = json.loads(STATUS_R3.read_text(encoding="utf-8"))
-    assert set(status["live_blockers"]) == set(live_blockers)
-    assert status["live_blocker_count"] == len(live_blockers)
+    assert set(status["live_blockers"]) == set(br.R3_EXPECTED_LIVE_BLOCKERS)
+    assert status["live_blocker_count"] == len(br.R3_EXPECTED_LIVE_BLOCKERS)
     assert set(status["resolved_blockers"]) == set(br.R3_RETIRED_BLOCKERS)
     assert set(status["blocker_set_before"]) == set(br.R2_EXPECTED_LIVE_BLOCKERS)
     assert status["parent_build_manifest"]["execution_blocker_count"] == 18

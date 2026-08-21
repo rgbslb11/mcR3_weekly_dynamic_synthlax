@@ -39,8 +39,9 @@ def test_governed_architecture_and_blockers_are_explicit():
         "inputs.aac_divisions_csv",
     ):
         assert retired not in blockers
-    # Opened by R2: the Board of Record it names is not mounted.
-    assert "inputs.board_of_record_i_k" in blockers
+    # Board I-K custody is now satisfied by the exact approved binary.
+    assert cfg.inputs.board_of_record_xlsx is not None
+    assert "inputs.board_of_record_i_k" not in blockers
     with pytest.raises(GovernanceBlock):
         cfg.require_executable()
 
