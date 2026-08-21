@@ -780,10 +780,20 @@ correction, not project execution work.
 COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common
 ```
 
+**The authority.** The Chairman ruling *Common-opponent performance formula* was issued
+**APPROVED**, states the formula in terms, and declares that "the coefficients 0.25 / 0.50 / 0.25
+are canonical and exact" under the authorization line **DIRECT CHAIRMAN AUTHORITY**. It also
+supersedes, explicitly, any earlier wording describing the formula as "some formula that looks
+like" this structure — so the exactness of the coefficients is *issued*, not inferred from the
+earlier hedged text. That earlier wording is preserved as the prior record and was not edited.
+The ruling holds the OWP/OOWP construction semantics unchanged, keeps UNAVAILABLE fail-closed and
+advancing to the next governed criterion, and states that it changes none of SOS, CCG rules,
+postseason topology, G5 seed #5, FCS Elo policy, calibration parameters, Board authority, SOR or
+SRS.
+
 **What was wrong.** The module recorded `COMMON_OPPONENT_FORMULA_IS_CANONICAL = False` on the
-grounds that no *mounted workbook* states the formula. Those workbooks predate the direct
-Chairman approval of this exact formula, and older artifact state does not outrank a later
-direct ruling. The authority hierarchy is:
+grounds that no *mounted workbook* states the formula. Those workbooks predate the ruling, and
+older artifact state does not outrank a later direct ruling. The authority hierarchy is:
 
 ```
 older artifact state / open item  ->  later direct Chairman ruling  ->  successor governed authority

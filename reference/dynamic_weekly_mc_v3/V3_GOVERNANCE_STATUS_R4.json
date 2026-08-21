@@ -24,7 +24,9 @@
       "subject": "Performance against common opponents — the exact scoring formula",
       "decision": "COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common. These exact weights are the governed rule, not a configurable production parameter: 0.20/0.60/0.20, 0.25/0.25/0.50 and every other weighting are refused for governed use. The formula is applied to the common-opponent subset under the OWP/OOWP denominator and exclusion semantics already governed by ruling R3-SOS-OWP-OOWP-SEMANTICS, which this ruling does not reopen or alter. UNAVAILABLE propagation stays fail-closed: an unavailable WP_common, OWP_common or OOWP_common makes the score UNAVAILABLE and the tiebreak advances to the next already-governed criterion rather than inventing 0, 0.0 or 0.500.",
       "evidence": [
-        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL COMMON-OPPONENT AUTHORITY BINDING — the exact formula was approved directly.",
+        "OPERATION SYTHALAX CHAIRMAN RULING — COMMON-OPPONENT PERFORMANCE FORMULA. Issued APPROVED: 'For all governed common-opponent performance comparisons, use exactly: COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common.' The ruling states in terms that 'the coefficients 0.25 / 0.50 / 0.25 are canonical and exact', and carries the human authorization line 'DIRECT CHAIRMAN AUTHORITY'.",
+        "The same ruling states that it supersedes any earlier wording describing the formula as 'some formula that looks like' this structure. The exactness of the coefficients is therefore issued, not inferred from the earlier text.",
+        "The same ruling holds the separately governed OWP/OOWP construction semantics unchanged, keeps UNAVAILABLE inputs fail-closed and advancing to the next governed tiebreak criterion, and states that it changes none of SOS, CCG rules, postseason topology, G5 seed #5, FCS Elo policy, calibration parameters, Board authority, SOR or SRS.",
         "Weights are the SOS shape of ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP), restricted to the common-opponent subset; convergence ruling R2-COMMON-OPP carried the same shape forward before this direct approval was issued.",
         "Model_Parameters_v2_5_APPROVED.xlsx!18_ACC_POLICY_REFERENCE ACC-EXT-08 records the common-opponent question as OPEN / REQUIRES RULING. That entry predates this ruling and is preserved unedited as evidence of the prior state; it is not authority against the later direct approval."
       ],
@@ -32,6 +34,7 @@
       "supersedes": [
         "18_ACC_POLICY_REFERENCE ACC-EXT-08 read as leaving the common-opponent formula OPEN / REQUIRES RULING — superseded to exactly the extent that the exact 0.25/0.50/0.25 formula is now directly approved. The workbook row itself is preserved unedited.",
         "COMMON_OPPONENT_FORMULA_IS_CANONICAL = False and the CONVERGENCE_RULING_ONLY status carried under ruling R2-COMMON-OPP, which predate this direct approval.",
+        "Earlier Chairman wording describing the common-opponent formula as 'some formula that looks like the following' — superseded by the issued ruling, which states the coefficients are canonical and exact. The earlier wording is preserved as the prior record and is not edited.",
         "RESULT_WEIGHTED_OPPONENT_STRENGTH as a candidate common-opponent formula."
       ],
       "provenance": "FACT",
@@ -164,7 +167,29 @@
       "successor governed authority"
     ],
     "production_consumer_wired_by_r4": false,
-    "production_consumer_note": "No production decision path was invented to exercise the gate. The committee and A8/ECL tiebreak chains still receive an injected scorer, exactly as before. The affirmative gate exists so future production wiring cannot legitimately obtain governed authority without validation."
+    "production_consumer_note": "No production decision path was invented to exercise the gate. The committee and A8/ECL tiebreak chains still receive an injected scorer, exactly as before. The affirmative gate exists so future production wiring cannot legitimately obtain governed authority without validation.",
+    "formula_ruling": {
+      "title": "OPERATION SYTHALAX CHAIRMAN RULING — COMMON-OPPONENT PERFORMANCE FORMULA",
+      "disposition": "APPROVED",
+      "issued_directly": true,
+      "coefficients_declared_canonical_and_exact": true,
+      "human_authorization": "DIRECT CHAIRMAN AUTHORITY",
+      "supersedes_hedged_wording": "Supersedes any earlier wording describing the formula as 'some formula that looks like' this structure. The earlier wording is preserved as the prior record and was not edited.",
+      "scope_carve_outs_stated_by_the_ruling": [
+        "SOS",
+        "CCG rules",
+        "postseason topology",
+        "G5 seed #5",
+        "FCS Elo policy",
+        "calibration parameters",
+        "Board authority",
+        "SOR",
+        "SRS"
+      ],
+      "owp_oowp_semantics_held_unchanged": true,
+      "unavailable_remains_fail_closed": true
+    },
+    "formula_exactness_is_issued_not_inferred": true
   },
   "sos_semantics": {
     "ruling": "R3-SOS-OWP-OOWP-SEMANTICS",
@@ -371,8 +396,8 @@
     "writes_canonical_config": false
   },
   "test_counts": {
-    "total": 407,
-    "v3": 348,
+    "total": 409,
+    "v3": 350,
     "predecessor_r3_total": 352,
     "predecessor_r3_v3": 293,
     "measured_at": "final authority-binding candidate, before commit",

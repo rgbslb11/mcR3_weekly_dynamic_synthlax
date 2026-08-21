@@ -439,8 +439,20 @@ R4_COMMON_OPPONENT_FORMULA = ChairmanRuling(
         "inventing 0, 0.0 or 0.500."
     ),
     evidence=(
-        "Direct Chairman authority, OPERATION SYTHALAX PR #3 FINAL COMMON-OPPONENT "
-        "AUTHORITY BINDING — the exact formula was approved directly.",
+        "OPERATION SYTHALAX CHAIRMAN RULING — COMMON-OPPONENT PERFORMANCE FORMULA. "
+        "Issued APPROVED: 'For all governed common-opponent performance comparisons, "
+        "use exactly: COMMON_OPP_SCORE = 0.25 * WP_common + 0.50 * OWP_common + "
+        "0.25 * OOWP_common.' The ruling states in terms that 'the coefficients "
+        "0.25 / 0.50 / 0.25 are canonical and exact', and carries the human "
+        "authorization line 'DIRECT CHAIRMAN AUTHORITY'.",
+        "The same ruling states that it supersedes any earlier wording describing the "
+        "formula as 'some formula that looks like' this structure. The exactness of "
+        "the coefficients is therefore issued, not inferred from the earlier text.",
+        "The same ruling holds the separately governed OWP/OOWP construction "
+        "semantics unchanged, keeps UNAVAILABLE inputs fail-closed and advancing to "
+        "the next governed tiebreak criterion, and states that it changes none of "
+        "SOS, CCG rules, postseason topology, G5 seed #5, FCS Elo policy, "
+        "calibration parameters, Board authority, SOR or SRS.",
         "Weights are the SOS shape of ruling R2-SOS (0.25 WP / 0.50 OWP / 0.25 OOWP), "
         "restricted to the common-opponent subset; convergence ruling R2-COMMON-OPP "
         "carried the same shape forward before this direct approval was issued.",
@@ -460,6 +472,10 @@ R4_COMMON_OPPONENT_FORMULA = ChairmanRuling(
         "COMMON_OPPONENT_FORMULA_IS_CANONICAL = False and the "
         "CONVERGENCE_RULING_ONLY status carried under ruling R2-COMMON-OPP, which "
         "predate this direct approval.",
+        "Earlier Chairman wording describing the common-opponent formula as 'some "
+        "formula that looks like the following' — superseded by the issued ruling, "
+        "which states the coefficients are canonical and exact. The earlier wording "
+        "is preserved as the prior record and is not edited.",
         "RESULT_WEIGHTED_OPPONENT_STRENGTH as a candidate common-opponent formula.",
     ),
     provenance="FACT",

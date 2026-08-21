@@ -213,6 +213,34 @@ def test_the_pre_ruling_state_is_preserved_rather_than_rewritten():
     assert rulings.R2_COMMON_OPPONENTS in rulings.R2_RULINGS
 
 
+def test_the_issued_ruling_is_cited_as_the_authority_not_a_builder_summary():
+    """The evidence names the ruling itself, including its exactness language.
+
+    A builder asserting that something was approved is not authority. What makes
+    the exact coefficients governed is the issued ruling, which states them in
+    terms and declares them canonical and exact.
+    """
+    ruling = rulings.ruling("R4-COMMON-OPP-FORMULA")
+    evidence = " ".join(ruling.evidence)
+    assert "OPERATION SYTHALAX CHAIRMAN RULING" in evidence
+    assert "canonical and exact" in evidence
+    assert "DIRECT CHAIRMAN AUTHORITY" in evidence
+    assert "0.25 * WP_common + 0.50 * OWP_common + 0.25 * OOWP_common" in evidence
+
+
+def test_the_hedged_wording_is_superseded_rather_than_relied_on():
+    """The exactness is issued, not inferred from the earlier hedged text."""
+    ruling = rulings.ruling("R4-COMMON-OPP-FORMULA")
+    superseded = " ".join(ruling.supersedes)
+    assert "some formula that looks like" in superseded
+    assert "preserved as the prior record and is not edited" in superseded
+    # The ruling's own scope carve-outs are recorded, so a later reader can see
+    # what it did *not* touch.
+    evidence = " ".join(ruling.evidence)
+    for untouched in ("SOS", "CCG rules", "postseason topology", "G5 seed #5"):
+        assert untouched in evidence
+
+
 def test_older_open_item_evidence_does_not_override_the_later_ruling():
     """ACC-EXT-08 is cited as evidence of the prior state, and superseded as authority."""
     ruling = rulings.ruling("R4-COMMON-OPP-FORMULA")
@@ -451,6 +479,13 @@ def test_the_successor_status_record_states_the_binding():
         "common_opponents.require_governed_common_opponent_formula"
     )
     assert formula["historical_sources_rewritten"] is False
+    assert formula["formula_exactness_is_issued_not_inferred"] is True
+    issued = formula["formula_ruling"]
+    assert issued["disposition"] == "APPROVED"
+    assert issued["coefficients_declared_canonical_and_exact"] is True
+    assert issued["human_authorization"] == "DIRECT CHAIRMAN AUTHORITY"
+    assert issued["owp_oowp_semantics_held_unchanged"] is True
+    assert issued["unavailable_remains_fail_closed"] is True
     assert formula["denominator_semantics_ruling"] == "R3-SOS-OWP-OOWP-SEMANTICS"
     assert formula["denominator_semantics_changed"] is False
 
