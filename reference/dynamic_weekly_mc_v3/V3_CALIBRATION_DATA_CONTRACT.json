@@ -1,0 +1,439 @@
+{
+  "automatic_promotion": false,
+  "blockers_open": [
+    "weekly_performance_residual_coefficient",
+    "weekly_movement_cap_points",
+    "recent_form_weights",
+    "blowout_treatment",
+    "game_sd_points",
+    "sample_size_regularization",
+    "governance.GAME_SD_CALIBRATION_OPEN"
+  ],
+  "contract_id": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "dataset_provenance_requirements": {
+    "dataset_id": "Stable identifier recorded in the experiment record.",
+    "expected_margin_transform": "The named rating-to-margin transform used. Without it, weekly_performance_residual_coefficient is unidentifiable: any residual can be explained by re-scaling the transform instead.",
+    "forbidden_content": "No public betting flow, handle, ticket or steam signal under any spelling, and no injury adjustment. Refused at registration by calibration.register_dataset, not by review.",
+    "rating_scale_declaration": "The units of pregame_team_rating and expected_margin. A residual computed across two scales is arithmetic, not evidence.",
+    "retrieval_method": "How the bytes were obtained, reproducibly.",
+    "retrieved_at": "UTC timestamp of retrieval.",
+    "sha256": "SHA-256 of the exact bytes scored, so a result can be re-tied to its input.",
+    "source_authority": "Named authority that certifies the results. Must be a result source, not the V2.1 static control workbook and not any engine output.",
+    "synthetic_content": "REFUSED. A synthetic or simulated observation set may never be registered as governed calibration data."
+  },
+  "fields_requiring_admission_ruling": [
+    {
+      "admitted_by_governed_allowlist": false,
+      "definition": "Subject team's completed-game count entering the observation.",
+      "dtype": "integer",
+      "name": "games_played_to_date",
+      "needed_by": [
+        "sample_size_regularization"
+      ],
+      "provenance_requirement": "Currently only reachable inside the opaque prior_rating_state blob. sample_size_regularization is a function OF this count; leaving it unaddressed means the shrinkage schedule is fitted against a field no reviewer can see.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": false,
+      "definition": "Competition type of the observation.",
+      "dtype": "enum[REG|CCG|BOWL|CFP]",
+      "name": "game_type",
+      "needed_by": [
+        "blowout_treatment",
+        "game_sd_points",
+        "recent_form_weights"
+      ],
+      "provenance_requirement": "V3 freezes strength after Selection Day, so postseason games must be separable from regular-season games. Without this field a bowl blowout is fitted as if it were a Week 4 result.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": false,
+      "definition": "Number of overtime periods, 0 for regulation.",
+      "dtype": "integer",
+      "name": "overtime_periods",
+      "needed_by": [
+        "game_sd_points",
+        "blowout_treatment"
+      ],
+      "provenance_requirement": "College overtime manufactures margins that no pregame model predicts. Folding them into an untagged residual pool inflates game_sd_points, which is the exact direction of the unexplained 20.2 observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": false,
+      "definition": "Division of the opponent.",
+      "dtype": "enum[FBS|FCS]",
+      "name": "opponent_division",
+      "needed_by": [
+        "game_sd_points",
+        "blowout_treatment",
+        "sample_size_regularization"
+      ],
+      "provenance_requirement": "The FCS-to-V3 point scale is itself an open blocker (model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER). Until it is closed, FCS games must be identifiable so they can be excluded rather than silently fitted on an unresolved scale.",
+      "required": true
+    }
+  ],
+  "governed_allowlist": [
+    "game_id",
+    "season",
+    "week",
+    "event_time",
+    "team",
+    "opponent",
+    "venue",
+    "pregame_team_rating",
+    "pregame_opponent_rating",
+    "expected_margin",
+    "actual_margin",
+    "game_result",
+    "prior_rating_state",
+    "subsequent_outcomes",
+    "source_provenance",
+    "observed_at",
+    "recorded_at",
+    "model_version",
+    "configuration_version",
+    "split"
+  ],
+  "independent_witnesses": [
+    "colley_matrix",
+    "srs"
+  ],
+  "minimum_volume": {
+    "minimum_distinct_seasons": 3,
+    "minimum_distinct_seasons_reason": "A temporal split needs at least one season each for training, validation and holdout. Two seasons cannot produce three ordered partitions.",
+    "minimum_holdout_observations": 300,
+    "minimum_holdout_observations_reason": "The holdout is scored once. It must be large enough that its RMSE is not dominated by a handful of blowouts.",
+    "minimum_observations_total": 1500,
+    "minimum_observations_total_reason": "recent_form_weights and sample_size_regularization are fitted per week-index regime, so the sample is divided before it is used. A single season of roughly 750 games leaves each weekly regime too thin to separate from noise.",
+    "minimum_weeks_per_team_per_season": 8,
+    "minimum_weeks_per_team_per_season_reason": "recent_form_weights is a decay over prior weeks; a team with three observations cannot inform the tail of that decay."
+  },
+  "missing_required_data": {
+    "blocks": [
+      "weekly_performance_residual_coefficient",
+      "weekly_movement_cap_points",
+      "recent_form_weights",
+      "blowout_treatment",
+      "game_sd_points",
+      "sample_size_regularization",
+      "governance.GAME_SD_CALIBRATION_OPEN"
+    ],
+    "dataset": "HISTORICAL_GAME_RESULT_OBSERVATION_SET",
+    "fields_requiring_admission_ruling": [
+      "games_played_to_date",
+      "game_type",
+      "overtime_periods",
+      "opponent_division"
+    ],
+    "minimum_volume": {
+      "minimum_distinct_seasons": 3,
+      "minimum_distinct_seasons_reason": "A temporal split needs at least one season each for training, validation and holdout. Two seasons cannot produce three ordered partitions.",
+      "minimum_holdout_observations": 300,
+      "minimum_holdout_observations_reason": "The holdout is scored once. It must be large enough that its RMSE is not dominated by a handful of blowouts.",
+      "minimum_observations_total": 1500,
+      "minimum_observations_total_reason": "recent_form_weights and sample_size_regularization are fitted per week-index regime, so the sample is divided before it is used. A single season of roughly 750 games leaves each weekly regime too thin to separate from noise.",
+      "minimum_weeks_per_team_per_season": 8,
+      "minimum_weeks_per_team_per_season_reason": "recent_form_weights is a decay over prior weeks; a team with three observations cannot inform the tail of that decay."
+    },
+    "required_contract_fields": [
+      "game_id",
+      "season",
+      "week",
+      "event_time",
+      "team",
+      "opponent",
+      "venue",
+      "pregame_team_rating",
+      "pregame_opponent_rating",
+      "expected_margin",
+      "actual_margin",
+      "game_result",
+      "prior_rating_state",
+      "subsequent_outcomes",
+      "split",
+      "source_provenance",
+      "observed_at",
+      "recorded_at",
+      "model_version",
+      "configuration_version"
+    ],
+    "status": "NOT_PRESENT_IN_REPOSITORY",
+    "why_no_repository_artifact_substitutes": {
+      "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx": "Preseason strength priors. Predictors with no outcomes attached.",
+      "2026_FBS_Schedule_LOCKED_v5.xlsx": "743 fixtures, zero score columns. Fixtures without results.",
+      "Model_Parameters_v2_5_APPROVED.xlsx": "Parameter and governance registers. Records that margin-SD calibration is OPEN; contains no per-game observations.",
+      "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx": "Identity reconciliation for 134 entities. No games.",
+      "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx": "Simulation output over 10,000 synthetic seasons. Engine belief, not observation. Registering it would score the engine against itself."
+    }
+  },
+  "primary_objective": {
+    "direction": "minimize",
+    "metric": "out_of_sample_baxter_rating_rmse",
+    "ruling": "R2-CAL-PRIMARY"
+  },
+  "promotion_authorities": [
+    "GOVERNED_CALIBRATION_EVIDENCE",
+    "EXPLICIT_CHAIRMAN_JUSTIFICATION"
+  ],
+  "required_fields": [
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Stable unique key for the observation. Deduplication and split assignment key.",
+      "dtype": "string",
+      "name": "game_id",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must be unique within the dataset and stable across re-ingestion.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Season the game belongs to. Bounds the training/validation/holdout partition.",
+      "dtype": "integer",
+      "name": "season",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Recorded from a named result source with a retrieval timestamp. A value reconstructed by the engine, or inferred from a rating, is not an observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Ordinal week within the season. Establishes the sequence in which ratings update.",
+      "dtype": "integer",
+      "name": "week",
+      "needed_by": [
+        "recent_form_weights",
+        "weekly_movement_cap_points",
+        "weekly_performance_residual_coefficient",
+        "sample_size_regularization"
+      ],
+      "provenance_requirement": "Must be the week in which the game was PLAYED, not the week it was ingested.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Kickoff instant. The only field that can order two games inside one week, and therefore the only field that can prove a holdout game post-dates its training data.",
+      "dtype": "iso8601",
+      "name": "event_time",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Recorded from a named result source with a retrieval timestamp. A value reconstructed by the engine, or inferred from a rating, is not an observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Subject team of the observation row.",
+      "dtype": "canonical_team_id",
+      "name": "team",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must resolve through the canonical team identity authority (2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md). Free-text names are refused.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Opposing team.",
+      "dtype": "canonical_team_id",
+      "name": "opponent",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must resolve through the canonical team identity authority (2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md). Free-text names are refused.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Venue treatment from the subject team's perspective. Without it the home-field term contaminates the residual it is meant to be separated from.",
+      "dtype": "enum[HOME|AWAY|NEUTRAL]",
+      "name": "venue",
+      "needed_by": [
+        "weekly_performance_residual_coefficient",
+        "game_sd_points"
+      ],
+      "provenance_requirement": "Must come from the governed schedule/result source, not inferred from team order.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Subject team's strength immediately before kickoff, on a declared scale.",
+      "dtype": "float",
+      "name": "pregame_team_rating",
+      "needed_by": [
+        "weekly_performance_residual_coefficient",
+        "weekly_movement_cap_points",
+        "sample_size_regularization"
+      ],
+      "provenance_requirement": "Must be the rating as it stood BEFORE kickoff, carrying its own as-of stamp. A post-hoc rating recomputed from the full season leaks the outcome into its own predictor and makes every out-of-sample number optimistic.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Opponent's strength immediately before kickoff, on the same declared scale.",
+      "dtype": "float",
+      "name": "pregame_opponent_rating",
+      "needed_by": [
+        "weekly_performance_residual_coefficient",
+        "game_sd_points"
+      ],
+      "provenance_requirement": "Must be the rating as it stood BEFORE kickoff, carrying its own as-of stamp. A post-hoc rating recomputed from the full season leaks the outcome into its own predictor and makes every out-of-sample number optimistic.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Pregame predicted margin for the subject team. The predictor half of every residual.",
+      "dtype": "float_points",
+      "name": "expected_margin",
+      "needed_by": [
+        "weekly_performance_residual_coefficient",
+        "game_sd_points",
+        "blowout_treatment"
+      ],
+      "provenance_requirement": "Must be the margin that was predicted BEFORE the game, and the rating-to-margin transform used to produce it must be named.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Final scoring margin for the subject team. The outcome half of every residual and the target of the primary objective.",
+      "dtype": "float_points",
+      "name": "actual_margin",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Recorded from a named result source with a retrieval timestamp. A value reconstructed by the engine, or inferred from a rating, is not an observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Result from the subject team's perspective. Required for the Colley witness and for Brier/log-loss diagnostics, which are result-based, not margin-based.",
+      "dtype": "enum[W|L|T]",
+      "name": "game_result",
+      "needed_by": [
+        "blowout_treatment"
+      ],
+      "provenance_requirement": "Recorded from a named result source with a retrieval timestamp. A value reconstructed by the engine, or inferred from a rating, is not an observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "The rating state the week opened with, including the games-played count the subject team carried into the game. Without the count there is no low-n regime to fit, and sample_size_regularization has nothing to regularize against.",
+      "dtype": "json_object",
+      "name": "prior_rating_state",
+      "needed_by": [
+        "sample_size_regularization",
+        "weekly_movement_cap_points",
+        "recent_form_weights"
+      ],
+      "provenance_requirement": "Must be serialized as it stood at week open, from the same run that produced pregame_team_rating.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "The forward results used to score a rating out-of-sample. The primary objective is out-of-sample error, so each observation must reference the future games it is scored against, and those games must not also be in its training split.",
+      "dtype": "json_object",
+      "name": "subsequent_outcomes",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must reference game_ids present in the same dataset, so leakage is checkable rather than asserted.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Partition assignment. Must be present in the dataset rather than assigned at experiment time, so the partition is auditable and identical across runs.",
+      "dtype": "enum[training|validation|holdout]",
+      "name": "split",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must be temporally ordered: every holdout observation post-dates every training observation. A random split of sequential rating data is refused.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Named origin of the result: source system, retrieval method, and version.",
+      "dtype": "string",
+      "name": "source_provenance",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must name a source that a reviewer can independently re-query.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "When the result became observable.",
+      "dtype": "iso8601",
+      "name": "observed_at",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Recorded from a named result source with a retrieval timestamp. A value reconstructed by the engine, or inferred from a rating, is not an observation.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "When the row was ingested. Distinct from observed_at; collapsing the two hides backfill.",
+      "dtype": "iso8601",
+      "name": "recorded_at",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Ingest time. Never back-dated to match observed_at.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Version of the model that produced pregame_team_rating and expected_margin.",
+      "dtype": "string",
+      "name": "model_version",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must match a released model version, so a residual can be attributed.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "definition": "Configuration version behind the same two fields.",
+      "dtype": "string",
+      "name": "configuration_version",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Must match a released configuration version.",
+      "required": true
+    }
+  ],
+  "split_policy": {
+    "assignment": "TEMPORAL_ONLY",
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "ordering_rule": "max(event_time) of training < min(event_time) of validation, and max(event_time) of validation < min(event_time) of holdout.",
+    "random_assignment_permitted": false,
+    "random_assignment_refusal_reason": "Weekly ratings are a sequential process. A randomly assigned holdout game sits earlier in time than training games that already absorbed its result, so the measured out-of-sample error is not out-of-sample.",
+    "splits": [
+      "training",
+      "validation",
+      "holdout"
+    ],
+    "validation_use": "REGIME_SELECTION_AND_HYPERPARAMETER_SEARCH"
+  },
+  "status": "SPECIFICATION_ONLY_NO_DATASET_MOUNTED",
+  "supported_formats": [
+    "csv",
+    "tsv",
+    "json"
+  ],
+  "supporting_diagnostics": [
+    "brier_score",
+    "log_loss",
+    "probability_calibration",
+    "rating_stability",
+    "blowout_sensitivity",
+    "week_to_week_movement_distribution"
+  ],
+  "witness_composite_authorised": false
+}
