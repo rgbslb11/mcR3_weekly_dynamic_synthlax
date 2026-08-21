@@ -5,11 +5,13 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import GovernanceBlock
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.postseason import bracket_games_from_seeds, select_governed_14_team_cfp
 
 
-def test_committee_strength_tiebreak_requires_explicit_governance():
-    with pytest.raises(GovernanceBlock):
+def test_committee_strength_tiebreak_framing_is_retired():
+    """Ruling R2-COMMITTEE-TB retires the concept; both old answers are refused."""
+    with pytest.raises(GovernanceBlock, match="retired"):
         require_v3_strength_tiebreak_policy(None)
-    assert require_v3_strength_tiebreak_policy("PRESEASON_STRENGTH") == "PRESEASON_STRENGTH"
-    assert require_v3_strength_tiebreak_policy("FINAL_WEEKLY_FOOTBALL_STRENGTH") == "FINAL_WEEKLY_FOOTBALL_STRENGTH"
+    for retired in ("PRESEASON_STRENGTH", "FINAL_WEEKLY_FOOTBALL_STRENGTH"):
+        with pytest.raises(GovernanceBlock, match="retired"):
+            require_v3_strength_tiebreak_policy(retired)
 
 
 def test_cfp_uses_cg8_g5_champion_not_highest_ranked_nonchampion():

@@ -1,27 +1,68 @@
 # V3 Governance Decision Packets
 
 Prepared against `main` @ `3b46e561b8d939e10ba5d6ff2f69923d963a148e`, tested V3 baseline `6353567d`.
+Updated for the **R2 governance convergence** against audited head
+`e3e1e41bcec3b8c8e00e90087914824afaec7897`.
 
-V3 remains **EXPERIMENTAL**. Nothing in this document resolves a governance question. Each packet
-records the evidence found, the values in conflict, and the consequences of each option, so that a
-ruling can be issued from evidence rather than inferred from silence.
+V3 remains **EXPERIMENTAL**. Nothing in this document resolves a governance question on its own.
+Each packet records the evidence found, the values in conflict, and — where a Chairman ruling has
+since been issued — the ruling that closed it and the deterministic validation that had to pass
+before the corresponding blocker actually cleared.
 
-Starting blockers: **18**. Legitimately cleared: **1**. Remaining: **17**.
+## Blocker accounting
 
-The 17 remaining blockers collapse to **8 distinct rulings**, because several blocker IDs are two
-detections of one underlying decision.
+Counted by blocker ID, not by narrative. Earlier revisions of this document quoted a collapsed
+count of "distinct rulings" that matched neither the packet table below nor
+`blocker_report.summary()`; that figure is withdrawn. The three sets below are frozen in
+`blocker_report.py` and asserted for exact set equality by
+`tests/dynamic_weekly_mc_v3/test_r2_blocker_regression.py`.
 
-| Packet | Blockers covered | Disposition |
+| Checkpoint | Count | Source |
+| --- | ---: | --- |
+| R1 baseline (tested build) | 18 | `V3_BUILD_MANIFEST.json`, `blocker_report.R1_BASELINE_BLOCKERS` |
+| R1 audited live (head `e3e1e41`) | 17 | `blocker_report.R1_AUDITED_LIVE_BLOCKERS` |
+| **R2 live** | **11** | `blocker_report.R2_EXPECTED_LIVE_BLOCKERS`, live `show-blockers` |
+
+**Retired by R2 rulings (9).** Each required both an issued ruling and a passing deterministic check.
+
+| Blocker ID | Ruling | Validation that had to pass |
 | --- | --- | --- |
-| [1. Schedule provenance](#1-schedule-provenance) | `provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH`, `provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5` | 1 resolved, 1 missing artifact |
-| [2. Thirteen-game exceptions](#2-thirteen-game-schedule-exceptions) | `governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED` | Human ruling required |
-| [3. AAC division membership](#3-aac-division-membership) | `inputs.aac_divisions_csv` | Missing authoritative artifact |
-| [4. FCS source authority](#4-fcs-source-authority-and-translation) | `fcs_translation_policy`, `governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE` | Human ruling required |
-| [5. HFA baseline](#5-hfa-baseline-40-vs-35) | `hfa_baseline_points`, `governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5` | Human ruling required |
-| [6. Committee strength source](#6-committee-final-strength-tiebreak-source) | `committee_tiebreak_strength_source` | Human ruling required |
-| [7. A8/ECL ordering](#7-a8ecl-ordering-circularity) | `governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT` | Human ruling required |
-| [8. Quarterfinal mapping](#8-cfp-quarterfinal-mapping) | `governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT` | Human ruling required |
-| [9. Calibration program](#9-rerating-calibration-program) | six `calibration.*`, `governance.GAME_SD_CALIBRATION_OPEN` | Calibration experiment required |
+| `provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5` | `R2-SCHED-V5-AUTH` | Certified Games content reproduces; mounted file is not the superseded v4 binary |
+| `governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED` | `R2-SCHED-13GAME` | Exactly 13 W1–W14 REG rows for each of the five; no duplicate `game_id`; no duplicate opponent/date; no CCG template counted; no unapproved team above 12 |
+| `hfa_baseline_points` | `R2-HFA-3P5` | Config carries 3.5; legacy 4.0 refused by name |
+| `governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5` | `R2-HFA-3P5` | Same ruling; both register rows left unedited |
+| `fcs_translation_policy` | `R2-FCS-ELO-1250` | Config carries `FIXED_ELO_1250`; Board equivalents and transform inversion refused |
+| `governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE` | `R2-FCS-ELO-1250` | Build Manifest preserved unedited and recorded as superseded for V3 use |
+| `committee_tiebreak_strength_source` | `R2-COMMITTEE-TB` | Obsolete field null and refused if populated; structured chain configured |
+| `inputs.aac_divisions_csv` | `R2-AAC-SUCCESSOR` | Successor artifact mounted and digest-verified; legacy artifact recorded missing, not reproduced |
+| `governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT` | `R2-A8-ECL-ORDER` | TB-3 board proven post-CCG and pre-G5-seeding |
+
+**Opened by R2 (3).** Newly issued governance names artifacts and mathematics this repository does
+not hold. Each is a narrow gate replacing an assumption, not a regression.
+
+| Blocker ID | Why |
+| --- | --- |
+| `inputs.board_of_record_i_k` | `R2-BOARD-OF-RECORD` names Board I-K; it is not mounted and Board I-H may not substitute |
+| `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED` | `R2-SOS` fixes the weights; no authority defines the OWP/OOWP denominator, exclusion or instance weighting |
+| `governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED` | `R2-FCS-ELO-1250` fixes an Elo; no register maps it onto the unified neutral-points axis |
+
+**Carried forward, unchanged (8).** Six `calibration.*` fields, `governance.GAME_SD_CALIBRATION_OPEN`
+and `governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT`. No ruling substitutes for calibration
+evidence that does not exist, or for a bracket edge the official artifact never states.
+
+| Packet | Blockers covered | Status after R2 |
+| --- | --- | --- |
+| [1. Schedule provenance](#1-schedule-provenance) | `provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH`, `provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5` | **Both resolved** — 1a by reconciliation, 1b by `R2-SCHED-V5-AUTH` |
+| [2. Thirteen-game exceptions](#2-thirteen-game-schedule-exceptions) | `governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED` | **Resolved** — `R2-SCHED-13GAME` |
+| [3. AAC division membership](#3-aac-division-membership) | `inputs.aac_divisions_csv` | **Resolved** — `R2-AAC-SUCCESSOR` |
+| [4. FCS source authority](#4-fcs-source-authority-and-translation) | `fcs_translation_policy`, `governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE` | **Resolved** — `R2-FCS-ELO-1250`; opens the unified-points scale gate |
+| [5. HFA baseline](#5-hfa-baseline-40-vs-35) | `hfa_baseline_points`, `governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5` | **Resolved** — `R2-HFA-3P5` selects 3.5 |
+| [6. Committee strength source](#6-committee-final-strength-tiebreak-source) | `committee_tiebreak_strength_source` | **Resolved by retirement** — `R2-COMMITTEE-TB` |
+| [7. A8/ECL ordering](#7-a8ecl-ordering-circularity) | `governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT` | **Resolved** — `R2-A8-ECL-ORDER` |
+| [8. Quarterfinal mapping](#8-cfp-quarterfinal-mapping) | `governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT` | **Narrowed, still open** — `R2-NO-RESEED` removes reseeding; slot edges remain unstated |
+| [9. Calibration program](#9-rerating-calibration-program) | six `calibration.*`, `governance.GAME_SD_CALIBRATION_OPEN` | **Open** — objective now governed by `R2-CAL-OBJECTIVE`; no data mounted |
+| [10. Board of Record](#10-board-of-record) | `inputs.board_of_record_i_k` | **Open** — artifact not mounted |
+| [11. SOS semantics](#11-sos-denominator-semantics) | `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED` | **Open** — weights ruled, semantics not |
 
 ---
 
@@ -54,7 +95,12 @@ Reproduce:
 python -m pytest tests/dynamic_weekly_mc_v3/test_provenance_reconciliation.py -v
 ```
 
-### 1b. Binary hash — MISSING AUTHORITATIVE DATA
+### 1b. Binary hash — RESOLVED by ruling `R2-SCHED-V5-AUTH`
+
+**Resolution.** Schedule v5 is authoritative, and a binary-copy identity difference does not block V3 when the source is the verified v5 schedule and its certified Games content reproduces. It does. Option A below was not taken and Option B was not taken either: the registered hash `db26c3ff…` is **not** rewritten to match the mounted copy. All three binary hashes stay recorded, `provenance_anomalies` still reports the mismatch as an observation, and only `blocking_provenance_anomalies` narrows. A content-certification failure still blocks, and a mounted superseded v4 artifact still blocks.
+
+The evidence below is unchanged.
+
 
 **Finding.** Source-copy mismatch. The fixtures are intact; the artifact custody chain is not.
 
@@ -85,6 +131,9 @@ v2.5 certifies `db26c3ff…`. Two governed registers disagree about which bytes 
 
 ## 2. Thirteen-game schedule exceptions
 
+**RESOLVED by ruling `R2-SCHED-13GAME`.** ARK, GAST, UK, VAN and WVU are approved. The blocker cleared only after `schedule_exceptions.validate_13_game_exceptions` confirmed, against the mounted schedule, that each carries exactly 13 W1–W14 REG rows, that no CCG template row is countable, that no `game_id` or opponent/date pair repeats, and that no unapproved team sits above 12 games. `OI-SCHED-13` and `RAT-002` are left unedited; the ruling supersedes RAT-002's recorded safe default rather than changing it.
+
+
 **Evidence.** Open item `OI-SCHED-13` is **OPEN**, P0, owner Chairman, naming five teams:
 **ARK, GAST, UK, VAN, WVU**. Recommended action: "Resolve or explicitly ratify exception."
 
@@ -109,6 +158,9 @@ both CCG participant selection (R-CCG-01) and A8/ECL standings championships (R-
 ---
 
 ## 3. AAC division membership
+
+**RESOLVED by ruling `R2-AAC-SUCCESSOR`** — Option A below was impossible and Option B was declined. Instead a **new** governed artifact was issued: `aac_divisions_2026_R2_SUCCESSOR.csv`, 554 bytes, sha256 `92fd7f78…`, derived under R-CCG-07 from the hash-verified canonical master, with a provenance sidecar recording source rule, source artifact hashes, columns, `recorded_at` and successor status. The legacy 577-byte artifact is recorded `NOT_MOUNTED_IN_REPOSITORY` with `reproduction_attempted: false` — its lineage is preserved and its digest was never faked. The gate accepts either digest and nothing else.
+
 
 **Evidence — the ratification exists.**
 
@@ -154,6 +206,13 @@ themselves *are* present in the canonical master; it is the ratified artifact th
 
 ## 4. FCS source authority and translation
 
+**RESOLVED by ruling `R2-FCS-ELO-1250`** — with one narrow gate opened in its place.
+
+Both sub-questions below are now answered: the source is authorised for V3 use (the Build Manifest's `Model use authorized: FALSE` is preserved unedited and recorded as superseded), and the treatment is a fixed **Elo 1250** requiring no later toggle. The Board equivalents (`0.294` / `0.297` / `0.297514`) are refused as a conversion rule and `invert_board_transform` raises rather than computing.
+
+**What the ruling does not settle.** V3 rates teams in unified neutral points, and no governed register maps Elo onto that axis. That gap is surfaced as `governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED` rather than filled by inverting the transform the same ruling forbids.
+
+
 Two separate questions, both currently negative.
 
 **A. Is the source authorized for model use?** No. The POWER_CRUNCH Build Manifest records
@@ -182,36 +241,58 @@ affected across the 121 FBS / 13 FCS split.
 
 ## 5. HFA baseline: 4.0 vs 3.5
 
-**No ruling is made here. Both values are presented with consequences.**
+**RESOLVED by ruling `R2-HFA-3P5`: the V3 football-point HFA is 3.5.**
 
-| | Option A | Option B |
+### What the registers actually say
+
+An earlier revision of this packet described the two values as symmetrically authoritative —
+"both are marked authoritative in their own registers", and "the conflict is genuine, not a
+stale-label artifact". That was an incomplete reading of the evidence and is corrected here.
+
+| | 4.0 | 3.5 |
 | --- | --- | --- |
-| Value | **4.0 points** | **3.5 points** |
 | Register row | `ENG-HOME-FIELD` | `SCHED-HFA-BASE` |
-| Source | `ENGINE_PARAMS` — cfb_sim.py, status **VERIFIED**, "calibrated up from initial 2.4" in the Jul 13–14 sweep | Team-master locked schedule/model parameter |
-| Character | V2 legacy engine constant, empirically calibrated | Current governed schedule baseline |
+| `02_PARAMETER_REGISTER` status | **`HISTORICAL`** | `LOCKED` |
+| `02_PARAMETER_REGISTER` implementation status | **"conflicts with current HFA families"** | "active team-edge baseline" |
+| `02_PARAMETER_REGISTER` validation status | **`NOT CURRENT`** | `SOURCE-VERIFIED` |
+| `02_PARAMETER_REGISTER` note | **"Legacy drive-engine HFA; do not conflate with schedule HFA or Elo HFA"** | `team_home_edge_points = modifier * 3.5` |
+| `ENGINE_PARAMS` sheet | `HOME_FIELD_PTS = 4`, status `VERIFIED`, "Calibrated up from initial 2.4" | not present |
 
-Both are marked authoritative in their own registers. `13_SUPERSESSION_LOG` contains **no** entry
-superseding either. The conflict is genuine, not a stale-label artifact.
+So 4.0 is `VERIFIED` **in `ENGINE_PARAMS` only**. The master parameter register carries it as
+`HISTORICAL` / `NOT CURRENT` and warns in as many words against conflating it with the schedule
+HFA. The evidence was never symmetric, and the register's own note anticipated the ruling.
 
-**Consequences.**
+### What the ruling does and does not change
 
-| | Option A (4.0) | Option B (3.5) |
-| --- | --- | --- |
-| V2.1 comparability | Preserved. The V2.1 static control was produced under 4.0, so V3-vs-V2.1 deltas isolate the dynamic-rerating change. | Broken. Every V3-vs-V2.1 delta blends a rerating effect with a 0.5-point HFA shift, and the control can no longer serve as a clean baseline. |
-| Governed-input consistency | V3 would run on an engine constant that contradicts the locked schedule parameter. | Consistent with the current governed schedule baseline. |
-| Effect on margins | Home margin 0.5 points higher than Option B in every home game. Roughly 736 regular-season games per path; the shift is systematic, not noise, and moves home win rate up by a small but consistent amount. | Correspondingly lower. |
-| Historical baselines altered | None. V2.1 control is immutable under both options. | None. |
-| Affected files | `config/dynamic_weekly_mc_v3/v3_experimental.json` (`hfa_baseline_points`), `test_v2_control.py`, any rerating tests asserting margin behaviour. | Same. |
+* **V3 football-point HFA is 3.5.** `hfa_baseline_points` carries it; `require_governed_hfa`
+  refuses 4.0 by name, citing its `HISTORICAL` / `NOT CURRENT` status rather than merely
+  reporting a mismatch.
+* **4.0 is preserved, not deleted.** Both register rows are unedited. `hfa.HFA_REGISTER` records
+  4.0 with its status so the historical value stays visible.
+* **The Elo layer is untouched.** `CCG-HFA_ELO = 65` (LOCKED under R-CCG-06 / DEF-CCG-6) is a
+  separate parameter in a separate layer. The ruling does not globally replace every HFA-shaped
+  value with 3.5, and a test asserts the register still reads
+  `{SCHED-HFA-BASE: 3.5, ENG-HOME-FIELD: 4.0, CCG-HFA_ELO: 65.0}`.
+* **V2.1 is unchanged.** The static control was produced under the legacy engine and its digest
+  `39055662…` is unmodified. A V3-versus-V2.1 comparison now blends a rerating effect with a
+  0.5-point HFA difference; that is a consequence of the ruling and is recorded, not hidden.
 
-Note that both blocker IDs — `hfa_baseline_points` and
-`governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5` — are cleared by this single ruling.
+`13_SUPERSESSION_LOG` still contains no entry superseding either row. The ruling is the
+superseding authority, and it is recorded in `rulings.py` rather than written into the workbook.
 
-**Execution blocked:** yes. `hfa_baseline_points` stays `null`.
+**Execution blocked:** no. Both `hfa_baseline_points` and
+`governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5` are cleared by this single ruling.
 
 ---
 
 ## 6. Committee final-strength tiebreak source
+
+**RESOLVED BY RETIREMENT — ruling `R2-COMMITTEE-TB`.** Neither option below was selected, because the question itself presumed a board that ranks on a hidden number. The field `committee_tiebreak_strength_source` stays `null` and is refused if populated; `require_v3_strength_tiebreak_policy` now raises for every input including its two former answers. In its place `committee_tiebreak_policy` carries the deterministic chain COMMITTEE-TB1 head-to-head, TB2 common-opponent performance, TB3 SOS, TB4 previous week's board, and the weekly product publishes a Top 25 ordering and the current bracket only.
+
+One edge case stays fail-closed and only that one: on the first November board there is no previous board for TB4, and no repository authority designates a fallback. Board I-K is the Board of Record but nothing names it as the TB4 stand-in, so `break_committee_tie` raises there rather than substituting one.
+
+The evidence below is unchanged and still explains why the original framing was unusable.
+
 
 **Use point.** `committee.rank_committee_results_first` orders on
 `(-win_pct, -opponent_win_pct, -conference_champion, -strength_tiebreak, team)`. `strength_tiebreak`
@@ -248,6 +329,11 @@ source's behaviour at an exact four-way tie.
 
 ## 7. A8/ECL ordering circularity
 
+**RESOLVED by ruling `R2-A8-ECL-ORDER`** — and not by picking any of the three options below. The cycle is broken causally: A8 and ECL play no CCG, each determines its own champion independently, and A8/ECL-TB3 consults the committee board computed **after** the seven CCGs and **before** any G5 automatic-bid seeding. That board is built from completed football results, so it never consumes the champion flag it is being used to resolve, and the closing edge of the cycle is gone. `require_post_ccg_board` refuses a board that is pre-CCG or post-seeding. Cross-conference A8-versus-ECL comparison is refused outright.
+
+The cycle map below is preserved as the superseded reading that motivated the ruling.
+
+
 **The cycle.** Mapped explicitly in `ordering.py`:
 
 ```
@@ -282,6 +368,11 @@ a run must not be blocked by a hazard that never materializes, nor proceed throu
 
 ## 8. CFP quarterfinal mapping
 
+**NARROWED by ruling `R2-NO-RESEED`, still open.** There is no reseeding, so `RESEED_BY_ORIGINAL_SEED` is superseded and refused. Every edge the official artifact actually states is now bound: byes 1–4, play-in G1 = 12v13 and G2 = 11v14, first round 5v12 / 6v11 / 7v10 / 8v9, quarterfinal hosts E=1 F=2 G=3 H=4, semifinals W(E)vW(H) and W(F)vW(G), and P-3.
+
+What the artifact still never states is **which first-round winner fills E, F, G or H**. The full `.xlsx` was re-inspected for this convergence — five sheets, no cell comments, no hidden content — and the string `E = 1 v W(R1); F = 2 v W(R1); G = 3 v W(R1); H = 4 v W(R1)` is the whole of it. Binding an edge here would invent bracket topology, which the same ruling forbids, so `require_governed_quarterfinal_slot_edges` fails closed and `governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT` remains live.
+
+
 **What is governed.** The Playoff Calendar `Bracket_Flow` sheet fixes:
 
 ```
@@ -315,6 +406,13 @@ would silently pick a bracket shape the sources do not endorse.
 ---
 
 ## 9. Rerating calibration program
+
+**OBJECTIVE now governed by ruling `R2-CAL-OBJECTIVE`; the blockers remain.** The primary criterion is out-of-sample **Baxter Rating RMSE**, minimised. Colley Matrix and SRS are independent witnesses reported separately, and any weighted composite of the three is refused — ACC-EXT-12 records that blend as PROPOSAL ONLY / NOT ADOPTED. Training, validation and holdout stay separated. Promotion requires a named authority, either governed calibration evidence from the holdout split or explicit Chairman justification, **and** the human approval token; the record names which was used.
+
+Dataset registration was hardened after the previous audit: format-aware CSV/TSV/JSON parsing, unknown format refused rather than guessed, invalid encoding refused, a governed observation allowlist, and substring matching that catches `public_money_percentage`, `bet_pct`, `sharp_money` and a TSV header that a comma parser would have read as one column.
+
+No historical observation set is mounted, so all six coefficients stay `null` and registration still returns **`BLOCKED_ON_CALIBRATION_DATA`**.
+
 
 **No canonical coefficients are chosen.** All six values remain `null` in the canonical config.
 
@@ -361,34 +459,91 @@ schedule carries fixtures, not results. No experiment can be scored. Per the wor
 
 ---
 
-## Recommended order for remaining rulings
+## 10. Board of Record
 
-Sequenced so that each ruling is decidable without depending on a later one.
+**OPEN — opened by ruling `R2-BOARD-OF-RECORD`.**
 
-1. **Schedule binary provenance (1b)** and **13-game exceptions (2)** — independent of everything
-   else, and both concern whether the input set is trustworthy at all. The 13-game question also
-   feeds conference win%, which several later rules key on.
-2. **AAC membership (3)** — mechanical if the artifact is located; unblocks AAC CCG selection.
-3. **HFA (5)** — independent, and it fixes the margin scale every later calibration is measured on.
-   Ruling on calibration before HFA would calibrate against a scale that may then shift.
-4. **FCS authority and translation (4)** — independent; determines whether 13 entities affect ratings.
-5. **Committee strength source (6)** — depends on the HFA and rerating scale being settled if
-   `FINAL_WEEKLY_FOOTBALL_STRENGTH` is chosen.
-6. **A8/ECL ordering (7)** — depends on the committee board definition from 6.
-7. **Quarterfinal mapping (8)** — independent of 1–7, but only matters once a field can be selected.
-8. **Calibration program (9)** — last, and gated on calibration data existing at all. Requires 5 and
-   6 settled first.
+The Board of Record is `2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx` (Board I-K R1–R3 FINAL
+/ re-issued governance lineage). Board I-H must **not** be substituted for it.
+
+That artifact is not mounted in this repository. What is present is Board I-H v2, as sheet
+`08_BOARD_IH_TOP25` of Model Parameters v2.5, and it stays exactly where it is as historical and
+superseded evidence.
+
+Board rows are load-bearing for four separate governed decisions: CCG-TB3 (the last board before
+Championship Saturday), COMMITTEE-TB4 (the previous week's board), A8/ECL-TB3 (the post-CCG board),
+and CFP selection itself. `require_board_of_record` therefore fails closed, and
+`reject_historical_board_substitution` refuses any other board offered in its place.
+
+**Required to clear:** mount the named artifact.
+
+**Execution blocked:** yes — `inputs.board_of_record_i_k`.
+
+---
+
+## 11. SOS denominator semantics
+
+**OPEN — opened by ruling `R2-SOS`.**
+
+The ruling fixes the committee SOS definition exactly: `SOS = 0.25 * WP + 0.50 * OWP + 0.25 * OOWP`.
+One quantity, one direction, one definition. Mean opponent Elo is not it, and the retired
+`schedule_path_score` + `resume_ceiling_index` double count is not revived (both RETIRED in the
+Bracket Regime Deferred Register; DEF-2 records `sos_index` as "REPORTED, never scored").
+
+What no repository authority defines is what the weights are applied *to*:
+
+1. does OWP exclude the rated team's own games from each opponent's record?
+2. is an opponent played twice weighted once or twice?
+3. does OOWP exclude the rated team when averaging each opponent's OWP?
+
+`18_ACC_POLICY_REFERENCE` comes closest and does not answer them: ACC-EXT-03 (alternate game-count
+tied sets) and ACC-EXT-08/09 (common-opponent and sweep cascades) are all recorded **OPEN —
+REQUIRES RULING**, and ACC-EXT-10 records that the external vendor ranking the ACC policy names
+"does not disclose variables, weights, or formula".
+
+**These are not cosmetic.** On the Chairman's own common-opponent example — Lehigh 11-1 and USF
+11-1, each 2-1 against Harvard 7-5, Rice 4-8 and UCF 9-2 — the two resumes are *numerically
+identical* under question 1 answered "no", and separate cleanly under "yes", because beating a team
+lowers that team's record for you and raises it for the other. A deterministic fixture reproducing
+all five records asserts both outcomes. Choosing an answer here would silently pick a committee.
+
+**Required to clear:** issue the OWP/OOWP denominator, opponent-exclusion and schedule-instance
+weighting semantics.
+
+**Execution blocked:** yes — `governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED`.
+
+---
+
+## Remaining work, by blocker ID
+
+Sequenced so each item is decidable without depending on a later one. Listed by blocker ID rather
+than by a collapsed count.
+
+1. **`inputs.board_of_record_i_k`** — mount the named Board-of-Record artifact. Four governed
+   tiebreak paths and CFP selection all wait on it, so nothing downstream is decidable first.
+2. **`governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED`** — issue the SOS semantics. They
+   feed COMMITTEE-TB2, COMMITTEE-TB3 and A8/ECL-TB2.
+3. **`governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT`** — state the four R1-winner to
+   quarterfinal slot edges, or supply an artifact that does. Independent of 1 and 2.
+4. **`governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED`** — issue an
+   Elo-to-unified-points scale rule for the 13 schedule-only FCS entities.
+5. **The six `calibration.*` fields and `governance.GAME_SD_CALIBRATION_OPEN`** — last, and gated
+   on calibration data existing at all. The objective is now governed; the observations are not
+   mounted.
+
+One further edge case is fail-closed without being an execution blocker: `COMMITTEE-TB4` on the
+first November board, where no previous board exists and no authority designates a fallback.
 
 ## Is V3 ready for a governed experimental 10,000-path run?
 
-**No — and not merely for want of rulings.** Two independent obstacles stand beyond the eight
-decisions above:
+**No.** Three independent obstacles stand beyond the five items above:
 
-* **No calibration data exists.** Even with all eight rulings issued, the six rerating coefficients
+* **The Board of Record is not mounted.** No governed selection or tiebreak can run on real rows.
+* **No calibration data exists.** Even with every ruling issued, the six rerating coefficients
   would still be unset, because there is nothing to calibrate against.
 * **Production execution is not implemented.** `cli.py` reaches the full-run gate and raises by
-  design: "Full 10,000-path + postseason execution is intentionally unreachable until the governed
-  rerating and remaining data policies are unblocked and implemented."
+  design, and this convergence did not change that.
 
-The structural harness passes and the fail-closed gates are real, so the path to a run is clear —
-but the run itself is gated on rulings, then data, then implementation, in that order.
+The structural harness passes, 191 V3 tests and 250 tests overall are green, and the fail-closed
+gates are real and adversarially tested. V3 remains **EXPERIMENTAL**, every calibration value
+remains `null`, no probabilities were produced and no simulation was run.

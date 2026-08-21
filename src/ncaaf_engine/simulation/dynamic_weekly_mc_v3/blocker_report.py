@@ -20,6 +20,7 @@ from typing import Iterable
 DISPOSITIONS = (
     "RESOLVED_BY_EXISTING_AUTHORITY",
     "RESOLVED_BY_DETERMINISTIC_RECONCILIATION",
+    "RESOLVED_BY_CHAIRMAN_RULING",
     "HUMAN_RULING_REQUIRED",
     "MISSING_AUTHORITATIVE_DATA",
     "CALIBRATION_EXPERIMENT_REQUIRED",
@@ -29,6 +30,7 @@ DISPOSITIONS = (
 RESOLVED_DISPOSITIONS = (
     "RESOLVED_BY_EXISTING_AUTHORITY",
     "RESOLVED_BY_DETERMINISTIC_RECONCILIATION",
+    "RESOLVED_BY_CHAIRMAN_RULING",
 )
 
 
@@ -39,10 +41,16 @@ class BlockerDisposition:
     evidence: str
     required_to_clear: str
     governance_group: str
+    #: The R2 ruling that retired this blocker, when one did.
+    ruling: str | None = None
 
     def __post_init__(self) -> None:
         if self.disposition not in DISPOSITIONS:
             raise ValueError(f"Unknown disposition {self.disposition!r} for {self.blocker_id}")
+        if self.disposition == "RESOLVED_BY_CHAIRMAN_RULING" and not self.ruling:
+            raise ValueError(
+                f"{self.blocker_id} claims resolution by ruling but names no ruling"
+            )
 
     @property
     def resolved(self) -> bool:
@@ -60,6 +68,9 @@ GROUP_SCHEDULE_13 = "THIRTEEN_GAME_EXCEPTIONS"
 GROUP_BRACKET = "POSTSEASON_BRACKET_MAPPING"
 GROUP_A8_ECL = "A8_ECL_ORDERING"
 GROUP_CALIBRATION = "RERATING_CALIBRATION_PROGRAM"
+GROUP_BOARD_OF_RECORD = "BOARD_OF_RECORD_ARTIFACT"
+GROUP_SOS_SEMANTICS = "SOS_DENOMINATOR_SEMANTICS"
+GROUP_FCS_SCALE = "FCS_ELO_TO_UNIFIED_POINTS_SCALE"
 
 
 DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
@@ -102,56 +113,61 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     # --- governed input / policy -------------------------------------------
     BlockerDisposition(
         blocker_id="hfa_baseline_points",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "Two verified-but-conflicting values: ENG-HOME-FIELD 4.0 (cfb_sim.py, V2 "
-            "legacy, calibrated up from 2.4) and SCHED-HFA-BASE 3.5 (current governed "
-            "schedule/model parameter). No superseding ruling exists in 13_SUPERSESSION_LOG."
+            "Ruling R2-HFA-3P5 sets the V3 football-point HFA to 3.5. ENG-HOME-FIELD 4.0 "
+            "stays recorded HISTORICAL / NOT CURRENT and CCG-HFA_ELO 65 stays a separate Elo "
+            "parameter; neither register row was edited. "
         ),
-        required_to_clear="Chairman ruling selecting 4.0 or 3.5 as the V3 baseline.",
+        required_to_clear=(
+            "Cleared: config carries 3.5 and the legacy value is refused by name. "
+        ),
         governance_group=GROUP_HFA,
+        ruling="R2-HFA-3P5",
     ),
     BlockerDisposition(
         blocker_id="fcs_translation_policy",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "R-FCS-RATING-01 fixes FCS sim_rating 1397.51 and records a board equivalent "
-            "of 0.297514, but the POWER_CRUNCH Build Manifest states 'Board columns for "
-            "FCS: BLANK - Board-equivalent recorded not issued'. No governed rule converts "
-            "an FCS rating into unified neutral points."
+            "Ruling R2-FCS-ELO-1250 fixes FCS at Elo 1250 with no toggle. No Board equivalent "
+            "and no inverted Elo/Board transform is used. "
         ),
         required_to_clear=(
-            "An explicit translation rule, issued rather than merely recorded. "
-            "Inverting the Elo/Board transform would be an ad hoc conversion."
+            "Cleared: config carries FIXED_ELO_1250. "
         ),
         governance_group=GROUP_FCS,
+        ruling="R2-FCS-ELO-1250",
     ),
     BlockerDisposition(
         blocker_id="committee_tiebreak_strength_source",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "The COMMITTEE sheet is marked UNPATCHED with defect D-09 'No deterministic "
-            "tiebreak rule', and instructs that it not be wired in until patched. Neither "
-            "PRESEASON_STRENGTH nor FINAL_WEEKLY_FOOTBALL_STRENGTH is designated."
+            "Ruling R2-COMMITTEE-TB retires the PRESEASON_STRENGTH / "
+            "FINAL_WEEKLY_FOOTBALL_STRENGTH framing outright and replaces it with the "
+            "deterministic chain TB1 head-to-head, TB2 common-opponent performance, TB3 SOS, "
+            "TB4 previous week's board. "
         ),
-        required_to_clear="Ruling designating the final-strength tiebreak source.",
+        required_to_clear=(
+            "Cleared: the obsolete field stays null and is refused if populated; "
+            "committee_tiebreak_policy carries the structured chain. "
+        ),
         governance_group=GROUP_COMMITTEE,
+        ruling="R2-COMMITTEE-TB",
     ),
     BlockerDisposition(
         blocker_id="inputs.aac_divisions_csv",
-        disposition="MISSING_AUTHORITATIVE_DATA",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "R-CCG-07 ratifies an 8/8 American/Athletic split and the canonical team "
-            "master carries a matching membership (8 American, 8 Athletic, covering all "
-            "16 AAC teams). The ratified artifact aac_divisions_2026_RATIFIED.csv "
-            "(577 bytes, sha256 e0f674b4...) is registered but not mounted, and its exact "
-            "column set and ordering are unrecorded, so its digest cannot be reproduced."
+            "Ruling R2-AAC-SUCCESSOR issues aac_divisions_2026_R2_SUCCESSOR.csv (554 B, "
+            "sha256 92fd7f78...) derived under R-CCG-07 from the hash-verified canonical "
+            "master. The legacy 577-byte artifact is recorded NOT_MOUNTED_IN_REPOSITORY and "
+            "was not reproduced. "
         ),
         required_to_clear=(
-            "Supply the ratified CSV, or rule explicitly that the canonical-master-derived "
-            "membership substitutes for it."
+            "Cleared: a governed successor is mounted and digest-verified. "
         ),
         governance_group=GROUP_AAC,
+        ruling="R2-AAC-SUCCESSOR",
     ),
     # --- provenance ---------------------------------------------------------
     BlockerDisposition(
@@ -168,26 +184,32 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     ),
     BlockerDisposition(
         blocker_id="provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5",
-        disposition="MISSING_AUTHORITATIVE_DATA",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "Source-copy mismatch. The mounted workbook hashes to b0f2c2cd..., not the "
-            "registered v5 binary db26c3ff..., and is not the superseded v4 binary either. "
-            "Games-sheet content is provably certified, so the fixtures are intact and only "
-            "the artifact custody chain is broken."
+            "Ruling R2-SCHED-V5-AUTH accepts a binary source-copy difference when the "
+            "certified Games content reproduces. It does. All three historical binary hashes "
+            "(db26c3ff registered, b0f2c2cd mounted, 8d4d5112 superseded v4) are preserved "
+            "and the observation is still reported in provenance_anomalies. "
         ),
         required_to_clear=(
-            "Supply the registered v5 workbook, or ratify the mounted copy as the "
-            "authoritative binary and update the registered hash by ruling."
+            "Cleared by ruling; a content failure or a mounted v4 artifact still blocks. "
         ),
         governance_group=GROUP_SCHEDULE_PROV,
+        ruling="R2-SCHED-V5-AUTH",
     ),
     # --- governance / rules -------------------------------------------------
     BlockerDisposition(
         blocker_id="governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
-        disposition="HUMAN_RULING_REQUIRED",
-        evidence="Same underlying decision as hfa_baseline_points; detected from the parameter register.",
-        required_to_clear="Single HFA ruling clears both entries.",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
+        evidence=(
+            "Same ruling. The two register values still differ and are preserved; the ruling "
+            "makes the difference non-blocking rather than editing either row. "
+        ),
+        required_to_clear=(
+            "Cleared by the single HFA ruling. "
+        ),
         governance_group=GROUP_HFA,
+        ruling="R2-HFA-3P5",
     ),
     BlockerDisposition(
         blocker_id="governance.GAME_SD_CALIBRATION_OPEN",
@@ -198,24 +220,32 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     ),
     BlockerDisposition(
         blocker_id="governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "Open item OI-SCHED-13 is OPEN for ARK, GAST, UK, VAN, WVU. Ratification packet "
-            "RAT-002 carries no chairman_decision, and its recorded safe default if deferred "
-            "is explicitly 'Block final season run'."
+            "Ruling R2-SCHED-13GAME approves ARK, GAST, UK, VAN, WVU. Deterministic "
+            "validation confirms exactly 13 W1-W14 REG rows each, no duplicate game_id, no "
+            "duplicate opponent/date artefact, no CCG template counted, and no unapproved "
+            "team above 12. "
         ),
-        required_to_clear="Chairman decision on RAT-002: correct the schedules or ratify the exceptions.",
+        required_to_clear=(
+            "Cleared: ruling plus passing validation. OI-SCHED-13 and RAT-002 are left "
+            "unedited. "
+        ),
         governance_group=GROUP_SCHEDULE_13,
+        ruling="R2-SCHED-13GAME",
     ),
     BlockerDisposition(
         blocker_id="governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
-        disposition="HUMAN_RULING_REQUIRED",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
         evidence=(
-            "POWER_CRUNCH Build Manifest records 'Model use authorized: FALSE'. No superseding "
-            "authorization exists. This value must not be overridden."
+            "Ruling R2-FCS-ELO-1250 supersedes the POWER_CRUNCH Build Manifest 'Model use "
+            "authorized: FALSE' for V3 use. The manifest is preserved unedited. "
         ),
-        required_to_clear="Explicit superseding authorization for model use of the FCS source.",
+        required_to_clear=(
+            "Cleared by ruling; the superseded record remains visible. "
+        ),
         governance_group=GROUP_FCS,
+        ruling="R2-FCS-ELO-1250",
     ),
     BlockerDisposition(
         blocker_id="governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
@@ -231,15 +261,68 @@ DISPOSITION_REGISTER: tuple[BlockerDisposition, ...] = (
     ),
     BlockerDisposition(
         blocker_id="governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+        disposition="RESOLVED_BY_CHAIRMAN_RULING",
+        evidence=(
+            "Ruling R2-A8-ECL-ORDER breaks the cycle causally: the TB-3 board is computed "
+            "after the seven CCGs and before any G5 automatic-bid seeding, so it never "
+            "consumes the champion flag it is resolving. The historical cycle is preserved in "
+            "ordering.py as the superseded reading. "
+        ),
+        required_to_clear=(
+            "Cleared by causal sequencing, not by choosing a tiebreak. "
+        ),
+        governance_group=GROUP_A8_ECL,
+        ruling="R2-A8-ECL-ORDER",
+    ),
+    # --- opened by R2 convergence -------------------------------------------
+    #
+    # Newly issued governance names artifacts and mathematics this repository
+    # does not hold. Each entry below is a gate that did not exist before,
+    # surfaced narrowly rather than assumed away.
+    BlockerDisposition(
+        blocker_id="inputs.board_of_record_i_k",
+        disposition="MISSING_AUTHORITATIVE_DATA",
+        evidence=(
+            "Ruling R2-BOARD-OF-RECORD names "
+            "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx as Board of Record and forbids "
+            "substituting Board I-H. That artifact is not mounted; Board I-H v2 is present "
+            "only as sheet 08_BOARD_IH_TOP25 and stays historical evidence."
+        ),
+        required_to_clear=(
+            "Mount the named Board-of-Record artifact. CCG-TB3, COMMITTEE-TB4, A8_ECL-TB3 and "
+            "CFP selection all need real board rows."
+        ),
+        governance_group=GROUP_BOARD_OF_RECORD,
+    ),
+    BlockerDisposition(
+        blocker_id="governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
         disposition="HUMAN_RULING_REQUIRED",
         evidence=(
-            "TB-ECL/A8 resolves tied A8/ECL standings races via the FINAL committee board, "
-            "while the board's ordering key includes conference_champion and CG-8 routes the "
-            "G5 auto-bid through champion status. The cycle is structural; it binds only when "
-            "a race survives TB-1 and TB-2."
+            "Ruling R2-SOS fixes the weights 0.25 WP / 0.50 OWP / 0.25 OOWP, but no repository "
+            "authority defines whether OWP excludes the rated team's own games, whether a twice "
+            "played opponent counts twice, or whether OOWP excludes the rated team. On the "
+            "Chairman's own common-opponent example the two resumes are numerically identical "
+            "under one answer and separate cleanly under the other."
         ),
-        required_to_clear="Ruling selecting a deterministic ordering that breaks the cycle.",
-        governance_group=GROUP_A8_ECL,
+        required_to_clear=(
+            "Issue the OWP/OOWP denominator, opponent-exclusion and schedule-instance "
+            "weighting semantics. The weights alone do not determine a committee."
+        ),
+        governance_group=GROUP_SOS_SEMANTICS,
+    ),
+    BlockerDisposition(
+        blocker_id="governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
+        disposition="HUMAN_RULING_REQUIRED",
+        evidence=(
+            "Ruling R2-FCS-ELO-1250 fixes FCS at Elo 1250. The V3 engine rates teams in unified "
+            "neutral points, and no governed register maps the Elo layer onto that axis. The "
+            "only candidate is the POWER_CRUNCH Elo/Board transform, which the same ruling "
+            "forbids inverting."
+        ),
+        required_to_clear=(
+            "Issue an explicit Elo-to-unified-points scale rule for schedule-only FCS entities."
+        ),
+        governance_group=GROUP_FCS_SCALE,
     ),
 )
 
@@ -267,4 +350,84 @@ def summary(register: Iterable[BlockerDisposition] | None = None) -> dict[str, o
         "distinct_remaining_rulings": sorted(
             {e.governance_group for e in entries if not e.resolved}
         ),
+    }
+
+
+# --- historical blocker states, preserved -------------------------------------
+#
+# Counts move as governance advances. These two sets are what the record said at
+# each checkpoint, and they are frozen so a regression test can prove exactly
+# which blockers moved rather than trusting a total.
+
+#: The 18 blockers carried by the tested V3 baseline (V3_BUILD_MANIFEST.json).
+R1_BASELINE_BLOCKERS: frozenset[str] = frozenset(
+    {
+        "calibration.weekly_performance_residual_coefficient",
+        "calibration.weekly_movement_cap_points",
+        "calibration.recent_form_weights",
+        "calibration.blowout_treatment",
+        "calibration.game_sd_points",
+        "calibration.sample_size_regularization",
+        "hfa_baseline_points",
+        "fcs_translation_policy",
+        "committee_tiebreak_strength_source",
+        "inputs.aac_divisions_csv",
+        "provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH",
+        "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5",
+        "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+        "governance.GAME_SD_CALIBRATION_OPEN",
+        "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+        "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+        "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+        "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+    }
+)
+
+#: The 17 live at the independently audited PR #3 head e3e1e41, after the
+#: schedule content-hash reconciliation and before any R2 ruling.
+R1_AUDITED_LIVE_BLOCKERS: frozenset[str] = R1_BASELINE_BLOCKERS - {
+    "provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH"
+}
+
+#: Retired by the R2 rulings, each with its deterministic validation passing.
+R2_RETIRED_BLOCKERS: frozenset[str] = frozenset(
+    {
+        "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5",
+        "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+        "hfa_baseline_points",
+        "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+        "fcs_translation_policy",
+        "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+        "committee_tiebreak_strength_source",
+        "inputs.aac_divisions_csv",
+        "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT",
+    }
+)
+
+#: Opened by R2 because newly issued governance names evidence this repository
+#: does not hold. Not a regression: each replaces an assumption with a gate.
+R2_OPENED_BLOCKERS: frozenset[str] = frozenset(
+    {
+        "inputs.board_of_record_i_k",
+        "governance.OWP_OOWP_DENOMINATOR_SEMANTICS_NOT_GOVERNED",
+        "governance.FCS_FIXED_ELO_1250_TO_UNIFIED_POINTS_SCALE_NOT_GOVERNED",
+    }
+)
+
+#: DERIVED — the exact live set expected after R2 convergence.
+R2_EXPECTED_LIVE_BLOCKERS: frozenset[str] = (
+    R1_AUDITED_LIVE_BLOCKERS - R2_RETIRED_BLOCKERS
+) | R2_OPENED_BLOCKERS
+
+
+def convergence_delta() -> dict[str, object]:
+    """The exact before/after blocker accounting, computed rather than asserted."""
+    return {
+        "r1_baseline_count": len(R1_BASELINE_BLOCKERS),
+        "r1_audited_live_count": len(R1_AUDITED_LIVE_BLOCKERS),
+        "r2_expected_live_count": len(R2_EXPECTED_LIVE_BLOCKERS),
+        "retired_by_r2": sorted(R2_RETIRED_BLOCKERS),
+        "opened_by_r2": sorted(R2_OPENED_BLOCKERS),
+        "carried_forward": sorted(R1_AUDITED_LIVE_BLOCKERS - R2_RETIRED_BLOCKERS),
+        "expected_live": sorted(R2_EXPECTED_LIVE_BLOCKERS),
     }

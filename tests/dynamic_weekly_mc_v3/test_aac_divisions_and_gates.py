@@ -86,10 +86,17 @@ def test_candidate_csv_digest_does_not_equal_registered_digest():
     assert aac.candidate_csv_digest(_rows()) != aac.RATIFIED_AAC_CSV_SHA256
 
 
-def test_config_still_blocks_on_aac_divisions():
+def test_config_mounts_the_governed_successor_artifact():
+    """R2-AAC-SUCCESSOR issues a new artifact rather than faking the missing one."""
     cfg = V3Config.from_json(CONFIG)
-    assert cfg.inputs.aac_divisions_csv is None
-    assert "inputs.aac_divisions_csv" in cfg.execution_blockers()
+    assert cfg.inputs.aac_divisions_csv is not None
+    path, identity = aac.require_governed_aac_divisions_csv(cfg.inputs.aac_divisions_csv)
+    assert identity == aac.SUCCESSOR_AAC_CSV_FILENAME
+    assert "inputs.aac_divisions_csv" not in cfg.execution_blockers()
+    status = aac.aac_artifact_status(path)
+    assert status["is_governed"] is True
+    assert status["legacy"]["custody"] == "NOT_MOUNTED_IN_REPOSITORY"
+    assert status["legacy"]["reproduction_attempted"] is False
 
 
 # --- A8/ECL ordering circularity -------------------------------------------
@@ -136,13 +143,19 @@ def test_quarterfinal_mapping_is_not_inferred():
         require_governed_quarterfinal_mapping(None)
     with pytest.raises(GovernanceBlock, match="Unknown"):
         require_governed_quarterfinal_mapping("SOMETHING_PLAUSIBLE")
-    for option in QUARTERFINAL_MAPPING_OPTIONS:
-        assert require_governed_quarterfinal_mapping(option) == option
+    # Ruling R2-NO-RESEED removes reseeding from the candidate set; the option
+    # stays visible as history and is refused as a selection.
+    with pytest.raises(GovernanceBlock, match="superseded by ruling R2-NO-RESEED"):
+        require_governed_quarterfinal_mapping("RESEED_BY_ORIGINAL_SEED")
+    assert require_governed_quarterfinal_mapping("FIXED_BRACKET_MAPPING") == (
+        "FIXED_BRACKET_MAPPING"
+    )
+    assert "RESEED_BY_ORIGINAL_SEED" in QUARTERFINAL_MAPPING_OPTIONS
 
 
-def test_committee_strength_source_is_not_inferred():
-    with pytest.raises(GovernanceBlock):
-        require_v3_strength_tiebreak_policy(None)
-    with pytest.raises(GovernanceBlock):
-        require_v3_strength_tiebreak_policy("SOME_OTHER_STRENGTH")
-    assert require_v3_strength_tiebreak_policy("PRESEASON_STRENGTH") == "PRESEASON_STRENGTH"
+def test_committee_strength_source_concept_is_retired_not_inferred():
+    """The concept is gone, so every input is refused — including the old answers."""
+    for value in (None, "SOME_OTHER_STRENGTH", "PRESEASON_STRENGTH",
+                  "FINAL_WEEKLY_FOOTBALL_STRENGTH"):
+        with pytest.raises(GovernanceBlock, match="retired"):
+            require_v3_strength_tiebreak_policy(value)

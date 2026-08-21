@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from ncaaf_engine.simulation.dynamic_weekly_mc_v3.board_of_record import BOARD_OF_RECORD_FILENAME
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.config import InputPaths, ReratingCalibration, V3Config, DEFAULT_PRIOR_DECAY
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.engine import DynamicWeeklyMCV3
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.models import ScheduledGame, Team
@@ -10,6 +11,10 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3.rng import deterministic_stand
 def _cfg(tmp_path: Path) -> V3Config:
     aac = tmp_path / "aac.csv"
     aac.write_text("schedule_id,division\nA,American\nB,Athletic\n", encoding="utf-8")
+    # The R2 gates require the governed values, so the harness config carries
+    # them. Both fixture games are NEUTRAL, so HFA never enters the arithmetic.
+    board = tmp_path / BOARD_OF_RECORD_FILENAME
+    board.write_text("harness stand-in for the Board of Record artifact", encoding="utf-8")
     dummy = tmp_path / "dummy"
     return V3Config(
         model_name="SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
@@ -20,10 +25,10 @@ def _cfg(tmp_path: Path) -> V3Config:
         weeks=tuple(range(1, 17)),
         first_promoted_rerating_after_week=2,
         prior_decay=DEFAULT_PRIOR_DECAY.copy(),
-        hfa_baseline_points=0.0,
+        hfa_baseline_points=3.5,
         freeze_strength_after_selection=True,
         write_path_level_parquet=False,
-        inputs=InputPaths(dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, aac),
+        inputs=InputPaths(dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, aac, board),
         calibration=ReratingCalibration(
             weekly_performance_residual_coefficient=0.1,
             weekly_movement_cap_points=2.0,
@@ -32,8 +37,11 @@ def _cfg(tmp_path: Path) -> V3Config:
             game_sd_points=1.0,
             sample_size_regularization={"type": "TEST_ONLY_NONE"},
         ),
-        fcs_translation_policy="TEST_ONLY_NOT_USED",
-        committee_tiebreak_strength_source="PRESEASON_STRENGTH",
+        fcs_translation_policy="FIXED_ELO_1250",
+        # The retired strength-source concept stays null; the structured chain
+        # replaces it (ruling R2-COMMITTEE-TB).
+        committee_tiebreak_strength_source=None,
+        committee_tiebreak_policy="DETERMINISTIC_COMMITTEE_TIEBREAK_CHAIN_R2",
     )
 
 

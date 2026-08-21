@@ -154,9 +154,18 @@ def test_injury_signals_remain_deferred(tmp_path):
         cal.register_dataset(dataset, "DS-1")
 
 
+ADMISSIBLE_HEADER = (
+    "game_id,season,week,team,opponent,expected_margin,actual_margin,observed_at,recorded_at"
+)
+ADMISSIBLE_ROWS = (
+    "G1,2026,1,ARK,GAST,3.5,7,2026-08-29T00:00:00Z,2026-08-30T00:00:00Z\n"
+    "G2,2026,1,UK,VAN,-1.5,-3,2026-08-29T00:00:00Z,2026-08-30T00:00:00Z\n"
+)
+
+
 def test_admissible_dataset_registers_with_provenance(tmp_path):
     dataset = tmp_path / "obs.csv"
-    dataset.write_text("game_id,margin,opponent_rating\nG1,7,1550\nG2,-3,1602\n", encoding="utf-8")
+    dataset.write_text(f"{ADMISSIBLE_HEADER}\n{ADMISSIBLE_ROWS}", encoding="utf-8")
     registered = cal.register_dataset(dataset, "DS-1")
     assert registered.rows == 2
     assert registered.dataset_id == "DS-1"

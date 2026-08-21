@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from . import fcs as fcs_policy
+from . import aac_divisions, board_of_record, ccg, hfa as hfa_policy, ordering, schedule_exceptions, sos
 from .config import V3Config
 from .errors import GovernanceBlock, InputValidationError
 from .game import simulate_game
@@ -15,6 +17,7 @@ from .governance import (
     inspect_playoff_calendar,
 )
 from .phase_plan import validate_phase_plan
+from .rulings import R2_RULINGS
 from .models import GameObservation, Team, TeamPathState, WeeklyStrengthSnapshot
 from .rerating import BlockedGovernedRerater, WeeklyRerater
 
@@ -66,14 +69,47 @@ class DynamicWeeklyMCV3:
             "playoff_calendar": inspect_playoff_calendar(self.config.inputs.playoff_calendar_xlsx),
             "fcs_authority": inspect_fcs_authority(self.config.inputs.fcs_reconciled_master_xlsx),
         }
+
+        # R2 convergence evidence. Every flag is the result of a deterministic
+        # check against the mounted artifacts, never of a ruling being quoted.
+        thirteen_game = schedule_exceptions.validate_13_game_exceptions(schedule)
+        ccg_report = ccg.verify_seven_ccgs(schedule)
+        aac_status = aac_divisions.aac_artifact_status(self.config.inputs.aac_divisions_csv)
+        board_status = board_of_record.board_of_record_status(
+            self.config.inputs.board_of_record_xlsx
+        )
+        r2_evidence = {
+            "rulings_applied": [r.convergence_id for r in R2_RULINGS],
+            "hfa": hfa_policy.as_dict(),
+            "fcs": fcs_policy.GOVERNED_FCS_POLICY.as_dict(),
+            "thirteen_game_exceptions": thirteen_game,
+            "seven_ccgs": ccg_report,
+            "aac_divisions_artifact": aac_status,
+            "board_of_record": board_status,
+            "a8_ecl_ordering": ordering.resolution_as_dict(),
+            "sos_semantics_governed": sos.GOVERNED_SOS_SEMANTICS is not None,
+        }
+
         blockers = self.config.execution_blockers() + [
-            f"provenance.{x}" for x in schedule_report.get("provenance_anomalies", [])
+            f"provenance.{x}" for x in schedule_report.get("blocking_provenance_anomalies", [])
         ] + governance_blockers(
             model_parameters=governed["model_parameters"],
             bracket=governed["bracket"],
             playoff_calendar=governed["playoff_calendar"],
             fcs=governed["fcs_authority"],
+            hfa_ruling_applied=hfa_policy.hfa_conflict_resolved(self.config.hfa_baseline_points),
+            fcs_ruling_applied=(
+                self.config.fcs_translation_policy == fcs_policy.FCS_FIXED_ELO_POLICY
+            ),
+            thirteen_game_exceptions_validated=bool(thirteen_game["validated"]),
+            a8_ecl_ordering_resolved=ordering.a8_ecl_ordering_resolved(),
+            sos_semantics_governed=sos.GOVERNED_SOS_SEMANTICS is not None,
+            fcs_unified_scale_governed=(
+                fcs_policy.GOVERNED_FCS_POLICY.unified_points_equivalent is not None
+            ),
         )
+        if aac_status["blocker"]:
+            blockers.append(str(aac_status["blocker"]))
         # Stable order, no duplicate control labels.
         blockers = list(dict.fromkeys(blockers))
         return {
@@ -89,6 +125,7 @@ class DynamicWeeklyMCV3:
             "schedule": schedule_report,
             "schedule_phases": phase_counts,
             "governed_evidence": governed,
+            "r2_governance": r2_evidence,
             "execution_blockers": blockers,
             "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
         }

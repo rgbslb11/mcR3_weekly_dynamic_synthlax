@@ -15,6 +15,7 @@ from .provenance import (
     CERTIFIED_GAMES_CONTENT_SHA256,
     CONTENT_MISMATCH,
     GOVERNED_SCHEDULE_BINARY_SHA256,
+    ScheduleProvenance,
 )
 
 
@@ -217,11 +218,16 @@ def validate_schedule(path: Path, teams: dict[str, Team]) -> dict[str, object]:
     certified_content_hash = CERTIFIED_GAMES_CONTENT_SHA256
     governed_binary_hash = GOVERNED_SCHEDULE_BINARY_SHA256
     actual_binary_hash = sha256_file(path)
-    anomalies: list[str] = []
-    if content_hash != certified_content_hash:
-        anomalies.append(CONTENT_MISMATCH)
-    if actual_binary_hash != governed_binary_hash:
-        anomalies.append(BINARY_MISMATCH)
+    provenance = ScheduleProvenance(
+        content_sha256_reproduced=content_hash,
+        content_sha256_certified=certified_content_hash,
+        binary_sha256_actual=actual_binary_hash,
+        binary_sha256_governed=governed_binary_hash,
+    )
+    # The full observation is preserved; only the *blocking* subset narrows under
+    # ruling R2-SCHED-V5-AUTH.
+    anomalies = provenance.anomalies()
+    blocking = provenance.blocking_anomalies()
     return {
         "games_total": len(games),
         "regular_games": len(regular),
@@ -231,5 +237,8 @@ def validate_schedule(path: Path, teams: dict[str, Team]) -> dict[str, object]:
         "schedule_binary_sha256_actual": actual_binary_hash,
         "schedule_binary_sha256_governed": governed_binary_hash,
         "provenance_anomalies": anomalies,
+        "blocking_provenance_anomalies": blocking,
+        "governed_binary_disposition": provenance.governed_binary_disposition(),
+        "schedule_v5_authority_ruling": "R2-SCHED-V5-AUTH",
         "weeks": sorted({g.week for g in regular}),
     }

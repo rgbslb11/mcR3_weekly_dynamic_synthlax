@@ -29,6 +29,7 @@ Breaking the cycle requires a governed ruling. This module does not choose one.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Callable, Sequence
 
 from .errors import GovernanceBlock
 
@@ -151,3 +152,148 @@ def require_resolved_ordering(
             f"expected one of {sorted(RESOLUTION_OPTIONS)}."
         )
     return diagnosis
+
+
+# --- R2 causal resolution -----------------------------------------------------
+#
+# Everything above this line records the *superseded* reading, in which a tied
+# A8/ECL race consumed a board that already needed the champion flag it was
+# resolving. It is kept intact: it is the historical observation that motivated
+# the ruling, and deleting it would erase the evidence.
+#
+# Ruling R2-A8-ECL-ORDER breaks the cycle causally rather than by choosing a
+# tiebreak. The two conferences play no CCG and each determines its own champion
+# independently; the board TB-3 consults is the one computed *after* the seven
+# CCGs and *before* any G5 automatic-bid seeding is applied. Because that board
+# is built from completed football results and never from playoff seeding, it
+# does not depend on the A8/ECL champion flag, and the dependency edge that
+# closed the loop is gone.
+
+from .rulings import R2_A8_ECL  # noqa: E402
+from .errors import InputValidationError  # noqa: E402
+
+#: The governed resolution. Named separately from the historical option list so
+#: a reader cannot mistake it for one of the candidates that was never chosen.
+GOVERNED_ORDERING_RESOLUTION = "POST_CCG_BOARD_BEFORE_G5_SEEDING_R2"
+
+STANDINGS_ONLY_TIEBREAK_CHAIN = (
+    "A8_ECL-TB1_HEAD_TO_HEAD",
+    "A8_ECL-TB2_COMMON_OPPONENT_PERFORMANCE",
+    "A8_ECL-TB3_POST_CCG_BOARD_BEFORE_G5_SEEDING",
+)
+
+#: Ordered phases. A consumer that runs them out of order reintroduces the cycle.
+CAUSAL_SEQUENCE = (
+    "COMPLETE_SEVEN_CCGS",
+    "COMPUTE_POST_CCG_COMMITTEE_BOARD",
+    "RESOLVE_A8_CHAMPION",
+    "RESOLVE_ECL_CHAMPION",
+    "COMPARE_FIVE_G5_CHAMPIONS",
+    "APPLY_G5_AUTOMATIC_BID_SEEDING",
+)
+
+
+@dataclass(frozen=True)
+class PostCcgBoard:
+    """The board A8/ECL-TB3 consults.
+
+    ``g5_seeding_applied`` must be False. A board built after G5 automatic-bid
+    seeding has already consumed the champion flags this board is being used to
+    determine, which is the original cycle wearing a different name.
+    """
+
+    order: tuple[str, ...]
+    ccgs_complete: bool
+    g5_seeding_applied: bool
+
+    def rank_of(self, team: str) -> int:
+        try:
+            return self.order.index(team)
+        except ValueError:
+            raise GovernanceBlock(
+                f"{team} is absent from the post-CCG committee board"
+            ) from None
+
+
+def require_post_ccg_board(board: PostCcgBoard | None) -> PostCcgBoard:
+    if board is None:
+        raise GovernanceBlock(
+            "A8_ECL-TB3 requires the post-CCG committee board computed before G5 "
+            f"automatic-bid seeding (ruling {R2_A8_ECL.convergence_id})."
+        )
+    if not board.ccgs_complete:
+        raise GovernanceBlock(
+            "A8_ECL-TB3 board must be computed after the seven CCGs are complete; "
+            f"causal sequence is {' -> '.join(CAUSAL_SEQUENCE)}."
+        )
+    if board.g5_seeding_applied:
+        raise GovernanceBlock(
+            "A8_ECL-TB3 board must be computed before G5 automatic-bid seeding is applied. "
+            "A post-seeding board reintroduces the champion-flag dependency the ruling removes."
+        )
+    return board
+
+
+def resolve_standings_champion(
+    conference: str,
+    contenders: Sequence[str],
+    *,
+    head_to_head: Callable[[str, str], str | None],
+    common_opponent_score: Callable[[str, str], tuple[float, float]],
+    post_ccg_board: PostCcgBoard | None,
+) -> tuple[str, str]:
+    """Resolve one standings-only conference championship. Never cross-conference.
+
+    Returns ``(champion, step)``. A tie is resolved inside the conference only —
+    comparing an A8 team with an ECL team here would answer a question nobody
+    asked, and the ruling says so explicitly.
+    """
+    if conference not in STANDINGS_ONLY_CONFERENCES:
+        raise GovernanceBlock(
+            f"{conference} is not a standings-only conference; "
+            f"{list(STANDINGS_ONLY_CONFERENCES)} are."
+        )
+    listed = sorted(set(contenders))
+    if not listed:
+        raise InputValidationError(f"{conference} has no championship contenders")
+    if len(listed) == 1:
+        return listed[0], "NO_TIE"
+
+    if len(listed) == 2:
+        winner = head_to_head(listed[0], listed[1])
+        if winner is not None:
+            if winner not in listed:
+                raise InputValidationError(f"Head-to-head returned {winner!r}, not in {listed}")
+            return winner, STANDINGS_ONLY_TIEBREAK_CHAIN[0]
+
+    scored: list[tuple[float, str]] = []
+    for team in listed:
+        others = [t for t in listed if t != team]
+        values = [common_opponent_score(team, other)[0] for other in others]
+        scored.append((sum(values) / len(values), team))
+    best = max(s for s, _ in scored)
+    leaders = sorted(t for s, t in scored if s == best)
+    if len(leaders) == 1:
+        return leaders[0], STANDINGS_ONLY_TIEBREAK_CHAIN[1]
+
+    board = require_post_ccg_board(post_ccg_board)
+    return min(leaders, key=board.rank_of), STANDINGS_ONLY_TIEBREAK_CHAIN[2]
+
+
+def a8_ecl_ordering_resolved() -> bool:
+    """True: ruling R2-A8-ECL-ORDER supplies a causal, acyclic ordering."""
+    return True
+
+
+def resolution_as_dict() -> dict[str, object]:
+    return {
+        "ruling": R2_A8_ECL.convergence_id,
+        "governed_resolution": GOVERNED_ORDERING_RESOLUTION,
+        "tiebreak_chain": list(STANDINGS_ONLY_TIEBREAK_CHAIN),
+        "causal_sequence": list(CAUSAL_SEQUENCE),
+        "standings_only_conferences": list(STANDINGS_ONLY_CONFERENCES),
+        "cross_conference_comparison_permitted": False,
+        "historical_cycle_path": cycle_path(),
+        "historical_cycle_status": "SUPERSEDED_BY_R2_CAUSAL_SEQUENCING",
+        "historical_candidate_options_never_selected": list(RESOLUTION_OPTIONS),
+    }

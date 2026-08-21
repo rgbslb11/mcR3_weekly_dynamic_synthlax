@@ -74,12 +74,42 @@ class ScheduleProvenance:
         return "CONTENT_VERIFIED_BINARY_SOURCE_COPY_MISMATCH"
 
     def anomalies(self) -> list[str]:
+        """Every anomaly observed, ruling or no ruling.
+
+        This list is the historical observation and never shrinks because
+        governance advanced. A binary mismatch that a ruling has accepted is
+        still a binary mismatch, and a reader must be able to see it.
+        """
         out: list[str] = []
         if not self.content_verified:
             out.append(CONTENT_MISMATCH)
         if not self.binary_verified:
             out.append(BINARY_MISMATCH)
         return out
+
+    def blocking_anomalies(self) -> list[str]:
+        """The subset that still blocks execution under ruling R2-SCHED-V5-AUTH.
+
+        The ruling accepts a binary source-copy difference *when the certified
+        Games content reproduces*. It does not accept one when the content does
+        not: fixtures that fail certification are still fatal, and a mounted v4
+        artifact is still the wrong schedule.
+        """
+        observed = self.anomalies()
+        if not self.content_verified:
+            return observed
+        if self.is_superseded_v4_binary:
+            return observed
+        return [a for a in observed if a != BINARY_MISMATCH]
+
+    def governed_binary_disposition(self) -> str:
+        if self.binary_verified:
+            return "BINARY_VERIFIED"
+        if not self.content_verified:
+            return "BLOCKED_CONTENT_NOT_CERTIFIED"
+        if self.is_superseded_v4_binary:
+            return "BLOCKED_SUPERSEDED_V4_ARTIFACT"
+        return "ACCEPTED_SOURCE_COPY_UNDER_R2_SCHED_V5_AUTH"
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -91,6 +121,8 @@ class ScheduleProvenance:
             "binary_verified": self.binary_verified,
             "classification": self.classification(),
             "provenance_anomalies": self.anomalies(),
+            "blocking_provenance_anomalies": self.blocking_anomalies(),
+            "governed_binary_disposition": self.governed_binary_disposition(),
         }
 
 

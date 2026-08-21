@@ -183,3 +183,90 @@ def require_ratified_aac_divisions_csv(path: Path | None) -> Path:
             "A locally generated substitute is not a ratified artifact."
         )
     return path
+
+
+# --- R2 governed successor artifact -------------------------------------------
+#
+# Ruling R2-AAC-SUCCESSOR resolves the custody break without faking the missing
+# file. The legacy 577-byte artifact stays recorded as missing — its digest is
+# still the only thing that would prove *its* identity, and nothing here claims
+# to reproduce it. What is issued instead is a NEW artifact with its own
+# identity, its own digest and full derivation provenance, extracted from the
+# hash-verified canonical master under R-CCG-07.
+
+from .rulings import R2_AAC_SUCCESSOR  # noqa: E402
+
+#: FACT — digest of the successor artifact issued under R2-AAC-SUCCESSOR.
+SUCCESSOR_AAC_CSV_SHA256 = "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce"
+SUCCESSOR_AAC_CSV_BYTES = 554
+SUCCESSOR_AAC_CSV_FILENAME = "aac_divisions_2026_R2_SUCCESSOR.csv"
+SUCCESSOR_AAC_CSV_STATUS = "GOVERNED_SUCCESSOR"
+
+#: Legacy custody state. Preserved, never edited, never reproduced.
+LEGACY_AAC_CSV_FILENAME = "aac_divisions_2026_RATIFIED.csv"
+LEGACY_AAC_CSV_CUSTODY = "NOT_MOUNTED_IN_REPOSITORY"
+
+#: Every digest that identifies a governed AAC divisions artifact.
+GOVERNED_AAC_CSV_DIGESTS = {
+    RATIFIED_AAC_CSV_SHA256: LEGACY_AAC_CSV_FILENAME,
+    SUCCESSOR_AAC_CSV_SHA256: SUCCESSOR_AAC_CSV_FILENAME,
+}
+
+AAC_ARTIFACT_BLOCKER = "governance.AAC_DIVISIONS_ARTIFACT_NOT_GOVERNED"
+
+
+def require_governed_aac_divisions_csv(path: Path | None) -> tuple[Path, str]:
+    """Accept only a mounted file whose digest identifies a governed artifact.
+
+    Either the original ratified CSV (if it is ever recovered) or the R2
+    successor. A locally regenerated look-alike that is neither is still refused
+    — digest equality remains the only proof of identity.
+    """
+    if path is None:
+        raise GovernanceBlock(
+            "inputs.aac_divisions_csv is not configured. Ruling "
+            f"{R2_AAC_SUCCESSOR.convergence_id} issues {SUCCESSOR_AAC_CSV_FILENAME} "
+            f"(sha256 {SUCCESSOR_AAC_CSV_SHA256}); mount it or the recovered "
+            f"{LEGACY_AAC_CSV_FILENAME}."
+        )
+    if not path.exists():
+        raise GovernanceBlock(f"Configured AAC divisions CSV does not exist: {path}")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    identity = GOVERNED_AAC_CSV_DIGESTS.get(digest)
+    if identity is None:
+        raise GovernanceBlock(
+            f"{AAC_ARTIFACT_BLOCKER}: mounted AAC divisions CSV has sha256 {digest}, which "
+            f"identifies neither {LEGACY_AAC_CSV_FILENAME} ({RATIFIED_AAC_CSV_SHA256}) nor "
+            f"{SUCCESSOR_AAC_CSV_FILENAME} ({SUCCESSOR_AAC_CSV_SHA256})."
+        )
+    return path, identity
+
+
+def aac_artifact_status(path: Path | None) -> dict[str, object]:
+    """Report which governed AAC artifact is mounted, if any."""
+    digest = (
+        hashlib.sha256(path.read_bytes()).hexdigest() if path and path.exists() else None
+    )
+    return {
+        "ruling": R2_AAC_SUCCESSOR.convergence_id,
+        "mounted_path": str(path) if path else None,
+        "mounted_sha256": digest,
+        "identity": GOVERNED_AAC_CSV_DIGESTS.get(digest) if digest else None,
+        "is_governed": digest in GOVERNED_AAC_CSV_DIGESTS if digest else False,
+        "successor": {
+            "filename": SUCCESSOR_AAC_CSV_FILENAME,
+            "sha256": SUCCESSOR_AAC_CSV_SHA256,
+            "bytes": SUCCESSOR_AAC_CSV_BYTES,
+            "status": SUCCESSOR_AAC_CSV_STATUS,
+            "source_rule": "R-CCG-07",
+        },
+        "legacy": {
+            "filename": LEGACY_AAC_CSV_FILENAME,
+            "sha256": RATIFIED_AAC_CSV_SHA256,
+            "bytes": RATIFIED_AAC_CSV_BYTES,
+            "custody": LEGACY_AAC_CSV_CUSTODY,
+            "lineage_preserved": True,
+            "reproduction_attempted": False,
+        },
+        "blocker": None if digest in GOVERNED_AAC_CSV_DIGESTS else AAC_ARTIFACT_BLOCKER,
+    }

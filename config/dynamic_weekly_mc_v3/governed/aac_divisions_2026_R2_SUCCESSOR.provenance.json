@@ -1,0 +1,72 @@
+{
+  "artifact": "aac_divisions_2026_R2_SUCCESSOR.csv",
+  "artifact_status": "GOVERNED_SUCCESSOR",
+  "supersedes": {
+    "artifact": "aac_divisions_2026_RATIFIED.csv",
+    "sha256": "e0f674b4d0bab13ff943d0ced6364c70df40d4e4a1f1a2cde2a4479a13b2cd0f",
+    "bytes": 577,
+    "registered_in": [
+      "Model_Parameters_v2_5_APPROVED.xlsx!01_SOURCE_REGISTER aac_divisions",
+      "Model_Parameters_v2_5_APPROVED.xlsx!10_ARTIFACT_LINEAGE aac_divisions_2026_RATIFIED.csv",
+      "Model_Parameters_v2_5_APPROVED.xlsx!13_SUPERSESSION_LOG SUP-010"
+    ],
+    "custody_status": "NOT_MOUNTED_IN_REPOSITORY",
+    "lineage_preserved": true,
+    "reproduction_attempted": false,
+    "note": "The legacy artifact's exact column set, ordering and formatting are unrecorded, so its 577-byte digest cannot be reproduced. It is recorded as missing, not faked."
+  },
+  "issued_under_ruling": "R2-AAC-SUCCESSOR",
+  "source_rule": "R-CCG-07 \u2014 AAC division membership ratified (8 American / 8 Athletic), status RATIFIED",
+  "source_artifacts": [
+    {
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+      "sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+      "field": "2026_conference_division"
+    },
+    {
+      "path": "reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx",
+      "sha256": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f",
+      "sheets": [
+        "04_CCG_RULES",
+        "01_SOURCE_REGISTER",
+        "10_ARTIFACT_LINEAGE",
+        "13_SUPERSESSION_LOG"
+      ]
+    }
+  ],
+  "serialization": "UTF-8 CSV, header row, LF line endings, blank for null",
+  "columns": [
+    "schedule_id",
+    "team_name",
+    "conference",
+    "division"
+  ],
+  "rows": 16,
+  "american_division": [
+    "ARMY",
+    "ECU",
+    "FAU",
+    "NAVY",
+    "TEM",
+    "UAB",
+    "USF",
+    "USM"
+  ],
+  "athletic_division": [
+    "LT",
+    "MEM",
+    "NMSU",
+    "RICE",
+    "TLN",
+    "TLSA",
+    "UNT",
+    "UTSA"
+  ],
+  "sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+  "bytes": 554,
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "provenance_class": "DERIVED",
+  "derivation": "Extracted deterministically from the hash-verified canonical team master; no membership value was authored. Reproducible via aac_divisions.extract_aac_divisions + serialize_candidate_csv.",
+  "canonical_config_modified": false,
+  "reference_tree_modified": false
+}
