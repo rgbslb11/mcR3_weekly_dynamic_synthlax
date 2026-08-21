@@ -1,0 +1,41 @@
+{
+  "model_name": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-20-001",
+  "paths": 10000,
+  "base_seed": 20260803,
+  "weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  "first_promoted_rerating_after_week": 2,
+  "prior_decay": {
+    "0": 1.0,
+    "1": 0.8,
+    "2": 0.6,
+    "3": 0.4,
+    "4": 0.2,
+    "5": 0.0
+  },
+  "hfa_baseline_points": null,
+  "freeze_strength_after_selection": true,
+  "write_path_level_parquet": true,
+  "fcs_translation_policy": null,
+  "committee_tiebreak_strength_source": null,
+  "calibration": {
+    "weekly_performance_residual_coefficient": null,
+    "weekly_movement_cap_points": null,
+    "recent_form_weights": null,
+    "blowout_treatment": null,
+    "game_sd_points": null,
+    "sample_size_regularization": null
+  },
+  "inputs": {
+    "canonical_master_md": "../../reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+    "unified_preseason_ratings_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+    "schedule_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+    "model_parameters_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx",
+    "bracket_regime_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026 Bracket Regime LOCKED.xlsx",
+    "playoff_calendar_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
+    "fcs_reconciled_master_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
+    "v2_1_control_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
+    "aac_divisions_csv": null
+  }
+}

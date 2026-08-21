@@ -1,0 +1,219 @@
+{
+  "artifact": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "build_files": [
+    {
+      "bytes": 333,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/__init__.py",
+      "sha256": "683891e07b68a3a4884ad79805caf1d8446dc37757790197885220e3676165ac"
+    },
+    {
+      "bytes": 3931,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/aggregate.py",
+      "sha256": "f83d14dea9fca024ccca5941b2ec7e19d3bf6854283be3b27558e08733f9a560"
+    },
+    {
+      "bytes": 3505,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/cli.py",
+      "sha256": "fbdb4b8df908d3f2b8cb42ba7df2459cd4e90064d38a66426d590c38c74248d2"
+    },
+    {
+      "bytes": 2173,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/committee.py",
+      "sha256": "f60ec185bd323604ea192c0282e60c907527418d3b21d977ca0bdf69a721c81b"
+    },
+    {
+      "bytes": 2357,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/compare_v2.py",
+      "sha256": "2ede74132acb7df5414c24e20e7fa93de155cf0bd12e1593540ba5e32ae6557c"
+    },
+    {
+      "bytes": 6692,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/config.py",
+      "sha256": "7a410942f46344bde1d1b66d063c32293b2afd1c284bc5c2e66bc3efedda538b"
+    },
+    {
+      "bytes": 10672,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/engine.py",
+      "sha256": "ef59148b4421e037c0b1a167af3f981f05003e0c533020583e184cbe472acc92"
+    },
+    {
+      "bytes": 325,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/errors.py",
+      "sha256": "dc9d359adb142007e622f58e39135bea87a9f4211972ac28cafd860fb6569221"
+    },
+    {
+      "bytes": 1680,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/game.py",
+      "sha256": "e8090a084d22a97e8420add441699684f28d9ca7cd5e5a39cf9d5a186c97f11f"
+    },
+    {
+      "bytes": 5235,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/governance.py",
+      "sha256": "325a1f7432a9944cda563171dd0c24062fd8ee66bd9befba96315bdea4dd4dd8"
+    },
+    {
+      "bytes": 8930,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/inputs.py",
+      "sha256": "b74e75dec2a33b4e5c6da5559d7e337759f61b1eee6fb2595f99f33b7142c66d"
+    },
+    {
+      "bytes": 1793,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/manifest.py",
+      "sha256": "a8bf6b3671f780c8cc959fa1d84cb7896244aec87b16f8759bf063194af21337"
+    },
+    {
+      "bytes": 2284,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/models.py",
+      "sha256": "075b406c4f920fd5564a3ac7b7246008290d43d34018a8a9739ce678868e5281"
+    },
+    {
+      "bytes": 1185,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/outputs.py",
+      "sha256": "acd9a344c8f969b0f2cf30e650d1214533cc29ba8814a1fa5473ab48eac3a683"
+    },
+    {
+      "bytes": 1049,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/phase_plan.py",
+      "sha256": "5029942a8706c74c76d5e1aa95dd66c526c47c7dc1491691fe620f5d10c13755"
+    },
+    {
+      "bytes": 2250,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/postseason.py",
+      "sha256": "1a853bf41abdf5e88a6892494e3e2763a0a0e4e7db4f116daf8a416aafa67734"
+    },
+    {
+      "bytes": 2176,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/rerating.py",
+      "sha256": "16756554a59bc102a50b46db24a9c6e161b5b225b23429fdc884283e6a06a652"
+    },
+    {
+      "bytes": 940,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/rng.py",
+      "sha256": "2172316d31a3d5fb78ec9e2aa444ea5263b6c4424f6de5c5dfe6120acc1dda6d"
+    },
+    {
+      "bytes": 3946,
+      "path": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/standings.py",
+      "sha256": "463e345eca0dc0d18a7220efa625a54c2568296979bb0168eab8d4e9bce712d6"
+    },
+    {
+      "bytes": 1879,
+      "path": "config/dynamic_weekly_mc_v3/v3_experimental.json",
+      "sha256": "3162785d9d30c45428d0e2ba99e689b5adece5b4ce937611e0ab1437bc93a848"
+    },
+    {
+      "bytes": 1043,
+      "path": "scripts/Invoke-SythalaxDynamicWeeklyMCV3.ps1",
+      "sha256": "fd75af37c564712aa84b7e91622b71002008dcf9c5a1ed11889dbd94521db9ca"
+    },
+    {
+      "bytes": 4270,
+      "path": "tests/dynamic_weekly_mc_v3/test_config_and_preflight.py",
+      "sha256": "592a09bc51f87ec08f588c5491ee36286c9363f567b7de017134b2d0259721fe"
+    },
+    {
+      "bytes": 4009,
+      "path": "tests/dynamic_weekly_mc_v3/test_governance_phase_and_outputs.py",
+      "sha256": "72678949a71442dc6f9b25d618d3b98e3da6bdd1892b42705af3f0c8e590cdac"
+    },
+    {
+      "bytes": 1782,
+      "path": "tests/dynamic_weekly_mc_v3/test_postseason_and_tiebreak.py",
+      "sha256": "835078433f5fc71876a77a7e6b2fcf91bff0e41d3775e0a0e1d671c97bac8d5a"
+    },
+    {
+      "bytes": 3562,
+      "path": "tests/dynamic_weekly_mc_v3/test_rng_and_weekly_state.py",
+      "sha256": "7d281f8ac2fc5325c869f22f2e3a01607871d57e09134a5544bdededc034ad2a"
+    },
+    {
+      "bytes": 769,
+      "path": "tests/dynamic_weekly_mc_v3/test_v2_control.py",
+      "sha256": "cf2de040a99349770560c98489b514b37e8c6e51e0148ec4101732acab84fbd6"
+    },
+    {
+      "bytes": 8875,
+      "path": "docs/dynamic_weekly_mc_v3.md",
+      "sha256": "b81727dcf2ebfe6f305c3a64f27571341639a7a451c64fda631571a73a52f2ef"
+    },
+    {
+      "bytes": 3939,
+      "path": "BUILD_REPORT_DYNAMIC_WEEKLY_MC_V3.md",
+      "sha256": "d86ab7b44fdde988dacd2053c5c19e2d749f2928959074f01834e3085893c686"
+    },
+    {
+      "bytes": 649,
+      "path": "pyproject.toml",
+      "sha256": "7f4437b059d81a05435d00c3f791a2cbb87d57830e5157715dbc82bbf58a4efa"
+    }
+  ],
+  "configuration_version": "V3-PLACEHOLDER-2026-08-20-001",
+  "disposition": "STRUCTURAL_HARNESS_PASS_EXECUTION_BLOCKED",
+  "execution_blocker_count": 18,
+  "execution_blockers": [
+    "calibration.weekly_performance_residual_coefficient",
+    "calibration.weekly_movement_cap_points",
+    "calibration.recent_form_weights",
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.sample_size_regularization",
+    "hfa_baseline_points",
+    "fcs_translation_policy",
+    "committee_tiebreak_strength_source",
+    "inputs.aac_divisions_csv",
+    "provenance.SCHEDULE_GAMES_HASH_REPRODUCTION_MISMATCH",
+    "provenance.SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5",
+    "governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "governance.FIVE_13_GAME_SCHEDULE_EXCEPTIONS_UNRATIFIED",
+    "governance.FCS_SOURCE_MODEL_USE_AUTHORIZED_FALSE",
+    "governance.POSTSEASON_QUARTERFINAL_MAPPING_NOT_EXPLICIT",
+    "governance.A8_ECL_FINAL_BOARD_TIEBREAK_ORDERING_NOT_EXPLICIT"
+  ],
+  "generated_at": "2026-08-20T21:37:54.782382+00:00",
+  "governed_reference_inputs": [
+    {
+      "bytes": 9527,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026 Bracket Regime LOCKED.xlsx",
+      "sha256": "62bb7a4a3516047b1e4d260c3ee3c450e229256ed8ed4d6e162c7fab31d8d6ab"
+    },
+    {
+      "bytes": 14709,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
+      "sha256": "7effe507916f09cfb3b8518b61fccfd5e8ed3ab277a4c4994d1ed89325817e20"
+    },
+    {
+      "bytes": 113260,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+      "sha256": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a"
+    },
+    {
+      "bytes": 48641,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+      "sha256": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8"
+    },
+    {
+      "bytes": 278106,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+      "sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0"
+    },
+    {
+      "bytes": 83571,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx",
+      "sha256": "e244e0d54c54cb79b0504f79d780643324ca41a0e74cbf3b87d0b2abc2e5885f"
+    },
+    {
+      "bytes": 42155,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
+      "sha256": "91788e3b9554b85871f1facf1587050b0d5fe37f221a663e0766f18c151c7f1b"
+    },
+    {
+      "bytes": 40243,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
+      "sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+    }
+  ],
+  "model_version": "3.0.0-experimental-harness",
+  "test_count": 74,
+  "v2_1_static_control_sha256": "39055662b819a3ff3e6e87ad53e28a15d0451a6b1e692e7770459e7a984c614a"
+}

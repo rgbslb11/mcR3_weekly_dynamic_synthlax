@@ -1,0 +1,102 @@
+from enum import StrEnum
+
+
+class MarketType(StrEnum):
+    SIDE = "SIDE"
+    TOTAL = "TOTAL"
+
+
+class ContractState(StrEnum):
+    DISCOVERED = "DISCOVERED"
+    OBSERVED = "OBSERVED"
+    CREATED = "CREATED"
+    OPEN = "OPEN"
+    SUSPENDED = "SUSPENDED"
+    LOCKED = "LOCKED"
+    RESULT_PENDING = "RESULT_PENDING"
+    SETTLED = "SETTLED"
+    DISPUTED = "DISPUTED"
+    VOID = "VOID"
+
+
+class IdentityStatus(StrEnum):
+    VERIFIED = "VERIFIED"
+    PROVISIONAL = "PROVISIONAL"
+    AMBIGUOUS = "AMBIGUOUS"
+    BLOCKED = "BLOCKED"
+
+
+class GameStatus(StrEnum):
+    SCHEDULED = "SCHEDULED"
+    IN_PROGRESS = "IN_PROGRESS"
+    FINAL = "FINAL"
+    POSTPONED = "POSTPONED"
+    CANCELED = "CANCELED"
+    ABANDONED = "ABANDONED"
+
+
+class Direction(StrEnum):
+    YES = "YES"
+    NO = "NO"
+
+
+class SettlementResult(StrEnum):
+    YES = "YES"
+    NO = "NO"
+    PUSH = "PUSH"
+    VOID = "VOID"
+
+
+class SignalEffect(StrEnum):
+    BELIEF = "BELIEF"
+    FLOW = "FLOW"
+    INFORMATIONAL = "INFORMATIONAL"
+
+
+class CapperMarket(StrEnum):
+    ATS = "ATS"
+    TOTAL = "TOTAL"
+
+
+class SkillTier(StrEnum):
+    ELITE = "ELITE"
+    STRONG = "STRONG"
+    MODERATE = "MODERATE"
+    WEAK = "WEAK"
+    NO_POSITIVE_WEIGHT = "NO_POSITIVE_WEIGHT"
+    UNKNOWN = "UNKNOWN"
+
+
+class ReliabilityStatus(StrEnum):
+    PROVISIONAL = "PROVISIONAL"
+    CALIBRATED = "CALIBRATED"
+    DISABLED = "DISABLED"
+
+
+class OrderStatus(StrEnum):
+    RECEIVED = "RECEIVED"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    FILLED = "FILLED"
+    CANCELED = "CANCELED"
+
+
+class ParticipantType(StrEnum):
+    RETAIL_CROWD = "RETAIL_CROWD"
+    MOMENTUM_RETAIL = "MOMENTUM_RETAIL"
+    SHARP_FOLLOWER = "SHARP_FOLLOWER"
+    CONTRARIAN = "CONTRARIAN"
+    MARKET_MAKER = "MARKET_MAKER"
+    HUMAN_SIMULATOR = "HUMAN_SIMULATOR"
+
+
+class SignalType(StrEnum):
+    SEASON_POPULARITY = "SEASON_POPULARITY"
+    RECENT_POPULARITY = "RECENT_POPULARITY"
+    RECENT_CONCENTRATION = "RECENT_CONCENTRATION"
+    PUBLIC_CROWDING = "PUBLIC_CROWDING"
+    RELATIVE_CROWDING = "RELATIVE_CROWDING"
+    CAPPER_PICK = "CAPPER_PICK"
+    SHARP_CONSENSUS = "SHARP_CONSENSUS"
+    BELIEF_EDGE = "BELIEF_EDGE"
+    MARKET_DIVERGENCE = "MARKET_DIVERGENCE"

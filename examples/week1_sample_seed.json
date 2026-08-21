@@ -1,0 +1,12 @@
+{
+  "source": "user-supplied Covers Week 1 snapshot",
+  "season": 2026,
+  "week": 1,
+  "games": [
+    {"covers_game_id": "377582", "away": "UNC", "home": "TCU", "neutral_site": true, "side_subject": "TCU", "side": -6.5, "total": 49.5},
+    {"covers_game_id": "377599", "away": "SJSU", "home": "USC", "neutral_site": false, "side_subject": "USC", "side": -35.5, "total": 58.5},
+    {"covers_game_id": "377656", "away": "BSU", "home": "ORE", "neutral_site": false, "side_subject": "ORE", "side": -24.5, "total": 52.5},
+    {"covers_game_id": "377731", "away": "CLEM", "home": "LSU", "neutral_site": false, "side_subject": "LSU", "side": -11.5, "total": 50.5},
+    {"covers_game_id": "377747", "away": "SMU", "home": "FSU", "neutral_site": false, "side_subject": "SMU", "side": -2.5, "total": 52.5}
+  ]
+}
