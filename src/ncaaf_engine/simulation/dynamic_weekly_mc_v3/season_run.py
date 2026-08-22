@@ -42,7 +42,8 @@ from pathlib import Path
 from typing import Callable, Iterable, Mapping, Sequence
 
 from . import ccg as ccg_policy
-from . import committee, fcs as fcs_policy, mvp_control, ordering, postseason, sos
+from . import committee, common_opponents, fcs as fcs_policy, mvp_control, ordering
+from . import postseason, sos
 from . import run_tier as tier_policy
 from .aac_divisions import require_governed_aac_divisions_csv
 from .config import V3Config
@@ -177,33 +178,46 @@ def ledger_from_observations(
 #
 # The board is results-first, exactly as committee.rank_committee_results_first
 # builds it: win percentage, then opponent win percentage, then champion status,
-# then head-to-head among teams tied on all three, then the governed
-# strength-of-schedule, then the schedule id.
+# and then — for every pair still tied on all three — the governed committee
+# tiebreak chain of ruling R2-COMMITTEE-TB, in full and in precedence order.
 #
-# The fourth key is deliberately the governed SOS and never a strength number.
-# Ruling R2-COMMITTEE-TB retired the framing in which a hidden strength value
-# breaks a committee tie and replaced it with the chain TB1 head-to-head, TB2
-# common-opponent performance, TB3 SOS, TB4 previous board. TB1 and TB3 are what
-# this board consults; no football strength value enters it, which is asserted by
-# test rather than left to the reader.
+# No football strength value enters the board at any stage, which is asserted by
+# test rather than left to the reader: the only strength-shaped quantity is the
+# governed SOS at TB3, and SOS is a schedule property.
 
-BOARD_TIEBREAKS_CONSULTED: tuple[str, ...] = (
-    "COMMITTEE-TB1_HEAD_TO_HEAD",
-    "COMMITTEE-TB3_STRENGTH_OF_SCHEDULE",
+BOARD_TIEBREAKS_CONSULTED: tuple[str, ...] = committee.COMMITTEE_TIEBREAK_STAGES
+
+#: Empty, and computed from the chain rather than asserted: every governed stage
+#: is evaluated for every pair that reaches it. A stage that does not decide a
+#: pair is recorded TIED or UNAVAILABLE for that pair, which is a measured result
+#: and not an omission.
+BOARD_TIEBREAKS_NOT_CONSULTED: tuple[str, ...] = tuple(
+    stage
+    for stage in committee.COMMITTEE_TIEBREAK_STAGES
+    if stage not in BOARD_TIEBREAKS_CONSULTED
 )
 
-#: Recorded rather than quietly skipped. TB2 sits between the two consulted
-#: stages and is not reached: the board's preceding keys already order the field
-#: totally except where TB1 applies, and pairwise common-opponent scoring across
-#: a 121-team board on every path is not what this MVP needs. Carried forward.
-BOARD_TIEBREAKS_NOT_CONSULTED: tuple[str, ...] = (
-    "COMMITTEE-TB2_COMMON_OPPONENT_PERFORMANCE",
-    "COMMITTEE-TB4_PREVIOUS_WEEK_BOARD",
-)
+#: Successor history. The prior candidate reached TB1 then TB3 then the terminal
+#: ordering, so TB2 and TB4 were never evaluated; an independent audit measured
+#: TB2-reachable pairs at the CFP field boundary and blocked on it. Recorded
+#: rather than erased, and without backdating any authority: the chain below is
+#: what this successor executes, not what the prior candidate executed.
+BOARD_TIEBREAK_EXECUTION_HISTORY: dict[str, str] = {
+    "PRIOR_CANDIDATE_754F87C": (
+        "TB1 and TB3 evaluated; TB2 and TB4 omitted, with the omission disclosed as "
+        "'not reached'. Independent audit established the omission was reachable and "
+        "material at the CFP field boundary."
+    ),
+    "CURRENT_SUCCESSOR": (
+        "Full governed chain executed: TB1, TB2, TB3, TB4 each evaluated in precedence "
+        "order for every pair that reaches it, with UNAVAILABLE propagated fail-closed."
+    ),
+}
 
-#: The final, fully deterministic key. Not a governance claim: a disclosed
-#: convention that makes the ordering total when every governed criterion ties.
-BOARD_TERMINAL_ORDERING = "CANONICAL_SCHEDULE_ID_ASCENDING"
+#: The final, fully deterministic key. Not a governance claim and not a football
+#: tiebreak: a deterministic total-order fallback reached only after all four
+#: governed criteria have been evaluated for the pair and none resolved it.
+BOARD_TERMINAL_ORDERING = committee.COMMITTEE_TERMINAL_ORDERING
 
 
 def head_to_head_from(observations: Sequence[GameObservation]) -> Callable[[str, str], str | None]:
@@ -228,13 +242,75 @@ def head_to_head_from(observations: Sequence[GameObservation]) -> Callable[[str,
     return resolve
 
 
+def governed_common_opponent_resolver(
+    ledger: sos.ResumeLedger, semantics: sos.SosSemantics
+) -> Callable[[str, str], tuple[str, int]]:
+    """COMMITTEE-TB2, delegated to the governed common-opponent implementation.
+
+    No common-opponent arithmetic lives here. The scores come from
+    :func:`common_opponents.governed_compare_common_opponents`, which applies the
+    exact 0.25/0.50/0.25 formula issued by ruling R4-COMMON-OPP-FORMULA through
+    its own authority gate, over the same governed OWP/OOWP semantics the rest of
+    the board uses.
+
+    UNAVAILABLE stays UNAVAILABLE. A score of ``None`` on either side — a pair
+    with no common opponents, or one whose WP/OWP/OOWP over the shared set has no
+    qualifying observations — reports UNAVAILABLE and the chain advances because
+    it was evaluated, never because it was skipped. It is never read as 0, 0.0 or
+    .500.
+
+    Results are memoised per unordered pair: the score is symmetric in the pair by
+    construction and a 121-team board revisits the same pair across stages.
+    """
+    cache: dict[frozenset[str], tuple[str, int]] = {}
+
+    def resolve(team: str, other: str) -> tuple[str, int]:
+        key = frozenset((team, other))
+        cached = cache.get(key)
+        if cached is None:
+            left, right = sorted(key)
+            left_result, right_result = common_opponents.governed_compare_common_opponents(
+                ledger, left, right, semantics
+            )
+            if left_result.score is None or right_result.score is None:
+                cached = (committee.TB_UNAVAILABLE, 0)
+            elif not sos.criterion_resolves(left_result.score, right_result.score):
+                cached = (committee.TB_TIED, 0)
+            else:
+                # Recorded in canonical (sorted) pair orientation; re-oriented for
+                # the caller below so the cache is order-independent.
+                cached = (
+                    committee.TB_RESOLVED,
+                    -1 if left_result.score > right_result.score else 1,
+                )
+            cache[key] = cached
+        status, order = cached
+        if status != committee.TB_RESOLVED:
+            return status, 0
+        left, _right = sorted(key)
+        return status, order if team == left else -order
+
+    return resolve
+
+
 def build_board(
     fbs_teams: Sequence[str],
     observations: Sequence[GameObservation],
     conference_champions: Mapping[str, str],
     semantics: sos.SosSemantics,
+    previous_board: Sequence[str] | None = None,
+    observer: committee.ChainObserver | None = None,
 ) -> tuple[str, ...]:
-    """The committee board over the governed FBS membership."""
+    """The committee board over the governed FBS membership.
+
+    ``previous_board`` is COMMITTEE-TB4. It is passed explicitly rather than
+    inferred: the only previous committee board that exists in a V3 season path is
+    the one built before Championship Saturday, which is the same artifact the CCG
+    participant chain already consumes as
+    ``CcgTiebreakInputs.last_board_before_championship_saturday``. Where no earlier
+    board exists — the pre-Championship-Saturday board itself — TB4 is UNAVAILABLE
+    and the chain advances for that reason, having been evaluated.
+    """
     ledger = ledger_from_observations(observations)
     champions = set(conference_champions.values())
     inputs: dict[str, committee.CommitteeInputs] = {}
@@ -247,8 +323,11 @@ def build_board(
             losses=losses,
             opponent_win_pct=float(owp or 0.0),
             conference_champion=team in champions,
-            # TB3, not a strength. See BOARD_TIEBREAKS_CONSULTED above.
-            strength_tiebreak=float(schedule_strength or 0.0),
+            # TB3, not a strength. UNAVAILABLE is carried through as None so an
+            # absent schedule cannot decide a tie by being read as 0.0.
+            strength_tiebreak=(
+                None if schedule_strength is None else float(schedule_strength)
+            ),
         )
     pairwise = head_to_head_from(observations)
     head_to_head: dict[frozenset[str], str] = {}
@@ -260,7 +339,15 @@ def build_board(
         winner = pairwise(left, right)
         if winner is not None:
             head_to_head[key] = winner
-    return tuple(committee.rank_committee_results_first(inputs, head_to_head))
+    tiebreaks = committee.CommitteeTiebreakInputs(
+        common_opponent_order=governed_common_opponent_resolver(ledger, semantics),
+        previous_board=None if previous_board is None else tuple(previous_board),
+    )
+    return tuple(
+        committee.rank_committee_results_first(
+            inputs, head_to_head, tiebreaks, observer
+        )
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -371,7 +458,12 @@ def simulate_season_path(
             _apply_result(observation, game, states)
         _promote_week(engine, week, states, weekly_residuals)
 
-    pre_ccg_board = build_board(fbs_teams, observations, {}, semantics)
+    # No committee board precedes this one in a V3 season path, so COMMITTEE-TB4
+    # is UNAVAILABLE here and the chain advances for that measured reason. A
+    # previous board is not manufactured to fill the stage.
+    pre_ccg_board = build_board(
+        fbs_teams, observations, {}, semantics, previous_board=None
+    )
 
     # --- CONFERENCE_CHAMPIONSHIPS, W15 -----------------------------------
     champions: dict[str, str] = {}
@@ -440,7 +532,16 @@ def simulate_season_path(
     # The A8/ECL board is computed after the championships and before any G5
     # automatic-bid seeding, which is the causal sequencing ruling R2-A8-ECL-ORDER
     # uses to break the cycle. It is also the board the committee selects from.
-    post_ccg_board = build_board(fbs_teams, observations, champions, semantics)
+    # COMMITTEE-TB4 for the selection board is the board published before
+    # Championship Saturday — the same artifact CCG-TB3 consumes above, not a
+    # second notion of "previous board" invented here.
+    post_ccg_board = build_board(
+        fbs_teams,
+        observations,
+        champions,
+        semantics,
+        previous_board=pre_ccg_board,
+    )
     ledger = ledger_from_observations(observations)
     standings_board = ordering.PostCcgBoard(
         order=post_ccg_board, ccgs_complete=True, g5_seeding_applied=False

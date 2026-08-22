@@ -17,7 +17,7 @@
   "paths": 2000,
   "rows": [
     {
-      "average_final_committee_rank": 76.4705,
+      "average_final_committee_rank": 76.469,
       "average_final_strength": -11.861893530584046,
       "average_regular_season_wins": 4.705,
       "ccg_appearance_pct": 0.1385,
@@ -32,7 +32,7 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 17.634,
+      "average_final_committee_rank": 17.6345,
       "average_final_strength": 29.30285966231495,
       "average_regular_season_wins": 10.0715,
       "ccg_appearance_pct": 0.338,
@@ -42,12 +42,12 @@
       "national_title_appearance_pct": 0.1225,
       "national_title_win_pct": 0.0645,
       "preseason_strength": 28.8642258558148,
-      "quarterfinal_pct": 0.359,
+      "quarterfinal_pct": 0.3585,
       "schedule_id": "ALA",
-      "semifinal_pct": 0.2085
+      "semifinal_pct": 0.209
     },
     {
-      "average_final_committee_rank": 37.1065,
+      "average_final_committee_rank": 37.1005,
       "average_final_strength": 10.495944555454058,
       "average_regular_season_wins": 8.0295,
       "ccg_appearance_pct": 0.132,
@@ -107,7 +107,7 @@
       "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 79.256,
+      "average_final_committee_rank": 79.259,
       "average_final_strength": -3.887035312534688,
       "average_regular_season_wins": 4.41,
       "ccg_appearance_pct": 0.001,
@@ -122,7 +122,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 79.117,
+      "average_final_committee_rank": 79.119,
       "average_final_strength": -3.916396463556367,
       "average_regular_season_wins": 4.2825,
       "ccg_appearance_pct": 0.0195,
@@ -137,7 +137,7 @@
       "semifinal_pct": 0.0035
     },
     {
-      "average_final_committee_rank": 87.51,
+      "average_final_committee_rank": 87.513,
       "average_final_strength": -7.607622527942792,
       "average_regular_season_wins": 3.595,
       "ccg_appearance_pct": 0.006,
@@ -152,7 +152,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 44.783,
+      "average_final_committee_rank": 44.806,
       "average_final_strength": -3.050957071414357,
       "average_regular_season_wins": 7.945,
       "ccg_appearance_pct": 0.444,
@@ -167,7 +167,7 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 66.5045,
+      "average_final_committee_rank": 66.5135,
       "average_final_strength": -10.558108129595267,
       "average_regular_season_wins": 5.7,
       "ccg_appearance_pct": 0.0,
@@ -182,7 +182,7 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 18.856,
+      "average_final_committee_rank": 18.8515,
       "average_final_strength": 22.005844821248107,
       "average_regular_season_wins": 10.1175,
       "ccg_appearance_pct": 0.4805,
@@ -212,7 +212,7 @@
       "semifinal_pct": 0.0035
     },
     {
-      "average_final_committee_rank": 81.0395,
+      "average_final_committee_rank": 81.0445,
       "average_final_strength": -17.07769246675048,
       "average_regular_season_wins": 4.534,
       "ccg_appearance_pct": 0.0,
@@ -227,7 +227,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 60.1525,
+      "average_final_committee_rank": 60.152,
       "average_final_strength": -0.1330822718877396,
       "average_regular_season_wins": 5.96,
       "ccg_appearance_pct": 0.0375,
@@ -257,7 +257,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 74.308,
+      "average_final_committee_rank": 74.3085,
       "average_final_strength": -12.094999932269127,
       "average_regular_season_wins": 5.0925,
       "ccg_appearance_pct": 0.0,
@@ -272,12 +272,12 @@
       "semifinal_pct": 0.003
     },
     {
-      "average_final_committee_rank": 78.6395,
+      "average_final_committee_rank": 78.626,
       "average_final_strength": -5.789546905590129,
       "average_regular_season_wins": 4.45,
       "ccg_appearance_pct": 0.0125,
       "cfp_bye_pct": 0.0005,
-      "cfp_pct": 0.01,
+      "cfp_pct": 0.0105,
       "conference_title_pct": 0.0045,
       "national_title_appearance_pct": 0.0,
       "national_title_win_pct": 0.0,
@@ -287,7 +287,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 87.365,
+      "average_final_committee_rank": 87.364,
       "average_final_strength": -15.252676455721112,
       "average_regular_season_wins": 3.697,
       "ccg_appearance_pct": 0.0,
@@ -302,7 +302,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 78.3755,
+      "average_final_committee_rank": 78.402,
       "average_final_strength": -15.221610242741367,
       "average_regular_season_wins": 4.9365,
       "ccg_appearance_pct": 0.1435,
@@ -317,7 +317,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 77.007,
+      "average_final_committee_rank": 77.0125,
       "average_final_strength": -13.50223956777372,
       "average_regular_season_wins": 4.7245,
       "ccg_appearance_pct": 0.0,
@@ -332,7 +332,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 65.322,
+      "average_final_committee_rank": 65.326,
       "average_final_strength": 1.3095907859529707,
       "average_regular_season_wins": 5.4315,
       "ccg_appearance_pct": 0.026,
@@ -347,7 +347,7 @@
       "semifinal_pct": 0.0035
     },
     {
-      "average_final_committee_rank": 51.7295,
+      "average_final_committee_rank": 51.7305,
       "average_final_strength": 2.191277416110234,
       "average_regular_season_wins": 6.724,
       "ccg_appearance_pct": 0.208,
@@ -377,7 +377,7 @@
       "semifinal_pct": 0.0015
     },
     {
-      "average_final_committee_rank": 72.8035,
+      "average_final_committee_rank": 72.809,
       "average_final_strength": -13.490229930926445,
       "average_regular_season_wins": 5.023,
       "ccg_appearance_pct": 0.0,
@@ -392,7 +392,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 88.11,
+      "average_final_committee_rank": 88.111,
       "average_final_strength": -7.093461135661777,
       "average_regular_season_wins": 3.563,
       "ccg_appearance_pct": 0.0,
@@ -407,7 +407,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 63.991,
+      "average_final_committee_rank": 63.985,
       "average_final_strength": -11.19317555121753,
       "average_regular_season_wins": 5.9165,
       "ccg_appearance_pct": 0.2235,
@@ -422,7 +422,7 @@
       "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 82.1015,
+      "average_final_committee_rank": 82.102,
       "average_final_strength": -4.616323146430607,
       "average_regular_season_wins": 3.895,
       "ccg_appearance_pct": 0.0035,
@@ -437,7 +437,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 82.7035,
+      "average_final_committee_rank": 82.706,
       "average_final_strength": -15.805287698086152,
       "average_regular_season_wins": 4.1355,
       "ccg_appearance_pct": 0.0,
@@ -452,7 +452,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 65.604,
+      "average_final_committee_rank": 65.6055,
       "average_final_strength": -12.007013407821018,
       "average_regular_season_wins": 6.1315,
       "ccg_appearance_pct": 0.0,
@@ -467,12 +467,12 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 37.083,
+      "average_final_committee_rank": 37.0875,
       "average_final_strength": 11.818959075431733,
       "average_regular_season_wins": 8.228,
       "ccg_appearance_pct": 0.1695,
       "cfp_bye_pct": 0.0455,
-      "cfp_pct": 0.1955,
+      "cfp_pct": 0.195,
       "conference_title_pct": 0.0685,
       "national_title_appearance_pct": 0.0155,
       "national_title_win_pct": 0.004,
@@ -482,7 +482,7 @@
       "semifinal_pct": 0.046
     },
     {
-      "average_final_committee_rank": 89.982,
+      "average_final_committee_rank": 89.9845,
       "average_final_strength": -17.0180105035202,
       "average_regular_season_wins": 3.4225,
       "ccg_appearance_pct": 0.0,
@@ -497,7 +497,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 74.9725,
+      "average_final_committee_rank": 74.971,
       "average_final_strength": -11.670194910400246,
       "average_regular_season_wins": 5.058,
       "ccg_appearance_pct": 0.1435,
@@ -512,7 +512,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 64.1625,
+      "average_final_committee_rank": 64.164,
       "average_final_strength": -8.531600633252381,
       "average_regular_season_wins": 5.829,
       "ccg_appearance_pct": 0.0,
@@ -527,52 +527,52 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 33.7865,
-      "average_final_strength": 12.678897245865418,
-      "average_regular_season_wins": 8.444,
+      "average_final_committee_rank": 33.772,
+      "average_final_strength": 12.68066426935657,
+      "average_regular_season_wins": 8.4445,
       "ccg_appearance_pct": 0.145,
       "cfp_bye_pct": 0.0335,
-      "cfp_pct": 0.1715,
-      "conference_title_pct": 0.0625,
-      "national_title_appearance_pct": 0.0135,
+      "cfp_pct": 0.172,
+      "conference_title_pct": 0.063,
+      "national_title_appearance_pct": 0.013,
       "national_title_win_pct": 0.007,
       "preseason_strength": 13.1889387675614,
-      "quarterfinal_pct": 0.078,
+      "quarterfinal_pct": 0.077,
       "schedule_id": "HOU",
-      "semifinal_pct": 0.034
+      "semifinal_pct": 0.033
     },
     {
-      "average_final_committee_rank": 27.452,
-      "average_final_strength": 19.96462175789967,
+      "average_final_committee_rank": 27.459,
+      "average_final_strength": 19.963120107771818,
       "average_regular_season_wins": 9.1845,
-      "ccg_appearance_pct": 0.1835,
+      "ccg_appearance_pct": 0.184,
       "cfp_bye_pct": 0.0665,
-      "cfp_pct": 0.277,
+      "cfp_pct": 0.2765,
       "conference_title_pct": 0.0775,
-      "national_title_appearance_pct": 0.0445,
+      "national_title_appearance_pct": 0.044,
       "national_title_win_pct": 0.0205,
       "preseason_strength": 19.8286044850296,
-      "quarterfinal_pct": 0.159,
+      "quarterfinal_pct": 0.1595,
       "schedule_id": "ILL",
-      "semifinal_pct": 0.0845
+      "semifinal_pct": 0.084
     },
     {
-      "average_final_committee_rank": 20.6825,
-      "average_final_strength": 25.876133238388825,
+      "average_final_committee_rank": 20.6795,
+      "average_final_strength": 25.87621611878994,
       "average_regular_season_wins": 9.817,
-      "ccg_appearance_pct": 0.2795,
-      "cfp_bye_pct": 0.143,
+      "ccg_appearance_pct": 0.279,
+      "cfp_bye_pct": 0.1435,
       "cfp_pct": 0.4395,
       "conference_title_pct": 0.132,
       "national_title_appearance_pct": 0.081,
       "national_title_win_pct": 0.0395,
       "preseason_strength": 25.6257916008821,
-      "quarterfinal_pct": 0.283,
+      "quarterfinal_pct": 0.2835,
       "schedule_id": "IOWA",
-      "semifinal_pct": 0.1515
+      "semifinal_pct": 0.1525
     },
     {
-      "average_final_committee_rank": 85.035,
+      "average_final_committee_rank": 85.039,
       "average_final_strength": -10.003729300311623,
       "average_regular_season_wins": 3.9425,
       "ccg_appearance_pct": 0.005,
@@ -587,22 +587,22 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 13.124,
-      "average_final_strength": 32.897393225815534,
-      "average_regular_season_wins": 10.864,
-      "ccg_appearance_pct": 0.495,
-      "cfp_bye_pct": 0.294,
+      "average_final_committee_rank": 13.1285,
+      "average_final_strength": 32.89560822188852,
+      "average_regular_season_wins": 10.8635,
+      "ccg_appearance_pct": 0.4945,
+      "cfp_bye_pct": 0.2935,
       "cfp_pct": 0.653,
-      "conference_title_pct": 0.2835,
+      "conference_title_pct": 0.283,
       "national_title_appearance_pct": 0.1765,
-      "national_title_win_pct": 0.106,
+      "national_title_win_pct": 0.1055,
       "preseason_strength": 32.8846834746687,
-      "quarterfinal_pct": 0.4805,
+      "quarterfinal_pct": 0.48,
       "schedule_id": "IU",
       "semifinal_pct": 0.293
     },
     {
-      "average_final_committee_rank": 84.994,
+      "average_final_committee_rank": 84.9855,
       "average_final_strength": -9.277326463834068,
       "average_regular_season_wins": 4.0245,
       "ccg_appearance_pct": 0.009,
@@ -617,7 +617,7 @@
       "semifinal_pct": 0.0015
     },
     {
-      "average_final_committee_rank": 71.674,
+      "average_final_committee_rank": 71.678,
       "average_final_strength": 1.627075224785677,
       "average_regular_season_wins": 4.9755,
       "ccg_appearance_pct": 0.0365,
@@ -627,12 +627,12 @@
       "national_title_appearance_pct": 0.0025,
       "national_title_win_pct": 0.001,
       "preseason_strength": 0.975668299742115,
-      "quarterfinal_pct": 0.01,
+      "quarterfinal_pct": 0.0095,
       "schedule_id": "KU",
-      "semifinal_pct": 0.0065
+      "semifinal_pct": 0.006
     },
     {
-      "average_final_committee_rank": 17.9555,
+      "average_final_committee_rank": 17.956,
       "average_final_strength": 12.079794470723508,
       "average_regular_season_wins": 10.234,
       "ccg_appearance_pct": 0.0,
@@ -647,7 +647,7 @@
       "semifinal_pct": 0.0795
     },
     {
-      "average_final_committee_rank": 56.9835,
+      "average_final_committee_rank": 56.984,
       "average_final_strength": 4.098717475348488,
       "average_regular_season_wins": 6.463,
       "ccg_appearance_pct": 0.059,
@@ -662,7 +662,7 @@
       "semifinal_pct": 0.0105
     },
     {
-      "average_final_committee_rank": 64.6445,
+      "average_final_committee_rank": 64.642,
       "average_final_strength": 2.4821174742191183,
       "average_regular_season_wins": 5.525,
       "ccg_appearance_pct": 0.0055,
@@ -677,7 +677,7 @@
       "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 72.631,
+      "average_final_committee_rank": 72.6355,
       "average_final_strength": -12.643203099870002,
       "average_regular_season_wins": 5.4205,
       "ccg_appearance_pct": 0.029,
@@ -692,7 +692,7 @@
       "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 73.584,
+      "average_final_committee_rank": 73.592,
       "average_final_strength": -2.592268438940161,
       "average_regular_season_wins": 5.0275,
       "ccg_appearance_pct": 0.0105,
@@ -707,7 +707,7 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 59.767,
+      "average_final_committee_rank": 59.7625,
       "average_final_strength": -5.846199546758664,
       "average_regular_season_wins": 6.2655,
       "ccg_appearance_pct": 0.0835,
@@ -722,10 +722,10 @@
       "semifinal_pct": 0.003
     },
     {
-      "average_final_committee_rank": 8.9095,
-      "average_final_strength": 32.28008988747132,
+      "average_final_committee_rank": 8.909,
+      "average_final_strength": 32.2800517959906,
       "average_regular_season_wins": 11.6305,
-      "ccg_appearance_pct": 0.8255,
+      "ccg_appearance_pct": 0.825,
       "cfp_bye_pct": 0.4355,
       "cfp_pct": 0.81,
       "conference_title_pct": 0.5005,
@@ -734,13 +734,13 @@
       "preseason_strength": 32.2730797257195,
       "quarterfinal_pct": 0.6055,
       "schedule_id": "MIA",
-      "semifinal_pct": 0.3435
+      "semifinal_pct": 0.344
     },
     {
-      "average_final_committee_rank": 35.4355,
-      "average_final_strength": 19.85189794530102,
+      "average_final_committee_rank": 35.4325,
+      "average_final_strength": 19.85339959542887,
       "average_regular_season_wins": 8.1315,
-      "ccg_appearance_pct": 0.1255,
+      "ccg_appearance_pct": 0.125,
       "cfp_bye_pct": 0.045,
       "cfp_pct": 0.1695,
       "conference_title_pct": 0.0575,
@@ -752,7 +752,7 @@
       "semifinal_pct": 0.0615
     },
     {
-      "average_final_committee_rank": 71.8965,
+      "average_final_committee_rank": 71.902,
       "average_final_strength": 3.485760901093596,
       "average_regular_season_wins": 4.859,
       "ccg_appearance_pct": 0.0105,
@@ -767,37 +767,37 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 22.0895,
+      "average_final_committee_rank": 22.0915,
       "average_final_strength": 27.14572569417404,
       "average_regular_season_wins": 9.4565,
       "ccg_appearance_pct": 0.2355,
       "cfp_bye_pct": 0.128,
       "cfp_pct": 0.384,
       "conference_title_pct": 0.1245,
-      "national_title_appearance_pct": 0.0925,
+      "national_title_appearance_pct": 0.093,
       "national_title_win_pct": 0.0485,
       "preseason_strength": 27.2672764186387,
-      "quarterfinal_pct": 0.2585,
+      "quarterfinal_pct": 0.259,
       "schedule_id": "MISS",
-      "semifinal_pct": 0.1575
+      "semifinal_pct": 0.158
     },
     {
-      "average_final_committee_rank": 62.4725,
+      "average_final_committee_rank": 62.4745,
       "average_final_strength": 7.852334110176685,
       "average_regular_season_wins": 5.597,
       "ccg_appearance_pct": 0.019,
       "cfp_bye_pct": 0.004,
       "cfp_pct": 0.0225,
       "conference_title_pct": 0.0085,
-      "national_title_appearance_pct": 0.0035,
+      "national_title_appearance_pct": 0.004,
       "national_title_win_pct": 0.001,
       "preseason_strength": 7.80379574824291,
       "quarterfinal_pct": 0.013,
       "schedule_id": "MIZ",
-      "semifinal_pct": 0.006
+      "semifinal_pct": 0.0065
     },
     {
-      "average_final_committee_rank": 64.0125,
+      "average_final_committee_rank": 64.017,
       "average_final_strength": -9.969272331667257,
       "average_regular_season_wins": 5.9065,
       "ccg_appearance_pct": 0.0,
@@ -812,7 +812,7 @@
       "semifinal_pct": 0.0015
     },
     {
-      "average_final_committee_rank": 84.1955,
+      "average_final_committee_rank": 84.1965,
       "average_final_strength": -1.6008449704964924,
       "average_regular_season_wins": 3.7025,
       "ccg_appearance_pct": 0.005,
@@ -827,7 +827,7 @@
       "semifinal_pct": 0.0015
     },
     {
-      "average_final_committee_rank": 98.5325,
+      "average_final_committee_rank": 98.536,
       "average_final_strength": -10.057296145842736,
       "average_regular_season_wins": 2.4965,
       "ccg_appearance_pct": 0.003,
@@ -842,7 +842,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 71.9105,
+      "average_final_committee_rank": 71.912,
       "average_final_strength": -14.830928818405178,
       "average_regular_season_wins": 5.244,
       "ccg_appearance_pct": 0.0,
@@ -872,7 +872,7 @@
       "semifinal_pct": 0.0485
     },
     {
-      "average_final_committee_rank": 64.415,
+      "average_final_committee_rank": 64.421,
       "average_final_strength": 0.6629426072203566,
       "average_regular_season_wins": 5.7785,
       "ccg_appearance_pct": 0.0215,
@@ -894,15 +894,15 @@
       "cfp_bye_pct": 0.143,
       "cfp_pct": 0.408,
       "conference_title_pct": 0.0,
-      "national_title_appearance_pct": 0.058,
+      "national_title_appearance_pct": 0.0575,
       "national_title_win_pct": 0.0235,
       "preseason_strength": 21.8825931490791,
-      "quarterfinal_pct": 0.2615,
+      "quarterfinal_pct": 0.2605,
       "schedule_id": "ND",
-      "semifinal_pct": 0.1265
+      "semifinal_pct": 0.1255
     },
     {
-      "average_final_committee_rank": 60.374,
+      "average_final_committee_rank": 60.377,
       "average_final_strength": -4.574239594231008,
       "average_regular_season_wins": 6.2395,
       "ccg_appearance_pct": 0.3295,
@@ -917,7 +917,7 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 78.528,
+      "average_final_committee_rank": 78.5295,
       "average_final_strength": 0.19569633271509512,
       "average_regular_season_wins": 4.168,
       "ccg_appearance_pct": 0.0055,
@@ -932,22 +932,22 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 64.263,
+      "average_final_committee_rank": 64.2565,
       "average_final_strength": -7.895692157274754,
       "average_regular_season_wins": 6.0275,
       "ccg_appearance_pct": 0.231,
       "cfp_bye_pct": 0.001,
-      "cfp_pct": 0.057,
+      "cfp_pct": 0.0565,
       "conference_title_pct": 0.1295,
       "national_title_appearance_pct": 0.0,
       "national_title_win_pct": 0.0,
       "preseason_strength": -7.73710409350844,
-      "quarterfinal_pct": 0.0145,
+      "quarterfinal_pct": 0.014,
       "schedule_id": "NEV",
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 62.2905,
+      "average_final_committee_rank": 62.284,
       "average_final_strength": -4.855996207332755,
       "average_regular_season_wins": 5.999,
       "ccg_appearance_pct": 0.328,
@@ -962,7 +962,7 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 71.254,
+      "average_final_committee_rank": 71.25,
       "average_final_strength": -9.383694363671909,
       "average_regular_season_wins": 5.279,
       "ccg_appearance_pct": 0.213,
@@ -972,27 +972,27 @@
       "national_title_appearance_pct": 0.0005,
       "national_title_win_pct": 0.0,
       "preseason_strength": -8.58798902967206,
-      "quarterfinal_pct": 0.0055,
+      "quarterfinal_pct": 0.006,
       "schedule_id": "NM",
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 74.452,
+      "average_final_committee_rank": 74.446,
       "average_final_strength": -9.525048593735434,
       "average_regular_season_wins": 4.9345,
       "ccg_appearance_pct": 0.0665,
       "cfp_bye_pct": 0.0015,
       "cfp_pct": 0.0175,
       "conference_title_pct": 0.0205,
-      "national_title_appearance_pct": 0.0015,
+      "national_title_appearance_pct": 0.001,
       "national_title_win_pct": 0.0005,
       "preseason_strength": -9.56779070322764,
       "quarterfinal_pct": 0.0055,
       "schedule_id": "NMSU",
-      "semifinal_pct": 0.0025
+      "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 84.948,
+      "average_final_committee_rank": 84.9505,
       "average_final_strength": -6.042213672611131,
       "average_regular_season_wins": 3.856,
       "ccg_appearance_pct": 0.0,
@@ -1007,7 +1007,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 42.8165,
+      "average_final_committee_rank": 42.82,
       "average_final_strength": -2.640611173077665,
       "average_regular_season_wins": 7.768,
       "ccg_appearance_pct": 0.0,
@@ -1022,7 +1022,7 @@
       "semifinal_pct": 0.014
     },
     {
-      "average_final_committee_rank": 60.053,
+      "average_final_committee_rank": 60.0575,
       "average_final_strength": 1.4531656188958981,
       "average_regular_season_wins": 6.1265,
       "ccg_appearance_pct": 0.0665,
@@ -1037,13 +1037,13 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 17.9755,
-      "average_final_strength": 29.51715005086318,
-      "average_regular_season_wins": 10.0605,
-      "ccg_appearance_pct": 0.3655,
-      "cfp_bye_pct": 0.215,
-      "cfp_pct": 0.517,
-      "conference_title_pct": 0.1985,
+      "average_final_committee_rank": 17.9675,
+      "average_final_strength": 29.518935054790187,
+      "average_regular_season_wins": 10.061,
+      "ccg_appearance_pct": 0.366,
+      "cfp_bye_pct": 0.2155,
+      "cfp_pct": 0.516,
+      "conference_title_pct": 0.199,
       "national_title_appearance_pct": 0.12,
       "national_title_win_pct": 0.0635,
       "preseason_strength": 29.4350022864305,
@@ -1052,7 +1052,7 @@
       "semifinal_pct": 0.2225
     },
     {
-      "average_final_committee_rank": 81.8545,
+      "average_final_committee_rank": 81.8775,
       "average_final_strength": -15.758165672761363,
       "average_regular_season_wins": 4.63,
       "ccg_appearance_pct": 0.1475,
@@ -1067,14 +1067,14 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 35.2865,
+      "average_final_committee_rank": 35.287,
       "average_final_strength": 24.6720150059511,
       "average_regular_season_wins": 7.965,
       "ccg_appearance_pct": 0.191,
       "cfp_bye_pct": 0.071,
       "cfp_pct": 0.194,
       "conference_title_pct": 0.104,
-      "national_title_appearance_pct": 0.0535,
+      "national_title_appearance_pct": 0.054,
       "national_title_win_pct": 0.0325,
       "preseason_strength": 24.8418243103291,
       "quarterfinal_pct": 0.1405,
@@ -1082,22 +1082,22 @@
       "semifinal_pct": 0.0915
     },
     {
-      "average_final_committee_rank": 31.819,
+      "average_final_committee_rank": 31.8205,
       "average_final_strength": 23.208769001397457,
       "average_regular_season_wins": 8.4455,
       "ccg_appearance_pct": 0.1375,
       "cfp_bye_pct": 0.0585,
       "cfp_pct": 0.2115,
       "conference_title_pct": 0.074,
-      "national_title_appearance_pct": 0.0445,
-      "national_title_win_pct": 0.022,
+      "national_title_appearance_pct": 0.044,
+      "national_title_win_pct": 0.0215,
       "preseason_strength": 23.4752192042254,
       "quarterfinal_pct": 0.1475,
       "schedule_id": "OU",
-      "semifinal_pct": 0.0905
+      "semifinal_pct": 0.09
     },
     {
-      "average_final_committee_rank": 67.9735,
+      "average_final_committee_rank": 67.9745,
       "average_final_strength": -9.741478491251268,
       "average_regular_season_wins": 5.5495,
       "ccg_appearance_pct": 0.0,
@@ -1112,7 +1112,7 @@
       "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 52.045,
+      "average_final_committee_rank": 52.054,
       "average_final_strength": 5.183752655514405,
       "average_regular_season_wins": 6.693,
       "ccg_appearance_pct": 0.0565,
@@ -1127,7 +1127,7 @@
       "semifinal_pct": 0.0115
     },
     {
-      "average_final_committee_rank": 62.677,
+      "average_final_committee_rank": 62.6775,
       "average_final_strength": -5.444997892714675,
       "average_regular_season_wins": 5.8475,
       "ccg_appearance_pct": 0.0,
@@ -1142,7 +1142,7 @@
       "semifinal_pct": 0.004
     },
     {
-      "average_final_committee_rank": 75.9925,
+      "average_final_committee_rank": 75.9955,
       "average_final_strength": -6.331148921973547,
       "average_regular_season_wins": 4.843,
       "ccg_appearance_pct": 0.0065,
@@ -1157,7 +1157,7 @@
       "semifinal_pct": 0.0025
     },
     {
-      "average_final_committee_rank": 85.6245,
+      "average_final_committee_rank": 85.626,
       "average_final_strength": -5.149049646571583,
       "average_regular_season_wins": 3.5945,
       "ccg_appearance_pct": 0.0035,
@@ -1172,7 +1172,7 @@
       "semifinal_pct": 0.0015
     },
     {
-      "average_final_committee_rank": 84.898,
+      "average_final_committee_rank": 84.8895,
       "average_final_strength": -13.439057337150707,
       "average_regular_season_wins": 3.9145,
       "ccg_appearance_pct": 0.03,
@@ -1187,7 +1187,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 94.641,
+      "average_final_committee_rank": 94.646,
       "average_final_strength": -9.876897272343376,
       "average_regular_season_wins": 3.0325,
       "ccg_appearance_pct": 0.001,
@@ -1202,7 +1202,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 94.8785,
+      "average_final_committee_rank": 94.8825,
       "average_final_strength": -9.462857779406663,
       "average_regular_season_wins": 3.1145,
       "ccg_appearance_pct": 0.001,
@@ -1217,7 +1217,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 51.2185,
+      "average_final_committee_rank": 51.2815,
       "average_final_strength": -10.0194567457571,
       "average_regular_season_wins": 7.391,
       "ccg_appearance_pct": 0.2765,
@@ -1232,7 +1232,7 @@
       "semifinal_pct": 0.005
     },
     {
-      "average_final_committee_rank": 65.812,
+      "average_final_committee_rank": 65.733,
       "average_final_strength": -12.486456387280894,
       "average_regular_season_wins": 6.086,
       "ccg_appearance_pct": 0.1765,
@@ -1247,7 +1247,7 @@
       "semifinal_pct": 0.003
     },
     {
-      "average_final_committee_rank": 41.1935,
+      "average_final_committee_rank": 41.1955,
       "average_final_strength": 9.159278846122287,
       "average_regular_season_wins": 7.938,
       "ccg_appearance_pct": 0.1495,
@@ -1262,7 +1262,7 @@
       "semifinal_pct": 0.024
     },
     {
-      "average_final_committee_rank": 89.332,
+      "average_final_committee_rank": 89.333,
       "average_final_strength": -7.502888366486672,
       "average_regular_season_wins": 3.2865,
       "ccg_appearance_pct": 0.001,
@@ -1277,25 +1277,25 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 74.726,
-      "average_final_strength": -4.547370881030742,
-      "average_regular_season_wins": 4.675,
-      "ccg_appearance_pct": 0.0125,
+      "average_final_committee_rank": 74.727,
+      "average_final_strength": -4.54733278955002,
+      "average_regular_season_wins": 4.6755,
+      "ccg_appearance_pct": 0.013,
       "cfp_bye_pct": 0.002,
-      "cfp_pct": 0.02,
-      "conference_title_pct": 0.0055,
-      "national_title_appearance_pct": 0.0005,
-      "national_title_win_pct": 0.0,
+      "cfp_pct": 0.0205,
+      "conference_title_pct": 0.006,
+      "national_title_appearance_pct": 0.001,
+      "national_title_win_pct": 0.0005,
       "preseason_strength": -4.79538919118985,
-      "quarterfinal_pct": 0.0075,
+      "quarterfinal_pct": 0.008,
       "schedule_id": "SYR",
-      "semifinal_pct": 0.0015
+      "semifinal_pct": 0.002
     },
     {
-      "average_final_committee_rank": 21.604,
-      "average_final_strength": 27.32182044801898,
+      "average_final_committee_rank": 21.605,
+      "average_final_strength": 27.321838127916294,
       "average_regular_season_wins": 9.705,
-      "ccg_appearance_pct": 0.271,
+      "ccg_appearance_pct": 0.2705,
       "cfp_bye_pct": 0.1315,
       "cfp_pct": 0.4055,
       "conference_title_pct": 0.133,
@@ -1307,13 +1307,13 @@
       "semifinal_pct": 0.152
     },
     {
-      "average_final_committee_rank": 43.795,
-      "average_final_strength": 11.160748560767297,
-      "average_regular_season_wins": 7.4525,
+      "average_final_committee_rank": 43.8,
+      "average_final_strength": 11.158981537276146,
+      "average_regular_season_wins": 7.452,
       "ccg_appearance_pct": 0.151,
       "cfp_bye_pct": 0.026,
-      "cfp_pct": 0.125,
-      "conference_title_pct": 0.0735,
+      "cfp_pct": 0.1245,
+      "conference_title_pct": 0.073,
       "national_title_appearance_pct": 0.009,
       "national_title_win_pct": 0.0035,
       "preseason_strength": 11.2988805895421,
@@ -1322,7 +1322,7 @@
       "semifinal_pct": 0.029
     },
     {
-      "average_final_committee_rank": 57.9515,
+      "average_final_committee_rank": 57.951,
       "average_final_strength": -2.9250259602385684,
       "average_regular_season_wins": 6.171,
       "ccg_appearance_pct": 0.057,
@@ -1337,7 +1337,7 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 42.446,
+      "average_final_committee_rank": 42.4455,
       "average_final_strength": 16.37230355994773,
       "average_regular_season_wins": 7.3685,
       "ccg_appearance_pct": 0.0905,
@@ -1352,22 +1352,22 @@
       "semifinal_pct": 0.0305
     },
     {
-      "average_final_committee_rank": 19.0195,
+      "average_final_committee_rank": 19.0155,
       "average_final_strength": 30.70279265632592,
       "average_regular_season_wins": 9.9125,
       "ccg_appearance_pct": 0.3255,
       "cfp_bye_pct": 0.195,
-      "cfp_pct": 0.475,
+      "cfp_pct": 0.476,
       "conference_title_pct": 0.168,
-      "national_title_appearance_pct": 0.125,
-      "national_title_win_pct": 0.071,
+      "national_title_appearance_pct": 0.1255,
+      "national_title_win_pct": 0.0715,
       "preseason_strength": 30.7095117478807,
-      "quarterfinal_pct": 0.343,
+      "quarterfinal_pct": 0.3435,
       "schedule_id": "TEX",
-      "semifinal_pct": 0.2105
+      "semifinal_pct": 0.2115
     },
     {
-      "average_final_committee_rank": 23.865,
+      "average_final_committee_rank": 23.8605,
       "average_final_strength": 10.627719760171328,
       "average_regular_season_wins": 9.81,
       "ccg_appearance_pct": 0.5155,
@@ -1382,7 +1382,7 @@
       "semifinal_pct": 0.0575
     },
     {
-      "average_final_committee_rank": 66.3875,
+      "average_final_committee_rank": 66.3835,
       "average_final_strength": -6.714192517869779,
       "average_regular_season_wins": 5.6405,
       "ccg_appearance_pct": 0.055,
@@ -1397,7 +1397,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 75.0,
+      "average_final_committee_rank": 75.0015,
       "average_final_strength": -13.536340298974114,
       "average_regular_season_wins": 5.081,
       "ccg_appearance_pct": 0.0,
@@ -1412,7 +1412,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 12.534,
+      "average_final_committee_rank": 12.531,
       "average_final_strength": 26.888454637123875,
       "average_regular_season_wins": 11.0575,
       "ccg_appearance_pct": 0.638,
@@ -1420,14 +1420,14 @@
       "cfp_pct": 0.6955,
       "conference_title_pct": 0.3635,
       "national_title_appearance_pct": 0.116,
-      "national_title_win_pct": 0.0515,
+      "national_title_win_pct": 0.051,
       "preseason_strength": 26.73559925483,
-      "quarterfinal_pct": 0.4915,
+      "quarterfinal_pct": 0.492,
       "schedule_id": "TTU",
-      "semifinal_pct": 0.2505
+      "semifinal_pct": 0.251
     },
     {
-      "average_final_committee_rank": 65.977,
+      "average_final_committee_rank": 65.9425,
       "average_final_strength": -10.521416201908183,
       "average_regular_season_wins": 6.0605,
       "ccg_appearance_pct": 0.246,
@@ -1442,7 +1442,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 85.488,
+      "average_final_committee_rank": 85.489,
       "average_final_strength": -12.21710071896754,
       "average_regular_season_wins": 3.699,
       "ccg_appearance_pct": 0.018,
@@ -1457,7 +1457,7 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 75.95,
+      "average_final_committee_rank": 75.9535,
       "average_final_strength": -4.300831922914977,
       "average_regular_season_wins": 4.747,
       "ccg_appearance_pct": 0.016,
@@ -1472,7 +1472,7 @@
       "semifinal_pct": 0.003
     },
     {
-      "average_final_committee_rank": 80.364,
+      "average_final_committee_rank": 80.3565,
       "average_final_strength": -6.920965122963374,
       "average_regular_season_wins": 4.265,
       "ccg_appearance_pct": 0.0055,
@@ -1487,7 +1487,7 @@
       "semifinal_pct": 0.003
     },
     {
-      "average_final_committee_rank": 45.1445,
+      "average_final_committee_rank": 45.147,
       "average_final_strength": -1.209686977496542,
       "average_regular_season_wins": 7.633,
       "ccg_appearance_pct": 0.0,
@@ -1502,14 +1502,14 @@
       "semifinal_pct": 0.014
     },
     {
-      "average_final_committee_rank": 17.3885,
-      "average_final_strength": 30.643846093294883,
+      "average_final_committee_rank": 17.3895,
+      "average_final_strength": 30.643828413397568,
       "average_regular_season_wins": 10.104,
-      "ccg_appearance_pct": 0.3435,
+      "ccg_appearance_pct": 0.344,
       "cfp_bye_pct": 0.187,
       "cfp_pct": 0.523,
       "conference_title_pct": 0.163,
-      "national_title_appearance_pct": 0.136,
+      "national_title_appearance_pct": 0.1365,
       "national_title_win_pct": 0.076,
       "preseason_strength": 30.8378992039364,
       "quarterfinal_pct": 0.3725,
@@ -1517,7 +1517,7 @@
       "semifinal_pct": 0.2285
     },
     {
-      "average_final_committee_rank": 86.402,
+      "average_final_committee_rank": 86.4015,
       "average_final_strength": -3.3178654388442244,
       "average_regular_season_wins": 4.292,
       "ccg_appearance_pct": 0.0005,
@@ -1532,7 +1532,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 78.0365,
+      "average_final_committee_rank": 78.039,
       "average_final_strength": -1.750683633301814,
       "average_regular_season_wins": 4.246,
       "ccg_appearance_pct": 0.0115,
@@ -1547,7 +1547,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 78.6755,
+      "average_final_committee_rank": 78.6705,
       "average_final_strength": -13.163256491233764,
       "average_regular_season_wins": 4.7255,
       "ccg_appearance_pct": 0.136,
@@ -1562,34 +1562,34 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 54.276,
+      "average_final_committee_rank": 54.2735,
       "average_final_strength": -0.40102176469144685,
       "average_regular_season_wins": 6.4395,
       "ccg_appearance_pct": 0.174,
       "cfp_bye_pct": 0.0035,
       "cfp_pct": 0.0735,
       "conference_title_pct": 0.074,
-      "national_title_appearance_pct": 0.003,
-      "national_title_win_pct": 0.002,
+      "national_title_appearance_pct": 0.0035,
+      "national_title_win_pct": 0.0025,
       "preseason_strength": -0.546320067689786,
       "quarterfinal_pct": 0.0275,
       "schedule_id": "UNT",
       "semifinal_pct": 0.007
     },
     {
-      "average_final_committee_rank": 27.9515,
-      "average_final_strength": 20.570676534103434,
+      "average_final_committee_rank": 27.9465,
+      "average_final_strength": 20.570593653702318,
       "average_regular_season_wins": 8.7815,
-      "ccg_appearance_pct": 0.1885,
-      "cfp_bye_pct": 0.079,
+      "ccg_appearance_pct": 0.189,
+      "cfp_bye_pct": 0.0785,
       "cfp_pct": 0.282,
       "conference_title_pct": 0.086,
-      "national_title_appearance_pct": 0.048,
-      "national_title_win_pct": 0.024,
+      "national_title_appearance_pct": 0.0475,
+      "national_title_win_pct": 0.0235,
       "preseason_strength": 20.2565766514071,
       "quarterfinal_pct": 0.169,
       "schedule_id": "USC",
-      "semifinal_pct": 0.093
+      "semifinal_pct": 0.0925
     },
     {
       "average_final_committee_rank": 59.7795,
@@ -1607,7 +1607,7 @@
       "semifinal_pct": 0.004
     },
     {
-      "average_final_committee_rank": 80.001,
+      "average_final_committee_rank": 80.0,
       "average_final_strength": -12.088200929024703,
       "average_regular_season_wins": 4.413,
       "ccg_appearance_pct": 0.026,
@@ -1622,7 +1622,7 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 67.8645,
+      "average_final_committee_rank": 67.8565,
       "average_final_strength": -9.853412605213958,
       "average_regular_season_wins": 5.5125,
       "ccg_appearance_pct": 0.2405,
@@ -1637,12 +1637,12 @@
       "semifinal_pct": 0.0035
     },
     {
-      "average_final_committee_rank": 28.433,
+      "average_final_committee_rank": 28.438,
       "average_final_strength": 16.37293479520551,
       "average_regular_season_wins": 9.0205,
       "ccg_appearance_pct": 0.234,
       "cfp_bye_pct": 0.09,
-      "cfp_pct": 0.3045,
+      "cfp_pct": 0.304,
       "conference_title_pct": 0.113,
       "national_title_appearance_pct": 0.0345,
       "national_title_win_pct": 0.0135,
@@ -1652,7 +1652,7 @@
       "semifinal_pct": 0.078
     },
     {
-      "average_final_committee_rank": 86.839,
+      "average_final_committee_rank": 86.8275,
       "average_final_strength": -15.683006455588382,
       "average_regular_season_wins": 3.758,
       "ccg_appearance_pct": 0.116,
@@ -1667,12 +1667,12 @@
       "semifinal_pct": 0.0
     },
     {
-      "average_final_committee_rank": 80.322,
+      "average_final_committee_rank": 80.3155,
       "average_final_strength": -11.417321796671605,
       "average_regular_season_wins": 4.2825,
       "ccg_appearance_pct": 0.0465,
       "cfp_bye_pct": 0.0,
-      "cfp_pct": 0.009,
+      "cfp_pct": 0.0095,
       "conference_title_pct": 0.017,
       "national_title_appearance_pct": 0.0,
       "national_title_win_pct": 0.0,
@@ -1682,37 +1682,37 @@
       "semifinal_pct": 0.0005
     },
     {
-      "average_final_committee_rank": 14.246,
+      "average_final_committee_rank": 14.252,
       "average_final_strength": 23.53967131510541,
-      "average_regular_season_wins": 10.891,
+      "average_regular_season_wins": 10.8905,
       "ccg_appearance_pct": 0.5705,
-      "cfp_bye_pct": 0.2345,
+      "cfp_bye_pct": 0.234,
       "cfp_pct": 0.6575,
-      "conference_title_pct": 0.253,
+      "conference_title_pct": 0.2525,
       "national_title_appearance_pct": 0.076,
-      "national_title_win_pct": 0.0345,
+      "national_title_win_pct": 0.035,
       "preseason_strength": 23.7745596194438,
       "quarterfinal_pct": 0.4025,
       "schedule_id": "UVA",
       "semifinal_pct": 0.167
     },
     {
-      "average_final_committee_rank": 21.055,
+      "average_final_committee_rank": 21.056,
       "average_final_strength": 24.217042043618328,
       "average_regular_season_wins": 10.351,
       "ccg_appearance_pct": 0.2265,
       "cfp_bye_pct": 0.1445,
       "cfp_pct": 0.4565,
       "conference_title_pct": 0.112,
-      "national_title_appearance_pct": 0.0715,
+      "national_title_appearance_pct": 0.071,
       "national_title_win_pct": 0.037,
       "preseason_strength": 23.8468305164021,
-      "quarterfinal_pct": 0.282,
+      "quarterfinal_pct": 0.2815,
       "schedule_id": "VAN",
       "semifinal_pct": 0.1485
     },
     {
-      "average_final_committee_rank": 73.0855,
+      "average_final_committee_rank": 73.088,
       "average_final_strength": -4.103824230399118,
       "average_regular_season_wins": 4.799,
       "ccg_appearance_pct": 0.027,
@@ -1727,7 +1727,7 @@
       "semifinal_pct": 0.005
     },
     {
-      "average_final_committee_rank": 65.2185,
+      "average_final_committee_rank": 65.2215,
       "average_final_strength": 2.2880964235083088,
       "average_regular_season_wins": 5.3415,
       "ccg_appearance_pct": 0.034,
@@ -1742,22 +1742,22 @@
       "semifinal_pct": 0.006
     },
     {
-      "average_final_committee_rank": 35.295,
+      "average_final_committee_rank": 35.2825,
       "average_final_strength": 16.255071498323076,
       "average_regular_season_wins": 8.135,
       "ccg_appearance_pct": 0.102,
-      "cfp_bye_pct": 0.037,
-      "cfp_pct": 0.162,
+      "cfp_bye_pct": 0.0375,
+      "cfp_pct": 0.1625,
       "conference_title_pct": 0.0405,
       "national_title_appearance_pct": 0.0175,
       "national_title_win_pct": 0.0065,
       "preseason_strength": 16.2685749981018,
-      "quarterfinal_pct": 0.0905,
+      "quarterfinal_pct": 0.091,
       "schedule_id": "WASH",
-      "semifinal_pct": 0.041
+      "semifinal_pct": 0.0405
     },
     {
-      "average_final_committee_rank": 63.565,
+      "average_final_committee_rank": 63.5685,
       "average_final_strength": 0.3595590951932925,
       "average_regular_season_wins": 5.979,
       "ccg_appearance_pct": 0.0235,
@@ -1767,12 +1767,12 @@
       "national_title_appearance_pct": 0.0015,
       "national_title_win_pct": 0.0005,
       "preseason_strength": 0.156730291114626,
-      "quarterfinal_pct": 0.009,
+      "quarterfinal_pct": 0.0095,
       "schedule_id": "WIS",
       "semifinal_pct": 0.0035
     },
     {
-      "average_final_committee_rank": 67.561,
+      "average_final_committee_rank": 67.5345,
       "average_final_strength": -9.45283837952756,
       "average_regular_season_wins": 5.9095,
       "ccg_appearance_pct": 0.2785,
@@ -1802,7 +1802,7 @@
       "semifinal_pct": 0.001
     },
     {
-      "average_final_committee_rank": 66.605,
+      "average_final_committee_rank": 66.597,
       "average_final_strength": -10.499131309518631,
       "average_regular_season_wins": 5.8375,
       "ccg_appearance_pct": 0.188,
@@ -1817,7 +1817,7 @@
       "semifinal_pct": 0.0055
     },
     {
-      "average_final_committee_rank": 89.298,
+      "average_final_committee_rank": 89.3015,
       "average_final_strength": -15.738168639073644,
       "average_regular_season_wins": 3.7155,
       "ccg_appearance_pct": 0.0,
