@@ -33,7 +33,8 @@
   "artifact": "V3_R6_TEAM_IDENTITY_RECONCILIATION.json",
   "artifact_status": "TEAM_IDENTITY_RECONCILIATION_RECORD",
   "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
-  "canonical_authority": "C:/CLAUDE-SYTHALAX-WORKTREES/v3-historical-observation-corpus-r6/reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+  "canonical_authority": "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+  "canonical_authority_path_class": "REPOSITORY_RELATIVE",
   "canonical_authority_sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
   "canonical_entities": 134,
   "canonical_entities_in_corpus": [

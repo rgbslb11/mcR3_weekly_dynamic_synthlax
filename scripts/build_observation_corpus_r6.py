@@ -71,7 +71,7 @@ def main() -> int:
 
     corpus_bytes = oc.render_corpus_csv(build.rows)
     CORPUS_CSV.write_bytes(corpus_bytes)
-    receipt = oc.corpus_registration_receipt(CORPUS_CSV, build.rows)
+    receipt = oc.corpus_registration_receipt(CORPUS_CSV, build.rows, REPO_ROOT)
     split = oc.build_temporal_split(build.rows)
     volume = oc.volume_assessment(build.rows, build.source_report["team_season_coverage"])
 
@@ -199,7 +199,29 @@ def main() -> int:
                 "admitted_row_count": len(build.rows),
                 "excluded_row_count": len(build.exclusions),
                 "reconciles": build.reconciles(),
-                "rule": "raw == admitted + excluded, for every source file",
+                "reconciliation_universe": "NCAA_FBS_SCOREBOARD_FEED",
+                "rule": (
+                    "raw == admitted + excluded over every fbs-feed source file. "
+                    "The fbs feed is the reconciliation universe because it is the "
+                    "superset of the in-scope scored-game observations: an "
+                    "FBS-versus-FCS game is published in both feeds, so no in-scope "
+                    "game is reachable only through the fcs feed."
+                ),
+                "fbs_feed_row_count": build.source_report["raw_row_count"],
+                "fbs_feed_files": len(
+                    [r for r in records if r.division == "fbs"]
+                ),
+                "fcs_oracle_row_count": build.source_report["fcs_oracle_row_count"],
+                "fcs_oracle_files": build.source_report["fcs_oracle_files"],
+                "fcs_oracle_role": build.source_report["fcs_oracle_role"],
+                "fcs_oracle_rule": (
+                    "The fcs feed is read only to decide observed division — a game "
+                    "appearing in both feeds crosses divisions — and its rows are "
+                    "deliberately NOT terms in the equation above. They are not "
+                    "admitted, not excluded, and not counted as raw: an FCS-versus-FCS "
+                    "game is outside the governed scope of this corpus rather than a "
+                    "row it dropped."
+                ),
             },
             "reason_codes": list(oc.EXCLUSION_REASONS),
             "reason_counts": dict(sorted(reason_counts.items())),
@@ -355,11 +377,28 @@ def main() -> int:
                 "seasons_retrieved": custody["seasons"],
                 "seasons_admitted": list(oc.ADMITTED_SEASONS),
                 "seasons_refused": build.source_report["seasons_not_admitted"],
+                "seasons_refused_source_content_fact": build.source_report[
+                    "seasons_not_admitted_state_census"
+                ],
+                "seasons_refused_source_content_rule": build.source_report[
+                    "seasons_not_admitted_census_rule"
+                ],
                 "seasons_refused_evidence": (
-                    "The 2025 week files were last updated before those games "
-                    "were played; every game in them still reads gameState=pre "
-                    "with blank scores. The bytes are retained as the evidence "
-                    "for that finding."
+                    "SOURCE CONTENT FACT. The captured 2025 week files are a "
+                    "mid-season snapshot, not an empty one. Their gameState census "
+                    "is published verbatim in seasons_refused_source_content_fact "
+                    "and is counted from the bytes: the season stands mostly "
+                    "unplayed, a minority of rows already read final and a few "
+                    "still read live. EVIDENCE ADMISSION DECISION. That mix is why "
+                    "the season is refused, not an obstacle to refusing it. "
+                    "Admission is by whole finalised season: a season whose own "
+                    "bytes show it still in progress cannot supply a "
+                    "season-complete observation set, and admitting only the rows "
+                    "that happen to read final would make the corpus a function of "
+                    "when the snapshot was taken. Every 2025 row is therefore "
+                    "refused under SOURCE_SEASON_NOT_FINALISED, the final and live "
+                    "rows included. The bytes are retained as the evidence for "
+                    "both the fact and the decision."
                 ),
                 "postseason_coverage": (
                     "None. The feed carries no bowl or College Football Playoff "

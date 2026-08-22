@@ -70,7 +70,7 @@
       "class": "NOT_GOVERNED_AVAILABLE_USED_AS_GATE"
     },
     "overtime_periods": {
-      "basis": "finalMessage carries FINAL (OT) through FINAL (4OT). Counted in the reports; not admitted, because availability is not admission.",
+      "basis": "finalMessage carries an overtime label: FINAL (OT) for a single extra period and FINAL (<n>OT) for n of them. The vocabulary is open-ended, so it is read from the bytes rather than assumed here; the labels actually observed and the maximum are reported in source_report. Counted in the reports; not admitted, because availability is not admission.",
       "class": "NOT_GOVERNED_AVAILABLE"
     },
     "pregame_opponent_rating": {
@@ -120,13 +120,42 @@
   },
   "lane": "claude/v3-historical-observation-corpus-r6",
   "newline_policy": "LF",
-  "path": "C:/CLAUDE-SYTHALAX-WORKTREES/v3-historical-observation-corpus-r6/reference/dynamic_weekly_mc_v3/observation_corpus_r6/V3_R6_OBSERVATION_CORPUS.csv",
+  "path": "reference/dynamic_weekly_mc_v3/observation_corpus_r6/V3_R6_OBSERVATION_CORPUS.csv",
+  "path_class": "REPOSITORY_RELATIVE",
   "row_count": 2241,
   "sha256": "31504e8d03b68de549bb999f2ce6a62824eb3286e3802712534d3092fa3f7aac",
   "source_report": {
-    "overtime_disposition": "finalMessage carries FINAL (OT) through FINAL (4OT), so the count is observable. overtime_periods is not on the governed allowlist, so it is reported and not emitted.",
+    "fcs_oracle_files": 83,
+    "fcs_oracle_role": "DIVISION_CLASSIFICATION_ORACLE_OUTSIDE_ROW_RECONCILIATION",
+    "fcs_oracle_row_count": 4164,
+    "overtime_disposition": "finalMessage carries the overtime labels ['FINAL (OT)', 'FINAL (2OT)', 'FINAL (3OT)', 'FINAL (4OT)', 'FINAL (8OT)'] over the admitted corpus, so the count and the period depth are both observable. The vocabulary is read from the bytes and is not capped by this module. Three scopes are reported separately because they differ: the fbs feed publishes ['FINAL (OT)', 'FINAL (2OT)', 'FINAL (3OT)', 'FINAL (4OT)', 'FINAL (7OT)', 'FINAL (8OT)'], admission reaches FINAL (8OT), and any deeper feed label belongs to a game excluded on a ground unrelated to overtime. overtime_periods is not on the governed allowlist, so it is reported and not emitted.",
     "overtime_games_admitted": 91,
     "overtime_games_staged": 101,
+    "overtime_labels_admitted": [
+      "FINAL (OT)",
+      "FINAL (2OT)",
+      "FINAL (3OT)",
+      "FINAL (4OT)",
+      "FINAL (8OT)"
+    ],
+    "overtime_labels_source_feed": [
+      "FINAL (OT)",
+      "FINAL (2OT)",
+      "FINAL (3OT)",
+      "FINAL (4OT)",
+      "FINAL (7OT)",
+      "FINAL (8OT)"
+    ],
+    "overtime_labels_staged": [
+      "FINAL (OT)",
+      "FINAL (2OT)",
+      "FINAL (3OT)",
+      "FINAL (4OT)",
+      "FINAL (8OT)"
+    ],
+    "overtime_maximum_label_admitted": "FINAL (8OT)",
+    "overtime_maximum_label_source_feed": "FINAL (8OT)",
+    "overtime_maximum_periods_admitted": 8,
     "raw_row_count": 4355,
     "seasons_admitted": [
       2021,
@@ -136,6 +165,17 @@
     ],
     "seasons_not_admitted": {
       "2025": "SOURCE_SEASON_NOT_FINALISED"
+    },
+    "seasons_not_admitted_census_rule": "SOURCE CONTENT FACT, counted from the captured bytes and reported whatever the mix. It is recorded separately from the EVIDENCE ADMISSION DECISION beside it: a refused season may legitimately contain final rows, and those rows are refused with the rest because admission is by whole finalised season, not by row.",
+    "seasons_not_admitted_state_census": {
+      "2025": {
+        "by_game_state": {
+          "final": 22,
+          "live": 4,
+          "pre": 852
+        },
+        "total": 878
+      }
     },
     "seasons_retrieved": [
       2021,

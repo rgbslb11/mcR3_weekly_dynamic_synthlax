@@ -19894,8 +19894,15 @@
   "reconciliation": {
     "admitted_row_count": 2241,
     "excluded_row_count": 2114,
+    "fbs_feed_files": 91,
+    "fbs_feed_row_count": 4355,
+    "fcs_oracle_files": 83,
+    "fcs_oracle_role": "DIVISION_CLASSIFICATION_ORACLE_OUTSIDE_ROW_RECONCILIATION",
+    "fcs_oracle_row_count": 4164,
+    "fcs_oracle_rule": "The fcs feed is read only to decide observed division \u2014 a game appearing in both feeds crosses divisions \u2014 and its rows are deliberately NOT terms in the equation above. They are not admitted, not excluded, and not counted as raw: an FCS-versus-FCS game is outside the governed scope of this corpus rather than a row it dropped.",
     "raw_row_count": 4355,
     "reconciles": true,
-    "rule": "raw == admitted + excluded, for every source file"
+    "reconciliation_universe": "NCAA_FBS_SCOREBOARD_FEED",
+    "rule": "raw == admitted + excluded over every fbs-feed source file. The fbs feed is the reconciliation universe because it is the superset of the in-scope scored-game observations: an FBS-versus-FCS game is published in both feeds, so no in-scope game is reachable only through the fcs feed."
   }
 }

@@ -106,7 +106,18 @@
     "seasons_refused": {
       "2025": "SOURCE_SEASON_NOT_FINALISED"
     },
-    "seasons_refused_evidence": "The 2025 week files were last updated before those games were played; every game in them still reads gameState=pre with blank scores. The bytes are retained as the evidence for that finding.",
+    "seasons_refused_evidence": "SOURCE CONTENT FACT. The captured 2025 week files are a mid-season snapshot, not an empty one. Their gameState census is published verbatim in seasons_refused_source_content_fact and is counted from the bytes: the season stands mostly unplayed, a minority of rows already read final and a few still read live. EVIDENCE ADMISSION DECISION. That mix is why the season is refused, not an obstacle to refusing it. Admission is by whole finalised season: a season whose own bytes show it still in progress cannot supply a season-complete observation set, and admitting only the rows that happen to read final would make the corpus a function of when the snapshot was taken. Every 2025 row is therefore refused under SOURCE_SEASON_NOT_FINALISED, the final and live rows included. The bytes are retained as the evidence for both the fact and the decision.",
+    "seasons_refused_source_content_fact": {
+      "2025": {
+        "by_game_state": {
+          "final": 22,
+          "live": 4,
+          "pre": 852
+        },
+        "total": 878
+      }
+    },
+    "seasons_refused_source_content_rule": "SOURCE CONTENT FACT, counted from the captured bytes and reported whatever the mix. It is recorded separately from the EVIDENCE ADMISSION DECISION beside it: a refused season may legitimately contain final rows, and those rows are refused with the rest because admission is by whole finalised season, not by row.",
     "seasons_retrieved": [
       2021,
       2022,

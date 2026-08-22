@@ -82,6 +82,7 @@ import hashlib
 import io
 import json
 import re
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -123,10 +124,20 @@ __all__ = [
 
 CORPUS_ID = "V3_R6_HISTORICAL_OBSERVATION_CORPUS"
 
-#: Seasons admitted to the corpus. 2025 was retrieved and is *not* here: the
-#: feed's 2025 week files were last updated before those games were played and
-#: every game in them still reads ``pre`` with blank scores. The bytes are kept
-#: as the evidence for that finding and the season is refused as unfinalised.
+#: Seasons admitted to the corpus. 2025 was retrieved and is *not* here. Two
+#: separate things decide that, and conflating them is what the R6 audit caught:
+#:
+#: SOURCE CONTENT FACT. The captured 2025 week files are a mid-season snapshot.
+#: Their census is computed from the bytes, not asserted here, and is published
+#: as ``seasons_not_admitted_state_census``: at capture the season stood mostly
+#: unplayed, with a minority of rows already ``final`` and a few still ``live``.
+#:
+#: EVIDENCE ADMISSION DECISION. Admission is by whole season. A season whose own
+#: bytes show it still in progress is not a finalised season, so every one of its
+#: rows is refused under ``SOURCE_SEASON_NOT_FINALISED`` — including the rows that
+#: happen to read ``final``. Admitting those would mount a partially-played season
+#: as if it were a complete one, and would make the corpus a function of when the
+#: snapshot was taken. The bytes are kept as the evidence for that refusal.
 ADMITTED_SEASONS = (2021, 2022, 2023, 2024)
 
 #: Whole-season split boundaries. Season granularity is chosen over any finer
@@ -293,8 +304,12 @@ FIELD_CLASSIFICATION: Mapping[str, Mapping[str, str]] = {
     "overtime_periods": {
         "class": "NOT_GOVERNED_AVAILABLE",
         "basis": (
-            "finalMessage carries FINAL (OT) through FINAL (4OT). Counted in the "
-            "reports; not admitted, because availability is not admission."
+            "finalMessage carries an overtime label: FINAL (OT) for a single "
+            "extra period and FINAL (<n>OT) for n of them. The vocabulary is "
+            "open-ended, so it is read from the bytes rather than assumed here; "
+            "the labels actually observed and the maximum are reported in "
+            "source_report. Counted in the reports; not admitted, because "
+            "availability is not admission."
         ),
     },
     "opponent_division": {
@@ -348,6 +363,36 @@ _INDEX_ROW = re.compile(
     re.M,
 )
 _AKA = re.compile(r"### \d+ — .*?\(`([^`]+)`\)\n(?:.*?\n)*?- `aka_name`: `([^`]*)`")
+
+
+def _repo_relative(path: Path, repo_root: Path | None) -> str:
+    """Render ``path`` portably, for records that must read the same anywhere.
+
+    A provenance record naming ``C:/…/some-worktree/reference/…`` is not
+    independently checkable: that path exists on exactly one machine. The digest
+    beside it is the binding and stays the binding; this only makes the human-
+    readable locator resolvable from a fresh checkout. A path outside the
+    repository degrades to its file name rather than leaking the build host.
+    """
+    if repo_root is not None:
+        try:
+            return Path(path).resolve().relative_to(Path(repo_root).resolve()).as_posix()
+        except (ValueError, OSError):
+            pass
+    return Path(path).name
+
+
+def _overtime_periods(label: str) -> int:
+    """Extra periods behind an overtime ``finalMessage`` label.
+
+    ``FINAL (OT)`` is one period and carries no digit; ``FINAL (3OT)`` is three.
+    Parsed rather than tabulated, because the source's ceiling is not ours to
+    fix: this corpus already contains an eight-overtime game.
+    """
+    match = _OVERTIME.search(label)
+    if match is None:  # pragma: no cover - callers only pass matched labels
+        raise InputValidationError(f"{label!r} is not an overtime final message.")
+    return int(match.group(1)) if match.group(1) else 1
 
 
 def _sha256(data: bytes) -> str:
@@ -744,8 +789,30 @@ def build_observation_corpus(
     raw_row_count = 0
     #: Keyed rather than counted, so overtime can be reported against the rows
     #: that actually survived admission instead of against everything staged.
-    overtime_keys: set[tuple[int, str]] = set()
+    #: The label is kept, not just the key, because the source's overtime
+    #: vocabulary is open-ended and must be read rather than assumed.
+    overtime_labels: dict[tuple[int, str], str] = {}
+    #: Every overtime label the fbs feed publishes, across all retrieved seasons
+    #: and before any gate. Reported separately because it is wider than the
+    #: admitted vocabulary: the feed's FINAL (7OT) sits on a cross-division game,
+    #: excluded on that ground rather than on overtime depth. A record that
+    #: quoted only one of these scopes would understate the other.
+    feed_overtime_labels: set[str] = set()
     non_admitted_seasons: dict[int, str] = {}
+    non_admitted_season_states: dict[int, dict[str, Any]] = {}
+
+    # The fcs feed is a division oracle, not a row source. It is counted here so
+    # the reconciliation record can state its own scope exactly: the row equation
+    # is closed over the fbs feed, and this number is deliberately outside it.
+    fcs_oracle_row_count = 0
+    fcs_oracle_files = 0
+    for record in records:
+        if record.division != "fcs":
+            continue
+        fcs_oracle_files += 1
+        fcs_oracle_row_count += len(
+            json.loads(record.read(repo_root)).get("games", [])
+        )
 
     for season in sorted(by_season):
         fbs_records = sorted(by_season[season]["fbs"], key=lambda r: r.week)
@@ -756,8 +823,24 @@ def build_observation_corpus(
             for entry in payload.get("games", []):
                 fbs_games.append((record.week, entry["game"], record))
         raw_row_count += len(fbs_games)
+        for _, game, _ in fbs_games:
+            feed_match = _OVERTIME.search(game.get("finalMessage", ""))
+            if feed_match:
+                feed_overtime_labels.add(feed_match.group(0))
 
         if season not in seasons:
+            # SOURCE CONTENT FACT: what the captured bytes actually say, counted
+            # rather than characterised. A season caught mid-play carries a mix of
+            # states, and a record that flattens that mix to "all pre" is false
+            # even when the refusal it justifies is right.
+            states = Counter(g.get("gameState", "") for _, g, _ in fbs_games)
+            non_admitted_season_states[season] = {
+                "total": len(fbs_games),
+                "by_game_state": dict(sorted(states.items())),
+            }
+            # EVIDENCE ADMISSION DECISION: separate from the fact above. Admission
+            # is by whole season, so one non-final row makes the season unfinalised
+            # and refuses all of it — the final rows included.
             non_admitted_seasons[season] = (
                 "SOURCE_SEASON_NOT_FINALISED"
                 if any(g.get("gameState") != "final" for _, g, _ in fbs_games)
@@ -893,8 +976,9 @@ def build_observation_corpus(
             if home_division is None or away_division is None:
                 refuse("UNRESOLVED_OPPONENT_DIVISION", "division not determinable")
                 continue
-            if _OVERTIME.search(game.get("finalMessage", "")):
-                overtime_keys.add((season, source_game_id))
+            overtime_match = _OVERTIME.search(game.get("finalMessage", ""))
+            if overtime_match:
+                overtime_labels[(season, source_game_id)] = overtime_match.group(0)
             staged_row = {
                 **note,
                 "epoch": int(epoch_text),
@@ -1003,25 +1087,61 @@ def build_observation_corpus(
     exclusions.extend(coverage_exclusions)
     rows = tuple(sorted(rows, key=lambda r: (r.event_time, r.game_id)))
 
-    identity_report = _identity_report(resolutions, unresolved_names, ambiguous_pairs, authority, rows)
+    identity_report = _identity_report(
+        resolutions, unresolved_names, ambiguous_pairs, authority, rows, repo_root
+    )
     game_identity_report = _game_identity_report(rows)
     chronology_report = _chronology_report(rows)
+    admitted_overtime_labels = [
+        overtime_labels[(row.season, row.game_id.split("-", 2)[2])]
+        for row in rows
+        if (row.season, row.game_id.split("-", 2)[2]) in overtime_labels
+    ]
+    feed_label_set = sorted(feed_overtime_labels, key=_overtime_periods)
+    staged_label_set = sorted(set(overtime_labels.values()), key=_overtime_periods)
+    admitted_label_set = sorted(set(admitted_overtime_labels), key=_overtime_periods)
     source_report = {
         "raw_row_count": raw_row_count,
         "source_files": len(records),
         "seasons_retrieved": sorted({r.season for r in records}),
         "seasons_admitted": list(seasons),
         "seasons_not_admitted": {str(k): v for k, v in sorted(non_admitted_seasons.items())},
-        "overtime_games_staged": len(overtime_keys),
-        "overtime_games_admitted": sum(
-            1
-            for row in rows
-            if (row.season, row.game_id.split("-", 2)[2]) in overtime_keys
+        "seasons_not_admitted_state_census": {
+            str(k): v for k, v in sorted(non_admitted_season_states.items())
+        },
+        "seasons_not_admitted_census_rule": (
+            "SOURCE CONTENT FACT, counted from the captured bytes and reported "
+            "whatever the mix. It is recorded separately from the EVIDENCE "
+            "ADMISSION DECISION beside it: a refused season may legitimately "
+            "contain final rows, and those rows are refused with the rest because "
+            "admission is by whole finalised season, not by row."
         ),
+        "fcs_oracle_row_count": fcs_oracle_row_count,
+        "fcs_oracle_files": fcs_oracle_files,
+        "fcs_oracle_role": (
+            "DIVISION_CLASSIFICATION_ORACLE_OUTSIDE_ROW_RECONCILIATION"
+        ),
+        "overtime_games_staged": len(overtime_labels),
+        "overtime_games_admitted": len(admitted_overtime_labels),
+        "overtime_labels_source_feed": feed_label_set,
+        "overtime_maximum_label_source_feed": (feed_label_set[-1] if feed_label_set else ""),
+        "overtime_labels_staged": staged_label_set,
+        "overtime_labels_admitted": admitted_label_set,
+        "overtime_maximum_periods_admitted": (
+            max((_overtime_periods(x) for x in admitted_label_set), default=0)
+        ),
+        "overtime_maximum_label_admitted": (admitted_label_set[-1] if admitted_label_set else ""),
         "overtime_disposition": (
-            "finalMessage carries FINAL (OT) through FINAL (4OT), so the count is "
-            "observable. overtime_periods is not on the governed allowlist, so it "
-            "is reported and not emitted."
+            "finalMessage carries the overtime labels "
+            f"{admitted_label_set} over the admitted corpus, so the count and the "
+            "period depth are both observable. The vocabulary is read from the "
+            "bytes and is not capped by this module. Three scopes are reported "
+            "separately because they differ: the fbs feed publishes "
+            f"{feed_label_set}, admission reaches "
+            f"{admitted_label_set[-1] if admitted_label_set else 'none'}, and any "
+            "deeper feed label belongs to a game excluded on a ground unrelated "
+            "to overtime. overtime_periods is not on the governed allowlist, so "
+            "it is reported and not emitted."
         ),
         "team_season_coverage": coverage,
     }
@@ -1096,13 +1216,15 @@ def _identity_report(
     ambiguous_pairs: Mapping[int, list[str]],
     authority: CanonicalIdentityAuthority,
     rows: Sequence[ObservationRow],
+    repo_root: Path | None = None,
 ) -> dict[str, Any]:
     outcomes: dict[str, int] = {}
     for resolution in resolutions.values():
         outcomes[resolution.rule] = outcomes.get(resolution.rule, 0) + 1
     admitted_ids = {r.team for r in rows} | {r.opponent for r in rows}
     return {
-        "canonical_authority": str(authority.path).replace("\\", "/"),
+        "canonical_authority": _repo_relative(authority.path, repo_root),
+        "canonical_authority_path_class": "REPOSITORY_RELATIVE",
         "canonical_authority_sha256": authority.sha256,
         "canonical_entities": len(authority.entities),
         "canonical_fbs_members": authority.fbs_member_count,
@@ -1256,7 +1378,9 @@ def render_corpus_csv(rows: Sequence[ObservationRow]) -> bytes:
     return buffer.getvalue().encode("utf-8")
 
 
-def corpus_registration_receipt(path: Path, rows: Sequence[ObservationRow]) -> dict[str, Any]:
+def corpus_registration_receipt(
+    path: Path, rows: Sequence[ObservationRow], repo_root: Path | None = None
+) -> dict[str, Any]:
     """Re-read the written corpus and confirm it is the corpus that was built.
 
     The digest is taken over bytes read back from disk, not over the bytes that
@@ -1298,7 +1422,8 @@ def corpus_registration_receipt(path: Path, rows: Sequence[ObservationRow]) -> d
     splits = {row[header.index("split")] for row in body}
     return {
         "corpus_id": CORPUS_ID,
-        "path": str(path).replace("\\", "/"),
+        "path": _repo_relative(path, repo_root),
+        "path_class": "REPOSITORY_RELATIVE" if repo_root is not None else "FILE_NAME_ONLY",
         "sha256": _sha256(data),
         "byte_length": len(data),
         "row_count": len(body),

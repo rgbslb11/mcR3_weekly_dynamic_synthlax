@@ -242,7 +242,7 @@ ruling, not a claim on it.
 |---|---|
 | `games_played_to_date` | **Derivable** walk-forward from the corpus. |
 | `game_type` | **Unavailable.** `contestName` and `bracketRound` are blank on every row, and no postseason game is carried, so regular-season and conference-championship games are present and indistinguishable. |
-| `overtime_periods` | **Available.** `finalMessage` carries `FINAL (OT)` through `FINAL (4OT)`. 101 staged games are overtime games, 91 of them in the admitted corpus. This is the field the contract wanted specifically — untagged overtime inflates `game_sd_points` — and could not get from any prior source. It is still not emitted: availability is not admission, and this lane cannot widen the allowlist. |
+| `overtime_periods` | **Available.** `finalMessage` carries an overtime label — `FINAL (OT)` for one extra period, `FINAL (<n>OT)` beyond it. The vocabulary is open-ended and is read from the bytes rather than assumed: the fbs feed publishes up to `FINAL (7OT)`, and the admitted corpus reaches `FINAL (8OT)` (Georgia 44–42 Georgia Tech, 2024). The deeper feed label sits on a cross-division game excluded on that ground, not on depth. 101 staged games are overtime games, 91 of them in the admitted corpus. This is the field the contract wanted specifically — untagged overtime inflates `game_sd_points` — and could not get from any prior source. It is still not emitted: availability is not admission, and this lane cannot widen the allowlist. |
 | `opponent_division` | **Available** by feed intersection. Used as an admission gate; not emitted. |
 
 ---
@@ -281,6 +281,15 @@ all. Source data was necessary; it was never sufficient.
 Every refused row carries an exact reason code, and the counts reconcile:
 **4,355 raw = 2,241 admitted + 2,114 excluded.**
 
+That equation is closed over the **fbs feed**, which is its whole universe:
+4,355 rows across 91 files. The fbs feed is the right universe because it is the
+superset of the in-scope scored-game observations — an FBS-versus-FCS game is
+published in *both* feeds, so no in-scope game is reachable only through the fcs
+side. The **fcs feed** — 4,164 rows across 83 files — is a *division
+classification oracle* and is deliberately **not a term in that equation**: its
+rows are not admitted, not excluded, and not counted as raw. An FCS-versus-FCS
+game is outside this corpus's governed scope, not a row it dropped.
+
 | Reason | Rows |
 |---|---:|
 | `SOURCE_SEASON_NOT_FINALISED` | 878 |
@@ -292,12 +301,23 @@ Every refused row carries an exact reason code, and the counts reconcile:
 | `GAME_NOT_FINAL` | 2 |
 | `OUTSIDE_GOVERNED_SCOPE_FCS_VS_FCS` | 1 |
 
-**`SOURCE_SEASON_NOT_FINALISED` is a finding, not housekeeping.** Season 2025
-was retrieved in full — 878 games — and every one of them still reads
-`gameState=pre` with blank scores, in files the source last updated *before*
-those games were played. The feed's 2025 objects are stale pre-season snapshots.
-The bytes are retained as the evidence for that finding, and the season is
-refused.
+**`SOURCE_SEASON_NOT_FINALISED` is a finding, not housekeeping** — and the
+finding has two halves that must not be run together.
+
+*Source content fact.* Season 2025 was retrieved in full — 878 fbs-feed games —
+in files the source last updated part-way through that season. The census,
+counted from the bytes and published as `seasons_refused_source_content_fact`,
+is **852 `pre`, 22 `final`, 4 `live`**. It is a mid-season snapshot, not an
+empty one, and this document previously said otherwise.
+
+*Evidence admission decision.* That mix is the reason for the refusal, not an
+obstacle to it. Admission is by whole finalised season. A season whose own bytes
+show it still in progress cannot supply a season-complete observation set, and
+admitting only the 22 rows that happen to read `final` would make the corpus a
+function of *when the snapshot was taken* — a different capture minute would
+give a different corpus. All 878 rows are therefore refused under
+`SOURCE_SEASON_NOT_FINALISED`, the `final` and `live` rows included. The bytes
+are retained as the evidence for both halves.
 
 **`INSUFFICIENT_TEAM_SEASON_COVERAGE`** is the contract's own per-team floor
 being enforced rather than merely reported. A team-season holding fewer than 8

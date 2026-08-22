@@ -893,3 +893,269 @@ def test_no_parameter_is_promoted_by_this_module():
         assert not any(forbidden in name for name in exported)
     for field in calibration.CALIBRATION_FIELDS:
         assert field not in oc.CORPUS_COLUMNS
+
+
+# --------------------------------------------------------------------------
+# audit remediation R1 — record accuracy
+#
+# The R6 audit passed the corpus and failed four *records*: a 2025 refusal
+# described as something the bytes contradict, an overtime vocabulary stated
+# short of what the feed publishes, a reconciliation rule claiming a wider
+# universe than the code closes over, and builder-local absolute paths in
+# machine-readable provenance. None of those touched an observation, which is
+# exactly why none of the existing tests caught them: every test below asserts a
+# property of a *description*, checked against the bytes it describes.
+# --------------------------------------------------------------------------
+
+
+def _artifact(name):
+    return json.loads((CORPUS_DIR / name).read_text(encoding="utf-8"))
+
+
+def _fbs_game_states(records, season):
+    """gameState census for one season of the fbs feed, read from raw bytes."""
+    census = {}
+    for record in records:
+        if record.division != "fbs" or record.season != season:
+            continue
+        for entry in json.loads(record.read(REPO_ROOT)).get("games", []):
+            state = entry["game"].get("gameState", "")
+            census[state] = census.get(state, 0) + 1
+    return census
+
+
+def test_refused_season_census_matches_the_bytes_it_describes(build, records):
+    """A refused season is described by counting it, never by characterising it.
+
+    The original record said every 2025 row read ``pre``. Twenty-two read
+    ``final`` and four read ``live``. The refusal was right and the sentence was
+    false, which is the failure mode this pins: the census is recomputed from
+    the raw bytes here and must equal what the build published.
+    """
+    published = build.source_report["seasons_not_admitted_state_census"]
+    assert "2025" in published
+    observed = _fbs_game_states(records, 2025)
+    assert published["2025"]["by_game_state"] == observed
+    assert published["2025"]["total"] == sum(observed.values())
+    # The exact counts the audit measured, so drift is loud rather than quiet.
+    assert published["2025"] == {
+        "total": 878,
+        "by_game_state": {"final": 22, "live": 4, "pre": 852},
+    }
+
+
+def test_a_refused_season_may_hold_final_rows_and_still_refuses_all_of_them(build):
+    """Source content fact and evidence admission decision stay separate.
+
+    Twenty-two 2025 rows are ``final``. Admission is by whole finalised season,
+    so those rows are refused with the rest. Admitting them would make the
+    corpus depend on the minute the snapshot was taken.
+    """
+    census = build.source_report["seasons_not_admitted_state_census"]["2025"]
+    assert census["by_game_state"]["final"] > 0
+
+    assert build.source_report["seasons_not_admitted"]["2025"] == (
+        "SOURCE_SEASON_NOT_FINALISED"
+    )
+    refused_2025 = [
+        e
+        for e in build.exclusions
+        if e["season"] == 2025 and e["reason"] == "SOURCE_SEASON_NOT_FINALISED"
+    ]
+    assert len(refused_2025) == census["total"]
+    assert 2025 not in {row.season for row in build.rows}
+    assert 2025 not in oc.ADMITTED_SEASONS
+
+
+def test_the_published_census_rule_names_both_halves():
+    """The record must say which sentence is the fact and which is the decision."""
+    rule = _artifact("V3_R6_CORPUS_REGISTRATION_RECEIPT.json")["source_report"][
+        "seasons_not_admitted_census_rule"
+    ]
+    assert "SOURCE CONTENT FACT" in rule
+    assert "EVIDENCE ADMISSION DECISION" in rule
+
+    discovery = _artifact("V3_R6_OBSERVATION_CORPUS_DISCOVERY_R6.json")
+    evidence = discovery["source_acquisition"]["seasons_refused_evidence"]
+    assert "SOURCE CONTENT FACT" in evidence
+    assert "EVIDENCE ADMISSION DECISION" in evidence
+    # The false universal must not come back in any wording.
+    assert "every game in them still reads" not in evidence
+    assert discovery["source_acquisition"]["seasons_refused"] == {
+        "2025": "SOURCE_SEASON_NOT_FINALISED"
+    }
+
+
+def test_overtime_vocabulary_is_read_from_the_bytes_not_asserted(build, records):
+    """The stated overtime range must cover every label the feed actually uses.
+
+    The original records stopped at ``FINAL (4OT)``. The fbs feed publishes
+    ``FINAL (7OT)`` and the admitted corpus contains a ``FINAL (8OT)`` game, so
+    the stated range fell short of the evidence beneath it.
+    """
+    observed = set()
+    for record in records:
+        if record.division != "fbs":
+            continue
+        for entry in json.loads(record.read(REPO_ROOT)).get("games", []):
+            match = oc._OVERTIME.search(entry["game"].get("finalMessage", ""))
+            if match:
+                observed.add(match.group(0))
+
+    published_feed = set(build.source_report["overtime_labels_source_feed"])
+    assert published_feed == observed
+    # Both labels the audit named are inside the published vocabulary.
+    assert "FINAL (7OT)" in published_feed
+    assert "FINAL (8OT)" in published_feed
+
+    admitted = build.source_report["overtime_labels_admitted"]
+    assert "FINAL (8OT)" in admitted
+    assert build.source_report["overtime_maximum_periods_admitted"] == 8
+    assert build.source_report["overtime_maximum_label_admitted"] == "FINAL (8OT)"
+
+    # Every published label parses, and deeper labels sort later.
+    periods = [oc._overtime_periods(label) for label in published_feed]
+    assert max(periods) == 8
+    assert sorted(admitted, key=oc._overtime_periods) == admitted
+
+
+def test_no_record_caps_the_overtime_vocabulary_at_four_periods():
+    """The specific understatement the audit found must not reappear."""
+    receipt = _artifact("V3_R6_CORPUS_REGISTRATION_RECEIPT.json")
+    basis = receipt["field_classification"]["overtime_periods"]["basis"]
+    disposition = receipt["source_report"]["overtime_disposition"]
+    for text in (basis, disposition):
+        assert "through FINAL (4OT)" not in text
+    docs = (REPO_ROOT / "docs" / "v3_historical_observation_corpus_r6.md").read_text(
+        encoding="utf-8"
+    )
+    assert "through `FINAL (4OT)`" not in docs
+
+
+def test_admitted_overtime_count_is_unchanged_by_the_record_correction(build):
+    """Correcting a description must not move a single observation."""
+    assert build.source_report["overtime_games_admitted"] == 91
+    assert build.source_report["overtime_games_staged"] == 101
+    assert "overtime_periods" not in oc.CORPUS_COLUMNS
+
+
+def test_reconciliation_universe_is_the_fbs_feed_and_says_so(build, records):
+    """The row equation closes over the fbs feed, and the record must scope it.
+
+    The original rule said "for every source file", which is wider than the
+    implemented universe. The fbs feed is the correct universe — an
+    FBS-versus-FCS game is published in both feeds, so no in-scope game hides on
+    the fcs side — but the sentence claimed more than the code does.
+    """
+    fbs_rows = sum(
+        len(json.loads(r.read(REPO_ROOT)).get("games", []))
+        for r in records
+        if r.division == "fbs"
+    )
+    assert build.raw_row_count == fbs_rows == 4355
+    assert build.raw_row_count == len(build.rows) + len(build.exclusions)
+
+    reconciliation = _artifact("V3_R6_EXCLUSION_REPORT.json")["reconciliation"]
+    assert reconciliation["reconciliation_universe"] == "NCAA_FBS_SCOREBOARD_FEED"
+    assert reconciliation["fbs_feed_row_count"] == fbs_rows
+    assert reconciliation["raw_row_count"] == fbs_rows
+    assert "for every source file" not in reconciliation["rule"]
+    assert "fbs-feed source file" in reconciliation["rule"]
+
+
+def test_the_fcs_feed_is_declared_an_oracle_outside_the_row_equation(build, records):
+    """The fcs rows are a division oracle: not admitted, not excluded, not raw."""
+    fcs_rows = sum(
+        len(json.loads(r.read(REPO_ROOT)).get("games", []))
+        for r in records
+        if r.division == "fcs"
+    )
+    assert build.source_report["fcs_oracle_row_count"] == fcs_rows == 4164
+    assert build.source_report["fcs_oracle_files"] == len(
+        [r for r in records if r.division == "fcs"]
+    )
+    assert (
+        build.source_report["fcs_oracle_role"]
+        == "DIVISION_CLASSIFICATION_ORACLE_OUTSIDE_ROW_RECONCILIATION"
+    )
+
+    # The oracle count is deliberately outside the equation, not folded into it.
+    assert build.raw_row_count != fcs_rows
+    assert build.raw_row_count + fcs_rows != len(build.rows) + len(build.exclusions)
+
+    reconciliation = _artifact("V3_R6_EXCLUSION_REPORT.json")["reconciliation"]
+    assert reconciliation["fcs_oracle_row_count"] == fcs_rows
+    assert "NOT terms in the equation" in reconciliation["fcs_oracle_rule"]
+
+
+def test_no_r6_artifact_carries_a_builder_local_absolute_path():
+    """Provenance must read the same from any checkout.
+
+    An absolute worktree path is not independently checkable: it names one
+    machine. The digest beside it is the binding and stays the binding.
+    """
+    for artifact in sorted(CORPUS_DIR.glob("*.json")):
+        text = artifact.read_text(encoding="utf-8")
+        assert "CLAUDE-SYTHALAX-WORKTREES" not in text, artifact.name
+        assert "C:/" not in text, artifact.name
+        assert "C:\\" not in text, artifact.name
+
+
+def test_provenance_paths_are_repository_relative_and_resolve():
+    """The portable locators must actually resolve in this checkout."""
+    receipt = _artifact("V3_R6_CORPUS_REGISTRATION_RECEIPT.json")
+    assert receipt["path_class"] == "REPOSITORY_RELATIVE"
+    assert not Path(receipt["path"]).is_absolute()
+    assert (REPO_ROOT / receipt["path"]).resolve() == CORPUS_CSV.resolve()
+
+    identity = _artifact("V3_R6_TEAM_IDENTITY_RECONCILIATION.json")
+    assert identity["canonical_authority_path_class"] == "REPOSITORY_RELATIVE"
+    assert not Path(identity["canonical_authority"]).is_absolute()
+    resolved = (REPO_ROOT / identity["canonical_authority"]).resolve()
+    assert resolved == AUTHORITY_PATH.resolve()
+
+
+def test_portable_path_never_replaces_the_digest_binding(authority):
+    """Weakening a digest to a path trades evidence for trust. It must not."""
+    identity = _artifact("V3_R6_TEAM_IDENTITY_RECONCILIATION.json")
+    assert identity["canonical_authority_sha256"] == authority.sha256
+    assert identity["canonical_authority_sha256"] == oc._sha256(
+        AUTHORITY_PATH.read_bytes()
+    )
+
+    receipt = _artifact("V3_R6_CORPUS_REGISTRATION_RECEIPT.json")
+    assert receipt["sha256"] == oc._sha256(CORPUS_CSV.read_bytes())
+    assert receipt["byte_length"] == len(CORPUS_CSV.read_bytes())
+    assert receipt["bytes_reverified_at_registration"] is True
+
+
+def test_a_path_outside_the_repository_degrades_to_a_name(tmp_path, build):
+    """Portability must not become another route for leaking a build host."""
+    outside = tmp_path / "elsewhere" / "V3_R6_OBSERVATION_CORPUS.csv"
+    outside.parent.mkdir(parents=True)
+    outside.write_bytes(CORPUS_CSV.read_bytes())
+    receipt = oc.corpus_registration_receipt(outside, build.rows, REPO_ROOT)
+    assert receipt["path"] == "V3_R6_OBSERVATION_CORPUS.csv"
+    assert str(tmp_path) not in receipt["path"]
+    # The digest still binds the bytes, wherever they sit.
+    assert receipt["sha256"] == oc._sha256(CORPUS_CSV.read_bytes())
+
+
+def test_record_correction_left_the_observation_set_untouched(build):
+    """The remediation is representation-only. This is what says so."""
+    assert len(build.rows) == 2241
+    assert len(build.exclusions) == 2114
+    assert build.raw_row_count == 4355
+    assert oc.render_corpus_csv(build.rows) == CORPUS_CSV.read_bytes()
+    assert len(build.fcs_inventory) == 43
+
+    split = oc.build_temporal_split(build.rows)
+    assert split["splits"] == {"training": 1080, "validation": 598, "holdout": 563}
+    assert (
+        split["split_digest"]
+        == "d0b84cc3da244ffbb5566bbf5c86fd07aed081ae48b01de293b79863503e3f5b"
+    )
+    coverage = build.source_report["team_season_coverage"]
+    assert coverage["iterations"] == 5
+    assert coverage["rows_pruned"] == 227
+    assert coverage["minimum_games_per_team_season"] == 8
