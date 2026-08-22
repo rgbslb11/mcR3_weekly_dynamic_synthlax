@@ -89,31 +89,56 @@ at NEUTRAL.
 
 ## 3. What is genuinely missing
 
-Not the transform — the **axis**. `Unified Neutral-Field Points = 14 × Unified
-Master Z`, and both halves are 2026-specific.
+Not the transform, and not a ruling — the **opening state**. `Unified
+Neutral-Field Points = 14 × Unified Master Z`, and both halves are 2026-specific.
 
 **Population closure.** Unified Master Z is standardized over a *closed*
-121-team FBS population. Another season is another population; re-standardizing
-yields a different axis, so two seasons' point values are not commensurable. No
-register issues an anchoring rule. The canonical 2026 universe is itself
-synthetic — it contains members no real season had.
+121-team FBS population, and the canonical 2026 universe is itself synthetic. So
+2026 point *values* are not transportable onto another season's axis. That
+bounds what may be copied across seasons — it does not block reconstruction,
+which standardizes the historical population on its own terms rather than
+importing 2026 numbers.
 
 **Scale provisionality.** The `14` points/SD is marked in its own source
-"initial scale pending margin calibration", and `ENG-CAL-MARGIN` is OPEN. It is
-provisional against exactly the calibration this expected margin would feed.
+"initial scale pending margin calibration", and `!Ensemble Parameters` says
+outright "recalibrate against game margins". `ENG-CAL-MARGIN` is OPEN.
 
-The second point is not a caveat, it is an identification failure. Scaling the
-axis by `k` and the residual coefficient by `1/k` leaves every predicted margin
-unchanged, so **no objective over margins can distinguish them**. That is the
-unidentifiability the data contract already names under
-`expected_margin_transform` — this lane locates it precisely: it is between the
-*axis scale* and the coefficient, not between a missing transform and the
-coefficient.
+> **Correction (audit finding 1).** A prior revision of this lane read the second
+> point as a *global* identification failure: scale the axis by `k`, scale the
+> residual coefficient by `1/k`, and every predicted margin is unchanged. That
+> claim is **withdrawn**. It requires a weekly residual coefficient to be present
+> to absorb the rescale, and in weeks 1–2 there is none — those weeks precede the
+> first promoted rerating, which §4 records as the base case of the very same
+> recursion. The claim contradicted the base case stated alongside it.
+> Independently, the venue term carries the governed additive HFA `3.5` in real
+> football points; it does not rescale with the strength axis, so it acts as a
+> fixed-length ruler against which a change of scale is visible rather than
+> absorbable. Observed margins are already in that same unit.
 
-`HISTORICAL_STRENGTH_AXIS_ANCHOR` is recorded as a **model-identification
-dependency, not a formal blocker**. It gates no V3 execution path — V3 runs the
-2026 population, where the axis is fully defined — and no governed authority
-requires blocker registration for it.
+So the axis scale is **empirically identifiable**, not a matter for governance:
+
+| Weeks | Expected margin | Scale identifiable? |
+|---|---|---|
+| **1–2** | `scale × opening-strength difference + governed venue adjustment` | **Yes** — no weekly coefficient is in the model to cancel it |
+| **3+** | adds the promoted-rerating term | Yes, conditional on weeks 1–2, as an outer-loop problem over candidate vectors |
+
+The cleanest subset is confirmed-**neutral** games, where the venue term is
+exactly `0.0` — neither the HFA nor a per-team home-field modifier enters at all.
+
+This claims identifiability, not precision. Two weeks per season is a thin base,
+opening schedules are mismatch-heavy and are not a random sample, and
+venue-ambiguous games are excluded rather than imputed.
+
+`HISTORICAL_STRENGTH_AXIS_ANCHOR` is therefore classified
+**`EMPIRICALLY_CALIBRATABLE`**, with `chairman_ruling_required = false`. What
+remains outstanding is a model **input** — a historical opening standardized
+state — not an authority. It is still **not a formal blocker**: it gates no V3
+execution path, and the eight formal blockers are unchanged.
+
+A separate operation stays impossible, and is not the one performed here:
+recovering a historical *raw standard deviation* from a Z-score. A Z carries no
+information about the scale of the population it was taken over. The scale here
+is fitted **forward** against observed margins, not recovered backward from a Z.
 
 ---
 
@@ -283,37 +308,89 @@ Classified before asking:
 | `P_TO_STRENGTH_TRANSFORM` | Out of scope for expected margin. Remains open for SOR-B on its own terms |
 | `REFERENCE_HFA` | Out of scope for expected margin. Remains open for SOR-B on its own terms |
 | Reference HFA for a V3-axis reconstruction | `MATHEMATICALLY_DERIVABLE` — units decide it; `3.5` under `R2-HFA-3P5` |
-| `game_sd_points`, residual coefficient | `EMPIRICALLY_CALIBRATABLE`, gated on the anchor |
+| `game_sd_points`, residual coefficient | `EMPIRICALLY_CALIBRATABLE`, after the week 1–2 scale |
 | Weeks 3+ rerating formula | `EVIDENCE_MISSING` — no governed formula exists |
 | Historical corpus | `EVIDENCE_MISSING` — already raised by the prior lane |
-| **Historical strength axis anchor** | **`HUMAN_GOVERNANCE_REQUIRED`** |
+| **Historical strength axis anchor** | **`EMPIRICALLY_CALIBRATABLE`** |
+| Historical opening standardized state | `EVIDENCE_MISSING` — a model **input**, supplied externally |
 
-Only the last one survives. A Z-score carries no information about the scale of
-the population it was taken over, so recovering an anchor from the mounted corpus
-would need a second governed quantity on the same axis in a second season — and
-there is none.
+**No Chairman ruling is required, and none is formulated here.**
+`chairman_ruling_required = false`.
 
-**Minimum ruling question**, unbundled:
+The prior revision classified the axis anchor `HUMAN_GOVERNANCE_REQUIRED` and
+put a ruling question here. Audit finding 3 reversed that, and the reasoning is
+in §3: the points-per-SD scale is identifiable from real week 1–2 margins, which
+precede the first promoted rerating and so consume no weekly residual
+coefficient. Estimating it also *executes* the instruction its own governed
+source carries — "recalibrate against game margins" — rather than extending
+governance. The ruling question is withdrawn rather than reworded.
 
-> For a historical season outside the closed 2026 121-team FBS population, is
-> there a governed rule placing that season's pregame team strengths on the V3
-> unified neutral-field point axis — and if so, does it fix the points-per-SD
-> scale independently of margin calibration, or does the provisional 14 remain
-> subject to it?
+What still sits on the critical path is an **input**, not an authority: a
+historical opening standardized strength state. `claude/v3-historical-opening-state-r1`
+owns that; this lane consumes it.
 
-Not bundled with the synthetic-universe admissibility question (already raised),
-the FCS adapter, or the two SOR-B items.
+Governance re-enters only at the **promotion** boundary. Fitting a scale as
+experimental evidence needs no ruling; promoting any fitted value to canonical
+stays governed by the existing no-canonical-writer regime and the six `null`
+calibration values. This lane promotes nothing.
 
 Note that this **replaces** step 3 of the evidence lane's §14 unblocking list.
-Ratifying the SOR-B items would not advance expected margin; anchoring the axis
-would.
+Ratifying the SOR-B items would not advance expected margin.
+
+### Resolution order (audit finding 2)
+
+The prior revision said the axis had to be fixed *before* margin calibration
+because the reverse order was unidentified. That is corrected — the order runs
+the other way:
+
+1. obtain a valid historical opening standardized strength state;
+2. use real **week 1–2** margins, where no promoted rerating coefficient has yet
+   entered, to identify the point-axis scale;
+3. with the opening point domain established, run later-season walk-forward
+   **candidate rerating vectors**;
+4. estimate residual dispersion / `game_sd_points` from **out-of-sample
+   residuals**, once the deterministic mean model exists.
+
+No value at any step is estimated in this lane.
+
+---
+
+## 11a. Corpus tiers (audit finding 4)
+
+The single `pregame_state_contract` field list conflated raw observation with
+model state, which would have asked a raw data supplier to manufacture model
+output. It is now three contracts:
+
+| Tier | Contract | Owner | Contents |
+|---|---|---|---|
+| **A** | `raw_observation_contract()` | historical observation corpus | `game_id`, `season`, `week`, `order_key`, both canonical team ids, subject-oriented `venue`, `actual_margin`, `source`, `observed_at`, `recorded_at`; `opponent_division` where relevant |
+| **B** | `derived_model_state_contract()` | historical replay / expected-margin layer | `subject_pregame_points`, `opponent_pregame_points`, `strength_domain`, `state_origin`, `state_effective_through_week`, `expected_margin`, `venue_adjustment_points`, `axis_anchor`, `status` |
+| **C** | `experiment_metadata_contract()` | calibration harness | `candidate_id`, `parameter_vector_id`, `model_version`, `experiment_config_sha`, `dataset_sha`, `split_sha`, `authority_id`, `formula_id` |
+
+The three tiers are disjoint, and a test asserts it. **Tier A is the whole of
+what a raw corpus owes**, so this composes with
+`claude/v3-historical-observation-corpus-r6` without that lane producing a single
+model output.
+
+### Axis anchor enforcement (minor finding)
+
+`axis_anchor_authority` was a free-form string: any caller-invented token
+unlocked a number. It is now an `AxisAnchor` whose `kind` must come from a closed
+set — `GOVERNED_REGISTER_RULE`, `EMPIRICAL_WEEK_1_2_SCALE_CALIBRATION`,
+`PROVISIONAL_2026_POINTS_PER_SD_REUSE` — carrying `anchor_id`,
+`points_per_sd_status` and `source`, all required. A bare string is refused.
+
+The residual limit is stated rather than hidden: the module cannot verify that a
+named source says what the caller claims. That remains **`NON-BLOCKING_ADVISORY`**
+for calibration composition.
 
 ---
 
 ## 12. State
 
-- Tests **640 full / 581 V3**, up from 602 / 543. 38 new. No existing test
-  modified or weakened.
+- Tests **656 full / 597 V3**, up from 602 / 543 at the frozen base. 54 in this
+  lane. No existing fail-closed behaviour weakened; the only tests rewritten are
+  the ones that asserted the conclusions audit findings 1–4 corrected.
 - Formal blockers **8 before, 8 after**, same set. None opened, none retired.
 - No parameter promoted. `v3_experimental.json` untouched; all six calibration
   values remain `null`. No canonical config writer created.

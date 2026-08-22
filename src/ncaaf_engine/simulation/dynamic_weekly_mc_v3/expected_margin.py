@@ -63,26 +63,51 @@ correction. Nothing in that document is rewritten here.
 
 What is genuinely missing for a *historical* reconstruction
 ------------------------------------------------------------
-Not the transform — the **axis**. ``Unified Neutral-Field Points = 14 x Unified
-Master Z`` (:mod:`fcs`), and both halves of that are 2026-specific:
+Not the transform, and not a ruling — the **opening state**. ``Unified
+Neutral-Field Points = 14 x Unified Master Z`` (:mod:`fcs`), and both halves of
+that are 2026-specific:
 
 * ``Unified Master Z`` is standardized over a **closed 121-team FBS population**.
   A different season is a different population, so re-standardizing yields a
-  different axis; two seasons' point values are not commensurable without a
-  governed anchoring rule, and no register issues one.
+  different axis and 2026 point *values* cannot simply be transported onto it.
 * The ``14`` points/SD is marked in its own source "initial scale pending margin
-  calibration", and open item ``ENG-CAL-MARGIN`` is OPEN. It is provisional
-  against exactly the calibration this expected margin is meant to feed.
+  calibration", and ``!Ensemble Parameters`` says outright "recalibrate against
+  game margins". Open item ``ENG-CAL-MARGIN`` is OPEN.
 
-The second point is the identification hazard the data contract names under
-``expected_margin_transform``: if the scale is free at the same time as
-``weekly_performance_residual_coefficient``, the two trade off exactly and
-neither is identified. The scale must be anchored *before*, not *during*.
+Neither observation blocks reconstruction, because reconstruction does not need
+to *transport* 2026 values. It needs a historical standardized opening state —
+which standardization produces from the historical population itself — mapped
+onto the point domain by a scale parameter. That scale is **empirically
+identified**, not ruled:
 
-So the missing authority is :data:`HISTORICAL_AXIS_ANCHOR_DEPENDENCY`. It is
-recorded as a model-identification dependency, **not** as a formal project
-blocker: no governed authority requires blocker registration for it, and this
-module contributes nothing to ``V3Config.execution_blockers``.
+``Weeks 1 and 2 carry scale information no coefficient can cancel``
+    They open on preseason strength and precede the first promoted rerating
+    (``first_promoted_rerating_after_week = 2``), so
+    ``weekly_performance_residual_coefficient`` is not in the model for them at
+    all. Their expected margin is ``scale x opening-strength difference + the
+    governed venue adjustment``. Rescaling the axis moves every week-1-2
+    predicted margin and there is no weekly coefficient present to absorb it.
+    The governed additive HFA ``3.5`` compounds this: it is in real points and
+    does **not** rescale, so it acts as a fixed-length ruler against which a
+    change of scale is directly visible.
+
+The earlier claim that the axis scale and the residual coefficient are
+*globally* confounded is therefore withdrawn. It holds nowhere in weeks 1-2, and
+for weeks 3+ the two enter through different, freely varying terms — an
+outer-loop estimation problem over candidate vectors, not a non-identification.
+:data:`IDENTIFICATION_STRUCTURE` records the corrected statement.
+
+:data:`HISTORICAL_AXIS_ANCHOR_DEPENDENCY` is accordingly classified
+``EMPIRICALLY_CALIBRATABLE`` with ``chairman_ruling_required`` ``False``. It
+remains a model **input** dependency — a historical opening standardized state
+must be supplied — and it is **not** a formal project blocker: no governed
+authority requires blocker registration for it, and this module contributes
+nothing to ``V3Config.execution_blockers``. The eight formal blockers are
+unchanged.
+
+This module estimates no scale. It accepts an opening state and an
+:class:`AxisAnchor` declaring how that state reached the point domain, so that a
+later calibration experiment can carry out the estimation.
 
 Fail-closed policy
 ------------------
@@ -157,6 +182,18 @@ ORIGIN_PROMOTED_RERATING = "PROMOTED_WEEKLY_RERATING"
 PRESEASON_OPENING_WEEKS: tuple[int, ...] = (1, 2)
 FIRST_WEEK_REQUIRING_PROMOTED_RERATING = 3
 
+#: The closed set of routes by which a historical strength state may reach the
+#: V3 point domain. Not a ranking and not an approval: each names a route whose
+#: standing is recorded on the row, so an auditor can tell them apart.
+ANCHOR_KIND_GOVERNED_REGISTER = "GOVERNED_REGISTER_RULE"
+ANCHOR_KIND_EMPIRICAL_WEEK_1_2 = "EMPIRICAL_WEEK_1_2_SCALE_CALIBRATION"
+ANCHOR_KIND_PROVISIONAL_2026_SCALE = "PROVISIONAL_2026_POINTS_PER_SD_REUSE"
+ANCHOR_KINDS: tuple[str, ...] = (
+    ANCHOR_KIND_GOVERNED_REGISTER,
+    ANCHOR_KIND_EMPIRICAL_WEEK_1_2,
+    ANCHOR_KIND_PROVISIONAL_2026_SCALE,
+)
+
 
 # ---------------------------------------------------------------------------
 # Findings recorded by this lane
@@ -189,56 +226,78 @@ SOR_B_SCOPE_FINDING: dict[str, Any] = {
         f"{hfa_policy.V3_FOOTBALL_POINT_HFA} (ruling {R2_HFA.convergence_id}). It has "
         "no free parameter and consumes no calibration coefficient."
     ),
-    "residual_gap_after_the_correction": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+    "residual_gap_after_the_correction": "HISTORICAL_OPENING_STRENGTH_STATE",
     "opens_formal_blocker": False,
     "rewrites_prior_artifact": False,
 }
 
-#: The one authority this lane finds genuinely absent, stated in the terms a
-#: ruling would need. A model-identification dependency, not a formal blocker.
+#: The one thing this lane finds genuinely absent for historical work — and what
+#: kind of thing it is. Corrected under audit finding 3: it is an empirical
+#: calibration target and a model *input* dependency, not a governance question.
 HISTORICAL_AXIS_ANCHOR_DEPENDENCY: dict[str, Any] = {
     "dependency_id": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
-    "classification": "HUMAN_GOVERNANCE_REQUIRED",
+    "classification": "EMPIRICALLY_CALIBRATABLE",
+    "chairman_ruling_required": False,
     "is_formal_project_blocker": False,
     "why_not_a_formal_blocker": (
         "No governed authority requires blocker registration for it, and it gates no "
         "V3 execution path: V3 runs the 2026 population, where the axis is fully "
-        "defined. It gates only historical reconstruction, which is evidence work."
+        "defined. It gates only historical reconstruction, which is evidence work. "
+        "The eight formal blockers are unchanged and this dependency is not a ninth."
     ),
     "statement": (
-        "Historical pregame strengths cannot be placed on "
-        f"{V3_POINT_DOMAIN} without a governed rule anchoring the axis across "
-        "populations and seasons."
+        "Historical pregame strengths reach "
+        f"{V3_POINT_DOMAIN} by standardizing the historical population and mapping "
+        "that standardized state onto the point domain with a points-per-SD scale. "
+        "The scale is a quantity to be estimated against real week 1-2 margins, not "
+        "an authority to be issued."
     ),
-    "two_independent_reasons": {
-        "population_closure": (
-            "Unified Master Z is standardized over a closed "
-            f"{fcs_policy.UNIFIED_Z_POPULATION_SIZE}-team FBS population. Another season "
-            "is another population; re-standardizing produces a different axis, so point "
-            "values from two seasons are not commensurable. No register issues an "
-            "anchoring rule, and the canonical 2026 universe is itself synthetic — it "
-            "contains members no real season had."
+    "what_is_required_instead": (
+        "A historical opening standardized strength state — the model input this "
+        "module consumes and does not manufacture. Supplied externally; see "
+        "PregameTeamPoints and AxisAnchor."
+    ),
+    "why_empirically_calibratable": {
+        "week_1_2_are_coefficient_free": (
+            "Weeks 1 and 2 open on preseason strength and precede the first promoted "
+            "rerating (config.first_promoted_rerating_after_week = 2), so "
+            "calibration.weekly_performance_residual_coefficient is not in the model "
+            "for them. Their expected margin is scale x opening-strength difference "
+            "plus the governed venue adjustment, so real week 1-2 margins carry "
+            "information about the scale that no weekly coefficient can cancel."
         ),
-        "scale_provisionality": (
-            f"The {fcs_policy.UNIFIED_NEUTRAL_POINTS_PER_SD} points/SD scale is marked "
-            f"{V3_POINT_DOMAIN_SCALE_STATUS!r} in its own source and open item "
-            "ENG-CAL-MARGIN is OPEN. Fitting weekly_performance_residual_coefficient "
-            "while the scale is free leaves the two exactly confounded — any residual is "
-            "absorbable by rescaling the axis instead, which is the unidentifiability "
-            "the data contract names under expected_margin_transform."
+        "the_governed_hfa_is_a_fixed_length_ruler": (
+            f"The venue term uses the governed additive HFA "
+            f"{hfa_policy.V3_FOOTBALL_POINT_HFA} in real football points. It does not "
+            "rescale with the strength axis, so a change of scale is directly visible "
+            "against it rather than absorbable."
+        ),
+        "the_scale_is_provisional_by_instruction": (
+            f"{fcs_policy.UNIFIED_NEUTRAL_POINTS_PER_SD} points/SD is marked "
+            f"{V3_POINT_DOMAIN_SCALE_STATUS!r} in its own source, whose "
+            "!Ensemble Parameters sheet says 'recalibrate against game margins'. "
+            "Estimating it is executing that instruction, not extending governance."
         ),
     },
-    "why_not_engineering_derivable": (
-        "A Z-score carries no information about the scale of the population it was taken "
-        "over. Recovering an anchor from the mounted corpus would require a second "
-        "governed quantity on the same axis in a second season, and there is none."
+    "what_remains_true_about_population_closure": (
+        "Unified Master Z is standardized over a closed "
+        f"{fcs_policy.UNIFIED_Z_POPULATION_SIZE}-team FBS population, and the canonical "
+        "2026 universe is itself synthetic. So 2026 point *values* are not transportable "
+        "onto another season's axis. That bounds what may be copied across seasons; it "
+        "does not make a historical scale unidentifiable, because reconstruction "
+        "standardizes the historical population on its own terms rather than importing "
+        "2026 numbers."
     ),
-    "minimum_ruling_question": (
-        "For a historical season outside the closed 2026 121-team FBS population, is "
-        "there a governed rule placing that season's pregame team strengths on the V3 "
-        "unified neutral-field point axis — and if so, does it fix the points-per-SD "
-        "scale independently of margin calibration, or does the provisional 14 remain "
-        "subject to it?"
+    "not_a_recovery_of_a_lost_raw_sd": (
+        "A Z-score carries no information about the scale of the population it was taken "
+        "over, so a historical raw standard deviation cannot be recovered from one. That "
+        "is a different operation and it is not the one performed here: the scale is "
+        "fitted forward against observed margins, not recovered backward from a Z."
+    ),
+    "promotion_boundary": (
+        "Estimating the scale as experimental evidence requires no ruling. Promoting any "
+        "fitted value to canonical remains governed by the existing no-canonical-writer "
+        "regime and the six null calibration values. This lane promotes nothing."
     ),
     "not_bundled_with": (
         "the synthetic-universe admissibility question already raised by the "
@@ -290,6 +349,55 @@ class PregameTeamPoints:
             raise InputValidationError(
                 f"{self.schedule_id}: state_effective_through_week cannot be negative"
             )
+
+
+@dataclass(frozen=True)
+class AxisAnchor:
+    """How a historical strength state reached the V3 point domain.
+
+    Replaces the free-form ``axis_anchor_authority`` string of the prior
+    revision, which the audit flagged as documentary rather than enforced: any
+    caller-invented token unlocked a number. A caller may still describe its own
+    provenance, but it may no longer invent an anchor *kind* — ``kind`` must be
+    one of :data:`ANCHOR_KINDS`, each of which names a real, checkable route.
+
+    This is a structural gate, not a governance one. It cannot verify that the
+    named source says what the caller claims; what it does guarantee is that
+    every authorized row records which of the recognised routes produced it, so a
+    residual can be attributed rather than merely trusted.
+    """
+
+    anchor_id: str
+    kind: str
+    points_per_sd_status: str
+    source: str
+
+    def __post_init__(self) -> None:
+        if not self.anchor_id:
+            raise InputValidationError("AxisAnchor requires a non-empty anchor_id")
+        if self.kind not in ANCHOR_KINDS:
+            raise InputValidationError(
+                f"AxisAnchor kind {self.kind!r} is not a recognised route onto "
+                f"{V3_POINT_DOMAIN}. Permitted: {', '.join(ANCHOR_KINDS)}. A caller may "
+                "not invent an anchoring authority."
+            )
+        if not self.source:
+            raise InputValidationError(
+                f"{self.anchor_id}: AxisAnchor requires a named source"
+            )
+        if not self.points_per_sd_status:
+            raise InputValidationError(
+                f"{self.anchor_id}: AxisAnchor must state the status of the "
+                "points-per-SD scale it carries"
+            )
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "anchor_id": self.anchor_id,
+            "kind": self.kind,
+            "points_per_sd_status": self.points_per_sd_status,
+            "source": self.source,
+        }
 
 
 @dataclass(frozen=True)
@@ -459,68 +567,68 @@ def require_leak_free_pregame_state(
             )
 
 
-def pregame_state_contract() -> dict[str, Any]:
-    """The minimum historical state this construction consumes, and nothing more.
+def raw_observation_contract() -> dict[str, Any]:
+    """Contract A — what a historical *source corpus* must supply, and no more.
 
-    Narrower than ``calibration_contract.REQUIRED_CONTRACT_FIELDS``, which is the
-    superset the six coefficients need. This is the subset *expected margin*
-    needs, so a corpus supplier can see which fields are load-bearing for which
-    purpose instead of being handed one undifferentiated list.
+    Source-observable or deterministically source-derived facts only. This
+    contract deliberately carries **no V3 rating, no pregame points, no expected
+    margin and no strength domain**: those are model output, and asking a raw
+    data supplier to manufacture them is how a reconstruction ends up validating
+    itself. It composes directly with the historical observation-corpus lane.
     """
     return {
-        "contract_id": "V3-HISTORICAL-PREGAME-STATE-CONTRACT-001",
-        "scope": "EXPECTED_MARGIN_CONSTRUCTION_ONLY",
+        "contract_id": "V3-HISTORICAL-RAW-OBSERVATION-CONTRACT-001",
+        "tier": "A_RAW_HISTORICAL_OBSERVATION",
+        "supplied_by": "historical observation corpus (external source of record)",
         "required_fields": {
             "game_id": "Stable unique key for the observation.",
-            "season": "Season the game belongs to; bounds the population the axis is over.",
+            "season": "Season the game belongs to.",
             "week": (
                 "Week the game was PLAYED. Decides whether the state is preseason "
                 "opening strength or a promoted rerating."
             ),
             "order_key": (
-                "Kickoff instant, or an equivalent total order within the week. The only "
-                "field that can prove a state pre-dates its game when two games share a "
-                "week."
+                "Kickoff instant, or an equivalent total order within the week. The "
+                "only field that can prove a state pre-dates its game when two games "
+                "share a week."
             ),
             "subject_team": "Canonical team id. Free-text names are refused.",
             "opponent_team": "Canonical team id.",
             "venue": (
-                "HOME | AWAY | NEUTRAL, from the SUBJECT team's perspective. The V3 "
-                "schedule stores venue home-oriented, so the orientation must be stated "
-                "rather than inferred from column order."
+                "HOME | AWAY | NEUTRAL, from the SUBJECT team's perspective, from "
+                "named venue evidence. The V3 schedule stores venue home-oriented, so "
+                "the orientation must be stated rather than inferred from column order."
             ),
-            "subject_pregame_points": "Subject strength before kickoff, on a declared axis.",
-            "opponent_pregame_points": "Opponent strength before kickoff, on the same axis.",
-            "strength_domain": (
-                f"Axis declaration. Must be {V3_POINT_DOMAIN} for the governed transform "
-                "to apply."
-            ),
-            "state_effective_through_week": (
-                "Last completed week folded into both states. 0 for preseason. Must be "
-                "strictly less than week."
-            ),
-            "state_origin": f"{ORIGIN_PRESEASON_OPENING} | {ORIGIN_PROMOTED_RERATING}.",
-            "home_field_modifier": (
-                "Modifier of the team at home; null only at NEUTRAL. Never defaulted "
-                "to 1.0."
-            ),
-            "source": "Named provenance for the row and for each point state.",
-        },
-        "not_required_and_why": {
             "actual_margin": (
-                "The outcome half of the residual. Needed by calibration, not by the "
-                "predictor half this module builds."
+                "Final scoring margin for the subject team. The outcome half of every "
+                "residual. An observation, never reconstructed by the engine."
             ),
+            "source": "Named provenance for the row.",
+            "observed_at": "When the result became observable.",
+            "recorded_at": "When the row was ingested. Never back-dated.",
+        },
+        "conditionally_required_fields": {
+            "opponent_division": (
+                "Observed division where relevant. Needed only to explain an "
+                "exclusion; an opponent with no V3 point state already fails closed "
+                "without it."
+            ),
+        },
+        "explicitly_not_required_from_the_source": {
+            "subject_pregame_points": "Model state. Tier B.",
+            "opponent_pregame_points": "Model state. Tier B.",
+            "strength_domain": "Model state. Tier B.",
+            "state_origin": "Model state. Tier B.",
+            "state_effective_through_week": "Model state. Tier B.",
+            "expected_margin": "Model output. Tier B.",
+            "venue_adjustment_points": "Model output. Tier B.",
+            "model_version, configuration_version": "Experiment metadata. Tier C.",
             "game_sd_points": (
                 "simulate_game consumes it for the stochastic draw only. The "
                 "deterministic mean does not depend on it."
             ),
             "final_committee_rank, SOS, SOR, SOR-B": (
                 "Season-end or forward-looking. None enters the transform."
-            ),
-            "recent_form_weights, blowout_treatment": (
-                "Rerating-formula inputs. They shape the state, and a corpus supplies "
-                "the state directly."
             ),
         },
         "refused_inputs": [
@@ -531,8 +639,107 @@ def pregame_state_contract() -> dict[str, Any]:
             "final committee rank",
             "future standings, SRS, SOS or SOR",
         ],
+    }
+
+
+def derived_model_state_contract() -> dict[str, Any]:
+    """Contract B — what the historical replay / expected-margin layer produces.
+
+    Generated, never sourced. Every field here is a function of a raw observation
+    (contract A), an opening state, and a candidate parameter vector.
+    """
+    return {
+        "contract_id": "V3-HISTORICAL-DERIVED-MODEL-STATE-CONTRACT-001",
+        "tier": "B_DERIVED_RECONSTRUCTED_MODEL_STATE",
+        "produced_by": "historical replay / expected-margin reconstruction layer",
+        "fields": {
+            "subject_pregame_points": (
+                "Subject strength before kickoff on the declared axis. Replay output."
+            ),
+            "opponent_pregame_points": "Opponent strength before kickoff, same axis.",
+            "strength_domain": (
+                f"Axis declaration. Must be {V3_POINT_DOMAIN} for the governed "
+                "transform to apply."
+            ),
+            "state_origin": f"{ORIGIN_PRESEASON_OPENING} | {ORIGIN_PROMOTED_RERATING}.",
+            "state_effective_through_week": (
+                "Last completed week folded into both states. 0 for preseason. Must be "
+                "strictly less than week."
+            ),
+            "expected_margin": (
+                "Pregame predicted margin for the subject team, in football points. "
+                "Emitted only under STATUS_AUTHORIZED."
+            ),
+            "venue_adjustment_points": (
+                "The venue term actually applied: +H*m at HOME, -H*m at AWAY, exactly "
+                "0.0 at NEUTRAL."
+            ),
+            "axis_anchor": "The AxisAnchor under which the points reached the domain.",
+            "status": f"{STATUS_AUTHORIZED} | {STATUS_DERIVABLE} | {STATUS_UNAVAILABLE}.",
+        },
+        "inputs_it_requires": [
+            "contract A row",
+            "a historical opening standardized strength state",
+            "a candidate rerating parameter vector, for weeks >= "
+            f"{FIRST_WEEK_REQUIRING_PROMOTED_RERATING}",
+            "the governed home-field modifier of the home side, at non-neutral venues",
+        ],
         "preseason_opening_weeks": list(PRESEASON_OPENING_WEEKS),
         "first_week_requiring_promoted_rerating": FIRST_WEEK_REQUIRING_PROMOTED_RERATING,
+    }
+
+
+def experiment_metadata_contract() -> dict[str, Any]:
+    """Contract C — identity of the calibration run that produced tier B.
+
+    Belongs to calibration execution. Not the raw corpus's job and not the
+    reconstruction's; stamped by whatever harness runs the experiment.
+    """
+    return {
+        "contract_id": "V3-HISTORICAL-EXPERIMENT-METADATA-CONTRACT-001",
+        "tier": "C_EXPERIMENT_METADATA",
+        "stamped_by": "calibration execution harness",
+        "fields": {
+            "candidate_id": "Identity of the calibration candidate under evaluation.",
+            "parameter_vector_id": (
+                "Identity of the candidate rerating parameter vector. Experimental; no "
+                "vector is promoted by this lane."
+            ),
+            "model_version": "Version of the model that produced tier B.",
+            "experiment_config_sha": "Digest of the experiment configuration.",
+            "dataset_sha": "Digest of the admitted historical corpus.",
+            "split_sha": "Digest of the temporal split assignment.",
+            "authority_id": (
+                "The AxisAnchor anchor_id recorded on every tier-B row, so a residual "
+                "can be attributed to the mapping that produced it."
+            ),
+            "formula_id": f"Transform identity; {FORMULA_ID} here.",
+        },
+    }
+
+
+def pregame_state_contract() -> dict[str, Any]:
+    """The three contracts as one composed view, with the tier boundary explicit.
+
+    Kept as a single entry point for readers, but it no longer presents one
+    undifferentiated field list: audit finding 4 was that doing so asked a raw
+    data supplier to manufacture model outputs.
+    """
+    return {
+        "contract_id": "V3-HISTORICAL-PREGAME-STATE-CONTRACT-002",
+        "scope": "EXPECTED_MARGIN_CONSTRUCTION_ONLY",
+        "supersedes": "V3-HISTORICAL-PREGAME-STATE-CONTRACT-001",
+        "tier_boundary": (
+            "A is sourced, B is generated, C is stamped. A raw historical corpus is "
+            "responsible for tier A only."
+        ),
+        "raw_observation": raw_observation_contract(),
+        "derived_model_state": derived_model_state_contract(),
+        "experiment_metadata": experiment_metadata_contract(),
+        "narrower_than": (
+            "calibration_contract.REQUIRED_CONTRACT_FIELDS, which is the superset the "
+            "six coefficients need across all tiers."
+        ),
     }
 
 
@@ -565,17 +772,23 @@ def construct_historical_expected_margin(
     subject_state: PregameTeamPoints,
     opponent_state: PregameTeamPoints,
     hfa_baseline_points: float | None,
-    axis_anchor_authority: str | None = None,
+    axis_anchor: AxisAnchor | None = None,
 ) -> HistoricalExpectedMarginResult:
     """Build one historical expected margin, or refuse and say why.
 
-    ``axis_anchor_authority`` is the named governance placing this season's
-    strengths on the V3 axis. It has no default and no fallback. Absent it the
-    result is :data:`STATUS_DERIVABLE`: every term is mathematically determined
-    and the formula is exact, but the axis binding is ungoverned, so no number is
-    handed back. That distinction is the point of the three statuses — a reader
-    can tell "we cannot compute this" from "we can compute this and are not
-    permitted to".
+    ``axis_anchor`` is the :class:`AxisAnchor` recording how this season's
+    strengths reached the V3 axis. It has no default and no fallback, and a bare
+    string is refused rather than accepted as an authority. Absent it the result
+    is :data:`STATUS_DERIVABLE`: every term is mathematically determined and the
+    formula is exact, but nothing states how the points reached the domain, so no
+    number is handed back. That distinction is the point of the three statuses —
+    a reader can tell "we cannot compute this" from "we can compute this and
+    nothing yet says on what basis".
+
+    The anchor is a *scale* declaration, not a ruling. The points-per-SD scale it
+    carries is identifiable from real week 1-2 margins
+    (:data:`IDENTIFICATION_STRUCTURE`), so no Chairman ruling is required to
+    obtain one. This module estimates nothing.
 
     Two kinds of refusal are deliberately different in kind. A *missing or
     refused input* returns :data:`STATUS_UNAVAILABLE`, because a corpus can
@@ -662,7 +875,14 @@ def construct_historical_expected_margin(
     except GovernanceBlock as exc:
         return _unavailable(context.game_id, V3_POINT_DOMAIN, str(exc), bindings)
 
-    if not axis_anchor_authority:
+    if isinstance(axis_anchor, str):
+        raise InputValidationError(
+            f"{context.game_id}: axis_anchor must be an AxisAnchor, not the bare string "
+            f"{axis_anchor!r}. A free-form token is not an anchoring authority; construct "
+            "an AxisAnchor whose kind is one of: " + ", ".join(ANCHOR_KINDS) + "."
+        )
+
+    if axis_anchor is None:
         return HistoricalExpectedMarginResult(
             status=STATUS_DERIVABLE,
             game_id=context.game_id,
@@ -677,10 +897,11 @@ def construct_historical_expected_margin(
                 "hfa": f"{R2_HFA.convergence_id} / SCHED-HFA-BASE",
                 "transform": f"{FORMULA_ID} ({FORMULA_SOURCE})",
                 "axis_anchor": "ABSENT",
+                "axis_anchor_kind": "ABSENT",
             },
             reason_if_unavailable=(
-                f"Every term is determined and the transform is exact, but no governed "
-                f"authority places season {context.season} strengths on "
+                f"Every term is determined and the transform is exact, but no "
+                f"AxisAnchor states how season {context.season} strengths reached "
                 f"{V3_POINT_DOMAIN}. "
                 f"{HISTORICAL_AXIS_ANCHOR_DEPENDENCY['dependency_id']}: "
                 f"{HISTORICAL_AXIS_ANCHOR_DEPENDENCY['statement']}"
@@ -701,7 +922,9 @@ def construct_historical_expected_margin(
         authority_bindings={
             "hfa": f"{R2_HFA.convergence_id} / SCHED-HFA-BASE",
             "transform": f"{FORMULA_ID} ({FORMULA_SOURCE})",
-            "axis_anchor": axis_anchor_authority,
+            "axis_anchor": axis_anchor.anchor_id,
+            "axis_anchor_kind": axis_anchor.kind,
+            "axis_anchor_points_per_sd_status": axis_anchor.points_per_sd_status,
         },
         reason_if_unavailable=None,
     )
@@ -721,9 +944,10 @@ def construct_historical_expected_margin(
 #: walk-forward is deterministic and leak-free. That is a profile/outer-loop
 #: estimation structure, not a circular definition.
 #:
-#: What *is* a real identification failure is separate and is not about the
-#: coefficient at all: the points-per-SD scale and the residual coefficient are
-#: exactly confounded while both are free.
+#: A prior revision of this module additionally asserted a *global* scale /
+#: coefficient non-identifiability. Audit finding 1 refuted that as a global
+#: statement and it is withdrawn here; what replaces it is the narrower and
+#: correct per-week structure below.
 IDENTIFICATION_STRUCTURE: dict[str, Any] = {
     "circularity": "NOT_CIRCULAR__PARAMETER_CONDITIONAL_RECURSION",
     "base_case": (
@@ -739,20 +963,74 @@ IDENTIFICATION_STRUCTURE: dict[str, Any] = {
         "walk-forward loop over candidates is statistically valid. This lane does not "
         "run one."
     ),
-    "genuine_identification_failure": {
-        "id": "SCALE_COEFFICIENT_CONFOUNDING",
-        "statement": (
-            "weekly_performance_residual_coefficient and the points-per-SD scale of the "
-            "strength axis are not separately identified while both are free. Scaling "
-            "the axis by k and the coefficient by 1/k leaves every predicted margin "
-            "unchanged, so no objective over margins can distinguish them."
+    "global_scale_coefficient_nonidentifiability": False,
+    "withdrawn_claim": {
+        "claim": (
+            "Scaling the strength axis by k and "
+            "calibration.weekly_performance_residual_coefficient by 1/k leaves every "
+            "predicted margin unchanged, so the two are globally unidentified."
         ),
-        "resolution_order": (
-            "Anchor the axis first (HISTORICAL_STRENGTH_AXIS_ANCHOR), then estimate the "
-            "coefficient against it. The reverse order is not merely harder — it is "
-            "unidentified."
+        "disposition": "WITHDRAWN__REFUTED_BY_AUDIT_FINDING_1",
+        "why_it_fails": (
+            "It requires a weekly coefficient to be present to absorb the rescale. In "
+            "weeks 1-2 there is none: those weeks precede the first promoted rerating, "
+            "which this same structure records as the base case. The claim therefore "
+            "contradicted the base case it was stated alongside. Independently, the "
+            "venue term carries the governed additive HFA "
+            f"{hfa_policy.V3_FOOTBALL_POINT_HFA} in real football points, which does "
+            "not rescale with the axis, and observed margins are already in that same "
+            "unit — so a rescale is visible rather than absorbable."
         ),
     },
+    "week_1_2": {
+        "scale_identifiable_with_valid_opening_state": True,
+        "expected_margin_form": (
+            "expected_margin = scale x (opening standardized strength difference) + "
+            "governed venue adjustment"
+        ),
+        "consumes_weekly_residual_coefficient": False,
+        "why": (
+            "Weeks 1 and 2 open on fixed preseason strength and occur before the first "
+            "promoted rerating, so the weekly residual coefficient cannot cancel a "
+            "change in opening point-axis scale for those games. Historical week 1-2 "
+            "score margins therefore contain information about the point-axis scale "
+            "independently of the weekly rerating coefficient."
+        ),
+        "cleanest_subset": (
+            "Confirmed-neutral games, where the venue term is exactly 0.0, so neither "
+            "the HFA nor a per-team home-field modifier enters at all."
+        ),
+        "claims_no_more_than_the_mathematics_supports": (
+            "This records identifiability given a valid opening state and an admitted "
+            "corpus. It asserts no estimate, no precision, and no sample adequacy: two "
+            "weeks per season is a thin base, opening schedules are mismatch-heavy and "
+            "are not a random sample of the season, and venue-ambiguous games are "
+            "excluded rather than imputed."
+        ),
+    },
+    "week_3_plus": {
+        "classification": "CANDIDATE_VECTOR_OUTER_LOOP_CALIBRATION",
+        "is_a_nonidentification": False,
+        "why": (
+            "For weeks 3+ the scale enters through the opening-strength difference and "
+            "the coefficient enters through the promoted-rerating term. Those are "
+            "different, freely varying regressors across games, so they do not trade "
+            "off exactly. Estimating them is an outer-loop optimisation over candidate "
+            "vectors, conditional on the scale already identified from weeks 1-2 — not "
+            "an identification failure."
+        ),
+    },
+    "resolution_order": (
+        "1) obtain a valid historical opening standardized strength state; "
+        "2) use real week 1-2 margins, where no promoted rerating coefficient has yet "
+        "entered, to identify the point-axis scale; "
+        "3) with the opening point domain established, run later-season walk-forward "
+        "candidate rerating vectors; "
+        "4) estimate residual dispersion / game_sd_points from out-of-sample residuals "
+        "once the deterministic mean model exists. "
+        "The prior revision reversed steps 1-2 and called the reverse order "
+        "unidentified; that is corrected here."
+    ),
     "stronger_than_unset_coefficients": (
         "For weeks 3+ V3 carries no governed rerating *formula* at all: "
         "rerating.BlockedGovernedRerater raises unconditionally and FixtureResidualRerater "
@@ -761,14 +1039,33 @@ IDENTIFICATION_STRUCTURE: dict[str, Any] = {
     ),
 }
 
-#: The staged experiment design, as a dependency graph. Each stage records what
-#: must already hold; no stage estimates anything here.
+#: The staged experiment design, as a dependency graph, in the corrected
+#: resolution order of audit finding 2. Each stage records what must already
+#: hold; no stage estimates anything here.
 IDENTIFICATION_STAGES: tuple[dict[str, Any], ...] = (
     {
         "stage": "A",
-        "name": "GOVERNED_OPENING_WEEK_RESIDUAL_DISPERSION",
+        "name": "HISTORICAL_OPENING_STANDARDIZED_STATE",
+        "scope": "Per historical season, before any week is scored.",
+        "depends_on": ["an admitted historical corpus", "an external opening-state source"],
+        "does_not_depend_on": [
+            "a Chairman ruling",
+            "calibration.weekly_performance_residual_coefficient",
+            "a governed weekly rerating formula",
+        ],
+        "valid": True,
+        "produced_here": False,
+        "caveat": (
+            "This module consumes an opening state; it does not reconstruct one. The "
+            "state must be standardized over the historical season's own population "
+            "rather than imported from the closed 2026 universe."
+        ),
+    },
+    {
+        "stage": "B",
+        "name": "WEEK_1_2_POINT_AXIS_SCALE_IDENTIFICATION",
         "scope": "Weeks 1-2 only.",
-        "depends_on": ["HISTORICAL_STRENGTH_AXIS_ANCHOR", "an admitted historical corpus"],
+        "depends_on": ["Stage A", "venue evidence for the games used"],
         "does_not_depend_on": [
             "calibration.weekly_performance_residual_coefficient",
             "calibration.weekly_movement_cap_points",
@@ -776,49 +1073,64 @@ IDENTIFICATION_STAGES: tuple[dict[str, Any], ...] = (
             "calibration.blowout_treatment",
             "calibration.sample_size_regularization",
             "a governed weekly rerating formula",
+            "a Chairman ruling",
         ],
         "valid": True,
         "caveat": (
-            "Two weeks per season is a thin base, the estimate is conditional on the "
-            "anchored scale, and opening weeks are not a random sample of the season — "
-            "they are systematically heavy in mismatches. An estimate from them bounds "
-            "and informs; it does not settle game_sd_points."
-        ),
-    },
-    {
-        "stage": "B",
-        "name": "OUTER_WALK_FORWARD_OVER_CANDIDATE_RERATING_PARAMETERS",
-        "scope": "Weeks 3+.",
-        "depends_on": [
-            "Stage A",
-            "a governed weekly rerating formula (absent today)",
-            "HISTORICAL_STRENGTH_AXIS_ANCHOR",
-        ],
-        "valid": True,
-        "caveat": (
-            "Valid as a procedure, not runnable: the formula the parameters would "
-            "parameterise does not exist in governed form."
+            "Two weeks per season is a thin base and opening weeks are not a random "
+            "sample of the season — they are systematically heavy in mismatches. "
+            "Venue-ambiguous games are excluded rather than imputed, which is itself a "
+            "selection effect. The stage is identified; it is not thereby precise."
         ),
     },
     {
         "stage": "C",
+        "name": "OUTER_WALK_FORWARD_OVER_CANDIDATE_RERATING_PARAMETERS",
+        "scope": "Weeks 3+.",
+        "depends_on": [
+            "Stage B",
+            "a candidate rerating parameter vector",
+            "a governed weekly rerating formula (absent today)",
+        ],
+        "valid": True,
+        "caveat": (
+            "Valid as a procedure, not runnable: the formula the parameters would "
+            "parameterise does not exist in governed form. This is an optimisation "
+            "problem conditional on Stage B, not an identification failure."
+        ),
+    },
+    {
+        "stage": "D",
+        "name": "OUT_OF_SAMPLE_RESIDUAL_DISPERSION",
+        "scope": "game_sd_points.",
+        "depends_on": ["Stage B", "Stage C for weeks 3+"],
+        "valid": True,
+        "caveat": (
+            "Estimated from out-of-sample residuals once the deterministic mean model "
+            "exists, never from sd(actual_margin). Weeks 1-2 can support a preliminary "
+            "estimate off Stage B alone."
+        ),
+    },
+    {
+        "stage": "E",
         "name": "HFA_AS_AN_EXPERIMENTAL_WITNESS",
-        "scope": "Any stage.",
-        "depends_on": ["Stage A"],
+        "scope": "Diagnostic; after Stage B.",
+        "depends_on": ["Stage B"],
         "valid": True,
         "caveat": (
             "A historically estimated HFA is a witness quantity in its own namespace. "
             f"The canonical V3 football-point HFA {hfa_policy.V3_FOOTBALL_POINT_HFA} is "
             f"LOCKED by ruling {R2_HFA.convergence_id} and is not an estimand here. "
-            "Estimating HFA jointly with the axis scale re-opens the same confounding "
-            "as the coefficient, so it is estimated only against an anchored axis."
+            "Estimating HFA jointly with the axis scale weakens the fixed-length ruler "
+            "that makes Stage B clean, so it is estimated only against an already "
+            "identified scale."
         ),
     },
     {
-        "stage": "D",
+        "stage": "F",
         "name": "HOLDOUT_VALIDATION",
         "scope": "Reserved seasons.",
-        "depends_on": ["Stages A-C", "calibration_contract.SPLIT_POLICY"],
+        "depends_on": ["Stages A-E", "calibration_contract.SPLIT_POLICY"],
         "valid": True,
         "caveat": "Scored once, never used for selection.",
     },
@@ -849,8 +1161,10 @@ GAME_SD_IDENTIFICATION: dict[str, Any] = {
         "difference at all. It locates nothing."
     ),
     "must_be_known_first": [
-        "HISTORICAL_STRENGTH_AXIS_ANCHOR — the SD is in points, so it inherits the axis "
-        "scale directly; an unanchored axis makes the number unitless.",
+        "The point-axis scale from IDENTIFICATION_STAGES stage B — the SD is in points, "
+        "so it inherits the axis scale directly; an unscaled axis makes the number "
+        "unitless. Identified empirically from week 1-2 margins, not ruled.",
+        "A historical opening standardized strength state (stage A).",
         "A governed pregame expected margin per observation — the subtrahend.",
         "game_type and overtime_periods tagging — both are contract fields awaiting an "
         "admission ruling, and both inflate an untagged residual pool.",
@@ -859,8 +1173,8 @@ GAME_SD_IDENTIFICATION: dict[str, Any] = {
     ],
     "weeks_1_2_could_support_an_initial_estimate": True,
     "weeks_1_2_caveat": (
-        "Conditional on the anchor, and on a corpus this repository does not hold. Not "
-        "estimated here."
+        "Conditional on the identified scale, and on a corpus this repository does not "
+        "hold. Not estimated here."
     ),
     "governed_open_item": "ENG-CAL-MARGIN (OPEN); 20.2 remains unpromoted.",
 }
@@ -1090,16 +1404,21 @@ AUTHORITY_MATRIX: tuple[AuthorityEntry, ...] = (
     ),
     AuthorityEntry(
         label="HISTORICAL_STRENGTH_AXIS_ANCHOR",
-        status="ABSENT__HUMAN_GOVERNANCE_REQUIRED",
-        unit="points per standard deviation, across populations",
+        status="EMPIRICALLY_CALIBRATABLE__NO_RULING_REQUIRED",
+        unit="points per standard deviation",
         scope="any season outside the closed 2026 population",
-        source="no mounted artifact",
+        source="estimated against real week 1-2 margins; no mounted artifact needed",
         governed=False,
-        historical_calibration_usable=False,
+        historical_calibration_usable=True,
         reason=(
-            "The one authority this lane finds genuinely missing. Without it no "
-            "historical strength can be placed on the V3 axis, and the axis scale stays "
-            "confounded with the residual coefficient."
+            "Not an absent authority. The points-per-SD scale mapping a standardized "
+            "historical opening state onto the V3 point axis is identifiable from week "
+            "1-2 margins, which precede the first promoted rerating and so consume no "
+            "weekly residual coefficient. The prior revision recorded this as "
+            "HUMAN_GOVERNANCE_REQUIRED on the strength of a global scale/coefficient "
+            "confounding claim that audit finding 1 refuted. What remains outstanding "
+            "is a model input — a historical opening standardized state — not a ruling. "
+            "Promoting any fitted value stays governed by the existing regime."
         ),
     ),
 )
@@ -1149,15 +1468,66 @@ def authority_matrix_as_dict() -> dict[str, Any]:
             "week_1": STATUS_DERIVABLE,
             "week_2": STATUS_DERIVABLE,
             "week_3_plus": STATUS_UNAVAILABLE,
+            "week_1_2_note": (
+                "DERIVABLE without an AxisAnchor and AUTHORIZED with one. Weeks 1-2 "
+                "consume no calibration coefficient, so their margins carry point-axis "
+                "scale information independently of the weekly rerating coefficient."
+            ),
             "week_3_plus_reason": IDENTIFICATION_STRUCTURE[
                 "stronger_than_unset_coefficients"
             ],
+        },
+        "contracts": {
+            "raw_observation": raw_observation_contract(),
+            "derived_model_state": derived_model_state_contract(),
+            "experiment_metadata": experiment_metadata_contract(),
+        },
+        "axis_anchor_enforcement": {
+            "field": "axis_anchor",
+            "type": "AxisAnchor",
+            "permitted_kinds": list(ANCHOR_KINDS),
+            "bare_string_refused": True,
+            "status": "STRUCTURALLY_ENFORCED__PROVENANCE_CONTENT_ADVISORY",
+            "residual_advisory": (
+                "The kind is a closed set and is enforced. The truthfulness of the "
+                "named source cannot be checked from inside this module; that remains "
+                "NON-BLOCKING_ADVISORY for calibration composition."
+            ),
         },
         "fcs_expected_margin": {
             "status": STATUS_UNAVAILABLE,
             "blocker": fcs_policy.FCS_UNIFIED_SCALE_BLOCKER,
             "fixed_elo": fcs_policy.FCS_FIXED_ELO,
             "point_mapping": None,
+        },
+        "audit_remediation": {
+            "remediation_id": "EM-AUDIT-R1",
+            "responds_to": "HISTORICAL_EXPECTED_MARGIN_AUDIT_REQUEST_CHANGES",
+            "corrections": [
+                "Finding 1: global scale/coefficient nonidentifiability withdrawn; "
+                "replaced by the per-week structure in IDENTIFICATION_STRUCTURE.",
+                "Finding 2: resolution order corrected to opening state -> week 1-2 "
+                "scale -> weeks 3+ walk-forward -> out-of-sample residual dispersion.",
+                "Finding 3: HISTORICAL_STRENGTH_AXIS_ANCHOR reclassified "
+                "EMPIRICALLY_CALIBRATABLE; chairman_ruling_required False.",
+                "Finding 4: single pregame-state contract split into raw observation, "
+                "derived model state and experiment metadata tiers.",
+                "Minor: axis_anchor is now a validated AxisAnchor with a closed kind "
+                "set; a bare caller-invented string is refused.",
+            ],
+            "preserved_unchanged": [
+                "P_TO_STRENGTH_TRANSFORM and REFERENCE_HFA out of scope for football "
+                "expected margin",
+                f"V3 football-point HFA {hfa_policy.V3_FOOTBALL_POINT_HFA}",
+                "neutral venue adjustment exactly 0.0",
+                "subject orientation derived, not a second parameter",
+                f"FCS Elo {fcs_policy.FCS_FIXED_ELO}, no point adapter, fail closed",
+                "weeks 1-2 open on preseason strength; first promoted rerating after "
+                "week 2; weeks 3+ are a candidate-vector walk-forward problem",
+                "game_sd_points from out-of-sample residuals, not sd(actual_margin)",
+            ],
+            "estimated_here": [],
+            "formal_blockers_changed": False,
         },
         "parameters_promoted": [],
         "canonical_config_written": False,
