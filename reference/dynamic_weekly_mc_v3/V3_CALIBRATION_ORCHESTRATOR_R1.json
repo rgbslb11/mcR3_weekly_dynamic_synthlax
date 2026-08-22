@@ -1,0 +1,351 @@
+{
+  "artifact": "V3-CALIBRATION-ORCHESTRATOR-R1",
+  "artifact_status": "SEARCH_MACHINERY_COMPLETE_INPUTS_NOT_MOUNTED",
+  "candidate_identity": {
+    "id_bits": 63,
+    "scheme": "SHA256_OF_CANONICAL_PARAMETER_VECTOR",
+    "shard_rule": "candidate_id % shard_count == shard_index",
+    "stable_under_axis_widening": true
+  },
+  "coarse_universe": {
+    "axes": [
+      {
+        "boundary_expandable": true,
+        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "family": "weekly_performance_residual_coefficient",
+        "level_count": 5
+      },
+      {
+        "boundary_expandable": true,
+        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "family": "weekly_movement_cap_points",
+        "level_count": 4
+      },
+      {
+        "boundary_expandable": true,
+        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "family": "recent_form_weights",
+        "level_count": 9
+      },
+      {
+        "boundary_expandable": false,
+        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "family": "blowout_treatment",
+        "level_count": 4
+      },
+      {
+        "boundary_expandable": true,
+        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "family": "sample_size_regularization",
+        "level_count": 3
+      }
+    ],
+    "candidate_count": 2160,
+    "config_sha": "18e17ef2e6297b54f61d41a9ce579e3c2bb20099c87207dcabb2272a9ae3d041",
+    "range_authority": null,
+    "space_id": "V3-CAL-SEARCH-COARSE-001"
+  },
+  "expected_margin_input_contract": {
+    "authority_fields": {
+      "authority_id": "Stable id of the expected-margin authority.",
+      "hfa_points": "Home-field advantage in points, on the same axis.",
+      "hfa_treatment": "How venue maps onto the HFA term.",
+      "point_axis_id": "The declared point axis. The disputed resolution lives here.",
+      "status": "GOVERNED, or a non-promoting fixture class.",
+      "transform_id": "Named rating-to-margin transform."
+    },
+    "contract_id": "V3-CAL-EXPECTED-MARGIN-BOUNDARY-001",
+    "fail_closed": {
+      "fixture_authority": "Refused for any run whose results could be cited.",
+      "missing_authority": "GovernanceBlock. Never a default transform.",
+      "missing_expected_margin": "GovernanceBlock. Never 0.0."
+    },
+    "per_observation_fields": {
+      "actual_margin": "Final scoring margin from the subject team's perspective.",
+      "event_time": "ISO-8601 kickoff instant. The chronological key. It, not week, is what orders two games inside one week and what proves a prediction preceded its outcome.",
+      "game_id": "Stable unique key. Deduplication and split assignment key.",
+      "governed_expected_margin": "The authority's own pregame predicted margin for this game. Required, and never defaulted: see the module docstring.",
+      "opponent": "Canonical opponent id.",
+      "pregame_opponent_points": "Opponent's pregame point strength on the same axis.",
+      "pregame_team_points": "Subject team's point strength BEFORE kickoff, on the authority's declared axis. Used as the season opening strength on a team's first appearance and as the transform cross-check thereafter.",
+      "provenance": "Named origin of the row, carried through to the shard table.",
+      "season": "Season the game belongs to. State is re-initialised per season.",
+      "split": "One of ['training', 'validation', 'holdout']. Assigned in the corpus, temporally.",
+      "team": "Canonical subject team id.",
+      "venue": "One of ['HOME', 'AWAY', 'NEUTRAL'], from the subject team's perspective.",
+      "week": "Week PLAYED. Establishes which rerating boundary the game sits behind."
+    },
+    "separations": {
+      "expected_margin_vs_prediction": "governed_expected_margin is the authority's number and is corpus data. The candidate's own evolving prediction is derived state and is what the primary objective scores.",
+      "raw_vs_derived": "ObservationRow is frozen and is never written to. All model state lives in TeamCalibrationState."
+    },
+    "status": "SPECIFICATION_ONLY_NO_AUTHORITY_MOUNTED"
+  },
+  "game_sd_points": {
+    "admissible_method": "OUT_OF_SAMPLE_RESIDUAL_DISPERSION",
+    "estimated_on": "validation or holdout residuals; the training split is refused",
+    "influences_mean_model_selection": false,
+    "reason": "Selection is on RMSE, which needs no dispersion parameter, so the estimate cannot change which candidate wins. SD of actual margin measures the sport's variability rather than the model's error.",
+    "refused_method": "SD_OF_ACTUAL_MARGIN"
+  },
+  "historical_research_context": {
+    "identification_defects": [
+      "movement cap did not bind, so its value is not identified",
+      "depth optimum sat on the search boundary, so it is not identified",
+      "corpus provenance does not satisfy the current admission contract"
+    ],
+    "reported_best_blowout": "NO_SPECIAL_TREATMENT",
+    "reported_best_cap_points": 6.0,
+    "reported_best_coefficient": 0.18,
+    "reported_best_depth": 6,
+    "reported_best_regularization": "NONE",
+    "reported_best_scheme": "GEOMETRIC_0.6",
+    "reported_validation_rmse": 18.5156,
+    "status": "HISTORICAL_RESEARCH_CONTEXT_NOT_EVIDENCE",
+    "usable_as_anchor": false,
+    "usable_as_prior": false
+  },
+  "identification_reporting": {
+    "boundary_optimum": "BOUNDARY_OPTIMUM",
+    "movement_cap": [
+      "cap_hit_count",
+      "cap_hit_rate",
+      "max_uncapped_update",
+      "max_capped_update",
+      "cap_identified"
+    ],
+    "ordered_families_tested_for_boundary": [
+      "weekly_performance_residual_coefficient",
+      "weekly_movement_cap_points",
+      "recent_form_weights",
+      "sample_size_regularization"
+    ],
+    "policy": "A cap that never binds is not identified and is never reported as a finding. Where candidates tie on the primary metric and differ only in a family the corpus cannot see, the aggregate reports an equivalence class rather than a discovery.",
+    "unidentified_tie_marker": "UNIDENTIFIED_EQUIVALENCE_CLASS"
+  },
+  "objective": {
+    "direction": "minimize",
+    "primary_metric": "out_of_sample_baxter_rating_rmse",
+    "ruling": "R2-CAL-OBJECTIVE",
+    "secondary_metrics": [
+      "baxter_mae",
+      "winner_accuracy",
+      "brier_score",
+      "log_loss",
+      "probability_calibration_bins",
+      "week_to_week_movement_distribution",
+      "cap_binding_statistics",
+      "recent_form_effective_contributions",
+      "regularization_early_and_late_season_impact"
+    ],
+    "winner_accuracy_may_override_primary": false,
+    "witness_composite_authorised": false,
+    "witness_reporting": "Colley and SRS are computed from outcomes alone and are candidate-independent. Each candidate reports a Spearman rank correlation against them as a coherence witness. Neither is converted onto the V3 point axis and neither enters the ranking.",
+    "witnesses": [
+      "colley_matrix",
+      "srs"
+    ]
+  },
+  "operator_interface": {
+    "aggregate": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_aggregate --input <result-directory>",
+    "benchmark": "python scripts/benchmark_calibration_search.py",
+    "fan_out": "Run score_one_shard once per shard index with the same --shard-count and the same --expect-config-sha. Membership is candidate_id % shard_count, so the workers need no coordination and cannot overlap.",
+    "module_prefix": "ncaaf_engine.simulation.dynamic_weekly_mc_v3",
+    "plan_one_shard": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_search --stage coarse --shard-count 4 --shard-index 0 --plan",
+    "score_one_shard": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_search --stage coarse --shard-count 4 --shard-index 0 --observations <governed-corpus> --expected-margin-authority <authority-id> --range-authority <ruling-id>",
+    "worker_may_choose_its_own_grid": false,
+    "worker_may_write_canonical_config": false
+  },
+  "parameter_families": {
+    "all": [
+      "weekly_performance_residual_coefficient",
+      "weekly_movement_cap_points",
+      "recent_form_weights",
+      "blowout_treatment",
+      "game_sd_points",
+      "sample_size_regularization"
+    ],
+    "estimated_from_residuals": "game_sd_points",
+    "searched_as_mean_model": [
+      "weekly_performance_residual_coefficient",
+      "weekly_movement_cap_points",
+      "recent_form_weights",
+      "blowout_treatment",
+      "sample_size_regularization"
+    ],
+    "separation_reason": "game_sd_points is a property of the residuals a mean model leaves behind. Enumerating it as an axis would let a candidate choose the dispersion its own errors are scored against."
+  },
+  "promotions": {
+    "allowlist_widened": false,
+    "blockers_retired": 0,
+    "canonical_writer_created": false,
+    "parameters_promoted": 0,
+    "real_calibration_executed": false,
+    "season_monte_carlo_executed": false
+  },
+  "ranking": {
+    "homogeneity_keys": [
+      "input_dataset_sha",
+      "split_sha",
+      "experiment_config_sha",
+      "expected_margin_authority_id",
+      "model_version",
+      "stage"
+    ],
+    "policy": {
+      "declared_before_results": true,
+      "excluded_from_ranking": "Rows whose failure_status is not OK.",
+      "policy_id": "V3-CAL-RANKING-001",
+      "primary": {
+        "direction": "minimize",
+        "governed_metric": "out_of_sample_baxter_rating_rmse",
+        "metric": "baxter_rmse",
+        "ruling": "R2-CAL-OBJECTIVE"
+      },
+      "tie_breaks": [
+        {
+          "direction": "ascending",
+          "key": "baxter_mae",
+          "reason": "A second error measure on the same residuals, less dominated by the handful of blowouts that move RMSE."
+        },
+        {
+          "direction": "ascending",
+          "key": "movement_p95",
+          "reason": "Among equally accurate models, prefer the one whose weekly ratings move less. A rating that swings to reach the same accuracy is worse to publish, and this is the diagnostic ruling R2-CAL-OBJECTIVE already names."
+        },
+        {
+          "direction": "ascending",
+          "key": "candidate_id",
+          "reason": "Terminal and total, so the order is fully determined. Reaching this tie-break means the corpus did not separate the candidates, which the equivalence-class report states rather than hides."
+        }
+      ],
+      "winner_accuracy_may_override_primary": false,
+      "witness_composite_authorised": false
+    },
+    "policy_sha": "aea0dd067fba60f3bca79bd9e1f241cd08158eb6ae877a6cc0f1e617884cba66",
+    "tie_tolerance": 1e-09
+  },
+  "readiness": {
+    "blocking_inputs": [
+      {
+        "input": "GOVERNED_HISTORICAL_OBSERVATION_CORPUS",
+        "reason": "BLOCKED_ON_CALIBRATION_DATA: no historical observation set is mounted, and none was supplied.",
+        "required_for": "Any scoring at all.",
+        "supplied_as": "An exact dataset SHA-256, registered through calibration_evidence.register_governed_dataset."
+      },
+      {
+        "input": "GOVERNED_EXPECTED_MARGIN_AUTHORITY",
+        "reason": "No expected-margin authority supplied. Scoring is refused rather than run against a default transform: the historical point-axis resolution is the disputed question, and inventing one here would answer it by accident.",
+        "required_for": "Converting point strengths into a predicted margin.",
+        "supplied_as": "An ExpectedMarginAuthority with status GOVERNED, naming its point axis and rating-to-margin transform."
+      },
+      {
+        "input": "SEARCH_RANGE_AUTHORITY",
+        "reason": "Search space V3-CAL-SEARCH-COARSE-001 carries no range authority. Its axes are RANGE_PENDING_EVIDENCE: the levels are scaffolding chosen to exercise the harness, not ranges any evidence supports. A real search requires a named authority that fixes them.",
+        "required_for": "Turning the pending coarse axes into fixed ranges.",
+        "supplied_as": "A named ruling that fixes each axis, flipping its evidence status to RANGE_FIXED_BY_NAMED_AUTHORITY."
+      }
+    ],
+    "corpus_mounted": false,
+    "expected_margin_authority_mounted": false,
+    "machinery_complete": true,
+    "real_calibration_executable": false,
+    "search_ranges_fixed": false
+  },
+  "scope": "Deterministic candidate universe, temporal walk-forward scorer, shard protocol and aggregator for the six V3 calibration families. No parameter is selected, promoted, or written to canonical configuration.",
+  "shard_partition_proofs": {
+    "1": {
+      "duplicates": 0,
+      "exact": true,
+      "missing": 0,
+      "per_shard_sizes": {
+        "0": 2160
+      },
+      "shard_count": 1,
+      "unexpected": 0,
+      "union_size": 2160,
+      "universe_size": 2160
+    },
+    "2": {
+      "duplicates": 0,
+      "exact": true,
+      "missing": 0,
+      "per_shard_sizes": {
+        "0": 1073,
+        "1": 1087
+      },
+      "shard_count": 2,
+      "unexpected": 0,
+      "union_size": 2160,
+      "universe_size": 2160
+    },
+    "4": {
+      "duplicates": 0,
+      "exact": true,
+      "missing": 0,
+      "per_shard_sizes": {
+        "0": 538,
+        "1": 552,
+        "2": 535,
+        "3": 535
+      },
+      "shard_count": 4,
+      "unexpected": 0,
+      "union_size": 2160,
+      "universe_size": 2160
+    },
+    "8": {
+      "duplicates": 0,
+      "exact": true,
+      "missing": 0,
+      "per_shard_sizes": {
+        "0": 257,
+        "1": 278,
+        "2": 266,
+        "3": 259,
+        "4": 281,
+        "5": 274,
+        "6": 269,
+        "7": 276
+      },
+      "shard_count": 8,
+      "unexpected": 0,
+      "union_size": 2160,
+      "universe_size": 2160
+    }
+  },
+  "stage_plan": {
+    "coarse": {
+      "definition": "calibration_search.coarse_space()",
+      "precision_policy": "Deliberately coarse. Resolving a third decimal place here costs the same compute as covering twice the space, and Stage 2 resolves it anyway over a region Stage 1 has already justified.",
+      "purpose": "Locate useful regions of the parameter space.",
+      "scored_split": "validation",
+      "universe": "Cross product of the five mean-model families."
+    },
+    "holdout": {
+      "custody": "calibration_search.HoldoutLedger records the single consumption and refuses a second. Iterative tuning against the holdout is not discouraged; it is unavailable.",
+      "definition": "calibration_search.holdout_space(shortlist, parent=...)",
+      "dispersion_policy": "game_sd_points is carried in from validation rather than re-estimated here, so the holdout does not inform its own diagnostics.",
+      "purpose": "Score a shortlist once against a split nothing has touched.",
+      "scored_split": "holdout",
+      "universe": "An explicit shortlist, capped at 8 candidates."
+    },
+    "refinement": {
+      "boundary_policy": "A family whose leader sat on an edge of an expandable ladder is extended one full step past it. The search grows rather than reporting the edge.",
+      "definition": "calibration_search.refine_space(base, winners)",
+      "purpose": "Resolve the leading regions, and widen any that hit a boundary.",
+      "scored_split": "validation",
+      "universe": "A pure function of the coarse space and the ordered Stage-1 leaders, so two operators build byte-identical Stage-2 universes."
+    }
+  },
+  "temporal_controls": {
+    "first_promoted_rerating_after_week": 2,
+    "leakage_proof": "calibration_scoring.require_no_future_leakage",
+    "promotion_granularity": "WEEK_BOUNDARY_NEVER_PER_GAME",
+    "random_split_permitted": false,
+    "season_state": "RE_INITIALISED_PER_SEASON",
+    "split_assignment": "TEMPORAL_ONLY",
+    "weeks_one_and_two": "OPENING_STRENGTH_EXACT_NOTHING_PROMOTED"
+  },
+  "terminal": "CALIBRATION_ORCHESTRATOR_READY_FOR_INPUTS"
+}
