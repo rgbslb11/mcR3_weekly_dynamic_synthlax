@@ -1,0 +1,65 @@
+{
+  "artifact": "V3_VENUE_R1_MATCH_REPORT.json",
+  "artifact_status": "DETERMINISTIC_MATCH_REPORT",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "enrichment_id": "V3_R1_HISTORICAL_VENUE_ENRICHMENT",
+  "espn_source_report": {
+    "events_admitted": 3613,
+    "rows_set_aside": {
+      "ESPN_NOT_COMPLETED": 11
+    }
+  },
+  "lane": "V3_HISTORICAL_VENUE_ENRICHMENT_R1",
+  "match": {
+    "ambiguous_source_identity": 14,
+    "espn_event_bound_at_most_once": true,
+    "espn_events_available": 3613,
+    "espn_events_bound": 3416,
+    "fixpoint_rounds": 2,
+    "games_considered": 3454,
+    "match_methods": {
+      "IDENTITY_DATE": 3406,
+      "PARTIAL_IDENTITY_SCORE": 10
+    },
+    "matched_exactly": 3416,
+    "multiple_match_refused": 0,
+    "refusals": {
+      "AMBIGUOUS_SOURCE_IDENTITY": 14
+    },
+    "team_identity_ambiguous": [
+      "missouri-st",
+      "ut-martin"
+    ],
+    "team_identity_entries": 240,
+    "unmatched": 24
+  },
+  "ncaa_source_report": {
+    "division_membership": "see V3_VENUE_R1_TEAM_IDENTITY_MAP.json",
+    "division_membership_counts": {
+      "2021": {
+        "FBS": 128,
+        "FCS": 167,
+        "UNRESOLVED": 2
+      },
+      "2022": {
+        "FBS": 131,
+        "FCS": 175
+      },
+      "2023": {
+        "FBS": 133,
+        "FCS": 158
+      },
+      "2024": {
+        "FBS": 135,
+        "FCS": 177
+      }
+    },
+    "games_admitted": 3454,
+    "rows_set_aside": {
+      "SOURCE_GAME_ID_BLANK": 145,
+      "SOURCE_SCORE_ABSENT": 21,
+      "SOURCE_STATE_POSTPONED": 3,
+      "SOURCE_STATE_PRE": 4
+    }
+  }
+}

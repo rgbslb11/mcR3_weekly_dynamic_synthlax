@@ -1,0 +1,81 @@
+{
+  "artifact": "V3_VENUE_R1_COVERAGE_REPORT.json",
+  "artifact_status": "COVERAGE_REPORT",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "away_field_count": 0,
+  "bowl_count": 0,
+  "bowl_venue_resolved": 0,
+  "calibration_usability_breakdown": {
+    "EXPECTED_MARGIN_VENUE_READY": 3416,
+    "EXPECTED_MARGIN_VENUE_UNRESOLVED": 38
+  },
+  "completion_timestamp_count": 0,
+  "conference_championship_count": 39,
+  "conference_championship_home_field": 16,
+  "conference_championship_neutral": 23,
+  "conference_championship_venue_resolved": 39,
+  "conflict_status_breakdown": {
+    "NO_CONFLICT": 3166,
+    "SOURCE_CONFLICT_KICKOFF": 275,
+    "SOURCE_CONFLICT_KICKOFF|SOURCE_CONFLICT_SCORE": 4,
+    "SOURCE_CONFLICT_SCORE": 9
+  },
+  "division_matchup_breakdown": {
+    "DIVISION_UNRESOLVED": 35,
+    "FBS_VS_FBS": 2939,
+    "FBS_VS_FCS": 478,
+    "FCS_VS_FCS": 2
+  },
+  "enrichment_id": "V3_R1_HISTORICAL_VENUE_ENRICHMENT",
+  "evidence_status_breakdown": {
+    "VENUE_EVIDENCE_ABSENT": 38,
+    "VENUE_EVIDENCE_BOUND": 3416
+  },
+  "expected_margin_venue_ready": 3416,
+  "fbs_vs_fcs_ambiguous": 17,
+  "fbs_vs_fcs_fbs_home": 458,
+  "fbs_vs_fcs_fcs_home": 0,
+  "fbs_vs_fcs_neutral": 3,
+  "fbs_vs_fcs_total": 478,
+  "fbs_vs_fcs_venue_resolved": 461,
+  "fbs_vs_fcs_venue_unresolved": 17,
+  "game_type_breakdown": {
+    "CONFERENCE_CHAMPIONSHIP": 39,
+    "REGULAR_SEASON": 3377,
+    "UNKNOWN_GAME_TYPE": 38
+  },
+  "game_type_resolved_count": 3416,
+  "game_type_unresolved_count": 38,
+  "games_considered": 3454,
+  "home_field_count": 3334,
+  "kickoff_local_count": 3454,
+  "kickoff_local_date_only_count": 12,
+  "kickoff_local_time_of_day_count": 3442,
+  "kickoff_timestamp_any_source_count": 3454,
+  "kickoff_timestamp_count": 3175,
+  "lane": "V3_HISTORICAL_VENUE_ENRICHMENT_R1",
+  "match_status_breakdown": {
+    "AMBIGUOUS_SOURCE_IDENTITY": 14,
+    "MATCHED_EXACT": 3416,
+    "UNMATCHED": 24
+  },
+  "neutral_count": 82,
+  "observability_timestamp_count": 0,
+  "orientation_cross_source_breakdown": {
+    "AGREED": 3334,
+    "AGREED_AT_NEUTRAL_SITE": 82,
+    "NOT_CHECKABLE": 38
+  },
+  "orientation_cross_source_disagreements": 0,
+  "playoff_count": 0,
+  "season_breakdown": {
+    "2021": 855,
+    "2022": 844,
+    "2023": 868,
+    "2024": 887
+  },
+  "source_conflict_count": 288,
+  "unmatched_count": 38,
+  "venue_resolved_count": 3416,
+  "venue_unresolved_count": 38
+}

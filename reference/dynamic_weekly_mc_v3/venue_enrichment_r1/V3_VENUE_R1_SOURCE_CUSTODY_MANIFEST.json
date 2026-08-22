@@ -1,0 +1,1715 @@
+{
+  "artifact": "V3_VENUE_R1_SOURCE_CUSTODY_MANIFEST.json",
+  "artifact_status": "SOURCE_CUSTODY_MANIFEST",
+  "authorities": [
+    "ESPN_COLLEGE_FOOTBALL_SCOREBOARD",
+    "NCAA_OFFICIAL_SCOREBOARD_FEED"
+  ],
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "bytes_reverified": true,
+  "enrichment_id": "V3_R1_HISTORICAL_VENUE_ENRICHMENT",
+  "lane": "V3_HISTORICAL_VENUE_ENRICHMENT_R1",
+  "source_authorities": [
+    {
+      "carries_venue": false,
+      "role": "GAME_IDENTITY_AND_SOURCE_ORIENTATION",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+      "source_authority_tier": "TIER_1_NCAA_OFFICIAL"
+    },
+    {
+      "carries_venue": true,
+      "role": "VENUE_GAME_TYPE_AND_KICKOFF_EVIDENCE",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD",
+      "source_authority_tier": "TIER_5_REPRODUCIBLE_SECONDARY"
+    }
+  ],
+  "sources_verified": 281,
+  "verified": [
+    {
+      "decompressed_byte_length": 1184326,
+      "decompressed_sha256": "f4b6cb2acf7aba9f7d96eea14e52cebf8f8a5f752e6163e43abbc1cf9b8c97dc",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1077800,
+      "decompressed_sha256": "1c20839c6c2d745f4132c8bb63b645ce54f4bfd3a07c79f3379abd019ad504da",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 994534,
+      "decompressed_sha256": "86b96d3a48e8f78a40c55ef77b25ae0a320184823890f83af2fd8617c73757ff",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 952054,
+      "decompressed_sha256": "715bd95dd0ad2ed6fdea50a9d9116ddefdad464b00227ce82520afe323684f4a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 902225,
+      "decompressed_sha256": "79b91da1ee94b999bbee9800cb18cfc1f2d4d82a812968f0b886be212a243069",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 710550,
+      "decompressed_sha256": "28a4c7ebbf9a5f9014688acccd16536536b1ab571c9b7d9c0b376c38849f781e",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 723767,
+      "decompressed_sha256": "36b3c6b94896e58d2d976181ea55f7900f2c9832b02d4e861d42d1f6eb117147",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 745424,
+      "decompressed_sha256": "da01e0f9ed17653dc4d89860eadf0b705a326dc5fb30cfb589e602234a9834eb",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 748450,
+      "decompressed_sha256": "8d821d30b520703012e6d14560321e339bacb33dc327fb50f9c0a6b5cccd15cb",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 804556,
+      "decompressed_sha256": "355c7a778f318c9b56eb38a850f9dc2fd6a85b8c99a30df44597c9f68fd0d372",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 904910,
+      "decompressed_sha256": "290cbf7a8ef9f3f79fe5802dff20e9c8dd5890d9182a0d2552bf8e8ce15c467f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 893114,
+      "decompressed_sha256": "aad49fc149f35d428784e66d20c43e6b46c7a414f817293d2207749319d2da6f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 883877,
+      "decompressed_sha256": "630fce9a5d26f3d3f55114eb66dbd9c9253f5ca82cbea772ec9b858f92df8d2f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 114871,
+      "decompressed_sha256": "1bc55daa8c5b99f4a9b195cdbdd1f03cabdfca34f74d63af5c053c563a4766c8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 12633,
+      "decompressed_sha256": "727ca53f9ec9cf7099e4288fe8e385312aaa67997c8e6cf2e0b6b507627f5035",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st2/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 630557,
+      "decompressed_sha256": "8da9e10d60f1e415893528f8857c80a54542e04e5dc5a6d934ff1cc8abb515c5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3694,
+      "decompressed_sha256": "3d6949bf726396f9ede4d6b189437b3358000885935cb4639db7afdc599051df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2021/st3/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1285811,
+      "decompressed_sha256": "b4bb602601c5cdaf521882e1e8fd07c7f87fdd5781054083a82c56793d0a9d77",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1035923,
+      "decompressed_sha256": "42350bc34d7588c081701a5047aa894f267acdd931a6c65a6b5c5cf5d5219508",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 941591,
+      "decompressed_sha256": "e385f9f0adeb56334e89e9984792a4ab6d55c3009b333f685bba3b59d909541b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 940911,
+      "decompressed_sha256": "3c1a2d99aa9aa1f5891213fbff9217ed59e3fb384eebed6190910e2e97512e61",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 875551,
+      "decompressed_sha256": "37c2ba8d1fc7cfcb66092556e9a362e1997cffc19beef05f4bce99e0547c8016",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 783833,
+      "decompressed_sha256": "69288b547c26c5784a5dae5aa6fd1690473a40fe6343d9252449fce0a6491dcf",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 763379,
+      "decompressed_sha256": "ef1da6d4dc1554190b52898ecfaef4ad8b78956bc54ff0c3c65085bd0f9173af",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 724921,
+      "decompressed_sha256": "a89e31e27e66967ddc6d6dbe027403c3699751808912263beb50c27e6a986130",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 656839,
+      "decompressed_sha256": "86222c77e676095e70df38c42a6d922532378c2ff2d62229044a3fab24592f8b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 840994,
+      "decompressed_sha256": "6a0806d0347b05062802614351eb240a1ebba7418b8b24715204792ff6d24ed5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 858243,
+      "decompressed_sha256": "cd7d1beedd191969cd8330860ba3ba47f13cdc43f7d9a2071524d5250bb8b5b0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 943338,
+      "decompressed_sha256": "7c30625eabc6326157b908a4ef9b0400977e72881a57a930c2966cc2d51a3ab5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 899246,
+      "decompressed_sha256": "912082149869e78f1f328f827c8c9b0087ea04b8d754c9ddee177c502291289a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 160267,
+      "decompressed_sha256": "00a80efed924ffab43f5619b5c277a68233dc4d0d6d7b3997f4ae84f8d3ab53d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 12964,
+      "decompressed_sha256": "1be4970a885645ddadbab329d92471d4b018c95333e347d53671f731b6858859",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st2/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 671893,
+      "decompressed_sha256": "83ff1df5fcf29b4a3372fbda12537ad7bb30ca325d07c98e8d8e49f21f58f0fa",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3690,
+      "decompressed_sha256": "2c767a7b561abca107f8a4b00dafa08e5d861b4bcb3b8a3e47a189beedff5d88",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2022/st3/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1263321,
+      "decompressed_sha256": "1cefa14e7d2638c372bba18b71ef7ead5ab1d48ed94901fb1143e736f06f91a0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1191530,
+      "decompressed_sha256": "f42c7eb822013a0bedbfe56b4feece8604667be3c99028050c066322df448a2f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1080518,
+      "decompressed_sha256": "c39b04e96124a2dca135635ea06f6e972ca91a0f258d5bf6aefe0ba6da971626",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 985731,
+      "decompressed_sha256": "65a10e597d81d4a61a9c5d3e433faff0022b684a81a88520244333eff52370ac",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 847066,
+      "decompressed_sha256": "8657d1d141a0ce245c5d7e1ec4d52acb82547668d63d0b393ceff2b9e82b0cd8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 785463,
+      "decompressed_sha256": "c47533727ab840d0c783d516986dc83447f1e7b61129b75c6a92ec43c8bac819",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 803655,
+      "decompressed_sha256": "1a834473af33423e2a0ae2b3fe1f51c26b808bf1987ef33ed85636d032faad11",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 818669,
+      "decompressed_sha256": "14fd7796d68341d7bf21fb1389a00f2a4e5a8ab0576abd61bd42777c89257579",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 797592,
+      "decompressed_sha256": "115fa31de9a40e905c5951a3604ae433d6ff87fcdeb6f234bcd06fda05286b16",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 968738,
+      "decompressed_sha256": "147a38b1dd56165c520a483a354b8431025158c8dbb47c1078ad59ce4a668944",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 967473,
+      "decompressed_sha256": "4eb3130817d35d4d7a6a2fe6121deae00d45c56fc9ad7e79c5708bf12275b323",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1017370,
+      "decompressed_sha256": "f3df829380ed20d8dc778c849813d506ca127a7264bd0ba7e8a428ca7de9b1c9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 959127,
+      "decompressed_sha256": "210f29b3c3ebe2dcac0ab8045b83380d0845f13122be732a0a8394e8f5c7a450",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 141734,
+      "decompressed_sha256": "d7837c4a6360ed4286a09f0d859cfe2d8787a5d803a994b031398da1241eaa9f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 21032,
+      "decompressed_sha256": "6016f2c081a5c7a3b8eea5bc8beedc214764deb94e85494dd87b0f895ac3e580",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st2/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 684739,
+      "decompressed_sha256": "48fa996afa958996c11d941e4c322726d8f5c81c77b72af37b9cf9eada66efed",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3693,
+      "decompressed_sha256": "01186654f00cafb05a2bce470f258882aecf78b324df932c2fe5ba0dd6e42542",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2023/st3/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1452547,
+      "decompressed_sha256": "f165eae0f97025bcfaa684c44f9b7c4f458b32e22d6aea389bf35693ead21b97",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1185783,
+      "decompressed_sha256": "faccc364e9c84c6a2708ea29a273ddefb6a1a6af4153416169f40b950c77de4d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 963116,
+      "decompressed_sha256": "fe6e673e5381639373ad1f55daab312af3ce924f655fc6d13bc5c4c27631b932",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 971247,
+      "decompressed_sha256": "73cbee10697305b6c3de0d7dda88ac246f35dc3b34d7302c287344a69505b82c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 870266,
+      "decompressed_sha256": "cd4700aadd8da02e9ba47c72b178a6e7e865505d4ba9eb5b3f322c541e526d8d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 731966,
+      "decompressed_sha256": "0a693a1829096e1bce99bd4b811adeeffb95767b2bfc610f75c41d3e1c825b3f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 775667,
+      "decompressed_sha256": "4f924831e96221ed9e24c894bc15678850fd58c09fafa04ed23296daa91e56f3",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 920971,
+      "decompressed_sha256": "c5331ff5577bcc05126c03d95642fc5806de2869682cc2226c05ee7cc4ff1718",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 879899,
+      "decompressed_sha256": "b42378c696284660b1cade655f9090bb483a057cff3d42f514eb5e342f415fce",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 750176,
+      "decompressed_sha256": "d4234690963316acbf00d29dccd050347a1bc3b9c600ca0bb7bdc8e065ed0239",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 767918,
+      "decompressed_sha256": "f5c07b72b2729825b2f21c9e40d20ccd6d47f191238d256ce102828e20bb45af",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 818355,
+      "decompressed_sha256": "b662c9b91493d2a84574621044218b6b23c3fbdfee8ae526d4db18773adabd4d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 990868,
+      "decompressed_sha256": "52f1dc60d7dc540f980b457d3d0f25d7b940d51ebfbea6295d286a4434982f9a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 1055437,
+      "decompressed_sha256": "d01fd56c10cc1c6f06267618bc2a7b79f64c6c5c931103b236fb1950cf61108a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 139283,
+      "decompressed_sha256": "c53dfa6a1f16a0274693614dcf2a4f767405eaeaf9beb3f59c538121c6118e4c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 24221,
+      "decompressed_sha256": "c84d87bb4484da934d2e22027b547f871560a05898d105b2117359ccbad4eb12",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st2/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 791434,
+      "decompressed_sha256": "16dcf9d8878e97568d4d94407a10e17df8474c757405d29df5f4a6878cf197ad",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk01.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk02.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk03.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk04.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk05.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk06.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk07.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk08.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk09.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk10.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk11.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk12.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk13.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk14.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk15.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk16.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 3971,
+      "decompressed_sha256": "9cbafdb34cd4a36eb774649d325b38aae2331fe2eba784873a7b5e185d0b8593",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/espn_scoreboard/2024/st3/wk17.json.gz",
+      "source_authority": "ESPN_COLLEGE_FOOTBALL_SCOREBOARD"
+    },
+    {
+      "decompressed_byte_length": 129268,
+      "decompressed_sha256": "35064e1e40497d6b676ab6ee90159363b7a197dbbcda81f520a8c686e8b776e8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 114391,
+      "decompressed_sha256": "10f27365ed831a28f36aba1213c42e4ab507c445a9fa453f150f94290cf8de50",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 103567,
+      "decompressed_sha256": "7b420f7293af288c061f3787ae8d577e78b36bfc54ba72770a70b1f42f8d57b7",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 94087,
+      "decompressed_sha256": "52232225ffc2bd3e725d31c8a5678df01879b0139c420b031f2dfe2a7c9bdbef",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84941,
+      "decompressed_sha256": "40bd7ae18aa4b081995c79161c6c4c5acc58eb7712bdc44ad0e20cdf580bf53b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 71189,
+      "decompressed_sha256": "4574840aef77313364975486b7c3542902525e098315146564fc63531165430d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 71879,
+      "decompressed_sha256": "a517d89fc641373f4ced425792ba85fe5500c8b87286f503013758a140a8f2a2",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 74960,
+      "decompressed_sha256": "15322b3ec149297c0a6969f25fa2b3ebef6ac2dd88b983d7dc59c1eae5dd60fa",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 73965,
+      "decompressed_sha256": "21920e40882312442f6e40244184034ce446d7e4ba770bdcc3ab9d256bad5564",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83538,
+      "decompressed_sha256": "4e29ae162959e73959e25a610c65959643ef0e961c630bd4ffccb1a3844bb0d3",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 88810,
+      "decompressed_sha256": "d99ff008e168219d60d06f9d1719919f5a78f4a82cff0d7b168e315a0d8fdf6b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 91692,
+      "decompressed_sha256": "5345df4f865eeb940437c26e622eac70fab835efb1f2e8ae8252cc2b180e90d4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 90390,
+      "decompressed_sha256": "66100b27ac52c9140020944c457ccdb26b328b6f6dad1705d54275accde89eb1",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 16626,
+      "decompressed_sha256": "68168ae3daf9a30e8c985d79a26f5a689858e865b2c4c28b71f3f977721b1dc7",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1330,
+      "decompressed_sha256": "ee028f0bbc26fdb2893a182623daa287c1a7ef4919c2422fc22bbad4c9bf1983",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "f3755ba43e2cb4df9c5187f894c5359b81268f51adfdcc36cd17c0cc32278d78",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "6f95603634d34d3f532bcc121edc138d43875b3c343bf8967a90690b698408d6",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk17.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "c7f1322a5c79c2aa5cc420c205dbfc9a47e8dc10c55264a74e3efca8853ddf1c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk18.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "2b6f52839374c6718b0650ea0226a7ab9c194118d8db14681ff92e0df59aff5b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fbs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 118521,
+      "decompressed_sha256": "39113d378cecf30fe851f1dee7852b29d1ee9cd4423f5de65b46cba445f8718d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 117239,
+      "decompressed_sha256": "758656ef2c8535b216251af6c130068693ae07246e0092b1628317d0d17dbd96",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 100734,
+      "decompressed_sha256": "be79791663871a1c799c4526e50c87dbb61d1020a7817d5c4e897bf7270ed930",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80448,
+      "decompressed_sha256": "2d4a9453980e2974918a5f026ff192802c58663a0ac197052ba7753cb0617985",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76354,
+      "decompressed_sha256": "fa063a07817bbe5c59693af0552671c0a5ce2ad048a707ec4fb2fc2f48ced1b8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 75003,
+      "decompressed_sha256": "b924733d1894cfe20ec07b2a0c54607c8c46ec920541cdf17ba86b83e5cf5eac",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76348,
+      "decompressed_sha256": "62e3f638627feb87bf6be792a34965160b681c555e3cf1e55679901d9ccbe961",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 79015,
+      "decompressed_sha256": "cff6c64028a3525419db43590bec93087155e75647f0d4237f02bb5e030d36e3",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76259,
+      "decompressed_sha256": "992bda7d6262871d9e21851d22e74e49105ade3705faebcc1bf0d30a79864442",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84198,
+      "decompressed_sha256": "7bfe349586f16baf59af72c1c55bf56dd374f1f5a9cce5bd95dc123565193440",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 85694,
+      "decompressed_sha256": "80a609f1db24d8bd546868ab367e9a1f4b2b5629439199287f3be822fee72326",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 86128,
+      "decompressed_sha256": "dc2c07b05d14f35c9ae62505c202fb5166caafea636f6b755d019a35b9288f97",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 15056,
+      "decompressed_sha256": "7202d860a048cbdbbb413ccfa9dd39bbcac8175b163f527ab3606dd0c3f5f7c8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 11092,
+      "decompressed_sha256": "8483c31c09b99a2dde39e9700c2c48adaad1d8e311d21fee5b43c12d0a891a0c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 5591,
+      "decompressed_sha256": "858db19239ae199b27885fcdaebd93d0897d68a25eb08066519dd976c460192f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 4258,
+      "decompressed_sha256": "e95e9f014f48e62310b939788e533ac06eb0aedaa194aba215811928a8ed7f97",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1399,
+      "decompressed_sha256": "5b9db8935cc8453fcb99bbbb13d82a55688c6b9719598043bd96fc7d230f8098",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2021/fcs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 128344,
+      "decompressed_sha256": "edbdac5323e085e14cdeedf1379c6001f3c2827c477d1a547d2c2ca8c13aeff4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 116206,
+      "decompressed_sha256": "10187767e81264034d89feed03f7b3ec32bd740e748ecdbeac85165a6f0b7d06",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 98683,
+      "decompressed_sha256": "917a9faa670040c574067c4b5c7c4200386235c0c0bbf65eedc165cb46af1d56",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 93293,
+      "decompressed_sha256": "ed2150298bf0e1dc88be13f8aa9dc1b8cd0039e84e3734f4da19ed560577841e",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 89144,
+      "decompressed_sha256": "05c3bc65e5745f6d08247332aa75ff876ed3be5b1e93a88b464abbc330e4e566",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80796,
+      "decompressed_sha256": "63b602c2bf7e5c6f0fa16ea2fae3a6122b37bc1cf50689ffc4df8bd055f2c6dc",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76226,
+      "decompressed_sha256": "f78157a4db5ac629ba318d76dc2e85d281326fd23d549248b92ed9ef0324d868",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 75879,
+      "decompressed_sha256": "ef695a17a767b94a5b40605e50ba03cc8c6214118b0ff843899192c75eb0ff4d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 68459,
+      "decompressed_sha256": "114b2b770b57babbec9f78e86b4ad4300689eb3ede7c162784c165f6f70a8733",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 85060,
+      "decompressed_sha256": "c3694862796d3ab460826bda630428fe7105927d8ea1b6fd20a7a0ca93b8885d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 92024,
+      "decompressed_sha256": "b6288e3f698d0418db691c0a5b40d755197330d2bc0418588198ef4c346e68aa",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 92004,
+      "decompressed_sha256": "fe4d6b454593d88ff3e0529e23a2478d916140b76651c003a7df0c6e624727f6",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 89325,
+      "decompressed_sha256": "79e7763c44a524b8a647348ac3ec1cd72c7fa81b9c20927d2af36fa4a24d2a41",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 17834,
+      "decompressed_sha256": "4fdbc9963bb64b0d4dd0817beceef5cc9eb17534feb975ff877567ec40449691",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1362,
+      "decompressed_sha256": "2cd571bdca15fc574102585648dcb77b234064807cf1a021f3bd1bae4aa060b3",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "88ca3087e50406f7817d17ab900f9804192cac3a2485702643f864981b5c9f83",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "8da2e773ae7807cf87ef3f4775c8284c87d25cd94acb510a1621172210af59dc",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk17.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "1670171d30241251385bb2773b2e8288c5d13272a8a009f33d47cd7605271d97",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk18.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "984cfd8e1a13c0959b86ab4099f58da0a806ec96119638ee886dd52a3947c281",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fbs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 125690,
+      "decompressed_sha256": "ea9191f47c171ec4fc3693f64529353ea534752ea76bfbf6da77363eca3b88fa",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 117681,
+      "decompressed_sha256": "c6debdbaac30caf20a73cd66c5236167765c8bfd1f51b220606960a89ebb37de",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 101168,
+      "decompressed_sha256": "1972ec90673580df7e0ced459a9e20cbddbaadab12142938cca0f8210178420d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83773,
+      "decompressed_sha256": "620107641287465ad7a7adf49639bae7d89afe24b0ed6c3bcd8a5072ef7d3ec2",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84859,
+      "decompressed_sha256": "225bf32a954977ab350c21b2e82ac4866dc9a69801951850afb5a8f98c192ef9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 73980,
+      "decompressed_sha256": "8d4a9c9084b3d6620077bf4c27f1918deffdc559fe09d11a10d18d29425bdc05",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80757,
+      "decompressed_sha256": "f3864147db299060aff2eaeafae58cc9f8b4ab9977c24c78de80cd82fffd4cce",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 82249,
+      "decompressed_sha256": "e8dd7155455ed90937d196ce32b925f3ba782c900d8a68d491408142dfd6c91a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83380,
+      "decompressed_sha256": "3d2fe215038fd0ad657f8ea9e17f8143fefb2651553500e8244b945492495a20",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80767,
+      "decompressed_sha256": "3a200570d8c23b9ba1e7cd7eccfd08f21cefdfc91a793da22dfdc531f66f5c94",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 89011,
+      "decompressed_sha256": "c5db3318a9b5268cc254c86d2d7b29dc9e27247ea2eee7553225a419895e710b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 86269,
+      "decompressed_sha256": "61c8626efd341c03a069db9411c1ac4c50ccece7b1494170f29f19041b31a087",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 13873,
+      "decompressed_sha256": "09307418a1aa86be8caa80a0ffe1573a0692371409dc6eb18938883139d4360a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 14001,
+      "decompressed_sha256": "7a26bdb626f93f87fba1acf046d324463dc034cffe93dc53e5c77e3163a8b9df",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 5733,
+      "decompressed_sha256": "65c058465b660f2ffbe3eb4cda3177bf955ab6c8d4c9167b8ff2ba32dba53bac",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 4307,
+      "decompressed_sha256": "db1d27c31500b95c48921b4a86ad6df80f447f3c0bee42aa6435d2ec80c7b38b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1428,
+      "decompressed_sha256": "b51ebb387be0edfdf22e8274fbc7b2c7dda6819c22f55149e9311cc84b1305d8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2022/fcs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 131948,
+      "decompressed_sha256": "6f0e0e4f7e8e5442a5cfcc03186890db4b496f7b9abd908eca0602a48ec84076",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 119522,
+      "decompressed_sha256": "a238d56f6c4538d32ec28e855a704b7c7b97e9e0031f9124e022131d6bd89c23",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 105569,
+      "decompressed_sha256": "dadb9659bfa3156f34367f30aee1d695cd322266831c09d1f3971fd250a5953b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 94905,
+      "decompressed_sha256": "2c3cfa7605fcfb4d78f015ee0783469097ca68f651c05140cbc569011064d2d1",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83194,
+      "decompressed_sha256": "570346b724f816a7d9360b3ab5643a8a1bb346d5f67a943791493afc6eccd6fd",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 72196,
+      "decompressed_sha256": "60380469b44d5b33fcd06d810896275c043f56f287c8e608f61cdd4742253141",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 78067,
+      "decompressed_sha256": "0d69dc594dd54e865c74ab3538c6ac44178072df536512675ac84cf4796cb1f5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76536,
+      "decompressed_sha256": "24b431ca5f33b67db7a42715dd22c4fd9b96df4d4b0ddf1e375735cc2a6d99cf",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76688,
+      "decompressed_sha256": "ab4f8327a35c213485d6590ccc16a4a71c8c1a38035bd69e0a6c1510ac62e686",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 92128,
+      "decompressed_sha256": "48db8fe33c238d16f3308cd416f985ee64b7a6eb6b2d903d094c50fe944ae2c5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 91847,
+      "decompressed_sha256": "f41a653001d0e2102da9a3aa4682b897abf9bb983a87120e7d442e6e70000ffc",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 96182,
+      "decompressed_sha256": "e2f628fad4d4e98e8b8250d7d7f8bf8c275ee498f7a648a6e5b4ef35f05c8eb0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 92061,
+      "decompressed_sha256": "0d0400bd399c6976dc67a76557cdd6768b997bb09e15db6a5630c1f10d22ea79",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 15180,
+      "decompressed_sha256": "6b207fe1640340550a1c35c53a3b35e91a6fce6e5c4020164236f33db817500f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1354,
+      "decompressed_sha256": "baf8b90c7d5be66a156904b9d0b9f8f9401f0be7d4e827f8663beeca9228055a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "0fc7211754c5ef12edb6b5be8ca2fa13b55eb5084313e7616829ef0c8b83a406",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "587ac23c2be7b019b138e209aa3ae3fafe44e6138b420a4d90d626da4062cb21",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk17.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "d1c868cba51815483f7bb741504b55edca6ce47494e9207c94b3379ec41e84f9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk18.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109,
+      "decompressed_sha256": "c9631850758e1f1b95ddfa88f92fab3b641d9f121b5791d0891cf523dff81a9d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fbs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 126494,
+      "decompressed_sha256": "1028a942b2c7517c8d2a8de26351eec7cf39df169fa5a2eaf9da3d9ec18ef1a1",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 117105,
+      "decompressed_sha256": "8afeb9cc5a9887f636ad01238956d7fbf749d21dd5f037733e6a4444e855339f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 101560,
+      "decompressed_sha256": "3b7f672c961257dfe5d41d4ab6954069aa549411d9b19f3d24d6cb57ca87a3e4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 79375,
+      "decompressed_sha256": "86966e238638bfaf8ad0d2d5616d6def5e6e85433281bc7212d902d0dace5392",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84861,
+      "decompressed_sha256": "75b12e3491c0242c319a598fc6bb5dcfdab6a5c6e920a4fe09fc46fea986b0a7",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 72472,
+      "decompressed_sha256": "e277f8bee7edc42fe7dc86b37f91d6337d8f6d13284e0e280852688b69760d3e",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 73819,
+      "decompressed_sha256": "df9cdc997cb1a0fd92a35db8574b9ddcfcee8bae37c8a6ddd57d3674402174e8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76527,
+      "decompressed_sha256": "acbf6e9ccd1d0aa8164af8a8815d8ac8fe90a845cbfe696352c6e7a6f2965fcf",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80739,
+      "decompressed_sha256": "7ef6477ad9eea260c68e3be0e95cf45dc6ee621b06be4a096ad8c21fd40b1860",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84794,
+      "decompressed_sha256": "f26787b2f2345a315dfe07321090833f132cefeca29d3b2e31e99ce7455f4e45",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83526,
+      "decompressed_sha256": "5768e9fb258bec3d2da3344603fef19a078dc1233de937ad2501525eda73b75a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 84989,
+      "decompressed_sha256": "2704ebbc96f70cd45ab0a6cbe0690a3f3f802eabb2108af86f4d588369e9861c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 13925,
+      "decompressed_sha256": "0fcd96706e1d1847b6d4530bb040109e2dbadb4682e8a8d7a4aef87fcfcd83e9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 12586,
+      "decompressed_sha256": "9057b349b4218a4b229a93ede6868fc6f292381cd7e3e54054322b2fb5a0ee83",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 5641,
+      "decompressed_sha256": "112eacca009d66d1171a7c145cc0284812011d90d7ce60a8c3c005b908c66d54",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 4245,
+      "decompressed_sha256": "4bf19f490945975cd5f29d342a1897ee4d7dacd6b82d16162510d71f10be07c8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1394,
+      "decompressed_sha256": "cafb1dcbb164d30cccd76d54fcdb9b6cbf4c01cdc5f9773758072021387bd6eb",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2023/fcs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 142842,
+      "decompressed_sha256": "902fc15fc80eb4efc8d9d604a33fc7af8de76fb67166c417352375f4d01b877b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 109893,
+      "decompressed_sha256": "824580d89398d1b60fbc1522af50bdf6aab4365977e25554f5a48bddda6e42c9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 91193,
+      "decompressed_sha256": "60fb5e6bd380fe03d470d05fad14f4957d79a18be8358086065205a81faa2170",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 93137,
+      "decompressed_sha256": "3ed43ef4a9a7c4c260ac9b94c6364c487025c1fcd4c5d8c2fef40c82831f38d4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80810,
+      "decompressed_sha256": "4be042e6afb0c8872b8b15ddfa15ab9c779a1468cf56cd8f4cbcea7001539ed0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 70549,
+      "decompressed_sha256": "c82cdb8df2b4b451fc72de6e32b62e24fad5156e5c07ffe865221742284bf23a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76413,
+      "decompressed_sha256": "64419afa0cd0f53160ae44681a118e4bf3d6a1fb7b8f2049b6290374c4dded0f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 85803,
+      "decompressed_sha256": "a16717d0a44cd9195d269f7284e37b532a59d3d91ecd33069de3af67911555e7",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83032,
+      "decompressed_sha256": "3423c765c777bd85c20e6ea2c1900ab48c2c2d7a35834c0c70dc4b5dad442464",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 70569,
+      "decompressed_sha256": "d42199a30d0e7d89006fe5b4062cbfeab0537093ecf5299d53ce620808dfa2c0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 73822,
+      "decompressed_sha256": "cb7d10776655f6beb411695fdfd779cda453ed5833e28b3e425720b6c9654300",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 80684,
+      "decompressed_sha256": "0f56ea07c6f5a05dd377f664b0399cbec2f85536908ea48d56e8d3c1a959889d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 94574,
+      "decompressed_sha256": "d855603d95b3bae3ebe288fac0455e2b4a2bef087a088bd738ac8f5165de989d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 94854,
+      "decompressed_sha256": "9b245a91d8c556d144927e6ecdeda6785ae401b319469dcea4b82e9cd7ab348b",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 13814,
+      "decompressed_sha256": "12e3fcbf496e28e087e3b33d91b37c8a3216cc36172f322de75e35b43a0b26c8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 182,
+      "decompressed_sha256": "394b86271655224dfc7be3be3a35c93f4cc45c01cd8c5d94cfe790c4a790748c",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 182,
+      "decompressed_sha256": "5f6db1c4b29e6f53d3c37719b908eaa8f4ad939439aa9c7766eacb6d742bff36",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk17.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 182,
+      "decompressed_sha256": "4f937ebfd30f6d6e2112eee6f788edbff42801db73d36a4a9ae380a349f6754f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk18.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 182,
+      "decompressed_sha256": "7009bf52cf57b124211717fdcc751ee8da3dd2c30ed93153cda3ef1b164471b6",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fbs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 135174,
+      "decompressed_sha256": "acbcc00f61c89de81dffbd400f43a63fe1076536d217111513a7a8f952b511b5",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk01.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 113952,
+      "decompressed_sha256": "5938f4e9e513c98d5d7b4863d85b90bd8a3b779497d5698b5e28185d340b46e3",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk02.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 93107,
+      "decompressed_sha256": "bce3618e6e4ad454ca0c15de86619962b7da19d64d2e8fee5581626a393a8f28",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk03.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 90289,
+      "decompressed_sha256": "1d5ad12bf0523b453d5e78e278cc009a3765b1504d235e06f176cecebb216ceb",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk04.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 77924,
+      "decompressed_sha256": "653175b98fc15e22b63d48af5fcc679d3e949169b2ef8a33a6208793ee0d28d8",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk05.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 79462,
+      "decompressed_sha256": "c12f5f51d0cd1684ff68b011c81e43f9e1cd968745cffe0cc6678620ffff6d49",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk06.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 76697,
+      "decompressed_sha256": "3e48e89c62fc3ad2efa98cb121abbdefef05012b1e5067e01963323e61bb3d10",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk07.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 75221,
+      "decompressed_sha256": "aa27b5641905485165791b617799658fb7d0959b526c234ff9690207d79553d7",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk08.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 82066,
+      "decompressed_sha256": "230db9b884ecbb7504b3d6bfebfc5a8279807f4f74f77d6510cd4d1adcb2a5d9",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk09.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 83365,
+      "decompressed_sha256": "d553e48cb0702f8cb6820acd86077cd1354e41bd8ad3c261188ddad3f86b31ad",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk10.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 67060,
+      "decompressed_sha256": "a3015e19e9d30a1ebb7888a4d285f76397c499b9d78ee680d62ed845871721d0",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk11.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 87601,
+      "decompressed_sha256": "b51ee5c3680b4f1c404f37bff4d2cf058ad8a6f141ddb16b8adbb1fbc62b21ed",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk12.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 87569,
+      "decompressed_sha256": "a75815b457e0f13918cb566d2d9f43854acd08ffa0fd7c5c5f0de0835059c33f",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk13.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 16781,
+      "decompressed_sha256": "21c1fc94916fd1f6b9900c784ca0d93e82d6c65355337da8f190eaedc5b922b4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk14.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 12663,
+      "decompressed_sha256": "0b415eb9405e3b2d6acdfe7f6e9ca910660348495561b8502a983764baec7ce4",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk15.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 7146,
+      "decompressed_sha256": "13a270e542e951e48ff1c51c2e3942c6862c4bbb7de48783912393170360ee5a",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk16.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 3009,
+      "decompressed_sha256": "adb9b22ee0f0ee5c87cf4fa86e5f9c6a30d9120788db6e1a38b93e13ebe6595d",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk17.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    },
+    {
+      "decompressed_byte_length": 1491,
+      "decompressed_sha256": "91435cd050e99bcfc20c5ba69f2a0edc8ea9c0443af02dc43bd9cac4fa9c5ce2",
+      "raw_path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/raw/ncaa_scoreboard/2024/fcs/wk19.json.gz",
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED"
+    }
+  ]
+}

@@ -50,3 +50,14 @@
 # The Board of Record and every governed workbook. `binary` unsets text, diff
 # and merge, so no filter can alter a byte.
 *.xlsx             binary
+
+# Raw source captures for the historical enrichment lanes. Already byte-preserved
+# by the `* -text` rule above; named explicitly because this file's convention is
+# that every type actually present is named, and because raw custody depends on
+# it rather than merely benefiting from it. The captures are gzip containers
+# whose decompressed bytes carry a registered SHA-256, so a checkout filter that
+# touched them would break every digest recorded against them. This is also why
+# the captures are stored as `.json.gz` and not as `.json`: the `*.json` rule
+# above normalises to LF, and a raw capture a checkout can rewrite is not a raw
+# capture.
+*.gz               binary
