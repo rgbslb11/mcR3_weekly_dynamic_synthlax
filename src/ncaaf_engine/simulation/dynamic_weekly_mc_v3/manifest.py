@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 
 from .config import V3Config
 from .inputs import sha256_file
+from .textio import write_json_lf
 
 
 def build_input_manifest(config: V3Config, execution_blockers: list[str] | None = None) -> dict[str, object]:
@@ -34,6 +34,12 @@ def build_input_manifest(config: V3Config, execution_blockers: list[str] | None 
         "model_name": config.model_name,
         "model_version": config.model_version,
         "configuration_version": config.configuration_version,
+        # The tier travels with the artifact. Without it a directory of outputs
+        # is silent about how many paths produced it, and a development run
+        # becomes indistinguishable from a result of record.
+        "paths": config.paths,
+        "run_tier": config.run_tier.name,
+        "publish_freeze_eligible": config.publish_freeze_eligible,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "input_files": files,
         "execution_blockers": config.execution_blockers() if execution_blockers is None else execution_blockers,
@@ -45,8 +51,4 @@ def write_manifest(
 ) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     p = output_dir / "input_manifest.json"
-    p.write_text(
-        json.dumps(build_input_manifest(config, execution_blockers), indent=2, sort_keys=True),
-        encoding="utf-8",
-    )
-    return p
+    return write_json_lf(p, build_input_manifest(config, execution_blockers))

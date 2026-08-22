@@ -1,0 +1,52 @@
+# Checkout-byte determinism for governed artifacts.
+#
+# Governed artifacts are verified by SHA-256 over their bytes — the AAC
+# divisions CSV against a digest registered in source, the canonical master
+# Markdown and every mounted workbook against the run manifest. Git for Windows
+# ships core.autocrlf=true at system scope, so an independent clone that has
+# never had a local override checks those text artifacts out as CRLF and every
+# registered digest fails. That is a checkout property, not a repository
+# property, so it cannot be fixed by a local config: it is pinned here, where
+# the repository itself carries the answer.
+#
+# Recorded so the intent is not re-derived later: at the commit that introduced
+# this file every tracked text blob was already pure LF and the only binaries
+# were the eight .xlsx workbooks. These rules therefore normalize nothing —
+# they hold the bytes that are already committed.
+
+# Fail closed. Without an explicit rule Git applies text=auto's content
+# heuristic, which makes checkout bytes depend on what a blob happens to
+# contain. Unknown and future file types are byte-preserved instead of guessed;
+# every type actually present is named below and overrides this line.
+*                  -text
+
+# --- governed text: byte identity is load-bearing ---------------------------
+# CSV carries a digest registered in aac_divisions.py; Markdown and JSON are
+# digested into the input manifest and the reproducibility artifacts.
+*.csv              text eol=lf
+*.md               text eol=lf
+*.json             text eol=lf
+
+# --- source and configuration text ------------------------------------------
+# No registered digest today. Pinned anyway so a future digest over source or
+# config cannot be broken by the checkout that produced it.
+*.py               text eol=lf
+*.toml             text eol=lf
+*.ini              text eol=lf
+*.sql              text eol=lf
+*.mako             text eol=lf
+*.yml              text eol=lf
+*.yaml             text eol=lf
+.gitignore         text eol=lf
+.gitattributes     text eol=lf
+
+# --- Windows-native scripts --------------------------------------------------
+# Determinism is the requirement, not LF specifically. These are launched by
+# Windows PowerShell, so they are pinned to the platform-native ending — pinned
+# explicitly, which is what stops autocrlf from deciding it per clone.
+*.ps1              text eol=crlf
+
+# --- binary: never touched ---------------------------------------------------
+# The Board of Record and every governed workbook. `binary` unsets text, diff
+# and merge, so no filter can alter a byte.
+*.xlsx             binary
