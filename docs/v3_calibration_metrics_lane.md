@@ -4,7 +4,15 @@
 
 Branch: `claude/v3-calibration-metrics-r1`
 Frozen base: `5479f2ae7687c36c0ed4117334171289693dd5c9`
-Disposition: **METRIC PACKAGE COMPLETE — AWAITING GOVERNED HISTORICAL INPUTS**
+Freeze: **CAL-METRICS-R1**
+Disposition: **FROZEN — READY FOR INPUTS**
+
+The metric-engineering phase is closed. The whole oracle — criterion, tie-break
+hierarchy, stage and holdout policy, witness roles, diagnostic conventions and
+emitted schema — is digested into `ORACLE_FREEZE_SHA256`
+(`954dcf0f7d26fb814dea529d7e37b3bb8c4465cebc8bf5f061390af15b54dd9f`), which
+`require_frozen_oracle` checks. A worker running an altered oracle is caught
+before its scores enter the merge.
 
 No parameter was promoted, no candidate grid was built, no blocker was retired,
 no real calibration run was executed, and no season Monte Carlo was run. The
@@ -207,17 +215,76 @@ about football.
 
 ---
 
-## 9. What is still blocked
+## 9. Required versus optional inputs
 
-Only inputs, and none of them is this lane's to supply:
+The distinction matters because getting it wrong would deadlock the programme.
+`game_sd_points` is to be estimated *from* out-of-sample residuals once a
+deterministic mean model exists; a probability conversion needs that sigma; and
+a witness comparison needs candidate rating state the same search produces. So
+blocking the mean-model search on probabilities or witnesses would be waiting
+for outputs of the thing being blocked.
 
-1. **A governed historical observation set.** None exists — see
-   `docs/v3_calibration_lane_c.md` §4 and `docs/v3_calibration_evidence_lane.md`.
-   The metric package is complete and cannot score anything until one arrives.
-2. **A governed margin-to-probability conversion.** Blocked behind
-   `calibration.game_sd_points`. Brier and log loss stay `None` with a named
-   reason.
-3. **A Colley Matrix implementation.** Named as a witness, never written.
-4. **Walk-forward witness state.** Requires 1 and, for Colley, 3.
+**Required** (absent any of these there is no Baxter score, and the candidate is
+unrankable): accepted historical replay rows, `actual_margin`,
+`predicted_margin`, temporal train/validation/holdout identity, and candidate
+ID plus experiment bindings.
 
-Everything downstream of those inputs is built, tested and deterministic.
+**Secondary, non-blocking** — computed from the required inputs alone and
+reported for every candidate: MAE, bias, winner accuracy, movement diagnostics,
+blowout diagnostics, temporal stability.
+
+**Optional / downstream** — reported as unavailable, never withholding a score:
+Brier, log loss, probability calibration, Colley witness, SRS witness.
+
+An unavailable witness emits `WITNESS_UNAVAILABLE` beside a full score sheet.
+The leakage gate stays hard when `require_walk_forward_witness` is called
+directly, but inside candidate scoring a witness refusal is contained to that
+witness block: `primary_selection_ready` stays true and the candidate still
+ranks. `failure_reasons` now carries only what stopped the primary criterion
+existing; everything else is in `non_blocking_reasons`.
+
+---
+
+## 10. Corpus dependency
+
+The programme state is **not** "no historical corpus exists". The corpus lane
+has produced roughly **2,241 real 2021–2024 observations** that independently
+passed substantive source/data audit, currently under narrow record/provenance
+remediation and targeted re-audit.
+
+This package therefore reports:
+
+```
+AUDITED_HISTORICAL_CORPUS_CANDIDATE_PENDING_FINAL_ACCEPTANCE
+```
+
+carried on `metrics_package_status()` and on every emitted candidate record.
+
+**The mutable corpus worktree was not read or copied by this lane.**
+`bind_accepted_corpus` binds one exact 64-character digest at execution time and
+refuses two things separately: anything that is not a digest (a branch name, a
+worktree path, a placeholder), and a well-formed digest that has not been
+accepted. Binding to a candidate under re-audit would let the bytes move
+underneath a score already recorded against them.
+
+Still outstanding, and none of it this lane's to supply:
+
+1. **Final acceptance of the corpus**, then its digest.
+2. **A governed margin-to-probability conversion** — behind
+   `calibration.game_sd_points`, itself downstream of the mean model.
+3. **A Colley Matrix implementation** — named as a witness, never written.
+4. **Walk-forward witness state** — requires 1, and for Colley also 3.
+
+Only item 1 gates the first real mean-model calibration.
+
+---
+
+## 11. Composition with the search lane
+
+Agent 3 generates candidate vectors and historical replay rows. This package
+scores them. Workers score; workers do not rank; central aggregation ranks under
+the fixed Baxter OOS RMSE policy.
+
+No worker may redefine the primary objective, the tie-break order, the holdout
+policy or the witness role — each is asserted `False` in
+`ranking_interface_as_dict()` and covered by the freeze digest.

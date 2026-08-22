@@ -738,7 +738,10 @@ def test_the_colley_witness_reports_unavailable_rather_than_a_number():
     assert witness["unavailable_reason"] == cm.REASON_COLLEY_NOT_MOUNTED
     assert witness["blocker"] == cm.COLLEY_WITNESS_BLOCKER
     assert "spearman_rank_correlation" not in witness
-    assert cm.REASON_COLLEY_NOT_MOUNTED in record.failure_reasons
+    assert witness["witness_status"] == cm.WITNESS_UNAVAILABLE
+    # Non-blocking: an absent witness is reported, never charged as a failure.
+    assert cm.REASON_COLLEY_NOT_MOUNTED in record.non_blocking_reasons
+    assert record.failure_reasons == ()
 
 
 def test_a_supplied_colley_state_is_compared_but_marked_as_supplied():
@@ -1191,3 +1194,220 @@ def test_the_benchmark_fixture_is_reproducible_from_its_seed():
     assert [r.digest() for r in cm.evaluate_candidates(a)] == [
         r.digest() for r in cm.evaluate_candidates(b)
     ]
+
+
+# --- CAL-METRICS-R1 freeze: witnesses and probabilities are non-blocking ------
+
+
+def test_an_absent_witness_does_not_withhold_the_baxter_score():
+    """The circularity this guards: a witness needs the mean model to exist."""
+    record = cm.evaluate_candidate(_replay(_three_split_rows()))
+    assert record.primary_metric_value is not None
+    assert record.primary_selection_ready is True
+    assert record.failure_reasons == ()
+    assert record.status == cm.METRICS_PRIMARY_READY
+    assert record.witness_status == {
+        "colley_matrix": cm.WITNESS_UNAVAILABLE,
+        "srs": cm.WITNESS_UNAVAILABLE,
+    }
+
+
+def test_an_absent_probability_conversion_does_not_withhold_the_baxter_score():
+    record = cm.evaluate_candidate(_replay(_three_split_rows()))
+    assert record.probability["brier_score"] is None
+    assert record.probability["log_loss"] is None
+    assert record.out_of_sample_mae is not None
+    assert record.bias is not None
+    assert record.winner_accuracy["accuracy"] is not None
+    assert record.primary_selection_ready is True
+
+
+def test_candidates_with_no_witnesses_still_rank():
+    """Witness unavailability must not remove a candidate from the search."""
+    replays = [
+        _replay(
+            [_row("A", 10.0, 10.0 - d, candidate_id=f"C{i}")],
+            candidate_id=f"C{i}",
+        )
+        for i, d in enumerate((5.0, 1.0, 3.0))
+    ]
+    records = cm.evaluate_candidates(replays)
+    assert all(r.witness_status["srs"] == cm.WITNESS_UNAVAILABLE for r in records)
+    ranked = cm.rank_candidates(
+        records, stage=cm.STAGE_COARSE, objective=PRIMARY_OBJECTIVE
+    )
+    assert [r.candidate_id for r in ranked] == ["C1", "C2", "C0"]
+
+
+def test_a_leaking_witness_degrades_that_witness_and_not_the_candidate():
+    """The gate stays hard when called directly; inside scoring it is contained."""
+    late = cm.WitnessSnapshot("srs", "9999-9999", {"A": 1.0, "B": 2.0})
+    replay = _replay(
+        [_row("A", 10.0, 7.0)],
+        witness_snapshots=(late,),
+        candidate_rating_states={"2022-0000": {"A": 30.0, "B": 10.0}},
+    )
+    record = cm.evaluate_candidate(replay, evaluation_as_of="2022-0000")
+    assert record.primary_metric_value == 3.0
+    assert record.primary_selection_ready is True
+    assert record.srs_witness["witness_status"] == cm.WITNESS_UNAVAILABLE
+    assert record.srs_witness["blocked_primary_selection"] is False
+    assert any("WITNESS_REFUSED" in r for r in record.non_blocking_reasons)
+    # Called directly, the leakage gate still refuses outright.
+    with pytest.raises(GovernanceBlock, match="not a pregame witness"):
+        cm.require_walk_forward_witness(late, "2022-0000")
+
+
+def test_only_a_missing_primary_input_is_charged_as_a_failure():
+    empty = cm.CandidateReplay(
+        candidate_id="C1",
+        rows=(_row("A", 10.0, 7.0, split="training"),),
+        input_dataset_sha="D",
+        split_sha="S",
+        experiment_config_sha="E",
+    )
+    record = cm.evaluate_candidate(empty)
+    assert record.primary_selection_ready is False
+    assert record.status == cm.METRICS_UNAVAILABLE
+    assert record.failure_reasons == (cm.REASON_NO_OUT_OF_SAMPLE_ROWS,)
+
+
+def test_the_input_classification_is_published_and_disjoint():
+    contract = cm.ranking_interface_as_dict()
+    assert contract["required_inputs"] == list(cm.REQUIRED_INPUTS)
+    assert contract["witnesses_required_for_primary_selection"] is False
+    for optional in ("brier_score", "log_loss", "colley_matrix_witness", "srs_witness"):
+        assert optional in cm.OPTIONAL_DOWNSTREAM_INPUTS
+    assert set(cm.REQUIRED_INPUTS) & set(cm.OPTIONAL_DOWNSTREAM_INPUTS) == set()
+    assert (
+        set(cm.SECONDARY_NON_BLOCKING_METRICS) & set(cm.OPTIONAL_DOWNSTREAM_INPUTS)
+        == set()
+    )
+
+
+def test_game_sd_points_is_not_required_for_the_mean_model_metrics():
+    status = cm.metrics_package_status()
+    assert status["game_sd_points_required_for_primary_selection"] is False
+    assert "out-of-sample model residuals" in status["game_sd_points_estimated_from"]
+    # It does correctly gate the probability metrics.
+    assert status["brier_and_log_loss_blocker"] == "calibration.game_sd_points"
+
+
+# --- CAL-METRICS-R1 freeze: the oracle digest ---------------------------------
+
+
+def test_the_frozen_oracle_digest_verifies_against_itself():
+    verified = cm.require_frozen_oracle(cm.ORACLE_FREEZE_SHA256)
+    assert verified["freeze_id"] == "CAL-METRICS-R1"
+    assert verified["verified"] is True
+    assert len(cm.ORACLE_FREEZE_SHA256) == 64
+    assert cm.ORACLE_FREEZE_SHA256 == cm.canonical_digest(cm.ranking_interface_as_dict())
+
+
+def test_a_mismatched_oracle_digest_is_refused():
+    with pytest.raises(GovernanceBlock, match="digest mismatch"):
+        cm.require_frozen_oracle("0" * 64)
+
+
+def test_the_freeze_digest_covers_more_than_the_tie_breaks():
+    """A worker keeping the tie-breaks but moving a band edge must be caught."""
+    contract = cm.ranking_interface_as_dict()
+    assert contract["tie_break_policy_sha256"] == cm.TIE_BREAK_POLICY_SHA256
+    for key in (
+        "stage_ranking_split",
+        "diagnostic_conventions",
+        "result_schema_keys",
+        "independent_witnesses",
+        "holdout_release_token_pattern",
+    ):
+        assert key in contract
+    mutated = dict(contract)
+    mutated["diagnostic_conventions"] = {"blowout_boundary_points": 14.0}
+    assert cm.canonical_digest(mutated) != cm.ORACLE_FREEZE_SHA256
+
+
+def test_the_composition_contract_keeps_ranking_central():
+    contract = cm.ranking_interface_as_dict()
+    assert contract["workers_score_only"] is True
+    assert contract["ranking_is_central"] is True
+    for key in (
+        "worker_may_redefine_primary_objective",
+        "worker_may_redefine_tie_breaks",
+        "worker_may_redefine_holdout_policy",
+        "worker_may_redefine_witness_role",
+    ):
+        assert contract[key] is False
+
+
+# --- CAL-METRICS-R1 freeze: corpus binding ------------------------------------
+
+
+def test_the_corpus_dependency_is_reported_as_a_pending_candidate():
+    status = cm.metrics_package_status()
+    assert status["corpus_input_status"] == (
+        "AUDITED_HISTORICAL_CORPUS_CANDIDATE_PENDING_FINAL_ACCEPTANCE"
+    )
+    assert status["corpus_candidate_observations"] == 2241
+    assert status["corpus_candidate_seasons"] == "2021-2024"
+    assert status["corpus_worktree_read"] is False
+
+
+def test_every_emitted_record_carries_the_corpus_dependency_state():
+    payload = cm.evaluate_candidate(_replay(_three_split_rows())).as_dict()
+    assert payload["corpus_input_status"] == cm.CORPUS_INPUT_STATUS
+    assert payload["witnesses_required_for_primary_selection"] is False
+
+
+def test_binding_requires_an_exact_digest_not_a_branch_or_a_placeholder():
+    for bad in ("HEAD", "PENDING", "worktree", "abc123", "", "Z" * 64, "A" * 64):
+        with pytest.raises(InputValidationError, match="exact SHA-256"):
+            cm.bind_accepted_corpus(bad, accepted=True)
+
+
+def test_binding_refuses_a_corpus_that_is_not_yet_accepted():
+    with pytest.raises(GovernanceBlock, match="PENDING_FINAL_ACCEPTANCE"):
+        cm.bind_accepted_corpus("b" * 64, accepted=False)
+
+
+def test_an_accepted_corpus_binds_to_its_exact_digest():
+    digest = "c" * 64
+    bound = cm.bind_accepted_corpus(digest, accepted=True)
+    assert bound["corpus_sha256"] == digest
+    assert bound["binding"] == "EXACT_ACCEPTED_CORPUS_SHA256"
+    assert bound["corpus_input_status"] == "ACCEPTED_AND_BOUND"
+    assert bound["oracle_sha256"] == cm.ORACLE_FREEZE_SHA256
+
+
+# --- CAL-METRICS-R1 freeze: holdout, restated as an explicit stage matrix ------
+
+
+@pytest.mark.parametrize(
+    "stage,permitted",
+    [
+        (cm.STAGE_COARSE, "validation"),
+        (cm.STAGE_REFINEMENT, "validation"),
+        (cm.STAGE_FINAL_HOLDOUT, "holdout"),
+    ],
+)
+def test_the_stage_to_split_matrix_is_exactly_as_declared(stage, permitted):
+    assert cm.STAGE_RANKING_SPLIT[stage] == permitted
+
+
+def test_no_holdout_value_is_reachable_from_a_coarse_or_refinement_record():
+    """Restated end to end: compute holdout, then try every read path."""
+    rows = [
+        dataclasses.replace(r, predicted_margin=r.actual_margin - 555.0)
+        if r.split == "holdout"
+        else r
+        for r in _three_split_rows()
+    ]
+    record = cm.evaluate_candidate(_replay(rows))
+    payload = record.as_dict()
+    assert "555" not in json.dumps(payload)
+    assert payload["holdout"]["holdout"] == cm.SEALED
+    assert payload["by_split"]["holdout"] == {"holdout": cm.SEALED}
+    assert "555" not in cm.canonical_json(payload)
+    # The rank key cannot see it either.
+    assert 555.0 not in cm._rank_key(record)[0]
+    # And it is still there, behind the token.
+    assert record.sealed_holdout.open(RELEASE)["rmse"] == 555.0

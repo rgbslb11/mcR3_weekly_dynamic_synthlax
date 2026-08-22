@@ -1,5 +1,12 @@
 """Deterministic calibration scoring oracle for the V3 candidate search.
 
+Frozen at :data:`ORACLE_FREEZE_ID` (``CAL-METRICS-R1``). The whole oracle --
+criterion, tie-break hierarchy, stage and holdout policy, witness roles,
+diagnostic conventions and emitted schema -- is digested into
+:data:`ORACLE_FREEZE_SHA256`, which :func:`require_frozen_oracle` checks. A
+shard worker running an altered oracle is detected before its scores are merged,
+not after a candidate has been chosen under arithmetic nobody compared.
+
 This module computes metrics. It does not choose a model, propose a parameter
 grid, or promote a coefficient. Candidate generation belongs to the search lane;
 what lives here is the fixed, auditable answer to "how did this candidate
@@ -41,6 +48,15 @@ oversights:
   will accept a Colley rating vector the day one exists, but
   :data:`COLLEY_IMPLEMENTATION_MOUNTED` is ``False`` and the Colley witness
   reports unavailable rather than inventing a matrix solve.
+
+Neither gap withholds a Baxter score, and the reason is not politeness -- it is
+that blocking on either would be circular. ``game_sd_points`` is to be estimated
+*from* out-of-sample residuals once a deterministic mean model exists, so a
+probability conversion cannot precede the mean-model search that produces it;
+and a witness comparison needs candidate rating state that the same search
+produces. :data:`REQUIRED_INPUTS` therefore names only what the criterion
+genuinely needs, :data:`OPTIONAL_DOWNSTREAM_INPUTS` names the rest, and an
+absent witness emits :data:`WITNESS_UNAVAILABLE` beside a full score sheet.
 
 **Holdout cannot be ranked by accident.** Holdout metrics are not merely
 labelled: they sit in a :class:`SealedHoldout` that refuses to yield its
@@ -173,8 +189,50 @@ CAP_HIT_TOLERANCE_POINTS = 1e-9
 # ---------------------------------------------------------------------------
 
 METRICS_COMPLETE = "METRICS_COMPLETE"
-METRICS_PARTIAL = "METRICS_PARTIAL_SOME_INPUTS_UNAVAILABLE"
-METRICS_UNAVAILABLE = "METRICS_UNAVAILABLE"
+#: The expected state for the first mean-model search: the primary criterion and
+#: every secondary margin metric are computed, and only downstream inputs
+#: (probability conversion, witness state) are missing. This is a *ready* status,
+#: not a degraded one -- see :data:`OPTIONAL_DOWNSTREAM_INPUTS`.
+METRICS_PRIMARY_READY = "METRICS_PRIMARY_READY_OPTIONAL_INPUTS_UNAVAILABLE"
+METRICS_UNAVAILABLE = "METRICS_UNAVAILABLE_PRIMARY_NOT_COMPUTABLE"
+
+#: What the primary criterion actually needs. Absent any of these, no Baxter
+#: score exists and the candidate is unrankable.
+REQUIRED_INPUTS: tuple[str, ...] = (
+    "accepted_historical_replay_rows",
+    "actual_margin",
+    "predicted_margin",
+    "temporal_train_validation_holdout_identity",
+    "candidate_id_and_experiment_bindings",
+)
+
+#: Computed from the required inputs alone. Reported for every candidate, and
+#: never blocking.
+SECONDARY_NON_BLOCKING_METRICS: tuple[str, ...] = (
+    "out_of_sample_mae",
+    "bias",
+    "winner_accuracy",
+    "movement_diagnostics",
+    "blowout_diagnostics",
+    "temporal_stability",
+)
+
+#: Downstream of a governed probability conversion or of a witness model that
+#: does not exist yet. Their absence is reported and must never withhold a Baxter
+#: score: the mean model has to exist before either can be built, so blocking the
+#: mean-model search on them would be circular.
+OPTIONAL_DOWNSTREAM_INPUTS: tuple[str, ...] = (
+    "brier_score",
+    "log_loss",
+    "probability_calibration",
+    "colley_matrix_witness",
+    "srs_witness",
+)
+
+#: Emitted in place of a witness block's comparison fields. A witness that cannot
+#: be computed is reported as unavailable; it never refuses the candidate score.
+WITNESS_AVAILABLE = "WITNESS_AVAILABLE"
+WITNESS_UNAVAILABLE = "WITNESS_UNAVAILABLE"
 
 #: Named reasons. A caller can branch on these; it cannot branch on prose.
 REASON_NO_PROBABILITY_CONVERSION = (
@@ -211,6 +269,16 @@ REASON_NO_OUT_OF_SAMPLE_ROWS = (
     "NO_OUT_OF_SAMPLE_ROWS: the candidate replay contains no rows in the requested "
     "out-of-sample partition."
 )
+
+#: Programme state of the historical observation corpus this package will score
+#: against. The corpus lane has produced an audited candidate; it is under narrow
+#: record/provenance remediation and targeted re-audit, so it is a *candidate*
+#: rather than an accepted corpus. This package neither reads nor copies the
+#: mutable corpus worktree: it binds one accepted digest at execution time, via
+#: :func:`bind_accepted_corpus`, and nothing before then.
+CORPUS_INPUT_STATUS = "AUDITED_HISTORICAL_CORPUS_CANDIDATE_PENDING_FINAL_ACCEPTANCE"
+CORPUS_CANDIDATE_OBSERVATIONS = 2241
+CORPUS_CANDIDATE_SEASONS = "2021-2024"
 
 #: Colley is a named witness with no mounted implementation. Stated as data so a
 #: test can assert the state rather than trusting a comment.
@@ -1508,7 +1576,12 @@ def srs_witness(
         "authority_boundary_preserved": True,
     }
     if snapshot is None:
-        return {**boundary, "available": False, "unavailable_reason": REASON_NO_WITNESS_SNAPSHOT}
+        return {
+            **boundary,
+            "available": False,
+            "witness_status": WITNESS_UNAVAILABLE,
+            "unavailable_reason": REASON_NO_WITNESS_SNAPSHOT,
+        }
     if snapshot.witness_id != "srs":
         raise InputValidationError(
             f"srs_witness received a {snapshot.witness_id!r} snapshot"
@@ -1517,11 +1590,13 @@ def srs_witness(
         return {
             **boundary,
             "available": False,
+            "witness_status": WITNESS_UNAVAILABLE,
             "unavailable_reason": REASON_NO_CANDIDATE_RATING_STATE,
         }
     return {
         **boundary,
         "available": True,
+        "witness_status": WITNESS_AVAILABLE,
         "unavailable_reason": None,
         **witness_comparison(candidate_ratings, snapshot, evaluation_as_of),
     }
@@ -1552,6 +1627,7 @@ def colley_witness(
         return {
             **boundary,
             "available": False,
+            "witness_status": WITNESS_UNAVAILABLE,
             "unavailable_reason": REASON_COLLEY_NOT_MOUNTED,
         }
     if snapshot.witness_id != "colley_matrix":
@@ -1562,6 +1638,7 @@ def colley_witness(
         return {
             **boundary,
             "available": False,
+            "witness_status": WITNESS_UNAVAILABLE,
             "unavailable_reason": REASON_NO_CANDIDATE_RATING_STATE,
         }
     # A governed Colley state supplied from outside is admissible; one computed
@@ -1569,6 +1646,7 @@ def colley_witness(
     return {
         **boundary,
         "available": True,
+        "witness_status": WITNESS_AVAILABLE,
         "unavailable_reason": None,
         "state_source": "SUPPLIED_BY_CALLER_NOT_COMPUTED_HERE",
         **witness_comparison(candidate_ratings, snapshot, evaluation_as_of),
@@ -1689,7 +1767,22 @@ class CandidateMetricRecord:
     split_sha: str
     experiment_config_sha: str
     status: str
+    #: True when the Baxter out-of-sample RMSE exists. This, and not
+    #: :attr:`status`, is what decides whether a candidate can be ranked.
+    primary_selection_ready: bool = False
+    #: Reasons the primary criterion does not exist. Empty whenever
+    #: :attr:`primary_selection_ready` is true.
     failure_reasons: tuple[str, ...] = ()
+    #: Optional or downstream inputs that were absent. Reported, never blocking.
+    non_blocking_reasons: tuple[str, ...] = ()
+
+    @property
+    def witness_status(self) -> dict[str, str]:
+        """Per-witness availability, so a consumer need not infer it."""
+        return {
+            "colley_matrix": self.colley_witness.get("witness_status", WITNESS_UNAVAILABLE),
+            "srs": self.srs_witness.get("witness_status", WITNESS_UNAVAILABLE),
+        }
 
     @property
     def season_rmse_sd(self) -> float | None:
@@ -1724,7 +1817,12 @@ class CandidateMetricRecord:
             "split_sha": self.split_sha,
             "experiment_config_sha": self.experiment_config_sha,
             "status": self.status,
+            "primary_selection_ready": self.primary_selection_ready,
             "failure_reasons": list(self.failure_reasons),
+            "non_blocking_reasons": list(self.non_blocking_reasons),
+            "witness_status": dict(self.witness_status),
+            "witnesses_required_for_primary_selection": False,
+            "corpus_input_status": CORPUS_INPUT_STATUS,
             "tie_break_policy_sha256": TIE_BREAK_POLICY_SHA256,
             "primary_direction": PRIMARY_CALIBRATION_DIRECTION,
             "ruling": R2_CALIBRATION.convergence_id,
@@ -1767,7 +1865,12 @@ RESULT_SCHEMA_KEYS: tuple[str, ...] = tuple(
             "split_sha",
             "experiment_config_sha",
             "status",
+            "primary_selection_ready",
             "failure_reasons",
+            "non_blocking_reasons",
+            "witness_status",
+            "witnesses_required_for_primary_selection",
+            "corpus_input_status",
             "tie_break_policy_sha256",
             "primary_direction",
             "ruling",
@@ -1820,9 +1923,15 @@ def evaluate_candidate(
         by_split_rows[row.split].append(row)
     target = by_split_rows[split]
 
-    reasons: list[str] = []
+    # Blocking reasons stop the primary criterion existing. Non-blocking ones
+    # describe an optional or downstream input that is absent. Conflating them
+    # is what would let a missing witness -- a model that cannot be built until
+    # after this calibration produces a mean model -- withhold the very score
+    # that calibration needs.
+    blocking: list[str] = []
+    non_blocking: list[str] = []
     if not target:
-        reasons.append(REASON_NO_OUT_OF_SAMPLE_ROWS)
+        blocking.append(REASON_NO_OUT_OF_SAMPLE_ROWS)
 
     residuals = _residuals(target)
     primary = rmse(residuals)
@@ -1830,11 +1939,11 @@ def evaluate_candidate(
 
     probability = probability_diagnostics(target, replay.probability_authority)
     if not probability["available"]:
-        reasons.append(probability["unavailable_reason"])
+        non_blocking.append(probability["unavailable_reason"])
 
     movement = movement_diagnostics(replay.movement_records)
     if not movement["available"]:
-        reasons.append(movement["unavailable_reason"])
+        non_blocking.append(movement["unavailable_reason"])
 
     # Witness comparison needs a boundary. Absent an explicit one the latest row
     # in the evaluated partition is the boundary, which is the tightest defensible
@@ -1848,17 +1957,43 @@ def evaluate_candidate(
     candidate_state = replay.candidate_rating_states.get(boundary, {})
     snapshots = {s.witness_id: s for s in replay.witness_snapshots}
 
-    colley = colley_witness(candidate_state, snapshots.get("colley_matrix"), boundary)
-    if not colley["available"]:
-        reasons.append(colley["unavailable_reason"])
-    srs = srs_witness(candidate_state, snapshots.get("srs"), boundary)
-    if not srs["available"]:
-        reasons.append(srs["unavailable_reason"])
+    def _witness(fn, witness_id):
+        """Compute a witness block, degrading a refusal to WITNESS_UNAVAILABLE.
 
-    if not target:
+        The leakage gate stays hard for anyone calling
+        :func:`require_walk_forward_witness` or :func:`witness_comparison`
+        directly -- a witness that has seen the outcomes is still refused, and
+        loudly. What changes here is only the blast radius: inside candidate
+        scoring the refusal degrades that one witness block instead of taking
+        the Baxter score down with it. A witness problem is not a reason to have
+        no primary criterion.
+        """
+        try:
+            return fn(candidate_state, snapshots.get(witness_id), boundary)
+        except (GovernanceBlock, InputValidationError) as err:
+            return {
+                "witness_id": witness_id,
+                "available": False,
+                "witness_status": WITNESS_UNAVAILABLE,
+                "unavailable_reason": f"WITNESS_REFUSED: {err}",
+                "authority_boundary_preserved": True,
+                "blocked_primary_selection": False,
+            }
+
+    colley = _witness(colley_witness, "colley_matrix")
+    if not colley["available"]:
+        non_blocking.append(colley["unavailable_reason"])
+    srs = _witness(srs_witness, "srs")
+    if not srs["available"]:
+        non_blocking.append(srs["unavailable_reason"])
+
+    # Status turns on the primary criterion alone. Optional and downstream gaps
+    # are reported, never promoted into a failure.
+    primary_ready = bool(target) and primary is not None
+    if not primary_ready:
         status = METRICS_UNAVAILABLE
-    elif reasons:
-        status = METRICS_PARTIAL
+    elif non_blocking:
+        status = METRICS_PRIMARY_READY
     else:
         status = METRICS_COMPLETE
 
@@ -1901,7 +2036,9 @@ def evaluate_candidate(
         split_sha=replay.split_sha,
         experiment_config_sha=replay.experiment_config_sha,
         status=status,
-        failure_reasons=tuple(sorted(set(reasons))),
+        primary_selection_ready=primary_ready,
+        failure_reasons=tuple(sorted(set(blocking))),
+        non_blocking_reasons=tuple(sorted(set(non_blocking))),
     )
 
 
@@ -2083,6 +2220,100 @@ def ranking_interface_as_dict() -> dict[str, Any]:
         "order_invariant": True,
         "parameters_promoted": False,
         "recommends_a_candidate": False,
+        # Composition. Workers score; central aggregation ranks. A worker that
+        # ranks locally has, by construction, chosen a selection criterion.
+        "workers_score_only": True,
+        "ranking_is_central": True,
+        "worker_may_redefine_primary_objective": False,
+        "worker_may_redefine_tie_breaks": False,
+        "worker_may_redefine_holdout_policy": False,
+        "worker_may_redefine_witness_role": False,
+        # Input classification for the first mean-model search.
+        "required_inputs": list(REQUIRED_INPUTS),
+        "secondary_non_blocking_metrics": list(SECONDARY_NON_BLOCKING_METRICS),
+        "optional_downstream_inputs": list(OPTIONAL_DOWNSTREAM_INPUTS),
+        "witnesses_required_for_primary_selection": False,
+        "witness_unavailable_sentinel": WITNESS_UNAVAILABLE,
+        "corpus_input_status": CORPUS_INPUT_STATUS,
+    }
+
+
+#: Digest over everything a shard worker must not vary: the criterion, the
+#: tie-break hierarchy, the stage/holdout policy, the witness roles, the
+#: diagnostic conventions and the emitted schema. Frozen at CAL-METRICS-R1.
+#:
+#: The tie-break digest alone would not catch a worker that kept the tie-breaks
+#: and moved a band edge or a stage mapping. This covers the whole oracle, so
+#: "are we all scoring the same way" is one comparison rather than a review.
+ORACLE_FREEZE_ID = "CAL-METRICS-R1"
+ORACLE_FREEZE_SHA256 = canonical_digest(ranking_interface_as_dict())
+
+
+def require_frozen_oracle(expected_sha256: str) -> dict[str, Any]:
+    """Fail closed unless this process carries the frozen scoring oracle.
+
+    Agent 3 asserts this once, before fanning out. A worker running an altered
+    oracle is detected before its scores enter the merge, rather than after a
+    candidate has been selected under arithmetic nobody compared.
+    """
+    actual = canonical_digest(ranking_interface_as_dict())
+    if expected_sha256 != actual:
+        raise GovernanceBlock(
+            f"Scoring oracle digest mismatch: expected {expected_sha256}, this process "
+            f"computes {actual}. The frozen evaluation oracle is {ORACLE_FREEZE_ID}; a "
+            "candidate scored under a different one is not comparable with the rest of "
+            "the search and must not be merged into it."
+        )
+    return {
+        "freeze_id": ORACLE_FREEZE_ID,
+        "oracle_sha256": actual,
+        "tie_break_policy_sha256": TIE_BREAK_POLICY_SHA256,
+        "verified": True,
+    }
+
+
+_SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
+
+#: Markers that must never be accepted as an accepted-corpus digest. The corpus
+#: lane's worktree is mutable and under re-audit; binding to it, or to a
+#: placeholder, would bind to bytes that can change after the binding.
+REFUSED_CORPUS_BINDINGS = (
+    "SYNTHETIC_NOT_ADMISSIBLE",
+    "PENDING",
+    "TBD",
+    "WORKTREE",
+    "HEAD",
+)
+
+
+def bind_accepted_corpus(accepted_sha256: str, *, accepted: bool) -> dict[str, Any]:
+    """Bind execution to one exact accepted corpus digest, or refuse.
+
+    Two separate refusals, because they are two separate mistakes. A digest that
+    is not 64 lowercase hex characters is not a digest. A digest that is well
+    formed but not yet accepted is a candidate -- the corpus is under narrow
+    record/provenance remediation and targeted re-audit, and binding to a
+    candidate would let the bytes move under a score that had already been
+    recorded against them.
+    """
+    value = str(accepted_sha256).strip()
+    if value.upper() in REFUSED_CORPUS_BINDINGS or not _SHA256_HEX.match(value):
+        raise InputValidationError(
+            f"Corpus binding {accepted_sha256!r} is not an exact SHA-256 digest. "
+            "Bind one accepted corpus by its 64-character digest; never to a branch, "
+            "a worktree path or a placeholder."
+        )
+    if not accepted:
+        raise GovernanceBlock(
+            f"Corpus {value} is {CORPUS_INPUT_STATUS}. Execution binds an accepted "
+            "corpus only. Re-audit acceptance is the corpus lane's to declare, not "
+            "this package's to assume."
+        )
+    return {
+        "corpus_sha256": value,
+        "binding": "EXACT_ACCEPTED_CORPUS_SHA256",
+        "corpus_input_status": "ACCEPTED_AND_BOUND",
+        "oracle_sha256": ORACLE_FREEZE_SHA256,
     }
 
 
@@ -2106,7 +2337,18 @@ def metrics_package_status() -> dict[str, Any]:
         "holdout_isolation": "ENFORCED_BY_SEALED_CONTAINER_AND_STAGE_GATE",
         "shard_order_invariance": "ENFORCED_BY_CANONICAL_SORT_AND_FSUM",
         "governed_observation_dataset_mounted": False,
-        "disposition": "READY_FOR_GOVERNED_HISTORICAL_INPUTS",
+        "corpus_input_status": CORPUS_INPUT_STATUS,
+        "corpus_candidate_observations": CORPUS_CANDIDATE_OBSERVATIONS,
+        "corpus_candidate_seasons": CORPUS_CANDIDATE_SEASONS,
+        "corpus_worktree_read": False,
+        "witnesses_required_for_primary_selection": False,
+        "game_sd_points_required_for_primary_selection": False,
+        "game_sd_points_estimated_from": (
+            "out-of-sample model residuals, after a deterministic mean model exists"
+        ),
+        "freeze_id": ORACLE_FREEZE_ID,
+        "oracle_sha256": ORACLE_FREEZE_SHA256,
+        "disposition": "FROZEN_READY_FOR_INPUTS",
         "parameters_promoted": False,
         "candidates_generated": False,
         "season_monte_carlo_run": False,
