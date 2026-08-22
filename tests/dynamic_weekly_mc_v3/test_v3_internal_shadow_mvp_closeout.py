@@ -51,6 +51,7 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3.models import ScheduledGame, T
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.rerating import PromotedRegimeRerater
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.rulings import (
     R5_FCS_SCALE,
+    R5_FCS_VENUE,
     R5_MVP_CONTROL_CORPUS,
     R5_POST_MVP_REAL_VALIDATION,
 )
@@ -524,6 +525,96 @@ def test_the_venue_clause_refuses_a_bespoke_fcs_home_field_advantage():
         fcs.install_governed_fcs_hfa_modifier(modifier=1.5)
 
 
+# ---------------------------------------------------------------------------
+# The FCS venue modifier: ruling R-V3-FCS-VENUE-01.
+# ---------------------------------------------------------------------------
+
+
+def test_the_venue_modifier_is_issued_by_its_own_chairman_ruling():
+    assert R5_FCS_VENUE.convergence_id == "R-V3-FCS-VENUE-01"
+    assert R5_FCS_VENUE.chairman_ruling_id == "R-V3-FCS-VENUE-01"
+    assert R5_FCS_VENUE.resolution_reason == "DIRECT_CHAIRMAN_AUTHORITY"
+    # It settles a modifier, not a blocker. Nothing was retired by issuing it.
+    assert R5_FCS_VENUE.retires == ()
+
+
+def test_the_venue_modifier_carries_direct_chairman_authority_not_an_assumption():
+    clause = fcs.fcs_venue_clause_as_dict()
+    assert clause["ruling"] == "R-V3-FCS-VENUE-01"
+    assert clause["authority"] == "DIRECT_CHAIRMAN_AUTHORITY"
+    assert clause["prior_authority"] == "DISCLOSED_ASSUMPTION_AT_R5_CLOSEOUT"
+    assert clause["assumption_superseded"] is True
+
+
+def test_the_ruling_records_what_it_supersedes_rather_than_erasing_it():
+    """The earlier disclosure is preserved as the prior record, not deleted."""
+    assert R5_FCS_VENUE.supersedes
+    assert any("assumption" in text.lower() for text in R5_FCS_VENUE.supersedes)
+
+
+def test_the_venue_modifier_needs_its_own_token_not_the_scale_adapters():
+    """Two rulings, two doors. One token must not install the other."""
+    with pytest.raises(GovernanceBlock, match="venue-modifier approval token"):
+        fcs.install_governed_fcs_hfa_modifier(
+            approval_token=fcs.FCS_SCALE_APPROVAL_TOKEN
+        )
+    assert fcs.active_fcs_hfa_modifier() is None
+    fcs.install_governed_fcs_hfa_modifier(
+        approval_token=fcs.FCS_VENUE_APPROVAL_TOKEN
+    )
+    assert fcs.active_fcs_hfa_modifier() == 1.0
+
+
+def test_the_venue_token_is_exactly_the_one_the_ruling_issued():
+    assert fcs.FCS_VENUE_APPROVAL_TOKEN == (
+        "APPROVE_V3_FCS_VENUE_MODIFIER::R-V3-FCS-VENUE-01"
+    )
+
+
+def test_the_ruled_modifier_is_one_and_the_ruling_changed_no_number():
+    """The binding converted an authority classification, not a value."""
+    assert fcs.FCS_LEAGUE_AVERAGE_HFA_MODIFIER == 1.0
+    assert fcs.install_governed_fcs_hfa_modifier() == 1.0
+    assert fcs.require_fcs_hfa_modifier(None, "EMU") == 1.0
+
+
+def test_the_venue_ruling_leaves_the_neutral_field_mapping_untouched():
+    clause = fcs.fcs_venue_clause_as_dict()
+    assert clause["fcs_neutral_field_points_unchanged"] == -31.0
+    assert clause["fcs_elo_unchanged"] == 1250.0
+    assert clause["embedded_in_adapter"] is False
+    assert clause["applied_at_neutral_venue"] is False
+    assert clause["double_hfa"] is False
+    assert clause["elo_layer_hfa_used"] is False
+    assert clause["subject_venue_points"] == {"HOME": 3.5, "AWAY": -3.5, "NEUTRAL": 0.0}
+
+
+def test_an_fcs_host_gets_the_ordinary_v3_venue_term_and_nothing_more():
+    """+3.5 at home for an FCS host, and exactly 0.0 at a neutral site."""
+    fcs.install_governed_fcs_scale_adapter()
+    fcs.install_governed_fcs_hfa_modifier()
+    points = fcs.require_fcs_unified_points()
+    at_home = simulate_game(
+        base_seed=11, path_id=1, game=_game("HOME"),
+        home=_state(points), away=_state(6.0),
+        hfa_baseline_points=V3_FOOTBALL_POINT_HFA,
+        home_hfa_modifier=fcs.require_fcs_hfa_modifier(None, "EMU"),
+        game_sd_points=16.75, rating_state_version="v",
+    )
+    at_neutral = simulate_game(
+        base_seed=11, path_id=1, game=_game("NEUTRAL"),
+        home=_state(points), away=_state(6.0),
+        hfa_baseline_points=V3_FOOTBALL_POINT_HFA,
+        home_hfa_modifier=fcs.require_fcs_hfa_modifier(None, "EMU"),
+        game_sd_points=16.75, rating_state_version="v",
+    )
+    assert at_home.home_field_points == pytest.approx(V3_FOOTBALL_POINT_HFA)
+    assert at_neutral.home_field_points == 0.0
+    assert at_home.expected_home_margin - at_neutral.expected_home_margin == (
+        pytest.approx(V3_FOOTBALL_POINT_HFA)
+    )
+
+
 def test_the_fcs_home_field_modifier_still_fails_closed_until_installed():
     with pytest.raises(GovernanceBlock, match="no governed home-field modifier"):
         fcs.require_fcs_hfa_modifier(None, "EMU")
@@ -894,6 +985,14 @@ def test_the_fcs_adapter_in_the_run_record_carries_the_ruled_value(run_record):
     assert scale["embeds_home_field_advantage"] is False
     assert run_record["fcs_venue_clause"]["double_hfa"] is False
     assert run_record["fcs_venue_clause"]["applied_at_neutral_venue"] is False
+
+
+def test_the_run_record_carries_the_bound_venue_authority(run_record):
+    clause = run_record["fcs_venue_clause"]
+    assert clause["ruling"] == "R-V3-FCS-VENUE-01"
+    assert clause["authority"] == "DIRECT_CHAIRMAN_AUTHORITY"
+    assert clause["league_average_modifier"] == 1.0
+    assert clause["installed"] is True
 
 
 def test_a_path_result_does_not_depend_on_the_tier_it_was_drawn_in(calibration):

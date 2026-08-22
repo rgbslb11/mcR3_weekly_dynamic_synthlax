@@ -117,6 +117,7 @@
   },
   "rulings": [
     "R-V3-FCS-SCALE-01",
+    "R-V3-FCS-VENUE-01",
     "R-V3-MVP-CONTROL-CORPUS-01"
   ],
   "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP"

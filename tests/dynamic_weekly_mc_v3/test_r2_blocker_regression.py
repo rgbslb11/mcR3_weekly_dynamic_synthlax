@@ -144,10 +144,26 @@ def test_the_r5_rulings_carry_the_chairman_identifiers_that_were_issued():
     The R2-R4 invariant above is unchanged and still holds: those rounds issued
     no identifiers and none was invented for them. This is the complement, not a
     relaxation — an R5 entry whose id went missing would fail here.
+
+    R5 spans two instructions rather than one. The closeout issued three rulings;
+    the FCS venue binding arrived afterwards and carries its own instruction
+    rather than being backdated into the closeout's. Both are named, so a ruling
+    stamped with an instruction nobody issued still fails.
     """
+    known_instructions = {rulings.R5_INSTRUCTION, rulings.R5_VENUE_INSTRUCTION}
     for ruling in rulings.R5_RULINGS:
         assert ruling.convergence_id.startswith("R-V3-")
         assert ruling.chairman_ruling_id == ruling.convergence_id
         assert ruling.decision
         assert ruling.provenance in ("FACT", "DERIVED")
-        assert ruling.instruction == rulings.R5_INSTRUCTION
+        assert ruling.instruction in known_instructions
+
+
+def test_the_venue_binding_is_recorded_under_its_own_instruction():
+    """It was issued after the closeout, and the record says so."""
+    venue = rulings.ruling("R-V3-FCS-VENUE-01")
+    assert venue.instruction == rulings.R5_VENUE_INSTRUCTION
+    assert venue.instruction != rulings.R5_INSTRUCTION
+    for ruling in rulings.R5_RULINGS:
+        if ruling.convergence_id != venue.convergence_id:
+            assert ruling.instruction == rulings.R5_INSTRUCTION

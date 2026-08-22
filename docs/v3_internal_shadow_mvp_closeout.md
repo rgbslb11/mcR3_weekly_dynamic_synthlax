@@ -18,11 +18,12 @@ claim to be one.
 `mvp_control.assert_not_real_world_labelled` is applied to every artifact this
 lane emits, so the prohibition is enforced rather than merely written down.
 
-## The three rulings
+## The rulings
 
 | Ruling | Retires | Reason |
 |---|---|---|
 | `R-V3-FCS-SCALE-01` | `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER` | Governed FCS Elo 1250 maps to **-31.0** V3 unified neutral-field points. |
+| `R-V3-FCS-VENUE-01` | nothing | An unresolved FCS home-field modifier is **1.0**, the governed league-average venue modifier. |
 | `R-V3-MVP-CONTROL-CORPUS-01` | the six `calibration.*` values and `governance.GAME_SD_CALIBRATION_OPEN` | The canonical 2025 synthetic season is authorised for `MVP_CONTROL_CALIBRATION_ONLY`. |
 | `R-V3-POST-MVP-REAL-VALIDATION-01` | nothing | Real historical calibration remains required after the MVP. |
 
@@ -30,7 +31,8 @@ lane emits, so the prohibition is enforced rather than merely written down.
 
 `blocker_report.DISPOSITION_REGISTER` is the **formal global** register and is
 unedited. Globally the eight blockers are still live, because global closure
-means a real-world calibration and the third ruling keeps that outstanding.
+means a real-world calibration and R-V3-POST-MVP-REAL-VALIDATION-01 keeps that
+outstanding.
 
 `blocker_report.internal_shadow_mvp_delta()` reports the **MVP** scope: the same
 eight, retired against a corpus authorised for that scope and no wider. Eight to
@@ -132,12 +134,19 @@ there is no double HFA and none at a neutral site.
 
 The venue clause needed one further resolution. Three scheduled games place an
 FCS entity at a HOME venue, and their `home_field_advantage_modifier` is recorded
-`UNRESOLVED`. The ruling directs ordinary V3 HFA logic, which is
-`baseline * modifier`; the modifier installed is the league average, which is
-exactly 1 because all 121 governed FBS members carry exactly 1 and the canonical
-master records the convention by name (`hfa_modifier_league_average`). It is a
-separate gate that refuses any other value, and the pre-ruling refusal is still
-the behaviour until it is installed.
+`UNRESOLVED`. Ruling **R-V3-FCS-VENUE-01** issues that modifier directly as
+**1.0**, the governed league-average venue modifier, under
+`DIRECT_CHAIRMAN_AUTHORITY`. The evidence it records is checkable on the same
+sheets: all 121 governed FBS members carry exactly 1, so the league average is 1
+exactly, and the canonical master names the convention
+(`hfa_modifier_league_average`). It has its own gate and its own approval token —
+the point-scale adapter's token is not accepted for it — and the pre-ruling
+refusal is still the behaviour until it is installed.
+
+At the R5 closeout this same value was installed as a *disclosed assumption*
+rather than an issued ruling. R-V3-FCS-VENUE-01 supersedes that disclosure. Only
+the authority classification changed; the number, the mathematics and every
+simulation output are unchanged.
 
 ## What this does not establish
 

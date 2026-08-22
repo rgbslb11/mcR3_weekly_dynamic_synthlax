@@ -59,7 +59,7 @@ import re
 from dataclasses import dataclass, field
 
 from .errors import GovernanceBlock
-from .rulings import R2_FCS, R5_FCS_SCALE
+from .rulings import R2_FCS, R5_FCS_SCALE, R5_FCS_VENUE
 
 #: FACT — ruling R2-FCS-ELO-1250.
 FCS_FIXED_ELO = 1250.0
@@ -310,6 +310,9 @@ REFUSED_DERIVATIONS = {
 }
 
 _FCS_SCALE_APPROVAL_TOKEN = re.compile(r"^APPROVE_V3_FCS_SCALE_ADAPTER::[A-Z0-9_.-]{4,}$")
+_FCS_VENUE_APPROVAL_TOKEN = re.compile(
+    r"^APPROVE_V3_FCS_VENUE_MODIFIER::[A-Z0-9_.-]{4,}$"
+)
 
 
 @dataclass(frozen=True)
@@ -491,9 +494,9 @@ def require_fcs_hfa_modifier(modifier: float | None, schedule_id: str = "<fcs>")
     for real games rather than refusing.
 
     The refusal stands until :func:`install_governed_fcs_hfa_modifier` installs
-    the venue resolution described there. Nothing is defaulted even then: the
-    installed value is a single governed constant with its own provenance, and it
-    is consulted only for an entity whose own record carries the sentinel.
+    the modifier ruling R-V3-FCS-VENUE-01 issues. Nothing is defaulted even then:
+    the installed value is a single ruled constant with its own approval token,
+    and it is consulted only for an entity whose own record carries the sentinel.
     """
     if modifier is None:
         installed = active_fcs_hfa_modifier()
@@ -509,29 +512,35 @@ def require_fcs_hfa_modifier(modifier: float | None, schedule_id: str = "<fcs>")
 
 
 # ---------------------------------------------------------------------------
-# The venue clause of ruling R-V3-FCS-SCALE-01.
+# Ruling R-V3-FCS-VENUE-01: the FCS home-field modifier.
 # ---------------------------------------------------------------------------
 #
-# The ruling supplies a *neutral-field* point value and directs that "home/away
-# venue adjustment uses ordinary V3 HFA logic rather than embedding extra HFA
-# inside the adapter". Ordinary V3 HFA logic is
+# R-V3-FCS-SCALE-01 supplies a *neutral-field* point value and directs that
+# "home/away venue adjustment uses ordinary V3 HFA logic rather than embedding
+# extra HFA inside the adapter". Ordinary V3 HFA logic is
 # ``hfa_baseline_points * home_field_advantage_modifier``, so executing that
-# direction for the three games at which an FCS entity hosts requires a modifier
-# for an entity whose own source row carries a sentinel.
+# direction for the three games at which an FCS entity hosts needs a modifier for
+# an entity whose own source row carries a sentinel.
 #
-# What is installed is the league-average modifier, and it is the league average
-# as a matter of arithmetic rather than of convention: every one of the 121
-# governed FBS members carries exactly 1 in the same column of the same sheet, so
-# the average over the governed population is 1 exactly, with no dispersion to
-# average away. The canonical team master records the convention by name in its
-# own provenance codes — ``hfa_baseline_3p5_locked;hfa_modifier_league_average``.
+# R-V3-FCS-VENUE-01 issues that modifier directly: **1.0**, the governed
+# league-average venue modifier. It is a Chairman ruling under
+# DIRECT_CHAIRMAN_AUTHORITY, not a reading of the earlier one. At the R5 closeout
+# the same value was installed as a disclosed *assumption*, and this supersedes
+# that disclosure — the authority classification changes, the number does not.
+#
+# The evidence the ruling records is checkable against the same sheets: every one
+# of the 121 governed FBS members carries exactly 1 in the
+# ``home_field_advantage_modifier`` column, so the league average over the
+# governed population is 1 exactly with no dispersion to average away, and the
+# canonical team master names the convention in its own provenance codes —
+# ``hfa_baseline_3p5_locked;hfa_modifier_league_average``.
 #
 # Three things this is not. It is not a rating: it multiplies the venue term and
 # never the strength. It is not embedded in the adapter: the neutral-field value
 # stays -31.0 and this is applied by game.simulate_game exactly as it is for any
-# FBS host, so there is no double HFA and no HFA at a neutral site. And it is not
-# a default: the pre-ruling refusal is the behaviour of this module until the
-# installation call is made.
+# FBS host, so there is no double HFA, no Elo-layer HFA, and none at a neutral
+# site. And it is not a default: the pre-ruling refusal is the behaviour of this
+# module until the installation call is made.
 
 #: FACT — POWER_CRUNCH!Reconciled Master, home_field_advantage_modifier column:
 #: 121 of 121 governed FBS members carry exactly 1.
@@ -543,6 +552,16 @@ FCS_LEAGUE_AVERAGE_HFA_MODIFIER = 1.0
 
 #: FACT — 2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md provenance codes.
 FCS_HFA_MODIFIER_CONVENTION_CODE = "hfa_modifier_league_average"
+
+#: The approval token ruling R-V3-FCS-VENUE-01 issues. Deliberately its own
+#: token and its own pattern: the venue modifier and the point-scale adapter are
+#: two rulings, and one token must not install the other.
+FCS_VENUE_APPROVAL_TOKEN = "APPROVE_V3_FCS_VENUE_MODIFIER::R-V3-FCS-VENUE-01"
+
+#: How the modifier is authorised. Was a disclosed assumption at the R5 closeout;
+#: ruling R-V3-FCS-VENUE-01 replaced that classification with an issued one.
+FCS_VENUE_AUTHORITY = "DIRECT_CHAIRMAN_AUTHORITY"
+FCS_VENUE_PRIOR_AUTHORITY = "DISCLOSED_ASSUMPTION_AT_R5_CLOSEOUT"
 
 _ACTIVE_FCS_HFA_MODIFIER: float | None = None
 
@@ -562,25 +581,28 @@ def install_governed_fcs_hfa_modifier(
     modifier: float = FCS_LEAGUE_AVERAGE_HFA_MODIFIER,
     approval_token: str | None = None,
 ) -> float:
-    """Install the venue clause of ruling R-V3-FCS-SCALE-01.
+    """Install the FCS home-field modifier issued by ruling R-V3-FCS-VENUE-01.
 
-    Refuses any value other than the league-average modifier, and refuses without
-    the ruling's approval token. A caller cannot use this door to introduce a
-    home-field advantage of its own choosing for the three FCS-hosted games.
+    Refuses any value other than the ruled league-average modifier, and refuses
+    without the ruling's own approval token. The point-scale adapter's token is
+    not accepted here: two rulings, two doors, so installing one can never
+    silently install the other.
     """
     global _ACTIVE_FCS_HFA_MODIFIER
     if approval_token is None:
-        approval_token = FCS_SCALE_APPROVAL_TOKEN
-    if not _FCS_SCALE_APPROVAL_TOKEN.match(approval_token):
+        approval_token = FCS_VENUE_APPROVAL_TOKEN
+    if not _FCS_VENUE_APPROVAL_TOKEN.match(approval_token):
         raise GovernanceBlock(
-            "Malformed FCS scale approval token for the venue clause. Expected "
-            "APPROVE_V3_FCS_SCALE_ADAPTER::<RULING_ID>."
+            f"Malformed FCS venue-modifier approval token for ruling "
+            f"{R5_FCS_VENUE.convergence_id}. Expected "
+            "APPROVE_V3_FCS_VENUE_MODIFIER::<RULING_ID>."
         )
     if float(modifier) != FCS_LEAGUE_AVERAGE_HFA_MODIFIER:
         raise GovernanceBlock(
             f"{modifier} is not the governed league-average home-field modifier "
-            f"{FCS_LEAGUE_AVERAGE_HFA_MODIFIER}. The ruling directs ordinary V3 HFA logic; "
-            "it does not authorise a bespoke FCS home-field advantage."
+            f"{FCS_LEAGUE_AVERAGE_HFA_MODIFIER}. Ruling {R5_FCS_VENUE.convergence_id} "
+            "issues that value and ordinary V3 HFA logic; it does not authorise a bespoke "
+            "FCS home-field advantage."
         )
     _ACTIVE_FCS_HFA_MODIFIER = float(modifier)
     return _ACTIVE_FCS_HFA_MODIFIER
@@ -588,7 +610,13 @@ def install_governed_fcs_hfa_modifier(
 
 def fcs_venue_clause_as_dict() -> dict[str, object]:
     return {
-        "ruling": R5_FCS_SCALE.convergence_id,
+        "ruling": R5_FCS_VENUE.convergence_id,
+        "chairman_ruling_id": R5_FCS_VENUE.chairman_ruling_id,
+        "authority": FCS_VENUE_AUTHORITY,
+        "prior_authority": FCS_VENUE_PRIOR_AUTHORITY,
+        "assumption_superseded": True,
+        "approval_token": FCS_VENUE_APPROVAL_TOKEN,
+        "scale_ruling": R5_FCS_SCALE.convergence_id,
         "clause": (
             "home/away venue adjustment uses ordinary V3 HFA logic rather than "
             "embedding extra HFA inside the adapter"
@@ -603,6 +631,10 @@ def fcs_venue_clause_as_dict() -> dict[str, object]:
         "embedded_in_adapter": False,
         "applied_at_neutral_venue": False,
         "double_hfa": False,
+        "elo_layer_hfa_used": False,
+        "subject_venue_points": {"HOME": 3.5, "AWAY": -3.5, "NEUTRAL": 0.0},
+        "fcs_neutral_field_points_unchanged": FCS_GOVERNED_UNIFIED_POINTS,
+        "fcs_elo_unchanged": FCS_FIXED_ELO,
     }
 
 

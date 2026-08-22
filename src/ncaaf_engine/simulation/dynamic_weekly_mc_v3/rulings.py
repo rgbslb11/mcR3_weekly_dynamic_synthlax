@@ -498,6 +498,10 @@ R5_INSTRUCTION = (
     "OPERATION SYTHALAX — V3 FINAL INTERNAL / SHADOW / TEST_ONLY MVP MODEL CLOSEOUT R1"
 )
 
+#: The venue binding was issued separately, after the closeout, so it carries its
+#: own instruction rather than being backdated into the one above.
+R5_VENUE_INSTRUCTION = "OPERATION SYTHALAX — V3 FINAL FCS VENUE AUTHORITY BINDING R1"
+
 #: The scope token every MVP-scoped artifact carries. Never abbreviated: a
 #: shortened form is what lets a shadow result be read as a live one later.
 INTERNAL_SHADOW_MVP_SCOPE = "INTERNAL_SHADOW_TEST_ONLY_MVP"
@@ -565,6 +569,42 @@ R5_MVP_CONTROL_CORPUS = ChairmanRuling(
     resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
 )
 
+R5_FCS_VENUE = ChairmanRuling(
+    convergence_id="R-V3-FCS-VENUE-01",
+    subject="FCS home-field modifier for the INTERNAL SHADOW MVP",
+    decision=(
+        "When a schedule-only FCS entity is the listed home team and its FCS-specific "
+        "home_field_advantage_modifier is otherwise unresolved, the modifier is 1.0 — the "
+        "governed league-average venue modifier. Ordinary V3 HFA then applies separately: "
+        "+3.5 from the subject perspective at HOME, -3.5 at AWAY, 0.0 at NEUTRAL. FCS "
+        "neutral-field strength is unchanged at Elo 1250 / -31.0 V3 unified neutral-field "
+        "points. No double HFA, no Elo-layer HFA, and no venue value embedded inside the "
+        "-31.0 adapter."
+    ),
+    evidence=(
+        "POWER_CRUNCH!Reconciled Master home_field_advantage_modifier: 121 of 121 governed "
+        "FBS members carry exactly 1; all 13 schedule-only FCS entities carry the sentinel "
+        "UNRESOLVED. The league average over the governed population is therefore 1 exactly, "
+        "with no dispersion to average away.",
+        "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md provenance codes record the "
+        "convention by name: hfa_baseline_3p5_locked;hfa_modifier_league_average.",
+        "2026_FBS_Schedule_LOCKED_v5.xlsx: exactly three scheduled games (G0019, G0213, "
+        "G0224) place a schedule-only FCS entity at a HOME venue.",
+    ),
+    retires=(),
+    supersedes=(
+        "The disclosed assumption recorded at the R5 closeout, which read the venue clause "
+        "of R-V3-FCS-SCALE-01 as implying the league-average modifier. That reading is now "
+        "the issued ruling and is no longer an assumption. The value it produced is "
+        "unchanged.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="R-V3-FCS-VENUE-01",
+    instruction=R5_VENUE_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+
 R5_POST_MVP_REAL_VALIDATION = ChairmanRuling(
     convergence_id="R-V3-POST-MVP-REAL-VALIDATION-01",
     subject="Post-MVP real-world validation requirement",
@@ -618,6 +658,7 @@ R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
 
 R5_RULINGS: tuple[ChairmanRuling, ...] = (
     R5_FCS_SCALE,
+    R5_FCS_VENUE,
     R5_MVP_CONTROL_CORPUS,
     R5_POST_MVP_REAL_VALIDATION,
 )

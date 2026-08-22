@@ -52,7 +52,7 @@ from .game import simulate_game
 from .inputs import load_schedule, load_teams
 from .models import GameObservation, ScheduledGame, Team, TeamPathState, TeamSeasonOutcome
 from .rerating import PromotedRegimeRerater
-from .rulings import R5_FCS_SCALE, R5_MVP_CONTROL_CORPUS
+from .rulings import R5_FCS_SCALE, R5_FCS_VENUE, R5_MVP_CONTROL_CORPUS
 
 #: Conferences whose champion is decided on conference play rather than a CCG.
 STANDINGS_ONLY_CONFERENCES: tuple[str, ...] = ordering.STANDINGS_ONLY_CONFERENCES
@@ -68,12 +68,12 @@ NO_CHAMPION_CONFERENCES: tuple[str, ...] = ("Independent",)
 
 
 def activate_internal_shadow_mvp(root: Path) -> dict[str, object]:
-    """Install the two R5 governance items, each through its own gate.
+    """Install the three R5 governance items, each through its own gate.
 
-    Deliberately explicit and deliberately not automatic. An FCS point value and
-    a calibrated game-SD are both governance events, so they happen at a call a
-    reader can find, and any caller that has not made it still sees the
-    pre-ruling fail-closed state.
+    Deliberately explicit and deliberately not automatic. An FCS point value, an
+    FCS venue modifier and a calibrated game-SD are all governance events, so
+    they happen at a call a reader can find, and any caller that has not made it
+    still sees the pre-ruling fail-closed state.
     """
     adapter = fcs_policy.install_governed_fcs_scale_adapter()
     venue_modifier = fcs_policy.install_governed_fcs_hfa_modifier()
@@ -81,7 +81,11 @@ def activate_internal_shadow_mvp(root: Path) -> dict[str, object]:
     promotion = mvp_control.install_calibration_promotion(calibration.promotion)
     return {
         "scope": mvp_control.MVP_SCOPE,
-        "rulings": [R5_FCS_SCALE.convergence_id, R5_MVP_CONTROL_CORPUS.convergence_id],
+        "rulings": [
+            R5_FCS_SCALE.convergence_id,
+            R5_FCS_VENUE.convergence_id,
+            R5_MVP_CONTROL_CORPUS.convergence_id,
+        ],
         "fcs_scale_adapter": adapter.as_dict(),
         "fcs_venue_clause": fcs_policy.fcs_venue_clause_as_dict(),
         "fcs_home_field_modifier": venue_modifier,

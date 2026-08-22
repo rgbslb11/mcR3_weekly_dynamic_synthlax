@@ -43,16 +43,30 @@
       "G0213",
       "G0224"
     ],
+    "approval_token": "APPROVE_V3_FCS_VENUE_MODIFIER::R-V3-FCS-VENUE-01",
+    "assumption_superseded": true,
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "chairman_ruling_id": "R-V3-FCS-VENUE-01",
     "clause": "home/away venue adjustment uses ordinary V3 HFA logic rather than embedding extra HFA inside the adapter",
     "convention_code": "hfa_modifier_league_average",
     "double_hfa": false,
+    "elo_layer_hfa_used": false,
     "embedded_in_adapter": false,
+    "fcs_elo_unchanged": 1250.0,
+    "fcs_neutral_field_points_unchanged": -31.0,
     "governed_fbs_modifier": 1.0,
     "governed_fbs_modifier_population": 121,
     "installed": true,
     "league_average_modifier": 1.0,
-    "ruling": "R-V3-FCS-SCALE-01",
-    "source_row_value": "UNRESOLVED"
+    "prior_authority": "DISCLOSED_ASSUMPTION_AT_R5_CLOSEOUT",
+    "ruling": "R-V3-FCS-VENUE-01",
+    "scale_ruling": "R-V3-FCS-SCALE-01",
+    "source_row_value": "UNRESOLVED",
+    "subject_venue_points": {
+      "AWAY": -3.5,
+      "HOME": 3.5,
+      "NEUTRAL": 0.0
+    }
   },
   "market_action_taken": false,
   "only_path_quantity_changed": true,
