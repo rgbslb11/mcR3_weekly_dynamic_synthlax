@@ -216,7 +216,8 @@
       "R-V3-FCS-SCALE-01",
       "R-V3-FCS-VENUE-01",
       "R-V3-MVP-CONTROL-CORPUS-01",
-      "R-V3-POST-MVP-REAL-VALIDATION-01"
+      "R-V3-POST-MVP-REAL-VALIDATION-01",
+      "R-V3-COMMITTEE-OWP-UNAVAILABLE-01"
     ],
     "seven_ccgs": {
       "ccg_count": 7,

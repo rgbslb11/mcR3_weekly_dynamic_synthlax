@@ -145,12 +145,16 @@ def test_the_r5_rulings_carry_the_chairman_identifiers_that_were_issued():
     no identifiers and none was invented for them. This is the complement, not a
     relaxation — an R5 entry whose id went missing would fail here.
 
-    R5 spans two instructions rather than one. The closeout issued three rulings;
-    the FCS venue binding arrived afterwards and carries its own instruction
-    rather than being backdated into the closeout's. Both are named, so a ruling
-    stamped with an instruction nobody issued still fails.
+    R5 spans more than one instruction. The closeout issued three rulings; the FCS
+    venue binding and the committee OWP handling each arrived afterwards and carry
+    their own instruction rather than being backdated into the closeout's. All are
+    named, so a ruling stamped with an instruction nobody issued still fails.
     """
-    known_instructions = {rulings.R5_INSTRUCTION, rulings.R5_VENUE_INSTRUCTION}
+    known_instructions = {
+        rulings.R5_INSTRUCTION,
+        rulings.R5_VENUE_INSTRUCTION,
+        rulings.R5_OWP_INSTRUCTION,
+    }
     for ruling in rulings.R5_RULINGS:
         assert ruling.convergence_id.startswith("R-V3-")
         assert ruling.chairman_ruling_id == ruling.convergence_id
@@ -159,11 +163,31 @@ def test_the_r5_rulings_carry_the_chairman_identifiers_that_were_issued():
         assert ruling.instruction in known_instructions
 
 
-def test_the_venue_binding_is_recorded_under_its_own_instruction():
-    """It was issued after the closeout, and the record says so."""
-    venue = rulings.ruling("R-V3-FCS-VENUE-01")
-    assert venue.instruction == rulings.R5_VENUE_INSTRUCTION
-    assert venue.instruction != rulings.R5_INSTRUCTION
-    for ruling in rulings.R5_RULINGS:
-        if ruling.convergence_id != venue.convergence_id:
-            assert ruling.instruction == rulings.R5_INSTRUCTION
+def test_each_successor_binding_is_recorded_under_its_own_instruction():
+    """Each was issued after the closeout, and the record says so.
+
+    Stated as an exact partition rather than as "everything else is the closeout":
+    the closeout issued exactly its three rulings, and every later binding carries
+    an instruction of its own. A successor quietly stamped with the closeout's
+    instruction — backdated authority — fails here.
+    """
+    successors = {
+        "R-V3-FCS-VENUE-01": rulings.R5_VENUE_INSTRUCTION,
+        "R-V3-COMMITTEE-OWP-UNAVAILABLE-01": rulings.R5_OWP_INSTRUCTION,
+    }
+    for convergence_id, instruction in successors.items():
+        issued = rulings.ruling(convergence_id)
+        assert issued.instruction == instruction
+        assert issued.instruction != rulings.R5_INSTRUCTION
+
+    closeout = {
+        ruling.convergence_id
+        for ruling in rulings.R5_RULINGS
+        if ruling.instruction == rulings.R5_INSTRUCTION
+    }
+    assert closeout == {
+        "R-V3-FCS-SCALE-01",
+        "R-V3-MVP-CONTROL-CORPUS-01",
+        "R-V3-POST-MVP-REAL-VALIDATION-01",
+    }
+    assert closeout.isdisjoint(successors)

@@ -2,7 +2,7 @@
   "base_seed": 20260803,
   "configuration_version": "V3-INTERNAL-SHADOW-MVP-2026-08-22-R1-001",
   "input_manifest_hash": "52664489bb551718c5b72db908a0d2a2882554bb68f467653a21e0f2649ba323",
-  "output_hash": "a96d2f3f4165b3b0e9c10ac8d3ca72e77a2b8f37f5c21beaf70224a904648d6d",
+  "output_hash": "705f1d2aa8530fba368d8a15c22e4fa80bfac1f72ce764662dae755f35282d3d",
   "parameter_set_hash": "57f5474047783de1a6ee5b407d66351da04e093c111986115d74992d29d7fbb5",
   "paths": 500,
   "rng": "deterministic_normal keyed by (base_seed, semantic coordinates)",

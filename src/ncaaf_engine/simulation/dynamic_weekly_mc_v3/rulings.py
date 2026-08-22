@@ -656,11 +656,59 @@ R3_RULINGS: tuple[ChairmanRuling, ...] = (
 
 R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
 
+#: The OWP handling was issued separately, after the committee tiebreak chain was
+#: executed in full, so it carries its own instruction rather than being backdated
+#: into either earlier one.
+R5_OWP_INSTRUCTION = "OPERATION SYTHALAX — V3 COMMITTEE OWP UNAVAILABLE REMEDIATION R1"
+
+R5_COMMITTEE_OWP_UNAVAILABLE = ChairmanRuling(
+    convergence_id="R-V3-COMMITTEE-OWP-UNAVAILABLE-01",
+    subject="Committee opponent win percentage when the governed value is UNAVAILABLE",
+    decision=(
+        "Committee OWP is a governed ranking criterion. An OWP that is UNAVAILABLE / NULL "
+        "remains UNAVAILABLE and is never converted to 0, 0.0, 0.500, a league average, the "
+        "worst available value or the best available value. For a pair of teams tied on the "
+        "criterion preceding OWP: if both carry governed OWP values they are compared "
+        "normally; if either is UNAVAILABLE, OWP does not resolve that pair and the "
+        "comparison advances to the next already-governed committee criterion. No team is "
+        "ranked automatically last, ranked automatically first, excluded from the board, or "
+        "assigned a fabricated OWP solely because its OWP is unavailable. This ruling "
+        "changes only the committee handling of unavailable OWP: the SOS formula, the OWP "
+        "and OOWP denominator semantics, common-opponent mathematics, TB1/TB2/TB3/TB4 "
+        "precedence, HFA 3.5, FCS Elo 1250, FCS unified neutral points -31.0, the FCS venue "
+        "modifier 1.0, the six calibrated parameters, RNG semantics and playoff topology "
+        "are all unchanged."
+    ),
+    evidence=(
+        "Independent re-audit observation on candidate b22f178: season_run.build_board "
+        "carried opponent_win_pct=float(owp or 0.0), coercing an UNAVAILABLE governed OWP "
+        "to 0.0 and letting an absent value act as numeric evidence in the board's second "
+        "ranking criterion.",
+        "sos.opponent_win_pct returns UNAVAILABLE under ruling R3-SOS-OWP-OOWP-SEMANTICS "
+        "when a team has zero qualifying observations; the semantics are unchanged by this "
+        "ruling and the UNAVAILABLE result is what it now preserves.",
+        "sos.criterion_resolves already encodes the governed 'an UNAVAILABLE component does "
+        "not resolve a tie, it advances the comparison' predicate, and is reused rather "
+        "than restated.",
+    ),
+    retires=(),
+    supersedes=(
+        "The float(owp or 0.0) coercion in the per-path committee board, which read an "
+        "UNAVAILABLE opponent win percentage as the worst available value. The coercion is "
+        "recorded here as the prior behaviour and is not preserved in the code.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="R-V3-COMMITTEE-OWP-UNAVAILABLE-01",
+    instruction=R5_OWP_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
 R5_RULINGS: tuple[ChairmanRuling, ...] = (
     R5_FCS_SCALE,
     R5_FCS_VENUE,
     R5_MVP_CONTROL_CORPUS,
     R5_POST_MVP_REAL_VALIDATION,
+    R5_COMMITTEE_OWP_UNAVAILABLE,
 )
 
 #: Every ruling issued across all three convergences. R2_RULINGS and R3_RULINGS

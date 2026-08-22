@@ -321,7 +321,11 @@ def build_board(
         inputs[team] = committee.CommitteeInputs(
             wins=wins,
             losses=losses,
-            opponent_win_pct=float(owp or 0.0),
+            # The board's second ranking criterion. UNAVAILABLE is preserved as
+            # None under ruling R-V3-COMMITTEE-OWP-UNAVAILABLE-01: coercing it to
+            # 0.0 ranked a team with no governed opponent record below every team
+            # that had one, which is an absent value acting as evidence.
+            opponent_win_pct=None if owp is None else float(owp),
             conference_champion=team in champions,
             # TB3, not a strength. UNAVAILABLE is carried through as None so an
             # absent schedule cannot decide a tie by being read as 0.0.

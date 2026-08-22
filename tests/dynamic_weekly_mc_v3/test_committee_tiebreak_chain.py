@@ -29,7 +29,12 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import (
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import GovernanceBlock
 
 TB1, TB2, TB3, TB4 = committee.COMMITTEE_TIEBREAK_STAGES
+OWP = committee.COMMITTEE_OWP_CRITERION
+CHAMPION = committee.COMMITTEE_CHAMPION_CRITERION
 TERMINAL = committee.COMMITTEE_TERMINAL_ORDERING
+
+#: The two criteria every pair below ties on before the tiebreak chain is reached.
+PRE_CHAIN = {OWP, CHAMPION}
 
 
 def _inputs(**sos_by_team):
@@ -95,7 +100,9 @@ def test_a_tb1_resolves_and_no_later_criterion_is_consulted():
     assert stage == TB1
     assert order < 0  # A, the head-to-head winner, ranks ahead
     assert tb2_calls == []  # TB2 was not consulted unnecessarily
-    assert set(statuses) == {TB1}  # no later stage was even evaluated
+    # The two criteria above the chain tie, TB1 decides, and nothing after it is
+    # evaluated at all.
+    assert set(statuses) == PRE_CHAIN | {TB1}
 
 
 def test_b_tb1_unresolved_causes_tb2_to_be_evaluated():
@@ -228,11 +235,11 @@ def test_h_tb4_unavailable_permits_terminal_ordering():
     assert order < 0  # schedule_id ascending
 
 
-def test_h_terminal_ordering_is_reached_only_after_all_four_stages():
+def test_h_terminal_ordering_is_reached_only_after_every_governed_criterion():
     inputs = _inputs(A=0.50, B=0.50)
     _order, stage, statuses = _decide("A", "B", inputs)
     assert stage == TERMINAL
-    assert set(statuses) == {TB1, TB2, TB3, TB4}
+    assert set(statuses) == set(committee.COMMITTEE_RANKING_CRITERIA)
 
 
 def test_h_a_team_absent_from_the_previous_board_is_unavailable_not_ranked_last():

@@ -27,6 +27,20 @@ module. :func:`sos.criterion_resolves` is the single shared predicate for "did
 this criterion actually separate these two teams", and it is imported rather than
 restated.
 
+The board's two criteria above the chain — opponent win percentage and conference
+champion status — are evaluated the same way and for the same reason. Ruling
+R-V3-COMMITTEE-OWP-UNAVAILABLE-01 holds that an UNAVAILABLE OWP stays
+UNAVAILABLE: it is never 0, 0.0, .500, a league average, or the worst or best
+available value, it never ranks a team automatically last or first, and it never
+excludes a team from the board. So the full pairwise sequence is::
+
+    COMMITTEE-OPPONENT_WIN_PCT
+    COMMITTEE-CONFERENCE_CHAMPION
+    COMMITTEE-TB1 … COMMITTEE-TB4
+    CANONICAL_SCHEDULE_ID_ASCENDING
+
+with the team's own win percentage partitioning the board before any of it.
+
 The terminal ``schedule_id`` ordering survives, but only as what it is: a
 deterministic total-order fallback reached after all four governed criteria have
 been evaluated and none resolved. It is not a football tiebreak and is not a
@@ -39,6 +53,7 @@ from dataclasses import dataclass
 from typing import Callable, Mapping, Sequence
 
 from .errors import GovernanceBlock
+from .rulings import R5_COMMITTEE_OWP_UNAVAILABLE
 from .sos import criterion_resolves
 
 #: The governed chain, in precedence order. Mirrors
@@ -48,6 +63,28 @@ COMMITTEE_TIEBREAK_STAGES: tuple[str, ...] = (
     "COMMITTEE-TB2_COMMON_OPPONENT_PERFORMANCE",
     "COMMITTEE-TB3_STRENGTH_OF_SCHEDULE",
     "COMMITTEE-TB4_PREVIOUS_WEEK_BOARD",
+)
+
+#: The two board criteria that rank ahead of the whole tiebreak chain and below
+#: the team's own record. They are *criteria*, evaluated per pair like every other
+#: one, not sort keys — which is what ruling R-V3-COMMITTEE-OWP-UNAVAILABLE-01
+#: requires, because an UNAVAILABLE OWP has no position on a numeric axis and
+#: putting it on one is the coercion the ruling forbids.
+COMMITTEE_OWP_CRITERION = "COMMITTEE-OPPONENT_WIN_PCT"
+COMMITTEE_CHAMPION_CRITERION = "COMMITTEE-CONFERENCE_CHAMPION"
+
+#: Every criterion evaluated pairwise, in governed precedence order. The team's own
+#: win percentage is not here: it is always available and is what partitions the
+#: board into the groups this sequence then orders.
+COMMITTEE_RANKING_CRITERIA: tuple[str, ...] = (
+    COMMITTEE_OWP_CRITERION,
+    COMMITTEE_CHAMPION_CRITERION,
+) + COMMITTEE_TIEBREAK_STAGES
+
+#: The authority for the UNAVAILABLE-OWP handling below.
+COMMITTEE_OWP_UNAVAILABLE_RULING = R5_COMMITTEE_OWP_UNAVAILABLE.convergence_id
+COMMITTEE_OWP_UNAVAILABLE_TOKEN = (
+    "APPROVE_V3_COMMITTEE_OWP_UNAVAILABLE::R-V3-COMMITTEE-OWP-UNAVAILABLE-01"
 )
 
 #: Reached only after every stage above has been evaluated without resolving.
@@ -71,7 +108,10 @@ REFUSED_UNAVAILABLE_SUBSTITUTES: tuple[float, ...] = (0.0, 0.5)
 class CommitteeInputs:
     wins: int
     losses: int
-    opponent_win_pct: float
+    #: The board's second ranking criterion. ``None`` is UNAVAILABLE and stays
+    #: UNAVAILABLE under ruling R-V3-COMMITTEE-OWP-UNAVAILABLE-01: never 0, 0.0,
+    #: .500, a league average, or the worst or best available value.
+    opponent_win_pct: float | None
     conference_champion: bool
     #: COMMITTEE-TB3. ``None`` is UNAVAILABLE and stays UNAVAILABLE: it is never
     #: coerced to 0.0, which would let an absent schedule decide a tie.
@@ -79,6 +119,7 @@ class CommitteeInputs:
 
     @property
     def win_pct(self) -> float:
+        """The team's own record. Always available — it is a count, not an estimate."""
         n = self.wins + self.losses
         return self.wins / n if n else 0.0
 
@@ -124,6 +165,38 @@ class CommitteeTiebreakInputs:
 #: and the outcome of every stage evaluated for it, in precedence order. It can
 #: never change an ordering: the chain ignores whatever it returns.
 ChainObserver = Callable[[str, str, Sequence[CriterionOutcome]], None]
+
+
+def _owp(
+    team: str, other: str, inputs: Mapping[str, CommitteeInputs]
+) -> CriterionOutcome:
+    """The board's opponent-win-percentage criterion, under R-V3-COMMITTEE-OWP-UNAVAILABLE-01.
+
+    An UNAVAILABLE OWP on either side does not resolve the pair and does not place
+    the team anywhere: the comparison advances, and where the team ends up is
+    decided by the criteria that follow. That is the whole of the difference
+    between this and reading the missing value as 0.0, which ranked such a team
+    below every team with any opponent record at all.
+    """
+    stage = COMMITTEE_OWP_CRITERION
+    a = inputs[team].opponent_win_pct
+    b = inputs[other].opponent_win_pct
+    if a is None or b is None:
+        return CriterionOutcome(stage, TB_UNAVAILABLE)
+    if not criterion_resolves(a, b):
+        return CriterionOutcome(stage, TB_TIED)
+    return CriterionOutcome(stage, TB_RESOLVED, -1 if a > b else 1)
+
+
+def _champion(
+    team: str, other: str, inputs: Mapping[str, CommitteeInputs]
+) -> CriterionOutcome:
+    stage = COMMITTEE_CHAMPION_CRITERION
+    a = inputs[team].conference_champion
+    b = inputs[other].conference_champion
+    if a == b:
+        return CriterionOutcome(stage, TB_TIED)
+    return CriterionOutcome(stage, TB_RESOLVED, -1 if a else 1)
 
 
 def _tb1(
@@ -194,14 +267,22 @@ def governed_pair_order(
     tiebreaks: CommitteeTiebreakInputs,
     observer: ChainObserver | None = None,
 ) -> tuple[int, str, tuple[CriterionOutcome, ...]]:
-    """Order one pair by the full governed chain, evaluating stages in order.
+    """Order one pair by the full governed sequence, evaluating criteria in order.
 
-    Returns ``(order, deciding_stage, outcomes)``. Every stage up to and including
-    the deciding one is actually evaluated, so an advance is always caused by a
-    measured TIED or UNAVAILABLE result rather than by omission.
+    Returns ``(order, deciding_stage, outcomes)``. Every criterion up to and
+    including the deciding one is actually evaluated, so an advance is always
+    caused by a measured TIED or UNAVAILABLE result rather than by omission.
+
+    The sequence is opponent win percentage, conference champion status, then the
+    four governed tiebreak stages. The pair's own records are equal by the time
+    this is called — win percentage is what groups the board, not what this
+    orders — so the first criterion here is the first one that can still separate
+    them.
     """
     outcomes: list[CriterionOutcome] = []
     for evaluate in (
+        lambda: _owp(team, other, inputs),
+        lambda: _champion(team, other, inputs),
         lambda: _tb1(team, other, head_to_head_winner),
         lambda: _tb2(team, other, tiebreaks),
         lambda: _tb3(team, other, inputs),
@@ -229,9 +310,9 @@ def _order_tie_group(
     tiebreaks: CommitteeTiebreakInputs,
     observer: ChainObserver | None,
 ) -> list[str]:
-    """Order one group of teams tied on every criterion preceding the chain.
+    """Order one group of teams tied on their own win percentage.
 
-    TB1 and TB2 are both *pairwise* criteria — head-to-head is a result between
+    OWP, TB1 and TB2 are all *pairwise* criteria — head-to-head is a result between
     two teams, and a common-opponent score is computed over the opponent set the
     two teams share — so neither is a scalar the group can simply be sorted on,
     and a set of pairwise decisions can contain a cycle (A over B, B over C, C
@@ -248,6 +329,11 @@ def _order_tie_group(
     not transitive, the cycle is resolved without inventing a football result:
     every input to the count is a decision the governed chain actually made, in
     its own precedence order.
+
+    An UNAVAILABLE OWP is a second, non-football source of the same shape: under
+    ruling R-V3-COMMITTEE-OWP-UNAVAILABLE-01 such a pair is simply not separated
+    by OWP, so a team with no governed OWP can sit unseparated from two teams OWP
+    does separate. That is handled here rather than by giving the team a number.
     """
     members = sorted(group)
     if len(members) < 2:
@@ -266,9 +352,22 @@ def _order_tie_group(
     return sorted(members, key=lambda team: (-wins[team], team))
 
 
-def _preceding_key(x: CommitteeInputs) -> tuple[float, float, int]:
-    """The committee criteria that rank ahead of the whole tiebreak chain."""
-    return (-x.win_pct, -x.opponent_win_pct, -int(x.conference_champion))
+def _preceding_key(x: CommitteeInputs) -> tuple[float]:
+    """The one criterion that partitions the board rather than ordering within it.
+
+    Only the team's own win percentage. Opponent win percentage and champion
+    status used to be part of this key, which worked only while every OWP was a
+    number: ruling R-V3-COMMITTEE-OWP-UNAVAILABLE-01 makes an UNAVAILABLE OWP
+    non-resolving rather than low, and "does not resolve" is not an equivalence
+    relation — a team with no governed OWP is unseparated from two teams that are
+    separated from each other. A partition cannot express that, so OWP moved into
+    the pairwise sequence where it can.
+
+    Where every OWP is available the two formulations agree exactly, because a
+    pairwise sequence over scalar criteria in the same order reproduces the
+    lexicographic sort it replaced.
+    """
+    return (-x.win_pct,)
 
 
 def rank_committee_results_first(
@@ -279,11 +378,11 @@ def rank_committee_results_first(
 ) -> list[str]:
     """The deterministic results-first board, executing the governed chain in full.
 
-    Teams are first partitioned into groups tied on every criterion that precedes
-    the chain — win percentage, opponent win percentage, conference champion
-    status — because those are what decide the board before any tiebreak is
-    reached. Only inside a group is the chain run, and there it is run for every
-    pair, in precedence order.
+    Teams are first partitioned by their own win percentage, which is a count and
+    is always available. Inside a group every remaining criterion is evaluated
+    pairwise in governed precedence order — opponent win percentage, conference
+    champion status, then TB1 through TB4 — so each one gets the chance to
+    separate a pair before the next is consulted.
 
     Supplying no :class:`CommitteeTiebreakInputs` does not skip TB2 and TB4: it
     makes them UNAVAILABLE, which is a different and honest thing. A caller that
