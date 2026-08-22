@@ -1,0 +1,19 @@
+{
+  "artifact": "V3_R6_CHRONOLOGY_REPORT.json",
+  "artifact_status": "CHRONOLOGY_AND_WALK_FORWARD_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "distinct_start_instants": 931,
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "observations": 2241,
+  "ordering_field": "event_time, from startTimeEpoch",
+  "postseason": "The feed carries no bowl or College Football Playoff games. The corpus therefore contains no postseason observation, which removes the postseason leakage path rather than managing it.",
+  "precision": "Second-resolution Unix instants published by the source. These are scheduled starts, not observed kickoffs, and are not represented as observed kickoffs anywhere in this corpus.",
+  "scheme": "EXACT_SOURCE_START_INSTANT",
+  "split_ordering": "Splits are whole seasons, so every ordering comparison that the temporal-split gate makes is separated by months, not by hours.",
+  "start_instant_absent": 0,
+  "supersedes_finding": "R5 recorded zero kickoff instants on the one real stream it found. Every admitted observation here carries a source-published start instant.",
+  "team_seasons_with_tied_instants": 0,
+  "walk_forward_rule": "A game may be ordered before another only on a strictly earlier start instant. Games sharing an instant are simultaneous and neither may inform the other. Because a game's result is observable only after it ends and no end instant is published, a start-instant ordering is sufficient to order games but NOT sufficient to prove that an earlier-starting game had finished before a later-starting one began. Any walk-forward feature derivation must therefore key on a completed-game boundary the source does not currently supply, or restrict itself to whole-day or whole-week boundaries.",
+  "with_start_instant": 2241
+}

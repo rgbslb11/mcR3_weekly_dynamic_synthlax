@@ -1,0 +1,53 @@
+{
+  "allowlist_widened": false,
+  "artifact": "V3_R6_EVIDENCE_BINDING_RECEIPT.json",
+  "artifact_status": "OBSERVATION_CORPUS_EVIDENCE_BINDING_RECEIPT",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "bindings": {
+    "canonical_identity_authority_sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "chronology": "EXACT_SOURCE_START_INSTANT",
+    "corpus_sha256": "31504e8d03b68de549bb999f2ce6a62824eb3286e3802712534d3092fa3f7aac",
+    "game_identity_unique": true,
+    "minimum_volume": true,
+    "raw_source_bytes": true,
+    "raw_source_sha256": true,
+    "retrieval_record": true,
+    "source_authority": [
+      "GOVERNED_RESULT_SOURCE"
+    ],
+    "team_identity_reconciliation": {
+      "complete_over_admitted_rows": true,
+      "unresolved_disposition": "excluded with UNRESOLVED_TEAM_IDENTITY and listed by name; never dropped and never mapped by similarity",
+      "unresolved_entity_count": 116
+    },
+    "temporal_split": true
+  },
+  "blockers_retired": [],
+  "bytes_reverified_at_binding": true,
+  "calibration_evidence_status": "NOT_REACHED",
+  "calibration_evidence_status_reason": "EVIDENCE_BOUND_BYTES_REVERIFIED_AT_BINDING requires a registered CalibrationDataset. This corpus cannot be one. The code gate, calibration.register_dataset, refuses it for the two columns named in calibration_register_dataset_refusal; the data contract's own required_fields list is wider still and adds the fields in contract_required_fields_absent. Every one of those is either a model output no observation source can supply or, in the case of venue, a fact this source does not publish.",
+  "calibration_register_dataset_refusal": "Calibration dataset V3_R6_HISTORICAL_OBSERVATION_CORPUS is missing required observation columns: ['expected_margin', 'observed_at']. BLOCKED_ON_CALIBRATION_DATA.",
+  "canonical_writer_created": false,
+  "code_gate_required_columns_absent": [
+    "expected_margin",
+    "observed_at"
+  ],
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "contract_required_fields_absent": [
+    "configuration_version",
+    "expected_margin",
+    "model_version",
+    "observed_at",
+    "pregame_opponent_rating",
+    "pregame_team_rating",
+    "prior_rating_state",
+    "subsequent_outcomes",
+    "venue"
+  ],
+  "evidence_status": "OBSERVATION_CORPUS_BOUND_BYTES_REVERIFIED",
+  "experiments_run": 0,
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "parameters_promoted": [],
+  "promotion_authorised": false,
+  "writes_canonical_config": false
+}

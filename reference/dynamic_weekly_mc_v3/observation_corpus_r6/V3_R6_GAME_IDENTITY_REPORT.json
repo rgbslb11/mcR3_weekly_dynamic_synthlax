@@ -1,0 +1,245 @@
+{
+  "artifact": "V3_R6_GAME_IDENTITY_REPORT.json",
+  "artifact_status": "GAME_IDENTITY_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "collision_rule": "Within a season, records sharing a canonical team pair and a source week are refused as one game published twice.",
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "distinct_game_id_count": 2241,
+  "duplicate_game_id_count": 0,
+  "game_id_count": 2241,
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "repeat_matchup_count": 12,
+  "repeat_matchups": [
+    {
+      "event_times": [
+        "2021-10-03T00:00:00+00:00",
+        "2021-12-04T17:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2021-353230",
+        "NCAA-2021-380459"
+      ],
+      "pair": [
+        "BAY",
+        "OKST"
+      ],
+      "season": 2021,
+      "weeks": [
+        5,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2021-09-26T00:00:00+00:00",
+        "2021-10-24T04:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2021-352866",
+        "NCAA-2021-353180"
+      ],
+      "pair": [
+        "HAW",
+        "NMSU"
+      ],
+      "season": 2021,
+      "weeks": [
+        4,
+        8
+      ]
+    },
+    {
+      "event_times": [
+        "2021-11-21T00:30:00+00:00",
+        "2021-12-04T01:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2021-353696",
+        "NCAA-2021-380458"
+      ],
+      "pair": [
+        "ORE",
+        "UTAH"
+      ],
+      "season": 2021,
+      "weeks": [
+        12,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2021-10-09T23:00:00+00:00",
+        "2021-12-04T00:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2021-353800",
+        "NCAA-2021-380457"
+      ],
+      "pair": [
+        "UTSA",
+        "WKU"
+      ],
+      "season": 2021,
+      "weeks": [
+        6,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2022-10-09T01:45:00+00:00",
+        "2022-12-03T21:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2022-2354343",
+        "NCAA-2022-409503"
+      ],
+      "pair": [
+        "BOISE",
+        "FRES"
+      ],
+      "season": 2022,
+      "weeks": [
+        6,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2022-10-23T00:00:00+00:00",
+        "2022-12-03T17:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2022-2354148",
+        "NCAA-2022-410419"
+      ],
+      "pair": [
+        "KSU",
+        "TCU"
+      ],
+      "season": 2022,
+      "weeks": [
+        8,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2022-11-12T20:30:00+00:00",
+        "2022-12-03T21:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2022-2354424",
+        "NCAA-2022-410491"
+      ],
+      "pair": [
+        "TLN",
+        "UCF"
+      ],
+      "season": 2022,
+      "weeks": [
+        11,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2022-10-22T19:30:00+00:00",
+        "2022-12-03T00:30:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2022-2354342",
+        "NCAA-2022-410510"
+      ],
+      "pair": [
+        "UNT",
+        "UTSA"
+      ],
+      "season": 2022,
+      "weeks": [
+        8,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2022-10-16T00:00:00+00:00",
+        "2022-12-03T01:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2022-2354487",
+        "NCAA-2022-410588"
+      ],
+      "pair": [
+        "USC",
+        "UTAH"
+      ],
+      "season": 2022,
+      "weeks": [
+        7,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2023-10-14T19:30:00+00:00",
+        "2023-12-02T01:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2023-3152653",
+        "NCAA-2023-4472105"
+      ],
+      "pair": [
+        "ORE",
+        "WASH"
+      ],
+      "season": 2023,
+      "weeks": [
+        7,
+        14
+      ]
+    },
+    {
+      "event_times": [
+        "2024-10-26T02:30:00+00:00",
+        "2024-12-07T01:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2024-37124",
+        "NCAA-2024-40285"
+      ],
+      "pair": [
+        "BOISE",
+        "UNLV"
+      ],
+      "season": 2024,
+      "weeks": [
+        9,
+        15
+      ]
+    },
+    {
+      "event_times": [
+        "2024-10-19T23:30:00+00:00",
+        "2024-12-07T21:00:00+00:00"
+      ],
+      "game_ids": [
+        "NCAA-2024-36750",
+        "NCAA-2024-40291"
+      ],
+      "pair": [
+        "TEX",
+        "UGA"
+      ],
+      "season": 2024,
+      "weeks": [
+        8,
+        15
+      ]
+    }
+  ],
+  "scheme": "NCAA-<season>-<ncaa_game_id>",
+  "scheme_basis": "The NCAA's own game identifier, namespaced by season because the feed reuses identifier spaces across seasons.",
+  "supersedes_finding": "R5 recorded game_id T073vT114 colliding on a repeated Oregon State / Washington State matchup. A team-pair key cannot carry unique game identity; this scheme keys on the source's own game identifier instead."
+}

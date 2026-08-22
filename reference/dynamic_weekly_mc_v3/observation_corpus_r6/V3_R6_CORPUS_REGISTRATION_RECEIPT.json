@@ -1,0 +1,166 @@
+{
+  "artifact": "V3_R6_CORPUS_REGISTRATION_RECEIPT.json",
+  "artifact_status": "CORPUS_REGISTRATION_RECEIPT",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "byte_length": 471189,
+  "bytes_reverified_at_registration": true,
+  "columns": [
+    "game_id",
+    "season",
+    "week",
+    "event_time",
+    "team",
+    "opponent",
+    "actual_margin",
+    "game_result",
+    "source_provenance",
+    "recorded_at",
+    "split"
+  ],
+  "columns_within_governed_allowlist": true,
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "corpus_id": "V3_R6_HISTORICAL_OBSERVATION_CORPUS",
+  "field_classification": {
+    "actual_margin": {
+      "basis": "home score minus away score, signed from the designated home team's perspective because venue is BLOCKED.",
+      "class": "DERIVED"
+    },
+    "configuration_version": {
+      "basis": "As model_version.",
+      "class": "BLOCKED"
+    },
+    "event_time": {
+      "basis": "startTimeEpoch, a Unix instant, rendered UTC. Source-scheduled start, not an observed kickoff; the distinction is recorded in the chronology report and never smoothed over.",
+      "class": "FACT"
+    },
+    "expected_margin": {
+      "basis": "Model output, and doubly blocked: the rating-to-margin transform it would be expressed through is itself unratified.",
+      "class": "BLOCKED"
+    },
+    "game_id": {
+      "basis": "NCAA gameID namespaced by season: NCAA-<season>-<gameID>.",
+      "class": "DERIVED"
+    },
+    "game_result": {
+      "basis": "W/L/T from the subject team's margin.",
+      "class": "DERIVED"
+    },
+    "game_type": {
+      "basis": "contestName and bracketRound are blank on every retrieved row. The feed carries no postseason games at all, so regular season and conference championships are present and indistinguishable.",
+      "class": "NOT_GOVERNED_UNAVAILABLE"
+    },
+    "games_played_to_date": {
+      "basis": "Walk-forward countable from the corpus. Still absent from the governed allowlist, so not emitted and no ruling is claimed.",
+      "class": "NOT_GOVERNED_DERIVABLE"
+    },
+    "model_version": {
+      "basis": "No model produced these rows; they are observations.",
+      "class": "BLOCKED"
+    },
+    "observed_at": {
+      "basis": "No per-row observability instant. The payload's updated_at carries no zone and the HTTP Last-Modified header is a CDN stamp identical across every season.",
+      "class": "BLOCKED"
+    },
+    "opponent": {
+      "basis": "NCAA-designated away side, resolved the same way.",
+      "class": "DERIVED"
+    },
+    "opponent_division": {
+      "basis": "Determined by fbs/fcs feed intersection. Used to exclude cross-division games; not emitted.",
+      "class": "NOT_GOVERNED_AVAILABLE_USED_AS_GATE"
+    },
+    "overtime_periods": {
+      "basis": "finalMessage carries FINAL (OT) through FINAL (4OT). Counted in the reports; not admitted, because availability is not admission.",
+      "class": "NOT_GOVERNED_AVAILABLE"
+    },
+    "pregame_opponent_rating": {
+      "basis": "Model output, as above.",
+      "class": "BLOCKED"
+    },
+    "pregame_team_rating": {
+      "basis": "Model output. No V3 run produced a pregame rating for these games.",
+      "class": "BLOCKED"
+    },
+    "prior_rating_state": {
+      "basis": "Model output. No V3 week-open state was ever serialised for these games.",
+      "class": "BLOCKED"
+    },
+    "recorded_at": {
+      "basis": "UTC instant the raw file was retrieved, from the acquisition manifest.",
+      "class": "FACT"
+    },
+    "season": {
+      "basis": "Season path segment of the source URL.",
+      "class": "FACT"
+    },
+    "source_provenance": {
+      "basis": "Source authority and the exact URL the row was retrieved from.",
+      "class": "FACT"
+    },
+    "split": {
+      "basis": "Whole-season temporal assignment; see SEASON_SPLIT_ASSIGNMENT.",
+      "class": "DERIVED"
+    },
+    "subsequent_outcomes": {
+      "basis": "Reconstructible from the corpus by derive_subsequent_outcomes, which orders each team's games by event_time. Not emitted: a denormalised copy of facts already in the corpus is a second place for them to be wrong.",
+      "class": "DERIVED_AVAILABLE_NOT_EMITTED"
+    },
+    "team": {
+      "basis": "NCAA-designated home side resolved to a canonical schedule_id through the 2026 canonical master.",
+      "class": "DERIVED"
+    },
+    "venue": {
+      "basis": "The feed designates home and away but publishes no neutral-site indicator, and none was found on any NCAA endpoint. Emitting HOME for every designated home team would assert that no game was played at a neutral site.",
+      "class": "BLOCKED"
+    },
+    "week": {
+      "basis": "Week path segment of the source URL.",
+      "class": "FACT"
+    }
+  },
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "newline_policy": "LF",
+  "path": "C:/CLAUDE-SYTHALAX-WORKTREES/v3-historical-observation-corpus-r6/reference/dynamic_weekly_mc_v3/observation_corpus_r6/V3_R6_OBSERVATION_CORPUS.csv",
+  "row_count": 2241,
+  "sha256": "31504e8d03b68de549bb999f2ce6a62824eb3286e3802712534d3092fa3f7aac",
+  "source_report": {
+    "overtime_disposition": "finalMessage carries FINAL (OT) through FINAL (4OT), so the count is observable. overtime_periods is not on the governed allowlist, so it is reported and not emitted.",
+    "overtime_games_admitted": 91,
+    "overtime_games_staged": 101,
+    "raw_row_count": 4355,
+    "seasons_admitted": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "seasons_not_admitted": {
+      "2025": "SOURCE_SEASON_NOT_FINALISED"
+    },
+    "seasons_retrieved": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "source_files": 174,
+    "team_season_coverage": {
+      "iterations": 5,
+      "minimum_games_per_team_season": 8,
+      "rows_pruned": 227,
+      "team_seasons": 428
+    }
+  },
+  "splits_present": [
+    "holdout",
+    "training",
+    "validation"
+  ],
+  "team_season_coverage": {
+    "iterations": 5,
+    "minimum_games_per_team_season": 8,
+    "rows_pruned": 227,
+    "team_seasons": 428
+  }
+}

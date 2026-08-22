@@ -1,0 +1,133 @@
+{
+  "artifact": "V3_R6_OBSERVATION_CORPUS_DISCOVERY_R6.json",
+  "artifact_status": "OBSERVATION_CORPUS_DISCOVERY_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "division_inventory": {
+    "FBS_FBS_admitted": 2241,
+    "FBS_FCS_admitted": 0,
+    "FBS_FCS_identified": 43,
+    "fcs_disposition": "Excluded under FBS_VS_FCS_OPPONENT_DIVISION_NOT_GOVERNED and inventoried in full. opponent_division is not on the governed allowlist and the FCS point-scale adapter is an open blocker.",
+    "fcs_participants_identified": [
+      "COLG",
+      "CP",
+      "DEL",
+      "DUQ",
+      "HC",
+      "IDHO",
+      "NDSU",
+      "SAC",
+      "SUU",
+      "YALE"
+    ],
+    "method": "A game appears in both the fbs and fcs scoreboards exactly when it crosses divisions. Team division follows from appearing in an FBS-only game; nothing is inferred from a conference name.",
+    "unresolved_division": 0
+  },
+  "governance": {
+    "allowlist_widened": false,
+    "blocker_count_after": 8,
+    "blocker_count_before": 8,
+    "blockers_after": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "blockers_before": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "blockers_opened": [],
+    "blockers_retired": [],
+    "canonical_config_written": false,
+    "experiments_run": 0,
+    "fcs_elo": 1250,
+    "fcs_mapping_promoted": false,
+    "parameters_promoted": [],
+    "season_monte_carlo_run": false
+  },
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "provenance_class": {
+    "ASSUMPTION": "None. Where a fact was unavailable \u2014 neutral-site status, observability instants, competition type \u2014 the field is classified BLOCKED and omitted rather than filled.",
+    "DERIVED": "Counts and classifications computed from those bytes: margins, results, game identifiers, division determination, canonical identity resolution and the temporal split.",
+    "FACT": "Byte-level properties of files retrieved in this lane and the field values inside them: digests, byte lengths, row counts, scores, participants, start instants and NCAA game identifiers."
+  },
+  "reconciliation": {
+    "admitted_row_count": 2241,
+    "excluded_row_count": 2114,
+    "raw_row_count": 4355,
+    "reason_counts": {
+      "DUPLICATE_OR_AMBIGUOUS_GAME_ID": 8,
+      "FBS_VS_FCS_OPPONENT_DIVISION_NOT_GOVERNED": 43,
+      "GAME_NOT_FINAL": 2,
+      "INSUFFICIENT_TEAM_SEASON_COVERAGE": 227,
+      "MISSING_SOURCE_GAME_IDENTIFIER": 21,
+      "OUTSIDE_GOVERNED_SCOPE_FCS_VS_FCS": 1,
+      "SOURCE_SEASON_NOT_FINALISED": 878,
+      "UNRESOLVED_TEAM_IDENTITY": 934
+    },
+    "reconciles": true
+  },
+  "remaining_blocked": {
+    "corpus_construction": [
+      "venue (HOME|AWAY|NEUTRAL): the source publishes no neutral-site indicator, so actual_margin is signed from the designated home team's perspective and neutral sites are indistinguishable from home games.",
+      "observed_at: no per-row zoned observability instant exists.",
+      "game_type: the feed carries no postseason games and no competition-type field, so regular-season and conference championship games are present and indistinguishable.",
+      "Game completion instants: only start instants are published, so a strict result-availability ordering within a day cannot be proved."
+    ],
+    "downstream_calibration": [
+      "pregame_team_rating, pregame_opponent_rating, expected_margin, prior_rating_state, model_version, configuration_version: model outputs no observation source can supply.",
+      "The rating-to-margin transform (P_TO_STRENGTH_TRANSFORM) and REFERENCE_HFA remain unratified, so expected_margin cannot be constructed in V3 units even against a perfect corpus.",
+      "Rulings on games_played_to_date, game_type, overtime_periods and opponent_division are still outstanding.",
+      "All eight formal blockers remain open."
+    ]
+  },
+  "source_acquisition": {
+    "base_url": "https://data.ncaa.com/casablanca/scoreboard/football",
+    "files_captured": 174,
+    "postseason_coverage": "None. The feed carries no bowl or College Football Playoff games in any retrieved season.",
+    "raw_bytes": 11777373,
+    "seasons_admitted": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "seasons_refused": {
+      "2025": "SOURCE_SEASON_NOT_FINALISED"
+    },
+    "seasons_refused_evidence": "The 2025 week files were last updated before those games were played; every game in them still reads gameState=pre with blank scores. The bytes are retained as the evidence for that finding.",
+    "seasons_retrieved": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+    "source_authority_class": "GOVERNED_RESULT_SOURCE",
+    "source_authority_tier": "TIER_1_NCAA_OFFICIAL",
+    "status": "ACQUIRED"
+  },
+  "supersedes": "V3_CALIBRATION_EVIDENCE_DISCOVERY_R5.json (successor, not replacement)",
+  "supersedes_r5_findings": {
+    "2006_2011_material_refused_as_synthetic": "NOT RE-ADMITTED. No 2006-2011 material is used.",
+    "local_synthetic_games_refused": "STILL REFUSED. The synthetic-content gate is unchanged and no synthetic outcome enters this corpus.",
+    "no_admissible_corpus_mounted": "ADDRESSED. A real, byte-bound corpus of 2241 observations across 4 seasons now exists.",
+    "real_2024_margin_sd_19_764": "NOT USED. No dispersion statistic is computed here and none is offered toward game_sd_points.",
+    "team_pair_game_id_collision_T073vT114": "RESOLVED. Identity keys on the NCAA's own game identifier namespaced by season; 12 repeat matchups are carried with distinct identifiers.",
+    "zero_admissible_fbs_vs_fcs_observations": "ADDRESSED IN PART. 43 real FBS-versus-FCS observations are now identified and inventoried. They remain excluded from the corpus and no FCS mapping is derived.",
+    "zero_kickoff_instants": "RESOLVED. Every admitted observation carries a source-published start instant."
+  },
+  "terminal": "HISTORICAL_OBSERVATION_CORPUS_R6_READY_FOR_AUDIT"
+}

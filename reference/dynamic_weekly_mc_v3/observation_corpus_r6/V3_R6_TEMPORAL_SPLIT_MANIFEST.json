@@ -1,0 +1,56 @@
+{
+  "artifact": "V3_R6_TEMPORAL_SPLIT_MANIFEST.json",
+  "artifact_status": "TEMPORAL_SPLIT_RECORD",
+  "assignment": "TEMPORAL_ONLY",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "boundaries": {
+    "holdout": [
+      "2024-08-24T16:00:00+00:00",
+      "2024-12-08T01:00:00+00:00"
+    ],
+    "training": [
+      "2021-08-28T17:00:00+00:00",
+      "2022-12-04T01:00:00+00:00"
+    ],
+    "validation": [
+      "2023-08-26T18:30:00+00:00",
+      "2023-12-09T20:00:00+00:00"
+    ]
+  },
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "granularity": "WHOLE_SEASON",
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "leak_free": true,
+  "minimum_volume": {
+    "distinct_seasons": 4,
+    "holdout_observations": 563,
+    "min_weeks_per_team_per_season": 8,
+    "minimum_volume_satisfied": true,
+    "total_observations": 2241
+  },
+  "random_assignment_permitted": false,
+  "season_assignment": {
+    "2021": "training",
+    "2022": "training",
+    "2023": "validation",
+    "2024": "holdout"
+  },
+  "seasons_per_split": {
+    "holdout": [
+      2024
+    ],
+    "training": [
+      2021,
+      2022
+    ],
+    "validation": [
+      2023
+    ]
+  },
+  "split_digest": "d0b84cc3da244ffbb5566bbf5c86fd07aed081ae48b01de293b79863503e3f5b",
+  "splits": {
+    "holdout": 563,
+    "training": 1080,
+    "validation": 598
+  }
+}

@@ -1,0 +1,961 @@
+{
+  "abbreviation_expansions": {
+    "ala.": "Alabama",
+    "ariz.": "Arizona",
+    "ark.": "Arkansas",
+    "caro.": "Carolina",
+    "cent.": "Central",
+    "colo.": "Colorado",
+    "conn.": "Connecticut",
+    "fla.": "Florida",
+    "ga.": "Georgia",
+    "ill.": "Illinois",
+    "ky.": "Kentucky",
+    "la.": "Louisiana",
+    "md.": "Maryland",
+    "mich.": "Michigan",
+    "minn.": "Minnesota",
+    "miss.": "Mississippi",
+    "mo.": "Missouri",
+    "neb.": "Nebraska",
+    "nor.": "Northern",
+    "okla.": "Oklahoma",
+    "ore.": "Oregon",
+    "sou.": "Southern",
+    "st.": "State",
+    "tenn.": "Tennessee",
+    "tex.": "Texas",
+    "va.": "Virginia",
+    "wash.": "Washington",
+    "wis.": "Wisconsin"
+  },
+  "ambiguous_canonical_ids": {},
+  "artifact": "V3_R6_TEAM_IDENTITY_RECONCILIATION.json",
+  "artifact_status": "TEAM_IDENTITY_RECONCILIATION_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "canonical_authority": "C:/CLAUDE-SYTHALAX-WORKTREES/v3-historical-observation-corpus-r6/reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+  "canonical_authority_sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+  "canonical_entities": 134,
+  "canonical_entities_in_corpus": [
+    "AF",
+    "ALA",
+    "ARIZ",
+    "ARK",
+    "ARMY",
+    "ARST",
+    "ASU",
+    "AUB",
+    "BAY",
+    "BC",
+    "BOISE",
+    "BYU",
+    "CAL",
+    "CCU",
+    "CHAR",
+    "CIN",
+    "CLEM",
+    "COLO",
+    "CSU",
+    "DUKE",
+    "ECU",
+    "FAU",
+    "FIU",
+    "FLA",
+    "FRES",
+    "FSU",
+    "GASO",
+    "GAST",
+    "GT",
+    "HAW",
+    "HOU",
+    "ILL",
+    "IOWA",
+    "ISU",
+    "IU",
+    "KSU",
+    "KU",
+    "LOU",
+    "LSU",
+    "LT",
+    "MD",
+    "MEM",
+    "MIA",
+    "MICH",
+    "MINN",
+    "MISS",
+    "MIZ",
+    "MRSH",
+    "MSST",
+    "MSU",
+    "MTSU",
+    "NAVY",
+    "NCSU",
+    "ND",
+    "NEB",
+    "NEV",
+    "NM",
+    "NMSU",
+    "NU",
+    "ODU",
+    "OKST",
+    "ORE",
+    "ORST",
+    "OSU",
+    "OU",
+    "PITT",
+    "PSU",
+    "PUR",
+    "RICE",
+    "RUTG",
+    "SC",
+    "SDSU",
+    "SJSU",
+    "SMU",
+    "STAN",
+    "SYR",
+    "TA&M",
+    "TCU",
+    "TEM",
+    "TENN",
+    "TEX",
+    "TLN",
+    "TLSA",
+    "TROY",
+    "TTU",
+    "TXST",
+    "UAB",
+    "UCF",
+    "UCLA",
+    "UConn",
+    "UGA",
+    "UK",
+    "ULL",
+    "ULM",
+    "UNC",
+    "UNLV",
+    "UNT",
+    "USC",
+    "USF",
+    "USM",
+    "USU",
+    "UTAH",
+    "UTEP",
+    "UTSA",
+    "UVA",
+    "VAN",
+    "VT",
+    "WAKE",
+    "WASH",
+    "WIS",
+    "WKU",
+    "WSU",
+    "WVU",
+    "WYO"
+  ],
+  "canonical_entities_in_corpus_count": 114,
+  "canonical_fbs_members": 121,
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "injectivity_rule": "Within a season the resolution must be injective. Two NCAA entities landing on one canonical schedule_id refuses both, because no source fact says which is correct.",
+  "lane": "claude/v3-historical-observation-corpus-r6",
+  "note": "canonical_division and entity_scope describe the synthetic 2026 universe and are never reported as the observed division of a historical game.",
+  "outcome_taxonomy": {
+    "FCS_ENTITY": "resolved entities observed as FCS by the feed; excluded under FBS_VS_FCS_OPPONENT_DIVISION_NOT_GOVERNED and inventoried",
+    "HISTORICAL_ALIAS_MATCH": "NCAA_CHAR6_CANONICAL_KEY or NCAA_ABBREVIATION_EXPANSION",
+    "HISTORICAL_NON_2026_ENTITY": "UNRESOLVED_ENTITY where the institution exists but the 2026 canonical master does not carry it",
+    "MATCHED_CANONICAL": "EXACT_CANONICAL_KEY",
+    "UNRESOLVED_ENTITY": "UNRESOLVED_ENTITY"
+  },
+  "resolution_rule_counts": {
+    "EXACT_CANONICAL_KEY": 455,
+    "NCAA_ABBREVIATION_EXPANSION": 38,
+    "NCAA_CHAR6_CANONICAL_KEY": 20,
+    "UNRESOLVED_ENTITY": 410
+  },
+  "resolution_rules": [
+    {
+      "basis": "The NCAA short name is already a canonical schedule_id, team_name, abbreviated_name or aka_name.",
+      "outcome_class": "MATCHED_CANONICAL",
+      "rule": "EXACT_CANONICAL_KEY"
+    },
+    {
+      "basis": "The NCAA six-character team code is a canonical key. This is the source's own identifier matching the master's own identifier, not an alias authored here.",
+      "outcome_class": "HISTORICAL_ALIAS_MATCH",
+      "rule": "NCAA_CHAR6_CANONICAL_KEY"
+    },
+    {
+      "basis": "One of the NCAA house-style abbreviations in NCAA_ABBREVIATION_EXPANSIONS is expanded and the result must land on an exact canonical key. A wrong expansion yields no match rather than a wrong match.",
+      "outcome_class": "HISTORICAL_ALIAS_MATCH",
+      "rule": "NCAA_ABBREVIATION_EXPANSION"
+    },
+    {
+      "basis": "Not present in the 2026 canonical master under any resolution key. Games are excluded with a reason, never dropped and never mapped to a similarly named school.",
+      "outcome_class": "HISTORICAL_NON_2026_ENTITY or UNRESOLVED_ENTITY",
+      "rule": "UNRESOLVED_ENTITY"
+    }
+  ],
+  "source_entities_seen": 246,
+  "source_side_qualifiers_preserved": "A parenthetical qualifier on the source name is never stripped. Miami (FL) and Miami (OH) are two schools, and discarding the qualifier to force a match is the silent mis-mapping this resolver exists to prevent. Miami (OH) is consequently unresolved and its games are excluded.",
+  "unresolved_entity_count": 116,
+  "unresolved_entity_names": [
+    "Abilene Christian",
+    "Akron",
+    "Alabama A&M",
+    "Alabama St.",
+    "Albany (NY)",
+    "Alcorn",
+    "App State",
+    "Ark.-Pine Bluff",
+    "Austin Peay",
+    "Ball St.",
+    "Bethune-Cookman",
+    "Bowling Green",
+    "Bryant",
+    "Bucknell",
+    "Campbell",
+    "Central Ark.",
+    "Central Conn. St.",
+    "Central Mich.",
+    "Charleston So.",
+    "Chattanooga",
+    "Delaware St.",
+    "ETSU",
+    "East Texas A&M",
+    "Eastern Ill.",
+    "Eastern Ky.",
+    "Eastern Wash.",
+    "Elon",
+    "Florida A&M",
+    "Fordham",
+    "Furman",
+    "Gardner-Webb",
+    "Grambling",
+    "Hampton",
+    "Houston Christian",
+    "Howard",
+    "Idaho St.",
+    "Illinois St.",
+    "Indiana St.",
+    "Jackson St.",
+    "Jacksonville St.",
+    "James Madison",
+    "Kennesaw St.",
+    "Kent St.",
+    "LIU",
+    "Lafayette",
+    "Lamar University",
+    "Liberty",
+    "Lindenwood",
+    "Maine",
+    "Massachusetts",
+    "McNeese",
+    "Mercer",
+    "Merrimack",
+    "Miami (OH)",
+    "Missouri St.",
+    "Monmouth",
+    "Montana",
+    "Montana St.",
+    "Morehead St.",
+    "Morgan St.",
+    "Murray St.",
+    "N.C. A&T",
+    "N.C. Central",
+    "New Hampshire",
+    "Nicholls",
+    "Norfolk St.",
+    "North Ala.",
+    "North Dakota",
+    "Northern Ariz.",
+    "Northern Colo.",
+    "Northwestern St.",
+    "Ohio",
+    "Portland St.",
+    "Prairie View",
+    "Reinhardt",
+    "Rhode Island",
+    "Richmond",
+    "Robert Morris",
+    "SFA",
+    "Sacred Heart",
+    "Saint Francis",
+    "Saint Francis (PA)",
+    "Sam Houston",
+    "Samford",
+    "South Alabama",
+    "South Carolina St.",
+    "South Dakota",
+    "South Dakota St.",
+    "Southeast Mo. St.",
+    "Southeastern La.",
+    "Southern Ill.",
+    "Southern U.",
+    "Stony Brook",
+    "Tarleton St.",
+    "Tennessee St.",
+    "Tennessee Tech",
+    "Tex. A&M-Commerce",
+    "Texas Southern",
+    "The Citadel",
+    "Towson",
+    "UAlbany",
+    "UC Davis",
+    "UIW",
+    "UNI",
+    "UT Martin",
+    "Utah Tech",
+    "VMI",
+    "Valparaiso",
+    "Villanova",
+    "Wagner",
+    "Weber St.",
+    "Western Caro.",
+    "Western Ill.",
+    "William & Mary",
+    "Wofford",
+    "Youngstown St."
+  ],
+  "unresolved_entity_seasons": {
+    "Abilene Christian": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Akron": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Alabama A&M": [
+      2022,
+      2023,
+      2024
+    ],
+    "Alabama St.": [
+      2021,
+      2022
+    ],
+    "Albany (NY)": [
+      2021
+    ],
+    "Alcorn": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "App State": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Ark.-Pine Bluff": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Austin Peay": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Ball St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Bethune-Cookman": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Bowling Green": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Bryant": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Bucknell": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Campbell": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Central Ark.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Central Conn. St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Central Mich.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Charleston So.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Chattanooga": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Delaware St.": [
+      2023,
+      2024
+    ],
+    "ETSU": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "East Texas A&M": [
+      2024
+    ],
+    "Eastern Ill.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Eastern Ky.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Eastern Wash.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Elon": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Florida A&M": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Fordham": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Furman": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Gardner-Webb": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Grambling": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Hampton": [
+      2021
+    ],
+    "Houston Christian": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Howard": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Idaho St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Illinois St.": [
+      2021,
+      2022,
+      2024
+    ],
+    "Indiana St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Jackson St.": [
+      2021,
+      2023,
+      2024
+    ],
+    "Jacksonville St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "James Madison": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Kennesaw St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Kent St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "LIU": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Lafayette": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Lamar University": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Liberty": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Lindenwood": [
+      2024
+    ],
+    "Maine": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Massachusetts": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "McNeese": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Mercer": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Merrimack": [
+      2023,
+      2024
+    ],
+    "Miami (OH)": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Missouri St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Monmouth": [
+      2021,
+      2023,
+      2024
+    ],
+    "Montana": [
+      2021,
+      2024
+    ],
+    "Montana St.": [
+      2021,
+      2022,
+      2024
+    ],
+    "Morehead St.": [
+      2021
+    ],
+    "Morgan St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Murray St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "N.C. A&T": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "N.C. Central": [
+      2021,
+      2023,
+      2024
+    ],
+    "New Hampshire": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Nicholls": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Norfolk St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "North Ala.": [
+      2022,
+      2023,
+      2024
+    ],
+    "North Dakota": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Northern Ariz.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Northern Colo.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Northwestern St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Ohio": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Portland St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Prairie View": [
+      2021,
+      2023,
+      2024
+    ],
+    "Reinhardt": [
+      2021
+    ],
+    "Rhode Island": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Richmond": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Robert Morris": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "SFA": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Sacred Heart": [
+      2023,
+      2024
+    ],
+    "Saint Francis": [
+      2021,
+      2024
+    ],
+    "Saint Francis (PA)": [
+      2022,
+      2023
+    ],
+    "Sam Houston": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Samford": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "South Alabama": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "South Carolina St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "South Dakota": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "South Dakota St.": [
+      2021,
+      2022,
+      2024
+    ],
+    "Southeast Mo. St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Southeastern La.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Southern Ill.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Southern U.": [
+      2021,
+      2022
+    ],
+    "Stony Brook": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Tarleton St.": [
+      2022,
+      2023,
+      2024
+    ],
+    "Tennessee St.": [
+      2021,
+      2022,
+      2023
+    ],
+    "Tennessee Tech": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Tex. A&M-Commerce": [
+      2023
+    ],
+    "Texas Southern": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "The Citadel": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Towson": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "UAlbany": [
+      2022,
+      2023,
+      2024
+    ],
+    "UC Davis": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "UIW": [
+      2021,
+      2022,
+      2023
+    ],
+    "UNI": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "UT Martin": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Utah Tech": [
+      2022,
+      2023,
+      2024
+    ],
+    "VMI": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Valparaiso": [
+      2022
+    ],
+    "Villanova": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Wagner": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Weber St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Western Caro.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Western Ill.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "William & Mary": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Wofford": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "Youngstown St.": [
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  }
+}
