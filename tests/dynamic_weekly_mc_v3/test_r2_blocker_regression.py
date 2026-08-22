@@ -121,7 +121,9 @@ def test_v3_remains_experimental_and_no_output_is_produced(live_blockers):
 
 def test_every_ruling_is_recorded_with_its_provenance_class():
     for ruling in rulings.ALL_RULINGS:
-        assert ruling.convergence_id.startswith(("R2-", "R3-", "R4-", "R6-"))
+        assert ruling.convergence_id.startswith(
+            ("R2-", "R3-", "R4-", "R6-", "R7-", "R8-", "R9-")
+        )
         assert ruling.decision
         assert ruling.provenance in ("FACT", "DERIVED")
 
@@ -135,8 +137,16 @@ def test_a_chairman_ruling_id_is_recorded_only_where_one_was_issued():
     """
     supplied = {
         "R6-CAL-TEMPORAL-ORDER": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+        "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+        "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN": (
+            "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN"
+        ),
+        "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY": (
+            "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY"
+        ),
     }
     for ruling in rulings.ALL_RULINGS:
         assert ruling.chairman_ruling_id == supplied.get(ruling.convergence_id)
         if ruling.approval_token is not None:
             assert ruling.approval_token != ruling.chairman_ruling_id
+            assert ruling.approval_token.startswith("APPROVE_")

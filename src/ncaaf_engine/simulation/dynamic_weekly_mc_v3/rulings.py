@@ -564,6 +564,241 @@ R6_CALIBRATION_TEMPORAL_ORDER = ChairmanRuling(
 )
 
 
+#: Issued as one instruction for the governed synthetic calibration evidence
+#: ruling.
+R7_INSTRUCTION = "OPERATION SYTHALAX — GOVERNED SYNTHETIC CALIBRATION EVIDENCE R1"
+
+
+R7_GOVERNED_SYNTHETIC_EVIDENCE = ChairmanRuling(
+    convergence_id="R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    subject="Governed synthetic season corpora as calibration evidence",
+    decision=(
+        "A byte-verified, provenance-bound GOVERNED SYNTHETIC season corpus may serve "
+        "as calibration, validation and holdout evidence for the synthetic V3 model. "
+        "The evidence domain must remain explicitly GOVERNED_SYNTHETIC and must never "
+        "be relabeled or represented as OBSERVED_REAL_WORLD, EMPIRICAL_REAL_WORLD or "
+        "REAL_WORLD_EXTERNAL_VALIDATION. Governed synthetic evidence may be used for "
+        "calibration dataset construction, calibration parameter estimation, "
+        "validation, untouched holdout scoring, and later human promotion "
+        "consideration for the synthetic V3 model. It does NOT establish real-world "
+        "predictive validity, sportsbook predictive validity, actual historical NCAA "
+        "forecasting performance, or independent external empirical validation. Every "
+        "derived dataset and evidence object must preserve source lineage. 2025 "
+        "remains HOLDOUT and may not participate in model, hyperparameter, "
+        "coefficient, exclusion-threshold, transform, game-SD or FCS mapping "
+        "selection. Existing contract controls remain mandatory: temporal admission, "
+        "digest continuity, expected-margin provenance, rating-scale declaration, "
+        "opponent classification, split integrity and holdout isolation. This ruling "
+        "does not authorize filling any missing source fact, does not authorize "
+        "Phase5E FCS Elo = 1500 (governed V3 policy remains FCS Elo = 1250), and "
+        "promotes no numerical coefficient."
+    ),
+    evidence=(
+        "OPERATION SYTHALAX — GOVERNED SYNTHETIC CALIBRATION EVIDENCE R1, issued "
+        "APPROVED under DIRECT_CHAIRMAN_AUTHORITY with approval token "
+        "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1 and RULING_ID "
+        "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE.",
+        "The ruling records its own necessity: the intended V3 calibration "
+        "architecture itself uses the audited 2006-2011 and 2024-2025 synthetic "
+        "universes, so a blanket refusal of synthetic corpora leaves the synthetic "
+        "model uncalibrated without protecting anything.",
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip!reports/"
+        "PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md — 'all synthetic games from 2006 "
+        "through 2011. ... No external or real-world schedule was used.' The corpus "
+        "declares its own domain; the ruling does not reinterpret it.",
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip!10_Source_Rulings/"
+        "2025 Synthetic Season LOCKED v3.xlsx [Certification] — 'provenance: SCHEDULE "
+        "SYNTHETIC. SCORES SIMULATED.'",
+        "V3_CALIBRATION_DATA_CONTRACT.json revision R1-TEMPORAL-ORDER-SUCCESSOR — "
+        "DATASET_PROVENANCE_REQUIREMENTS['synthetic_content'] recorded synthetic "
+        "observation sets as REFUSED. That clause predates this ruling, is preserved "
+        "in repository history, and is superseded only to the extent stated here.",
+    ),
+    # A data-domain ruling. The eight live execution blockers are calibration,
+    # governance and model-scale work that no ruling can close.
+    retires=(),
+    supersedes=(
+        "DATASET_PROVENANCE_REQUIREMENTS['synthetic_content'] read as refusing every "
+        "synthetic observation set — superseded to exactly the extent that a corpus "
+        "is byte-verified, provenance-bound and declared synthetic by its own "
+        "governed source. An ungoverned synthetic or test fixture remains refused.",
+        "Any reading under which governed synthetic evidence could be recorded, "
+        "serialized or reported as observed, empirical or real-world evidence.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    instruction=R7_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+    approval_token="APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1",
+)
+
+
+#: Issued as one instruction for the source-recorded walk-forward margin
+#: successor.
+R8_INSTRUCTION = "OPERATION SYTHALAX — SOURCE-RECORDED WALK-FORWARD MARGIN SUCCESSOR R1"
+
+
+R8_SOURCE_RECORDED_WALKFORWARD_MARGIN = ChairmanRuling(
+    convergence_id="R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    subject="Expected-margin provenance modes and the conditional pregame rating requirement",
+    decision=(
+        "The V3 calibration contract recognises two expected-margin provenance modes. "
+        "MODE A, DERIVED_AT_INGESTION: where expected_margin is computed, "
+        "reconstructed, transformed or otherwise derived by the V3 calibration adapter "
+        "from underlying team rating states, pregame_team_rating and "
+        "pregame_opponent_rating remain mandatory alongside expected_margin, "
+        "expected_margin_transform, expected_margin_model_id, "
+        "rating_scale_declaration and complete source provenance. Nothing about this "
+        "mode changes. MODE B, SOURCE_RECORDED_WALKFORWARD: where a governed source "
+        "artifact itself records the prediction generated before the target game, the "
+        "observation requires expected_margin, expected_margin_source_type = "
+        "SOURCE_RECORDED_WALKFORWARD, expected_margin_model_id, "
+        "expected_margin_transform or sufficient source-bound model specification, "
+        "rating_scale_declaration, source artifact identity, source artifact SHA256, "
+        "source member identity, source row / game identity, temporal provenance "
+        "proving the prediction belongs to the pregame walk-forward state, and "
+        "evidence domain GOVERNED_SYNTHETIC for the current corpus; "
+        "pregame_team_rating and pregame_opponent_rating may then be null ONLY where "
+        "those component states are not recorded by the governed source. A generic "
+        "expected-margin value is not sufficient and the mode may not be obtained by "
+        "declaring it: SOURCE_RECORDED_WALKFORWARD fails closed unless the source "
+        "provenance establishes that the prediction is present in the governed source "
+        "artifact, is associated deterministically with the target game, was produced "
+        "within the source's documented walk-forward chronology, is not a "
+        "retrospective full-season prediction, is not calculated from the target "
+        "game's actual result, has known model identity and scale, and rests on valid "
+        "source digest continuity. Where the governed source does record component "
+        "ratings — 2006 and 2007 — they are preserved and are never deliberately "
+        "nulled. No Baxter replay may be constructed solely to populate component "
+        "ratings, and reconstructed component states may never be represented as "
+        "source observations. This ruling authorises no retrospective expected "
+        "margins, no final-season ratings as pregame states, no fabricated ratings, "
+        "event_time, overtime status or team classification, no actual-margin-derived "
+        "predictions, no arbitrary synthetic inputs, no Phase5E FCS Elo 1500, no "
+        "coefficient promotion and no FCS point-scale promotion. V3 FCS Elo remains "
+        "1250."
+    ),
+    evidence=(
+        "OPERATION SYTHALAX — SOURCE-RECORDED WALK-FORWARD MARGIN SUCCESSOR R1, "
+        "issued APPROVED under DIRECT_CHAIRMAN_AUTHORITY with approval token "
+        "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1 and RULING_ID "
+        "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN.",
+        "The ruling records its own rationale: the governed Baxter historical and "
+        "modern evidence frequently preserves the actual pregame walk-forward "
+        "predicted margin but does not preserve both underlying pregame rating "
+        "components, and a deterministic replay solely to manufacture missing "
+        "observation fields would be weaker provenance than preserving the prediction "
+        "the governed source actually recorded.",
+        "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip!Baxter_Ratings_v1_<season>"
+        "_External_Validation.xlsx [Walk Forward] — every season's prediction is read "
+        "from a sheet named Walk Forward. rating_a_pre and rating_b_pre exist for 2006 "
+        "and 2007 and for no later season.",
+        "V3_CALIBRATION_DATA_CONTRACT.json revision R1-TEMPORAL-ORDER-SUCCESSOR — "
+        "pregame_team_rating and pregame_opponent_rating recorded as unconditionally "
+        "required. That clause predates this ruling, is preserved in repository "
+        "history, and is superseded only to the extent stated here.",
+    ),
+    # A contract-semantics ruling. The eight live execution blockers are
+    # calibration, governance and model-scale work that no ruling can close.
+    retires=(),
+    supersedes=(
+        "pregame_team_rating and pregame_opponent_rating read as unconditionally "
+        "required of every observation — superseded to exactly the extent that a "
+        "governed source artifact recorded the pregame walk-forward prediction and "
+        "records no component states. They remain mandatory under "
+        "DERIVED_AT_INGESTION, and they are never nulled where the source records "
+        "them.",
+        "Any reading under which a retrospective full-season fit, a final-season "
+        "rating, or a value computed from the actual result could serve as a "
+        "source-recorded walk-forward prediction.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    instruction=R8_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+    approval_token="APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+)
+
+
+#: Issued as one instruction for the full-corpus / use-specific eligibility
+#: successor.
+R9_INSTRUCTION = "OPERATION SYTHALAX — FULL 5,148 CORPUS / USE-SPECIFIC ELIGIBILITY R1"
+
+
+R9_FULL_CORPUS_USE_SPECIFIC_ELIGIBILITY = ChairmanRuling(
+    convergence_id="R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    subject="Canonical 5,148-game calibration corpus and use-specific eligibility",
+    decision=(
+        "The complete audited 5,148-game corpus is the canonical historical "
+        "calibration corpus. The prior treatment of 3,259 rows as the calibration "
+        "dataset and 1,889 rows as globally excluded is superseded. A field missing "
+        "for one calibration purpose must not globally discard a game that is valid "
+        "evidence for other calibration purposes. The universal ADMITTED / EXCLUDED "
+        "model is replaced by CORPUS MEMBERSHIP plus USE-SPECIFIC ELIGIBILITY: a game "
+        "belongs to the canonical calibration corpus if its source row belongs to the "
+        "verified 5,148-game source universe, and whether it may participate in a "
+        "specific numerical procedure depends on the evidence that procedure requires. "
+        "SOURCE_CORPUS_ROWS equals 5,148 and the canonical derived corpus carries all "
+        "5,148 source-game records with provenance and field-availability metadata; no "
+        "missing value is fabricated and no completeness is manufactured. Source "
+        "provenance is preserved exactly: OBSERVED_REAL_WORLD and GOVERNED_SYNTHETIC "
+        "are never relabeled, evidence domain is provenance metadata and does not by "
+        "itself determine corpus membership, and both may participate where their "
+        "required fields are supported. Any calculation of actual_margin minus "
+        "expected_margin requires a legitimate pregame expected margin under R8 "
+        "semantics; a row lacking one remains in the corpus but is ineligible for that "
+        "residual calculation. Outcome-only analyses require no pregame prediction and "
+        "must not be silently converted into model-residual analyses. Overtime UNKNOWN "
+        "remains UNKNOWN and is never converted to False; a game with unknown overtime "
+        "remains usable for procedures that do not require overtime classification, and "
+        "an overtime-sensitive procedure requires known status. Every FCS game remains "
+        "in the canonical corpus, FCS Elo remains 1250, the Elo-1250-to-V3-point-scale "
+        "adapter remains unresolved, and an FCS game participates in calculations that "
+        "do not depend on that unresolved mapping. Both T073vT114 contests remain in "
+        "the corpus with source_game_id preserved, source_game_id_unique false, and a "
+        "distinct deterministic provenance identity each; any calculation requiring a "
+        "globally unique source_game_id must refuse that key and use the provenance "
+        "identity. All 713 2011 source records remain, with lineage flags for "
+        "G2011_P3056 and G2011_P2932; a procedure needing the historical 711-game "
+        "engine-comparison universe expresses that as a use-specific eligibility mask. "
+        "Malformed source rows remain represented and may be numerically ineligible "
+        "where their factual fields cannot be established. All 757 2025 games remain in "
+        "the corpus and 2025 remains HOLDOUT: corpus membership yes, model selection "
+        "participation no."
+    ),
+    evidence=(
+        "OPERATION SYTHALAX — FULL 5,148 CORPUS / USE-SPECIFIC ELIGIBILITY R1, issued "
+        "APPROVED under DIRECT_CHAIRMAN_AUTHORITY with RULING_ID "
+        "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY.",
+        "V3_CALIBRATION_5148_ADAPTER_STATUS_R1.json under rulings R6/R7/R8 recorded "
+        "ADMITTED_ROWS 3,259 and EXCLUDED_ROWS 1,889 against a single universal "
+        "observation contract. That accounting is preserved as the record of the "
+        "prior run and is superseded as a description of the usable calibration "
+        "population.",
+        "The 1,889 rows carry real, byte-verified game results. 1,223 of them are "
+        "excluded only by the walk-forward eligibility flag and 336 only by an "
+        "unresolved observation date — neither of which is required by an "
+        "outcome-only analysis.",
+    ),
+    # A corpus-architecture ruling. The eight live execution blockers are
+    # calibration, governance and model-scale work that no ruling can close.
+    retires=(),
+    supersedes=(
+        "The universal ADMITTED / EXCLUDED model in which a row failing the full "
+        "walk-forward observation contract was reported as excluded from calibration "
+        "altogether — superseded by corpus membership plus use-specific eligibility. "
+        "The full contract itself is unchanged and is one use among several.",
+        "The characterisation of 3,259 rows as the calibration dataset and 1,889 as "
+        "globally excluded. The 3,259 are the fully paired, contract-complete "
+        "walk-forward subset; the 1,889 remain corpus members.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    instruction=R9_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+
 R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_SCHEDULE_V5_AUTHORITY,
     R2_THIRTEEN_GAME_EXCEPTIONS,
@@ -592,11 +827,23 @@ R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
 
 R6_RULINGS: tuple[ChairmanRuling, ...] = (R6_CALIBRATION_TEMPORAL_ORDER,)
 
+R7_RULINGS: tuple[ChairmanRuling, ...] = (R7_GOVERNED_SYNTHETIC_EVIDENCE,)
+
+R8_RULINGS: tuple[ChairmanRuling, ...] = (R8_SOURCE_RECORDED_WALKFORWARD_MARGIN,)
+
+R9_RULINGS: tuple[ChairmanRuling, ...] = (R9_FULL_CORPUS_USE_SPECIFIC_ELIGIBILITY,)
+
 #: Every ruling issued across every convergence round. R2_RULINGS, R3_RULINGS and
 #: R4_RULINGS stay exactly as the audited records; each later round adds to them
 #: rather than editing them, so the succession stays readable in one place.
 ALL_RULINGS: tuple[ChairmanRuling, ...] = (
-    R2_RULINGS + R3_RULINGS + R4_RULINGS + R6_RULINGS
+    R2_RULINGS
+    + R3_RULINGS
+    + R4_RULINGS
+    + R6_RULINGS
+    + R7_RULINGS
+    + R8_RULINGS
+    + R9_RULINGS
 )
 
 _BY_ID = {r.convergence_id: r for r in ALL_RULINGS}

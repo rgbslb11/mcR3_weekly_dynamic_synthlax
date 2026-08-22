@@ -226,9 +226,15 @@ SUPPORTED_DATASET_FORMATS = ("csv", "tsv", "json")
 #: Governed allowlist. A calibration observation set may carry these columns and
 #: nothing else; anything unrecognised is refused rather than ignored.
 #:
-#: The four ``temporal_order_*`` columns were admitted by ruling
-#: R6-CAL-TEMPORAL-ORDER, which requires them of any observation admitted without
-#: an authentic kickoff timestamp. They are here because a ruling put them here,
+#: ``expected_margin_source_type`` and ``expected_margin_provenance`` were
+#: admitted by ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN, which makes the
+#: two component-rating requirements conditional on which provenance mode an
+#: observation is admitted under. ``evidence_domain`` was admitted by ruling
+#: R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE,
+#: which requires every derived evidence object to preserve the domain of the
+#: corpus it came from. The four ``temporal_order_*`` columns were admitted by
+#: ruling R6-CAL-TEMPORAL-ORDER, which requires them of any observation admitted
+#: without an authentic kickoff timestamp. They are here because a ruling put them here,
 #: not because a fit needed them: the four fields under
 #: ``calibration_contract.FIELDS_REQUIRING_ADMISSION_RULING`` are still awaiting
 #: their own ruling and are still not admitted.
@@ -236,6 +242,9 @@ CALIBRATION_OBSERVATION_COLUMNS = (
     "game_id",
     "season",
     "week",
+    "evidence_domain",
+    "expected_margin_source_type",
+    "expected_margin_provenance",
     "event_time",
     "temporal_order_basis",
     "temporal_order_key",
@@ -2172,6 +2181,858 @@ def temporal_order_governance_as_dict() -> dict[str, Any]:
 
 
 
+# =============================================================================
+# Evidence domain — ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE
+# =============================================================================
+#
+# The contract's original provenance clause refused a synthetic or simulated
+# observation set outright. That clause was written against one failure: an
+# engine scored on its own replayed beliefs and the result reported as accuracy.
+# It is still the right refusal for that, and it is retained.
+#
+# It is the wrong refusal for the corpus V3 is actually calibrated against. The
+# audited 2006-2011 and 2024-2025 universes are synthetic *by construction and
+# by declaration* — each package states so in its own words — and the V3 model
+# they calibrate is itself a synthetic-season model. Refusing them wholesale
+# does not protect anything; it leaves the model uncalibrated while the reason
+# for the refusal does not apply.
+#
+# So the ruling separates two things the original clause had fused: whether a
+# corpus is synthetic, and whether it is *governed*. A governed synthetic corpus
+# is byte-verified, provenance-bound, and declared synthetic by its own source.
+# An ungoverned one is a fixture somebody labelled. The first is admissible
+# evidence for a synthetic model; the second is admissible for nothing, and
+# :func:`require_evidence_domain` is what tells them apart.
+#
+# What the ruling does not do is let the label drift. A governed synthetic
+# corpus establishes calibration, validation and holdout evidence for the
+# synthetic V3 model. It establishes no real-world predictive validity, no
+# sportsbook validity, no actual historical NCAA forecasting performance and no
+# independent external empirical validation, and it may never be recorded or
+# serialized as though it did. That is enforced here rather than left to a
+# reader's care, because the whole value of the distinction is that it survives
+# being written down and passed on.
+
+EVIDENCE_DOMAIN_RULING = "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE"
+EVIDENCE_DOMAIN_RULING_ID = "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE"
+EVIDENCE_DOMAIN_APPROVAL_TOKEN = (
+    "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1"
+)
+
+EVIDENCE_DOMAIN_OBSERVED_REAL_WORLD = "OBSERVED_REAL_WORLD"
+EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC = "GOVERNED_SYNTHETIC"
+
+#: The two admissible evidence domains. Anything else is refused by name.
+ADMISSIBLE_EVIDENCE_DOMAINS = (
+    EVIDENCE_DOMAIN_OBSERVED_REAL_WORLD,
+    EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC,
+)
+
+#: Labels a governed synthetic corpus may never be recorded under. Matched as
+#: normalized substrings, because a denylist of exact spellings is sidestepped by
+#: writing REAL_WORLD_VALIDATION instead of REAL_WORLD_EXTERNAL_VALIDATION.
+REFUSED_SYNTHETIC_RELABELS = (
+    "OBSERVED_REAL_WORLD",
+    "EMPIRICAL_REAL_WORLD",
+    "REAL_WORLD_EXTERNAL_VALIDATION",
+    "REAL_WORLD",
+    "EMPIRICAL",
+    "OBSERVED_REAL",
+    "EXTERNAL_VALIDATION",
+    "ACTUAL_HISTORICAL",
+    "SPORTSBOOK",
+)
+
+#: What governed synthetic evidence may be used for.
+GOVERNED_SYNTHETIC_ESTABLISHES = (
+    "calibration_dataset_construction",
+    "calibration_parameter_estimation",
+    "validation",
+    "untouched_holdout_scoring",
+    "later_human_promotion_consideration_for_the_synthetic_v3_model",
+)
+
+#: What it does not establish. Carried on every serialization of a governed
+#: synthetic evidence object, so the limit travels with the evidence.
+GOVERNED_SYNTHETIC_DOES_NOT_ESTABLISH = (
+    "real_world_predictive_validity",
+    "sportsbook_predictive_validity",
+    "actual_historical_ncaa_forecasting_performance",
+    "independent_external_empirical_validation",
+)
+
+#: The lineage a governed synthetic declaration must carry. A corpus that merely
+#: *says* GOVERNED_SYNTHETIC has claimed a domain, not earned one.
+REQUIRED_EVIDENCE_LINEAGE_FIELDS = (
+    "source_package",
+    "source_package_sha256",
+    "source_member",
+    "source_member_sha256",
+    "declared_by",
+    "declaration",
+)
+
+
+@dataclass(frozen=True)
+class EvidenceDomainDeclaration:
+    """A corpus's evidence domain, bound to the source that establishes it.
+
+    The declaration is not the authority. :func:`require_evidence_domain` is,
+    and it refuses a governed synthetic claim that cannot name the package, the
+    member, both digests, the declaring authority and the source's own words.
+    """
+
+    domain: str
+    source_package: str
+    source_package_sha256: str
+    source_member: str
+    source_member_sha256: str
+    declared_by: str
+    declaration: str
+    seasons: str = ""
+
+    @property
+    def is_governed_synthetic(self) -> bool:
+        return self.domain == EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC
+
+    def as_dict(self) -> dict[str, Any]:
+        """Serialize the domain together with the limits that qualify it.
+
+        ``domain`` is emitted from the declaration itself and never from a
+        caller-supplied label, and the four things governed synthetic evidence
+        does not establish are emitted alongside it. A reader who receives this
+        object cannot receive the claim without the qualification.
+        """
+        payload = {
+            "evidence_domain": self.domain,
+            "ruling": EVIDENCE_DOMAIN_RULING,
+            "source_package": self.source_package,
+            "source_package_sha256": self.source_package_sha256,
+            "source_member": self.source_member,
+            "source_member_sha256": self.source_member_sha256,
+            "declared_by": self.declared_by,
+            "declaration": self.declaration,
+            "seasons": self.seasons,
+        }
+        if self.is_governed_synthetic:
+            payload.update(
+                {
+                    "establishes": list(GOVERNED_SYNTHETIC_ESTABLISHES),
+                    "does_not_establish": list(GOVERNED_SYNTHETIC_DOES_NOT_ESTABLISH),
+                    "may_be_represented_as_real_world": False,
+                    "real_world_predictive_validity_established": False,
+                }
+            )
+        return payload
+
+
+def _normalize_label(text: str) -> str:
+    return re.sub(r"[^A-Z0-9]+", "_", str(text or "").strip().upper()).strip("_")
+
+
+def refuse_synthetic_relabel(declaration: EvidenceDomainDeclaration, claimed: str) -> None:
+    """Refuse any attempt to record governed synthetic evidence as real-world.
+
+    Called wherever a domain label is chosen by something other than the
+    declaration itself. The point is not that a caller might lie in one place;
+    it is that a relabelled corpus stays relabelled forever afterwards, and no
+    later reader has any way to notice.
+    """
+    if not declaration.is_governed_synthetic:
+        return
+    flat = _normalize_label(claimed)
+    if flat == EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC:
+        return
+    hit = [r for r in REFUSED_SYNTHETIC_RELABELS if r in flat]
+    raise GovernanceBlock(
+        f"Governed synthetic evidence from {declaration.source_package} may not be "
+        f"represented as {claimed!r}"
+        + (f" ({hit[0]})" if hit else "")
+        + f". Ruling {EVIDENCE_DOMAIN_RULING} admits it as "
+        f"{EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC} evidence for the synthetic V3 model and "
+        f"establishes none of {list(GOVERNED_SYNTHETIC_DOES_NOT_ESTABLISH)}."
+    )
+
+
+def require_evidence_domain(
+    declaration: EvidenceDomainDeclaration, *, approval_token: str | None = None
+) -> EvidenceDomainDeclaration:
+    """Admit a corpus's evidence domain, or fail closed.
+
+    ``OBSERVED_REAL_WORLD`` is unchanged by this ruling and needs no token: it is
+    what the contract always admitted. ``GOVERNED_SYNTHETIC`` needs the exact
+    approval token *and* complete source lineage, because the whole distinction
+    the ruling draws is between a corpus that is governed and one that says it
+    is.
+    """
+    domain = _normalize_label(declaration.domain)
+    if domain not in ADMISSIBLE_EVIDENCE_DOMAINS:
+        raise GovernanceBlock(
+            f"Evidence domain {declaration.domain!r} is not one of "
+            f"{list(ADMISSIBLE_EVIDENCE_DOMAINS)}. An unrecognised domain is refused "
+            "rather than mapped onto the nearest admitted one."
+        )
+    if domain == EVIDENCE_DOMAIN_OBSERVED_REAL_WORLD:
+        return declaration
+
+    if approval_token != EVIDENCE_DOMAIN_APPROVAL_TOKEN:
+        raise GovernanceBlock(
+            f"{EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC} evidence requires the approval token "
+            f"{EVIDENCE_DOMAIN_APPROVAL_TOKEN} issued with ruling "
+            f"{EVIDENCE_DOMAIN_RULING}; got {approval_token!r}. Without it the "
+            "contract's standing refusal of synthetic observation sets applies."
+        )
+    missing = [
+        f for f in REQUIRED_EVIDENCE_LINEAGE_FIELDS
+        if not str(getattr(declaration, f, "") or "").strip()
+    ]
+    if missing:
+        raise GovernanceBlock(
+            f"{EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC} evidence must carry complete source "
+            f"lineage; missing {missing}. A corpus that merely claims the domain has "
+            "claimed it, not earned it, and the ruling does not extend authority to a "
+            "fixture that says the right word."
+        )
+    for field_name in ("source_package_sha256", "source_member_sha256"):
+        digest = str(getattr(declaration, field_name)).strip().lower()
+        if not _SHA256_RE.match(digest):
+            raise GovernanceBlock(
+                f"{EVIDENCE_DOMAIN_GOVERNED_SYNTHETIC} evidence declares {field_name}="
+                f"{getattr(declaration, field_name)!r}, which is not a 64-character "
+                "lowercase SHA-256. Byte-verification is what makes the corpus governed."
+            )
+    refuse_synthetic_relabel(declaration, declaration.domain)
+    return declaration
+
+
+def evidence_domain_governance_as_dict() -> dict[str, Any]:
+    """The evidence-domain semantics, as a reviewable record."""
+    return {
+        "ruling": EVIDENCE_DOMAIN_RULING,
+        "approval_token": EVIDENCE_DOMAIN_APPROVAL_TOKEN,
+        "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+        "admissible_domains": list(ADMISSIBLE_EVIDENCE_DOMAINS),
+        "governed_synthetic_admissible": True,
+        "ungoverned_synthetic_admissible": False,
+        "arbitrary_or_test_synthetic_admissible": False,
+        "governed_synthetic_requires_approval_token": True,
+        "governed_synthetic_requires_source_lineage": list(
+            REQUIRED_EVIDENCE_LINEAGE_FIELDS
+        ),
+        "establishes": list(GOVERNED_SYNTHETIC_ESTABLISHES),
+        "does_not_establish": list(GOVERNED_SYNTHETIC_DOES_NOT_ESTABLISH),
+        "refused_relabels": list(REFUSED_SYNTHETIC_RELABELS),
+        "observed_real_world_semantics_changed": False,
+        "holdout_season": 2025,
+        "holdout_use": HOLDOUT_USE,
+        "fills_missing_source_facts": False,
+        "authorises_phase5e_fcs_elo_1500": False,
+        "fcs_elo_policy": 1250,
+        "coefficients_promoted": [],
+        "gate": "calibration.require_evidence_domain",
+    }
+
+
+# =============================================================================
+# Expected-margin provenance — ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN
+# =============================================================================
+#
+# The contract required both pregame component ratings of every observation.
+# That is the right requirement when the adapter *computes* the prediction:
+# without the two ratings the transform is unidentifiable, and a residual can
+# always be explained by re-scaling it instead.
+#
+# It is the wrong requirement when the governed source recorded the prediction
+# itself. The Baxter walk-forward workbooks preserve the margin predicted before
+# each game — from a sheet literally named "Walk Forward" — but preserve the two
+# ratings behind it only for 2006 and 2007. Demanding the components there left
+# exactly two options: drop the evidence, or rebuild the ratings by replay and
+# present the reconstruction as an observation. The second is worse provenance
+# than the recorded prediction it would be used to justify, and it is the
+# failure the pregame clause exists to prevent.
+#
+# So there are two provenance modes and the rating requirement is conditional on
+# which one applies:
+#
+# DERIVED_AT_INGESTION
+#     The adapter computed expected_margin from rating states. Both components
+#     stay mandatory. Nothing about this mode changed.
+#
+# SOURCE_RECORDED_WALKFORWARD
+#     A governed source artifact recorded the prediction before the game. The
+#     components may be null *only where the source records none*, and the row
+#     must instead carry enough source-bound provenance to prove the prediction
+#     is real, belongs to this game, came from the source's documented
+#     walk-forward chronology, is not a retrospective fit, is not computed from
+#     the result, names its model and scale, and sits behind verified digests.
+#
+# The mode is not a label a caller may assert. Declaring
+# SOURCE_RECORDED_WALKFORWARD without that provenance fails closed, and the
+# digests are compared against bytes the caller had to have read.
+
+EXPECTED_MARGIN_RULING = "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN"
+EXPECTED_MARGIN_RULING_ID = "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN"
+EXPECTED_MARGIN_APPROVAL_TOKEN = "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1"
+
+EXPECTED_MARGIN_MODE_DERIVED = "DERIVED_AT_INGESTION"
+EXPECTED_MARGIN_MODE_SOURCE_RECORDED = "SOURCE_RECORDED_WALKFORWARD"
+
+#: The two admissible expected-margin provenance modes.
+EXPECTED_MARGIN_MODES = (
+    EXPECTED_MARGIN_MODE_DERIVED,
+    EXPECTED_MARGIN_MODE_SOURCE_RECORDED,
+)
+
+#: Fields every mode must carry. The transform and the scale are what make a
+#: residual evidence rather than arithmetic across two rulers.
+EXPECTED_MARGIN_COMMON_FIELDS = ("model_id", "transform", "rating_scale")
+
+#: Fields SOURCE_RECORDED_WALKFORWARD must carry on top of those. Each one
+#: answers a specific way the mode could otherwise be claimed without being true.
+EXPECTED_MARGIN_SOURCE_RECORDED_FIELDS = (
+    "source_artifact",
+    "source_artifact_sha256",
+    "source_member",
+    "source_member_sha256",
+    "source_row",
+    "source_game_id",
+    "walkforward_chronology",
+)
+
+#: Substrings that mark a retrospective or full-season fit. Matched against the
+#: fields that say where the value was *read from* — the transform, the member
+#: and the row locator — because the governed workbooks carry a walk-forward
+#: prediction and a full-season fit side by side under names one letter apart.
+#:
+#: Deliberately not matched against ``walkforward_chronology``. That field is
+#: prose describing the source's own chronology, and a correct description says
+#: which sheets are excluded; scanning it for these words makes a denial read as
+#: an admission, which is a check that fires on the honest declaration and stays
+#: silent on the careless one.
+RETROSPECTIVE_MARGIN_MARKERS = (
+    "FULL_SEASON",
+    "FULLSEASON",
+    "FULL SEASON",
+    "RETROSPECTIVE",
+    "PRED_MARGIN_FULL",
+    "RESIDUAL_FULL",
+    "FINAL_RATING",
+    "FINAL SEASON",
+    "GAME RESIDUALS",
+    "FULL GAME FIT",
+    "_FIT",
+)
+
+#: Substrings that mark a value computed from the outcome it is scored against.
+OUTCOME_DERIVED_MARGIN_MARKERS = (
+    "ACTUAL_MARGIN",
+    "ACTUAL MARGIN",
+    "FINAL_MARGIN",
+    "FINAL SCORE",
+    "RESULT_DERIVED",
+    "FROM_RESULT",
+    "POSTGAME",
+    "POST_GAME",
+)
+
+
+@dataclass(frozen=True)
+class ExpectedMarginProvenance:
+    """Where one observation's expected_margin came from.
+
+    Carried as named fields rather than a packed string, for the same reason the
+    temporal ordering value is: a positional grammar is a rule nobody issued, and
+    it silently changes meaning the day a field is added.
+    """
+
+    source_type: str
+    model_id: str = ""
+    transform: str = ""
+    rating_scale: str = ""
+    source_artifact: str = ""
+    source_artifact_sha256: str = ""
+    source_member: str = ""
+    source_member_sha256: str = ""
+    source_row: str = ""
+    source_game_id: str = ""
+    walkforward_chronology: str = ""
+    derived_from_actual_result: bool = False
+    retrospective_full_season: bool = False
+
+    @property
+    def is_source_recorded(self) -> bool:
+        return self.source_type == EXPECTED_MARGIN_MODE_SOURCE_RECORDED
+
+    def as_dict(self) -> dict[str, Any]:
+        payload = {
+            "source_type": self.source_type,
+            "model_id": self.model_id,
+            "transform": self.transform,
+            "rating_scale": self.rating_scale,
+            "derived_from_actual_result": self.derived_from_actual_result,
+            "retrospective_full_season": self.retrospective_full_season,
+        }
+        if self.is_source_recorded:
+            payload.update(
+                {f: getattr(self, f) for f in EXPECTED_MARGIN_SOURCE_RECORDED_FIELDS}
+            )
+            payload["ruling"] = EXPECTED_MARGIN_RULING
+        return payload
+
+    def canonical(self) -> str:
+        """Self-describing canonical serialization, sorted and whitespace-free."""
+        return json.dumps(self.as_dict(), sort_keys=True, separators=(",", ":"))
+
+
+def _scan_for_markers(text: str, markers: tuple[str, ...]) -> str | None:
+    flat = str(text or "").upper()
+    for marker in markers:
+        if marker in flat:
+            return marker
+    return None
+
+
+def require_expected_margin_provenance(
+    game_id: str,
+    *,
+    expected_margin: Any,
+    provenance: ExpectedMarginProvenance,
+    pregame_team_rating: Any = None,
+    pregame_opponent_rating: Any = None,
+    evidence_domain: str | None = None,
+    temporal_order: Any = None,
+    approval_token: str | None = None,
+    verified_artifact_sha256: str | None = None,
+    verified_member_sha256: str | None = None,
+) -> ExpectedMarginProvenance:
+    """Admit one observation's expected_margin, or fail closed.
+
+    ``DERIVED_AT_INGESTION`` keeps the rule it always had: both component ratings
+    are mandatory, because the adapter computed the prediction from them.
+
+    ``SOURCE_RECORDED_WALKFORWARD`` allows them to be null, and pays for that with
+    provenance. The seven checks below are the seven ways the mode could be
+    claimed without being true, and the digests are compared against bytes the
+    caller had to have read — a declaration cannot verify itself.
+    """
+    label = (game_id or "").strip() or "<unidentified observation>"
+    mode = str(provenance.source_type or "").strip()
+
+    if mode not in EXPECTED_MARGIN_MODES:
+        raise GovernanceBlock(
+            f"Observation {label} declares expected_margin_source_type {mode!r}, which "
+            f"is not one of {list(EXPECTED_MARGIN_MODES)}. An unrecognised provenance "
+            "mode is refused rather than mapped onto the nearest known one."
+        )
+    if expected_margin is None or str(expected_margin).strip() == "":
+        raise GovernanceBlock(
+            f"Observation {label} carries no expected_margin. Ruling "
+            f"{EXPECTED_MARGIN_RULING} changed which *provenance* an expected margin "
+            "needs; it did not make the prediction itself optional, and a missing one "
+            "is never derived from the result."
+        )
+    missing = [
+        f for f in EXPECTED_MARGIN_COMMON_FIELDS
+        if not str(getattr(provenance, f, "") or "").strip()
+    ]
+    if missing:
+        raise GovernanceBlock(
+            f"Observation {label} declares {mode} but supplies no {missing}. Without a "
+            "named transform and scale a residual is arithmetic across two rulers, in "
+            "either mode."
+        )
+
+    if provenance.derived_from_actual_result:
+        raise GovernanceBlock(
+            f"Observation {label} declares its expected_margin derived from the actual "
+            "result. A prediction computed from the outcome it is scored against makes "
+            "every out-of-sample number downstream of it meaningless."
+        )
+    outcome = _scan_for_markers(
+        f"{provenance.transform} {provenance.source_row} {provenance.model_id}",
+        OUTCOME_DERIVED_MARGIN_MARKERS,
+    )
+    if outcome:
+        raise GovernanceBlock(
+            f"Observation {label} names {outcome} in its expected_margin provenance. A "
+            "value read from the result cannot serve as the prediction that result is "
+            "scored against."
+        )
+
+    if mode == EXPECTED_MARGIN_MODE_DERIVED:
+        absent = [
+            name
+            for name, value in (
+                ("pregame_team_rating", pregame_team_rating),
+                ("pregame_opponent_rating", pregame_opponent_rating),
+            )
+            if value is None or str(value).strip() == ""
+        ]
+        if absent:
+            raise GovernanceBlock(
+                f"Observation {label} declares {EXPECTED_MARGIN_MODE_DERIVED} but "
+                f"supplies no {absent}. A margin the adapter computed from rating states "
+                "must carry the states it was computed from; without them the transform "
+                "is unidentifiable and any residual can be explained by re-scaling it. "
+                f"Ruling {EXPECTED_MARGIN_RULING} relaxes this only for "
+                f"{EXPECTED_MARGIN_MODE_SOURCE_RECORDED}, and only where the governed "
+                "source records no component states."
+            )
+        return provenance
+
+    # --- SOURCE_RECORDED_WALKFORWARD ------------------------------------
+    if approval_token != EXPECTED_MARGIN_APPROVAL_TOKEN:
+        raise GovernanceBlock(
+            f"{EXPECTED_MARGIN_MODE_SOURCE_RECORDED} requires the approval token "
+            f"{EXPECTED_MARGIN_APPROVAL_TOKEN} issued with ruling "
+            f"{EXPECTED_MARGIN_RULING}; got {approval_token!r}. Declaring the mode is "
+            "not holding the authority for it."
+        )
+    absent = [
+        f for f in EXPECTED_MARGIN_SOURCE_RECORDED_FIELDS
+        if not str(getattr(provenance, f, "") or "").strip()
+    ]
+    if absent:
+        raise GovernanceBlock(
+            f"Observation {label} declares {EXPECTED_MARGIN_MODE_SOURCE_RECORDED} but "
+            f"supplies no {absent}. A generic expected-margin value is not sufficient: "
+            "the source provenance is what establishes that the prediction is present "
+            "in the artifact, belongs to this game, and came from the source's "
+            "documented walk-forward chronology."
+        )
+    for field_name in ("source_artifact_sha256", "source_member_sha256"):
+        digest = str(getattr(provenance, field_name)).strip().lower()
+        if not _SHA256_RE.match(digest):
+            raise GovernanceBlock(
+                f"Observation {label} declares {field_name}="
+                f"{getattr(provenance, field_name)!r}, which is not a 64-character "
+                "lowercase SHA-256."
+            )
+    if provenance.source_game_id.strip() != label:
+        raise GovernanceBlock(
+            f"Observation {label} cites source_game_id "
+            f"{provenance.source_game_id.strip()!r}. A recorded prediction must be "
+            "associated deterministically with the game it predicts; a row keyed to a "
+            "different contest is refused rather than joined by position."
+        )
+    if provenance.retrospective_full_season:
+        raise GovernanceBlock(
+            f"Observation {label} declares a retrospective full-season prediction. A "
+            "fit that has already seen the game cannot stand in for one made before it."
+        )
+    retro = _scan_for_markers(
+        f"{provenance.transform} {provenance.source_member} {provenance.source_row}",
+        RETROSPECTIVE_MARGIN_MARKERS,
+    )
+    if retro:
+        raise GovernanceBlock(
+            f"Observation {label} names {retro} in its expected_margin provenance. The "
+            "governed workbooks carry a walk-forward prediction and a full-season fit "
+            "side by side under names one letter apart, and the retrospective one may "
+            "never be read as a pregame prediction."
+        )
+    for declared, verified, name in (
+        (provenance.source_artifact_sha256, verified_artifact_sha256, "artifact"),
+        (provenance.source_member_sha256, verified_member_sha256, "member"),
+    ):
+        if not verified:
+            raise GovernanceBlock(
+                f"Observation {label} declares {EXPECTED_MARGIN_MODE_SOURCE_RECORDED} "
+                f"without a verified {name} digest to check its declaration against. "
+                "Digest continuity is proven against bytes that were read, never "
+                "against the declaration itself."
+            )
+        if str(declared).strip().lower() != str(verified).strip().lower():
+            raise GovernanceBlock(
+                f"Observation {label} declares {name} digest {declared} but the mounted "
+                f"bytes hash to {verified}. The recorded prediction does not come from "
+                "the artifact this row cites."
+            )
+    if temporal_order is None:
+        raise GovernanceBlock(
+            f"Observation {label} declares {EXPECTED_MARGIN_MODE_SOURCE_RECORDED} with "
+            "no admitted temporal order. Temporal provenance is what places the "
+            "prediction in the pregame walk-forward state rather than merely near it."
+        )
+    if evidence_domain not in ADMISSIBLE_EVIDENCE_DOMAINS:
+        raise GovernanceBlock(
+            f"Observation {label} declares {EXPECTED_MARGIN_MODE_SOURCE_RECORDED} with "
+            f"evidence_domain {evidence_domain!r}, which is not one of "
+            f"{list(ADMISSIBLE_EVIDENCE_DOMAINS)}."
+        )
+    return provenance
+
+
+def expected_margin_governance_as_dict() -> dict[str, Any]:
+    """The expected-margin provenance semantics, as a reviewable record."""
+    return {
+        "ruling": EXPECTED_MARGIN_RULING,
+        "approval_token": EXPECTED_MARGIN_APPROVAL_TOKEN,
+        "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+        "modes": list(EXPECTED_MARGIN_MODES),
+        "component_ratings_required_in": [EXPECTED_MARGIN_MODE_DERIVED],
+        "component_ratings_conditionally_null_in": [
+            EXPECTED_MARGIN_MODE_SOURCE_RECORDED
+        ],
+        "component_ratings_globally_optional": False,
+        "component_ratings_nulled_when_the_source_records_them": False,
+        "source_recorded_requires_approval_token": True,
+        "source_recorded_required_fields": (
+            list(EXPECTED_MARGIN_COMMON_FIELDS)
+            + list(EXPECTED_MARGIN_SOURCE_RECORDED_FIELDS)
+        ),
+        "source_recorded_checks": [
+            "the prediction is present in the governed source artifact",
+            "it is associated deterministically with the target game",
+            "it came from the source's documented walk-forward chronology",
+            "it is not a retrospective full-season prediction",
+            "it is not calculated from the target game's actual result",
+            "its model identity and rating scale are known",
+            "source digest continuity is verified against bytes that were read",
+        ],
+        "retrospective_markers_refused": list(RETROSPECTIVE_MARGIN_MARKERS),
+        "outcome_derived_markers_refused": list(OUTCOME_DERIVED_MARGIN_MARKERS),
+        "caller_asserted_mode_sufficient": False,
+        "missing_expected_margin_admissible": False,
+        "replay_to_manufacture_component_ratings_authorised": False,
+        "gate": "calibration.require_expected_margin_provenance",
+    }
+
+
+# =============================================================================
+# Corpus membership vs use-specific eligibility — ruling R9
+# =============================================================================
+#
+# Everything above answers one question: may this observation enter the full
+# walk-forward residual contract. That question has a right answer and the gates
+# that decide it are unchanged.
+#
+# The mistake was letting that one answer stand in for every other question. A
+# game whose source records no pregame prediction cannot enter a residual
+# calculation — and it is still a real, byte-verified, factual game result, which
+# is exactly what an actual-margin distribution is made of. Calling it "excluded"
+# discarded evidence for uses that never needed the missing field, and it
+# discarded it silently, because the word made the loss look like a decision.
+#
+# So there are two orthogonal ideas and they are kept apart by name:
+#
+# ``CANONICAL_CALIBRATION_CORPUS_RECORD``
+#     Membership. A row belongs because its source row belongs to the verified
+#     5,148-game universe. Membership is a fact about provenance, never about
+#     completeness, and no row is removed for missing a field.
+#
+# ``USE_SPECIFIC_ADMITTED_OBSERVATION``
+#     Eligibility. A row may participate in a particular numerical procedure when
+#     the evidence *that procedure* requires is actually supported. Different
+#     procedures ask for different things, and each asks for itself.
+#
+# The full residual contract is one use among several, and the strictest. It is
+# not weakened here: :func:`load_admitted_observations` still governs it, and a
+# row that fails it is not admitted to it. What changes is that failing it no
+# longer erases the row from everything else.
+
+CORPUS_RULING = "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY"
+CORPUS_RULING_ID = "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY"
+
+CANONICAL_CORPUS_RECORD = "CANONICAL_CALIBRATION_CORPUS_RECORD"
+USE_SPECIFIC_ADMITTED_OBSERVATION = "USE_SPECIFIC_ADMITTED_OBSERVATION"
+
+#: Membership is decided by provenance and by nothing else.
+CORPUS_MEMBERSHIP_BASIS = "VERIFIED_SOURCE_UNIVERSE_ROW"
+
+#: The evidence capabilities a row may or may not support. Names are facts about
+#: the source, not verdicts: ``overtime_status_known`` is false where the source
+#: recorded nothing, and false never becomes False-the-value.
+EVIDENCE_CAPABILITIES = (
+    "actual_margin_available",
+    "expected_margin_available",
+    "component_ratings_available",
+    "temporal_order_supported",
+    "participant_division_supported",
+    "overtime_status_known",
+    "fcs_participant",
+    "requires_unresolved_fcs_point_adapter",
+    "source_game_id_unique",
+    "source_row_provenance_identity_available",
+    "malformed_source_fields",
+    "walkforward_evidence_present",
+    "walkforward_eligibility_flag_set",
+    "observation_date_recorded",
+)
+
+#: Named calibration uses, each with the capabilities it actually needs. A use
+#: that needs nothing about overtime does not ask about overtime.
+CALIBRATION_USES: dict[str, dict[str, Any]] = {
+    "ACTUAL_MARGIN_DISTRIBUTION": {
+        "requires": ("actual_margin_available",),
+        "refuses": ("malformed_source_fields",),
+        "description": (
+            "Descriptive analysis of realised margins: distribution, tails, "
+            "blowout frequency, season and era comparison. Mathematically a "
+            "function of the result alone, so it requires no pregame prediction."
+        ),
+        "is_model_residual_use": False,
+    },
+    "EXPECTED_MARGIN_RESIDUAL": {
+        "requires": (
+            "actual_margin_available",
+            "expected_margin_available",
+            "temporal_order_supported",
+            "participant_division_supported",
+        ),
+        "refuses": ("malformed_source_fields", "requires_unresolved_fcs_point_adapter"),
+        "description": (
+            "Any calculation of actual_margin - expected_margin. Requires a "
+            "legitimate pregame expected margin under R8 semantics; an expected "
+            "margin is never manufactured for a row that lacks one."
+        ),
+        "is_model_residual_use": True,
+    },
+    "OVERTIME_SENSITIVE": {
+        "requires": ("actual_margin_available", "overtime_status_known"),
+        "refuses": ("malformed_source_fields",),
+        "description": (
+            "Any procedure that filters, removes or conditions on overtime. "
+            "Requires KNOWN overtime status; UNKNOWN is never read as False."
+        ),
+        "is_model_residual_use": False,
+    },
+    "FBS_ONLY": {
+        "requires": ("participant_division_supported",),
+        "refuses": ("malformed_source_fields", "fcs_participant"),
+        "description": "Procedures restricted to FBS-versus-FBS contests.",
+        "is_model_residual_use": False,
+    },
+    "POINT_SCALE_DEPENDENT": {
+        "requires": ("participant_division_supported",),
+        "refuses": (
+            "malformed_source_fields",
+            "requires_unresolved_fcs_point_adapter",
+        ),
+        "description": (
+            "Any procedure that must place every participant on the V3 unified "
+            "point axis. Blocked for FCS participants while "
+            "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER is open; the "
+            "mapping is not invented to unblock it."
+        ),
+        "is_model_residual_use": False,
+    },
+    "FULL_WALKFORWARD_OBSERVATION_CONTRACT": {
+        "requires": (
+            "actual_margin_available",
+            "expected_margin_available",
+            "temporal_order_supported",
+            "participant_division_supported",
+            "observation_date_recorded",
+            "walkforward_eligibility_flag_set",
+            "source_game_id_unique",
+        ),
+        "refuses": ("malformed_source_fields", "requires_unresolved_fcs_point_adapter"),
+        "description": (
+            "The strictest use: the full residual-model observation contract "
+            "enforced by calibration.load_admitted_observations. Unchanged by "
+            "ruling R9, which widens membership rather than this gate."
+        ),
+        "is_model_residual_use": True,
+    },
+}
+
+#: The holdout season, and the one thing membership never implies.
+HOLDOUT_SEASON = 2025
+MODEL_SELECTION_EXCLUDED_SEASONS = (HOLDOUT_SEASON,)
+
+
+def corpus_governance_as_dict() -> dict[str, Any]:
+    """The membership / eligibility semantics, as a reviewable record."""
+    return {
+        "ruling": CORPUS_RULING,
+        "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+        "record_kinds": [CANONICAL_CORPUS_RECORD, USE_SPECIFIC_ADMITTED_OBSERVATION],
+        "membership_basis": CORPUS_MEMBERSHIP_BASIS,
+        "membership_decided_by_completeness": False,
+        "membership_decided_by_evidence_domain": False,
+        "global_exclusion_model": "SUPERSEDED",
+        "evidence_capabilities": list(EVIDENCE_CAPABILITIES),
+        "calibration_uses": {
+            name: {
+                "requires": list(spec["requires"]),
+                "refuses": list(spec["refuses"]),
+                "description": spec["description"],
+                "is_model_residual_use": spec["is_model_residual_use"],
+            }
+            for name, spec in CALIBRATION_USES.items()
+        },
+        "full_contract_gate_weakened": False,
+        "full_contract_gate": "calibration.load_admitted_observations",
+        "outcome_only_use_may_become_residual_use": False,
+        "unknown_overtime_read_as_false": False,
+        "fcs_point_mapping_invented": False,
+        "missing_facts_fabricated": False,
+        "holdout_season": HOLDOUT_SEASON,
+        "holdout_corpus_membership": True,
+        "holdout_model_selection_participation": False,
+    }
+
+
+def eligible_uses(capabilities: Mapping[str, bool]) -> tuple[str, ...]:
+    """Which named uses a row's evidence actually supports.
+
+    Deterministic and total: every use is asked, in declaration order, and each
+    asks only for what it needs.
+    """
+    unknown = sorted(set(capabilities) - set(EVIDENCE_CAPABILITIES))
+    if unknown:
+        raise GovernanceBlock(
+            f"Unrecognised evidence capabilities {unknown}; admitted capabilities are "
+            f"{list(EVIDENCE_CAPABILITIES)}. A capability nobody declared cannot decide "
+            "an eligibility."
+        )
+    out = []
+    for name, spec in CALIBRATION_USES.items():
+        if all(bool(capabilities.get(r)) for r in spec["requires"]) and not any(
+            bool(capabilities.get(r)) for r in spec["refuses"]
+        ):
+            out.append(name)
+    return tuple(out)
+
+
+def require_use_specific_eligibility(
+    game_id: str, use: str, capabilities: Mapping[str, bool]
+) -> str:
+    """Admit one row to one named use, or say exactly what it lacks."""
+    if use not in CALIBRATION_USES:
+        raise GovernanceBlock(
+            f"Unknown calibration use {use!r}; declared uses are "
+            f"{list(CALIBRATION_USES)}."
+        )
+    spec = CALIBRATION_USES[use]
+    missing = [r for r in spec["requires"] if not bool(capabilities.get(r))]
+    blocking = [r for r in spec["refuses"] if bool(capabilities.get(r))]
+    if missing or blocking:
+        raise GovernanceBlock(
+            f"Observation {game_id} is not eligible for {use}: "
+            f"missing {missing}, blocked by {blocking}. It remains a member of the "
+            f"canonical calibration corpus; ruling {CORPUS_RULING} separates "
+            "membership from eligibility precisely so that a field missing for one "
+            "use does not discard a game that is evidence for another."
+        )
+    return use
+
+
+def refuse_model_selection_on_holdout(season: int, purpose: str = "model selection") -> None:
+    """Refuse any use of a holdout season for selection.
+
+    Membership in the corpus is not participation in selection, and this is the
+    line between them.
+    """
+    if int(season) in MODEL_SELECTION_EXCLUDED_SEASONS:
+        raise GovernanceBlock(
+            f"Season {season} is holdout and may not participate in {purpose}. "
+            f"Holdout use is {HOLDOUT_USE}. Its rows are members of the canonical "
+            "calibration corpus; membership is not selection participation."
+        )
+
+
 def calibration_governance_as_dict() -> dict[str, object]:
     return {
         "ruling": R2_CALIBRATION.convergence_id,
@@ -2192,7 +3053,15 @@ def calibration_governance_as_dict() -> dict[str, object]:
         "split_assignment": "TEMPORAL_ONLY",
         "random_split_permitted": False,
         "promotion_evidence_binding_states": [EVIDENCE_BOUND, EVIDENCE_UNBOUND],
+        # Unchanged, and it means what it always meant: an ungoverned synthetic or
+        # simulated observation set is refused. Ruling R7 does not widen this; it
+        # adds a separate, narrower door beside it.
         "synthetic_calibration_data_admissible": False,
+        "governed_synthetic_calibration_data_admissible": True,
+        "governed_synthetic_ruling": EVIDENCE_DOMAIN_RULING,
         "legacy_margin_sd_20_2_promotable": False,
         "temporal_order": temporal_order_governance_as_dict(),
+        "evidence_domain": evidence_domain_governance_as_dict(),
+        "expected_margin_provenance": expected_margin_governance_as_dict(),
+        "corpus_membership": corpus_governance_as_dict(),
     }

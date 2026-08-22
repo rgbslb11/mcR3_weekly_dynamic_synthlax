@@ -1,0 +1,562 @@
+{
+  "adapter_re_run": {
+    "adapter_id": "V3-CALIBRATION-5148-ADAPTER",
+    "admitted_by_season": {
+      "2006": 328,
+      "2007": 335
+    },
+    "admitted_by_split": {
+      "holdout": 0,
+      "training": 663,
+      "validation": 0
+    },
+    "admitted_temporal_basis_census": {
+      "EXACT_EVENT_TIME": 0,
+      "EXACT_GAME_DATE": 663,
+      "GOVERNED_SOURCE_SEQUENCE": 0,
+      "WEEK_STAGE_DATE": 0
+    },
+    "before_this_ruling": {
+      "ADMITTED_ROWS": 0,
+      "CONTRACT_CANDIDATE_ROWS": 404,
+      "gate_excluded_after": 0,
+      "gate_name_after": "EVIDENCE_DOMAIN_NOT_ADMISSIBLE",
+      "gate_name_before": "OBSERVATION_NOT_A_RECORDED_RESULT",
+      "provenance_gate_excluded": 4521
+    },
+    "exclusion_census_by_season": {
+      "BAXTER_MINIMUM_PRIOR_GAMES_NOT_MET": {
+        "2006": 167,
+        "2007": 170,
+        "2008": 157,
+        "2009": 153,
+        "2010": 142,
+        "2011": 146,
+        "2024": 154,
+        "2025": 134
+      },
+      "FCS_PARTICIPANT_PENDING_V3_POINT_SCALE_ADAPTER": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 1,
+        "2009": 1,
+        "2010": 4,
+        "2011": 63,
+        "2024": 0,
+        "2025": 0
+      },
+      "MODEL_EVIDENCE_ROW_ABSENT": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 1,
+        "2024": 42,
+        "2025": 54
+      },
+      "PARTICIPANT_DIVISION_NOT_ESTABLISHED": {
+        "2006": 16,
+        "2007": 9,
+        "2008": 16,
+        "2009": 59,
+        "2010": 47,
+        "2011": 0,
+        "2024": 0,
+        "2025": 0
+      },
+      "PARTICIPANT_DIVISION_OUTSIDE_CONTRACT_ENUM": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 11,
+        "2024": 0,
+        "2025": 0
+      },
+      "PREGAME_RATING_STATE_NOT_RECORDED": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 393,
+        "2009": 362,
+        "2010": 412,
+        "2011": 456,
+        "2024": 404,
+        "2025": 569
+      },
+      "RESULT_OBSERVATION_DATE_NOT_RECORDED": {
+        "2006": 25,
+        "2007": 13,
+        "2008": 57,
+        "2009": 47,
+        "2010": 37,
+        "2011": 35,
+        "2024": 122,
+        "2025": 0
+      },
+      "SOURCE_KEY_DUPLICATE_UNRECONCILED": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 2,
+        "2025": 0
+      },
+      "SOURCE_ROW_MALFORMED_ARTIFACT": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 3,
+        "2010": 0,
+        "2011": 1,
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "exclusion_totals": {
+      "BAXTER_MINIMUM_PRIOR_GAMES_NOT_MET": 1223,
+      "FCS_PARTICIPANT_PENDING_V3_POINT_SCALE_ADAPTER": 69,
+      "MODEL_EVIDENCE_ROW_ABSENT": 97,
+      "PARTICIPANT_DIVISION_NOT_ESTABLISHED": 147,
+      "PARTICIPANT_DIVISION_OUTSIDE_CONTRACT_ENUM": 11,
+      "PREGAME_RATING_STATE_NOT_RECORDED": 2596,
+      "RESULT_OBSERVATION_DATE_NOT_RECORDED": 336,
+      "SOURCE_KEY_DUPLICATE_UNRECONCILED": 2,
+      "SOURCE_ROW_MALFORMED_ARTIFACT": 4
+    },
+    "handoff": "CALIBRATION_5148_ADAPTER_BLOCKED",
+    "population_accounting": {
+      "ADMITTED_ROWS": 663,
+      "CONTRACT_CANDIDATE_ROWS": 3595,
+      "EXCLUDED_ROWS": 4485,
+      "MATCHED_MODEL_EVIDENCE_ROWS": 5050,
+      "SOURCE_UNIVERSE_ROWS": 5148
+    },
+    "source_universe_unchanged": {
+      "season_counts": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 724,
+        "2025": 757
+      },
+      "total": 5148
+    }
+  },
+  "admitted_evidence_domains": [
+    {
+      "declaration": "This package consolidates the source-derived chronological sequence, week, and date fields for all synthetic games from 2006 through 2011. ... No external or real-world schedule was used.",
+      "declared_by": "PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT",
+      "does_not_establish": [
+        "real_world_predictive_validity",
+        "sportsbook_predictive_validity",
+        "actual_historical_ncaa_forecasting_performance",
+        "independent_external_empirical_validation"
+      ],
+      "establishes": [
+        "calibration_dataset_construction",
+        "calibration_parameter_estimation",
+        "validation",
+        "untouched_holdout_scoring",
+        "later_human_promotion_consideration_for_the_synthetic_v3_model"
+      ],
+      "evidence_domain": "GOVERNED_SYNTHETIC",
+      "may_be_represented_as_real_world": false,
+      "real_world_predictive_validity_established": false,
+      "ruling": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+      "seasons": "2006-2011",
+      "source_member": "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/reports/PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md",
+      "source_member_sha256": "54e83f6e749cc68597fd1eb87ebf976d19743ee7c690e8e6126be2fcb6fb85fa",
+      "source_package": "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip",
+      "source_package_sha256": "c4e588dd82d0a03c99958538dc0e3b84c5b293142db33d8458e6defb850f18cc"
+    },
+    {
+      "declaration": "Every row carries official_synthetic=True; 174 of the 724 2024 rows carry provenance SYNTH_FILL, SYNTH_BLOCK or SYNTH_POST.",
+      "declared_by": "PHASE5D_OFFICIAL_SYNTHETIC_EVENT_STREAM",
+      "does_not_establish": [
+        "real_world_predictive_validity",
+        "sportsbook_predictive_validity",
+        "actual_historical_ncaa_forecasting_performance",
+        "independent_external_empirical_validation"
+      ],
+      "establishes": [
+        "calibration_dataset_construction",
+        "calibration_parameter_estimation",
+        "validation",
+        "untouched_holdout_scoring",
+        "later_human_promotion_consideration_for_the_synthetic_v3_model"
+      ],
+      "evidence_domain": "GOVERNED_SYNTHETIC",
+      "may_be_represented_as_real_world": false,
+      "real_world_predictive_validity_established": false,
+      "ruling": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+      "seasons": "2024-2025",
+      "source_member": "Power_Crunch_Research_Lab_Phase5D_WalkForward/02_Event_Stream/official_synthetic_event_stream_2024_2025.csv",
+      "source_member_sha256": "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6",
+      "source_package": "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip",
+      "source_package_sha256": "9a018a64b17d682e8c168524937ab70697e2f57a5b3ccae77f731fa3beba4f48"
+    },
+    {
+      "declaration": "provenance: SCHEDULE SYNTHETIC. SCORES SIMULATED. NCG result user-specified. Bowl names fictional.",
+      "declared_by": "2025_SYNTHETIC_SEASON_LOCKED_V3_CERTIFICATION",
+      "does_not_establish": [
+        "real_world_predictive_validity",
+        "sportsbook_predictive_validity",
+        "actual_historical_ncaa_forecasting_performance",
+        "independent_external_empirical_validation"
+      ],
+      "establishes": [
+        "calibration_dataset_construction",
+        "calibration_parameter_estimation",
+        "validation",
+        "untouched_holdout_scoring",
+        "later_human_promotion_consideration_for_the_synthetic_v3_model"
+      ],
+      "evidence_domain": "GOVERNED_SYNTHETIC",
+      "may_be_represented_as_real_world": false,
+      "real_world_predictive_validity_established": false,
+      "ruling": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+      "seasons": "2025",
+      "source_member": "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx",
+      "source_member_sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba",
+      "source_package": "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip",
+      "source_package_sha256": "9a018a64b17d682e8c168524937ab70697e2f57a5b3ccae77f731fa3beba4f48"
+    }
+  ],
+  "approval_token": "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1",
+  "artifact": "V3_GOVERNED_SYNTHETIC_EVIDENCE_STATUS_R1.json",
+  "artifact_status": "SUCCESSOR_EVIDENCE_AND_STATUS_RECORD",
+  "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+  "base_sha": "77e716a7d5179246589ad43b6e68f0a79aec2a0d",
+  "blocker_count_before": 8,
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blockers_retired_by_this_ruling": [],
+  "calibration_values_promoted": [],
+  "canonical_config_written": false,
+  "chairman_ruling": {
+    "approval_token": "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1",
+    "chairman_ruling_id": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    "convergence_id": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    "decision": "A byte-verified, provenance-bound GOVERNED SYNTHETIC season corpus may serve as calibration, validation and holdout evidence for the synthetic V3 model. The evidence domain must remain explicitly GOVERNED_SYNTHETIC and must never be relabeled or represented as OBSERVED_REAL_WORLD, EMPIRICAL_REAL_WORLD or REAL_WORLD_EXTERNAL_VALIDATION. Governed synthetic evidence may be used for calibration dataset construction, calibration parameter estimation, validation, untouched holdout scoring, and later human promotion consideration for the synthetic V3 model. It does NOT establish real-world predictive validity, sportsbook predictive validity, actual historical NCAA forecasting performance, or independent external empirical validation. Every derived dataset and evidence object must preserve source lineage. 2025 remains HOLDOUT and may not participate in model, hyperparameter, coefficient, exclusion-threshold, transform, game-SD or FCS mapping selection. Existing contract controls remain mandatory: temporal admission, digest continuity, expected-margin provenance, rating-scale declaration, opponent classification, split integrity and holdout isolation. This ruling does not authorize filling any missing source fact, does not authorize Phase5E FCS Elo = 1500 (governed V3 policy remains FCS Elo = 1250), and promotes no numerical coefficient.",
+    "evidence": [
+      "OPERATION SYTHALAX \u2014 GOVERNED SYNTHETIC CALIBRATION EVIDENCE R1, issued APPROVED under DIRECT_CHAIRMAN_AUTHORITY with approval token APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1 and RULING_ID R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE.",
+      "The ruling records its own necessity: the intended V3 calibration architecture itself uses the audited 2006-2011 and 2024-2025 synthetic universes, so a blanket refusal of synthetic corpora leaves the synthetic model uncalibrated without protecting anything.",
+      "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip!reports/PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md \u2014 'all synthetic games from 2006 through 2011. ... No external or real-world schedule was used.' The corpus declares its own domain; the ruling does not reinterpret it.",
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip!10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx [Certification] \u2014 'provenance: SCHEDULE SYNTHETIC. SCORES SIMULATED.'",
+      "V3_CALIBRATION_DATA_CONTRACT.json revision R1-TEMPORAL-ORDER-SUCCESSOR \u2014 DATASET_PROVENANCE_REQUIREMENTS['synthetic_content'] recorded synthetic observation sets as REFUSED. That clause predates this ruling, is preserved in repository history, and is superseded only to the extent stated here."
+    ],
+    "instruction": "OPERATION SYTHALAX \u2014 GOVERNED SYNTHETIC CALIBRATION EVIDENCE R1",
+    "provenance": "FACT",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "retires": [],
+    "subject": "Governed synthetic season corpora as calibration evidence",
+    "supersedes": [
+      "DATASET_PROVENANCE_REQUIREMENTS['synthetic_content'] read as refusing every synthetic observation set \u2014 superseded to exactly the extent that a corpus is byte-verified, provenance-bound and declared synthetic by its own governed source. An ungoverned synthetic or test fixture remains refused.",
+      "Any reading under which governed synthetic evidence could be recorded, serialized or reported as observed, empirical or real-world evidence."
+    ]
+  },
+  "classification": "CALIBRATION_EVIDENCE_DOMAIN",
+  "contract": {
+    "contract_id": "V3-CALIBRATION-DATA-CONTRACT-001",
+    "contract_revision": "R1-TEMPORAL-ORDER-SUCCESSOR",
+    "dataset_mounted": false,
+    "status": "SPECIFICATION_ONLY_NO_DATASET_MOUNTED",
+    "synthetic_clause_narrowed_not_deleted": true
+  },
+  "controls_that_remained_mandatory": [
+    "temporal admission",
+    "digest continuity",
+    "expected-margin provenance",
+    "rating-scale declaration",
+    "opponent classification",
+    "split integrity",
+    "holdout isolation"
+  ],
+  "convergence_id": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+  "decisive_remaining_blocker": {
+    "blocker": "PREGAME_RATING_STATE_NOT_RECORDED",
+    "consequence": "validation and holdout are both empty; the contract cannot be satisfied",
+    "independent_gate_rows": 3989,
+    "not_amended_here": "This lane holds no authority to let a recorded walk-forward margin stand in for the two individual ratings. No replay was built to manufacture them: a reconstructed rating presented as an observation is the exact failure the contract's pregame provenance requirement exists to prevent.",
+    "ordered_census_by_season": {
+      "2006": 0,
+      "2007": 0,
+      "2008": 393,
+      "2009": 362,
+      "2010": 412,
+      "2011": 456,
+      "2024": 404,
+      "2025": 569
+    },
+    "ordered_census_rows": 2596,
+    "pregame_rating_field_support_by_season": {
+      "2006": 535,
+      "2007": 526,
+      "2008": 0,
+      "2009": 0,
+      "2010": 0,
+      "2011": 0,
+      "2024": 0,
+      "2025": 0
+    },
+    "required_contract_fields": [
+      "pregame_team_rating",
+      "pregame_opponent_rating"
+    ],
+    "rule": "Both fields are unconditionally required by V3-CALIBRATION-DATA-CONTRACT-001 revision R1-TEMPORAL-ORDER-SUCCESSOR; neither carries a conditional_requirement. The governed walk-forward ledger records the resulting predicted margin for 2008 onward but not the two ratings behind it."
+  },
+  "derived_dataset_emitted": false,
+  "domain_label_controls": {
+    "does_not_establish": [
+      "real_world_predictive_validity",
+      "sportsbook_predictive_validity",
+      "actual_historical_ncaa_forecasting_performance",
+      "independent_external_empirical_validation"
+    ],
+    "domain_must_remain": "GOVERNED_SYNTHETIC",
+    "domain_travels_on_every_derived_row": true,
+    "establishes": [
+      "calibration_dataset_construction",
+      "calibration_parameter_estimation",
+      "validation",
+      "untouched_holdout_scoring",
+      "later_human_promotion_consideration_for_the_synthetic_v3_model"
+    ],
+    "never_represented_as": [
+      "OBSERVED_REAL_WORLD",
+      "EMPIRICAL_REAL_WORLD",
+      "REAL_WORLD_EXTERNAL_VALIDATION"
+    ],
+    "observation_column_admitted_by_this_ruling": "evidence_domain",
+    "refused_relabels": [
+      "OBSERVED_REAL_WORLD",
+      "EMPIRICAL_REAL_WORLD",
+      "REAL_WORLD_EXTERNAL_VALIDATION",
+      "REAL_WORLD",
+      "EMPIRICAL",
+      "OBSERVED_REAL",
+      "EXTERNAL_VALIDATION",
+      "ACTUAL_HISTORICAL",
+      "SPORTSBOOK"
+    ]
+  },
+  "evidence_domain_semantics": {
+    "admissible_domains": [
+      "OBSERVED_REAL_WORLD",
+      "GOVERNED_SYNTHETIC"
+    ],
+    "approval_token": "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1",
+    "arbitrary_or_test_synthetic_admissible": false,
+    "authorises_phase5e_fcs_elo_1500": false,
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "coefficients_promoted": [],
+    "does_not_establish": [
+      "real_world_predictive_validity",
+      "sportsbook_predictive_validity",
+      "actual_historical_ncaa_forecasting_performance",
+      "independent_external_empirical_validation"
+    ],
+    "establishes": [
+      "calibration_dataset_construction",
+      "calibration_parameter_estimation",
+      "validation",
+      "untouched_holdout_scoring",
+      "later_human_promotion_consideration_for_the_synthetic_v3_model"
+    ],
+    "fcs_elo_policy": 1250,
+    "fills_missing_source_facts": false,
+    "gate": "calibration.require_evidence_domain",
+    "governed_synthetic_admissible": true,
+    "governed_synthetic_requires_approval_token": true,
+    "governed_synthetic_requires_source_lineage": [
+      "source_package",
+      "source_package_sha256",
+      "source_member",
+      "source_member_sha256",
+      "declared_by",
+      "declaration"
+    ],
+    "holdout_season": 2025,
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "observed_real_world_semantics_changed": false,
+    "refused_relabels": [
+      "OBSERVED_REAL_WORLD",
+      "EMPIRICAL_REAL_WORLD",
+      "REAL_WORLD_EXTERNAL_VALIDATION",
+      "REAL_WORLD",
+      "EMPIRICAL",
+      "OBSERVED_REAL",
+      "EXTERNAL_VALIDATION",
+      "ACTUAL_HISTORICAL",
+      "SPORTSBOOK"
+    ],
+    "ruling": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    "ungoverned_synthetic_admissible": false
+  },
+  "fcs_elo_policy": 1250,
+  "fcs_mapping_promoted": null,
+  "fills_missing_source_facts": false,
+  "gate": "calibration.require_evidence_domain",
+  "handoff": "CALIBRATION_5148_ADAPTER_BLOCKED",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it.",
+  "historical_status_records": [
+    "V3_GOVERNANCE_STATUS_R2.json",
+    "V3_GOVERNANCE_STATUS_R3.json",
+    "V3_GOVERNANCE_STATUS_R4.json",
+    "V3_BOARD_IK_MOUNT_STATUS_R1.json",
+    "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.json",
+    "V3_BUILD_MANIFEST.json"
+  ],
+  "historical_status_records_rewritten": false,
+  "holdout": {
+    "admitted_rows": 0,
+    "excluded_from": [
+      "model selection",
+      "hyperparameter selection",
+      "coefficient selection",
+      "exclusion-threshold selection",
+      "transform selection",
+      "game-SD selection",
+      "FCS mapping selection"
+    ],
+    "scored_in_this_lane": false,
+    "season": 2025,
+    "use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION"
+  },
+  "instruction": "OPERATION SYTHALAX \u2014 GOVERNED SYNTHETIC CALIBRATION EVIDENCE R1",
+  "live_blocker_count": 8,
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "opened_blockers": [],
+  "phase5e_fcs_elo_1500_authorised": false,
+  "problem": "The issued contract refused a synthetic or simulated observation set outright. That clause was written against one failure \u2014 an engine scored on its own replayed beliefs and the result reported as accuracy \u2014 and it is still right about that. It was wrong about the corpus V3 is actually calibrated against: the audited 2006-2011 and 2024-2025 universes are synthetic by construction and by their own declaration, and the model they calibrate is itself a synthetic-season model. The clause blocked 4,521 of 5,148 rows without addressing the risk it was written for.",
+  "provenance_class": {
+    "ASSUMPTION": "None recorded.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "FACT": "Issued verbatim by the Chairman, or reproduced from a mounted artifact."
+  },
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "remaining_blockers": [
+    {
+      "affects": "all calibration uses",
+      "blocker": "PREGAME_RATING_STATE_NOT_RECORDED_BY_SOURCE",
+      "detail": "pregame_team_rating and pregame_opponent_rating are unconditionally required contract fields. Only the 2006 and 2007 walk-forward workbooks record rating_a_pre and rating_b_pre; every other season records the resulting predicted margin alone. A deterministic replay was not substituted, because it could be validated against the recorded predictions only for the two seasons that already carry the ratings.",
+      "rows": 4087,
+      "rows_by_season": {
+        "2006": 1,
+        "2007": 1,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 724,
+        "2025": 757
+      }
+    },
+    {
+      "affects": "calibration.game_sd_points and calibration.blowout_treatment only",
+      "blocker": "OVERTIME_STATUS_NOT_RECORDED_BY_SOURCE",
+      "detail": "No 2006-2011 source member carries an overtime column under any spelling, and the 550 recorded-result 2024 rows leave ot_a and ot_b empty. Overtime status was neither defaulted to False nor inferred from the final score. It does not block admission: overtime_periods sits in calibration_contract.FIELDS_REQUIRING_ADMISSION_RULING and is not on the governed observation allowlist, so no admitted observation may carry it yet. It does block the two coefficients that are functions of it.",
+      "rows": 4217,
+      "rows_by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 550
+      }
+    },
+    {
+      "affects": "all calibration uses",
+      "blocker": "CANDIDATE_PARTITION_CANNOT_BE_POPULATED",
+      "detail": "The experimental partition requires all of ['training', 'validation', 'holdout'] to be populated; ['validation', 'holdout'] carry no admissible observation. calibration.require_governed_temporal_split_integrity refuses an empty split, so no forward-only ordering can be proven and no out-of-sample number can be defined.",
+      "empty_splits": [
+        "validation",
+        "holdout"
+      ],
+      "rows": 0,
+      "split_counts": {
+        "holdout": 0,
+        "training": 663,
+        "validation": 0
+      }
+    },
+    {
+      "affects": "all calibration uses",
+      "blocker": "MINIMUM_OBSERVATION_VOLUME_NOT_MET",
+      "detail": "The contract's minimum volume is 1500 observations over at least 3 seasons with at least 300 holdout observations.",
+      "rows": 663
+    }
+  ],
+  "resolution": "The ruling separates two questions the clause had fused: whether a corpus is synthetic, and whether it is governed. A byte-verified, provenance-bound corpus declared synthetic by its own source is admitted as GOVERNED_SYNTHETIC evidence for the synthetic V3 model. An ungoverned synthetic set, or a fixture that merely types the words, receives no authority.",
+  "resolved_blockers": [],
+  "retained_findings": {
+    "duplicate_2024_identifier": {
+      "game_id": "T073vT114",
+      "note": "Both rows carrying the repeated key are excluded, not one of them. Choosing a survivor would be an unissued ruling, and no stronger composite source identity distinguishes the two contests.",
+      "rows_excluded": 2,
+      "silently_deduplicated": false
+    },
+    "lineage_2011": {
+      "canonical_eligible_rows": 712,
+      "canonical_rebuild_rows": 713,
+      "engine_comparison_exclusion_game_id": "G2011_P2932",
+      "engine_comparison_exclusion_note": "Texas Tech 63, DIVISION II 6; omitted by the established rating universe",
+      "engine_comparison_universe": 711,
+      "malformed_artifact_excluded": 1,
+      "malformed_artifact_game_id": "G2011_P3056",
+      "malformed_artifact_note": "Weber St. vs CONFW; level_a DIV_II, level_b ARTIFACT"
+    },
+    "overtime": {
+      "absent_from_source_rows": 4217,
+      "affects": [
+        "calibration.game_sd_points",
+        "calibration.blowout_treatment"
+      ],
+      "is_a_row_admission_gate": false,
+      "recorded_by_source": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 174,
+        "2025": 757
+      },
+      "status": "UNKNOWN_PRESERVED_NEVER_DEFAULTED_TO_FALSE"
+    },
+    "pregame_rating_lineage": "2006 and 2007 record both pregame ratings (535 and 526 rows). No later season records either. Retained, not resolved."
+  },
+  "ruling_id": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+  "ruling_status": "APPROVED",
+  "scope": "EVIDENCE_DOMAIN_SEMANTICS_AND_ADAPTER_RE_RUN",
+  "simulation_run": false
+}

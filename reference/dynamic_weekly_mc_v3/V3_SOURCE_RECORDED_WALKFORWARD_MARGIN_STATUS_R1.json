@@ -1,0 +1,979 @@
+{
+  "adapter_re_run": {
+    "adapter_id": "V3-CALIBRATION-5148-ADAPTER",
+    "before_this_ruling": {
+      "ADMITTED_ROWS": 663,
+      "contract_satisfied": false,
+      "handoff": "CALIBRATION_5148_ADAPTER_BLOCKED",
+      "partition_counts": {
+        "holdout": 0,
+        "training": 663,
+        "validation": 0
+      },
+      "pregame_gate_excluded": 2596
+    },
+    "blockers": [],
+    "division_label_census": {
+      "ARTIFACT": {
+        "2006": 16,
+        "2007": 9,
+        "2008": 1,
+        "2010": 29,
+        "2011": 1
+      },
+      "DIV_II": {
+        "2011": 12
+      },
+      "FBS": {
+        "2006": 1056,
+        "2007": 1045,
+        "2008": 1231,
+        "2009": 1184,
+        "2010": 1233,
+        "2011": 1349,
+        "2024": 1448,
+        "2025": 1514
+      },
+      "FCS": {
+        "2008": 1,
+        "2009": 1,
+        "2010": 4,
+        "2011": 63
+      },
+      "UNKNOWN": {
+        "2008": 15,
+        "2009": 65,
+        "2010": 18,
+        "2011": 1
+      }
+    },
+    "evidence_domain": {
+      "admitted_under": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+      "corpus_domain": "GOVERNED_SYNTHETIC",
+      "does_not_establish": [
+        "real_world_predictive_validity",
+        "sportsbook_predictive_validity",
+        "actual_historical_ncaa_forecasting_performance",
+        "independent_external_empirical_validation"
+      ],
+      "emitted_row_domain_counts": {
+        "GOVERNED_SYNTHETIC": 2855,
+        "OBSERVED_REAL_WORLD": 404
+      },
+      "emitted_row_domain_counts_by_split": {
+        "holdout": {
+          "GOVERNED_SYNTHETIC": 569,
+          "OBSERVED_REAL_WORLD": 0
+        },
+        "training": {
+          "GOVERNED_SYNTHETIC": 2286,
+          "OBSERVED_REAL_WORLD": 0
+        },
+        "validation": {
+          "GOVERNED_SYNTHETIC": 0,
+          "OBSERVED_REAL_WORLD": 404
+        }
+      },
+      "emitted_row_domains": [
+        "GOVERNED_SYNTHETIC",
+        "OBSERVED_REAL_WORLD"
+      ],
+      "establishes": [
+        "calibration_dataset_construction",
+        "calibration_parameter_estimation",
+        "validation",
+        "untouched_holdout_scoring",
+        "later_human_promotion_consideration_for_the_synthetic_v3_model"
+      ],
+      "may_be_represented_as_real_world": false,
+      "mixed_domain_note": "The admitted population is not uniformly governed synthetic. The 404 admitted 2024 rows carry Phase5D provenance REAL, which the package's own INPUTS.md anchors to a named external result source, so they are OBSERVED_REAL_WORLD. The validation split is therefore real-world anchored and the training and holdout splits are governed synthetic. Nothing was relabeled in either direction: the domain is read from each row's own source provenance and travels with it.",
+      "note": "Before ruling R7 the provenance gate refused every synthetic row and accounted for 4,521 of the 5,148. The ruling admits this corpus as GOVERNED_SYNTHETIC evidence for the synthetic V3 model. It establishes no real-world predictive validity, no sportsbook validity, no actual historical NCAA forecasting performance and no independent external empirical validation, and the domain travels on every emitted row.",
+      "ungoverned_synthetic_admissible": false
+    },
+    "exclusion_census": {
+      "BAXTER_MINIMUM_PRIOR_GAMES_NOT_MET": {
+        "by_season": {
+          "2006": 167,
+          "2007": 170,
+          "2008": 157,
+          "2009": 153,
+          "2010": 142,
+          "2011": 146,
+          "2024": 154,
+          "2025": 134
+        },
+        "note": "The governed walk-forward ledger marks the row ineligible under the frozen BAXTER-MOV-v1.0-R control of three minimum prior games per team. The source's own eligibility flag is read; no eligibility is re-derived here.",
+        "total": 1223
+      },
+      "EVIDENCE_DOMAIN_NOT_ADMISSIBLE": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 0,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "The row's evidence domain is not one calibration admits. Under ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE a corpus that is byte-verified, provenance-bound and declared synthetic by its own governed source is admitted as GOVERNED_SYNTHETIC; a row whose domain is neither that nor OBSERVED_REAL_WORLD is refused. Before that ruling this gate refused every synthetic row and accounted for 4,521 of the 5,148.",
+        "total": 0
+      },
+      "EXPECTED_MARGIN_NOT_RECORDED": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 0,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "The walk-forward ledger records no predicted margin for the row. expected_margin is never derived from actual_margin and never taken from a full-season retrospective fit.",
+        "total": 0
+      },
+      "FCS_PARTICIPANT_PENDING_V3_POINT_SCALE_ADAPTER": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 1,
+          "2009": 1,
+          "2010": 4,
+          "2011": 63,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "An FCS participant is identified. Blocker model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER is open, so FCS games are excluded rather than silently fitted on an unresolved scale. This adapter neither closes that blocker nor proposes a point value for it.",
+        "total": 69
+      },
+      "MODEL_EVIDENCE_ROW_ABSENT": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 1,
+          "2024": 42,
+          "2025": 54
+        },
+        "note": "No Baxter walk-forward row joins to this factual game row, so no expected_margin exists for it. Never substituted from another season, another model, or a full-season retrospective fit.",
+        "total": 97
+      },
+      "PARTICIPANT_DIVISION_NOT_ESTABLISHED": {
+        "by_season": {
+          "2006": 16,
+          "2007": 9,
+          "2008": 16,
+          "2009": 59,
+          "2010": 47,
+          "2011": 0,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "The source classification for one or both participants is UNKNOWN, ARTIFACT or absent. opponent_division is required by the contract and its enum admits FBS and FCS only; UNKNOWN is never mapped to FBS.",
+        "total": 147
+      },
+      "PARTICIPANT_DIVISION_OUTSIDE_CONTRACT_ENUM": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 11,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "A participant is classified outside enum[FBS|FCS] \u2014 DIVISION II in the 2011 archive. Refused rather than folded into the nearest admitted value.",
+        "total": 11
+      },
+      "PREGAME_RATING_STATE_NOT_RECORDED": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 0,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "pregame_team_rating and pregame_opponent_rating are unconditionally required contract fields, and the governed walk-forward ledger for this season records only the resulting predicted margin, not the two ratings behind it. Reconstructing them would be a replay presented as an observation.",
+        "total": 0
+      },
+      "RESULT_OBSERVATION_DATE_NOT_RECORDED": {
+        "by_season": {
+          "2006": 25,
+          "2007": 13,
+          "2008": 57,
+          "2009": 47,
+          "2010": 37,
+          "2011": 35,
+          "2024": 122,
+          "2025": 0
+        },
+        "note": "The contract requires observed_at \u2014 when the result became observable \u2014 and the source resolved no date for this row. A row admitted on week or sequence evidence has a provable order but no recorded observation timestamp, and one is not invented to fill the column.",
+        "total": 336
+      },
+      "SOURCE_KEY_DUPLICATE_UNRECONCILED": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 0,
+          "2024": 2,
+          "2025": 0
+        },
+        "note": "Two different contests in the source universe share one game identifier, so the identifier does not identify a game. Every row carrying the repeated key is excluded \u2014 not just the second one \u2014 because choosing a survivor would be an unissued ruling, and game_id is the contract's deduplication and split-assignment key.",
+        "total": 2
+      },
+      "SOURCE_ROW_MALFORMED_ARTIFACT": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 3,
+          "2010": 0,
+          "2011": 1,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "The governed source records the row as a malformed artifact rather than a contest: a participant label that is not a team, or a score the source did not resolve. Excluded rather than repaired.",
+        "total": 4
+      },
+      "TEMPORAL_ORDER_EVIDENCE_INSUFFICIENT": {
+        "by_season": {
+          "2006": 0,
+          "2007": 0,
+          "2008": 0,
+          "2009": 0,
+          "2010": 0,
+          "2011": 0,
+          "2024": 0,
+          "2025": 0
+        },
+        "note": "The source supplies no exact date, no source-supplied week ordinal and no sequence, so no basis in the successor precedence is supportable. Missing chronology is not fabricated to make the row pass.",
+        "total": 0
+      }
+    },
+    "expected_margin_provenance": {
+      "component_ratings_emitted_where_recorded": 663,
+      "component_ratings_null_because_unrecorded": 2596,
+      "mode_counts": {
+        "DERIVED_AT_INGESTION": 663,
+        "SOURCE_RECORDED_WALKFORWARD": 2596
+      },
+      "mode_counts_by_season": {
+        "2006": {
+          "DERIVED_AT_INGESTION": 328,
+          "SOURCE_RECORDED_WALKFORWARD": 0
+        },
+        "2007": {
+          "DERIVED_AT_INGESTION": 335,
+          "SOURCE_RECORDED_WALKFORWARD": 0
+        },
+        "2008": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 393
+        },
+        "2009": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 362
+        },
+        "2010": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 412
+        },
+        "2011": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 456
+        },
+        "2024": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 404
+        },
+        "2025": {
+          "DERIVED_AT_INGESTION": 0,
+          "SOURCE_RECORDED_WALKFORWARD": 569
+        }
+      },
+      "modes": [
+        "DERIVED_AT_INGESTION",
+        "SOURCE_RECORDED_WALKFORWARD"
+      ],
+      "replay_constructed": false,
+      "semantics": {
+        "approval_token": "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+        "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+        "caller_asserted_mode_sufficient": false,
+        "component_ratings_conditionally_null_in": [
+          "SOURCE_RECORDED_WALKFORWARD"
+        ],
+        "component_ratings_globally_optional": false,
+        "component_ratings_nulled_when_the_source_records_them": false,
+        "component_ratings_required_in": [
+          "DERIVED_AT_INGESTION"
+        ],
+        "gate": "calibration.require_expected_margin_provenance",
+        "missing_expected_margin_admissible": false,
+        "modes": [
+          "DERIVED_AT_INGESTION",
+          "SOURCE_RECORDED_WALKFORWARD"
+        ],
+        "outcome_derived_markers_refused": [
+          "ACTUAL_MARGIN",
+          "ACTUAL MARGIN",
+          "FINAL_MARGIN",
+          "FINAL SCORE",
+          "RESULT_DERIVED",
+          "FROM_RESULT",
+          "POSTGAME",
+          "POST_GAME"
+        ],
+        "replay_to_manufacture_component_ratings_authorised": false,
+        "retrospective_markers_refused": [
+          "FULL_SEASON",
+          "FULLSEASON",
+          "FULL SEASON",
+          "RETROSPECTIVE",
+          "PRED_MARGIN_FULL",
+          "RESIDUAL_FULL",
+          "FINAL_RATING",
+          "FINAL SEASON",
+          "GAME RESIDUALS",
+          "FULL GAME FIT",
+          "_FIT"
+        ],
+        "ruling": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+        "source_recorded_checks": [
+          "the prediction is present in the governed source artifact",
+          "it is associated deterministically with the target game",
+          "it came from the source's documented walk-forward chronology",
+          "it is not a retrospective full-season prediction",
+          "it is not calculated from the target game's actual result",
+          "its model identity and rating scale are known",
+          "source digest continuity is verified against bytes that were read"
+        ],
+        "source_recorded_required_fields": [
+          "model_id",
+          "transform",
+          "rating_scale",
+          "source_artifact",
+          "source_artifact_sha256",
+          "source_member",
+          "source_member_sha256",
+          "source_row",
+          "source_game_id",
+          "walkforward_chronology"
+        ],
+        "source_recorded_requires_approval_token": true
+      },
+      "walkforward_chronology": "Baxter walk-forward: each game is predicted from the rating state carried into it, built only from that season's earlier completed games under the frozen BAXTER-MOV-v1.0-R control (ridge lambda 0.3, margin cap +/-49, minimum three prior games per team). Read from the workbook sheet named 'Walk Forward'; the full-season retrospective sheets are never read."
+    },
+    "findings": [
+      {
+        "affects": "which expected-margin provenance mode a row is admitted under",
+        "blocks_admission": false,
+        "classification": "SOURCE_GAP_RESOLVED_BY_PROVENANCE_MODE",
+        "component_ratings_preserved_where_recorded": true,
+        "detail": "Only the 2006 and 2007 walk-forward workbooks record rating_a_pre and rating_b_pre; every other season records the resulting predicted margin alone. Under ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN that is no longer a contract violation: those rows are admitted under SOURCE_RECORDED_WALKFORWARD with source-bound provenance, and the two component fields stay null because the source records none. It remains reported because it is a real limit on the evidence. A deterministic replay was not substituted: it could be validated against the recorded predictions only for the two seasons that already carry the ratings, and a reconstructed rating presented as an observation is weaker provenance than the recorded prediction it would be used to justify.",
+        "finding": "PREGAME_RATING_STATE_NOT_RECORDED_BY_SOURCE",
+        "rows": 4087,
+        "rows_by_provenance_mode": {
+          "DERIVED_AT_INGESTION": 663,
+          "SOURCE_RECORDED_WALKFORWARD": 2596
+        },
+        "rows_by_season": {
+          "2006": 1,
+          "2007": 1,
+          "2008": 624,
+          "2009": 625,
+          "2010": 642,
+          "2011": 713,
+          "2024": 724,
+          "2025": 757
+        }
+      },
+      {
+        "affects": "calibration.game_sd_points and calibration.blowout_treatment only",
+        "blocks_admission": false,
+        "classification": "SOURCE_GAP_RESTRICTING_TWO_COEFFICIENTS",
+        "detail": "No 2006-2011 source member carries an overtime column under any spelling, and the 550 recorded-result 2024 rows leave ot_a and ot_b empty. Overtime status was neither defaulted to False nor inferred from the final score. It does not block admission: overtime_periods sits in calibration_contract.FIELDS_REQUIRING_ADMISSION_RULING and is not on the governed observation allowlist, so no admitted observation may carry it yet. It does restrict the two coefficients that are functions of it, and UNKNOWN is never converted to False.",
+        "finding": "OVERTIME_STATUS_NOT_RECORDED_BY_SOURCE",
+        "restricts_calibration_fields": [
+          "calibration.game_sd_points",
+          "calibration.blowout_treatment"
+        ],
+        "rows": 4217,
+        "rows_by_season": {
+          "2006": 536,
+          "2007": 527,
+          "2008": 624,
+          "2009": 625,
+          "2010": 642,
+          "2011": 713,
+          "2024": 550
+        },
+        "unknown_converted_to_false": false
+      }
+    ],
+    "handoff": "CALIBRATION_5148_ADAPTER_READY",
+    "overtime_status_census": {
+      "overtime_status_absent_from_source": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 550
+      },
+      "overtime_status_recorded_by_source": {
+        "2024": 174,
+        "2025": 757
+      }
+    },
+    "population_accounting": {
+      "ADMITTED_ROWS": 3259,
+      "CONTRACT_CANDIDATE_ROWS": 3595,
+      "EXCLUDED_ROWS": 1889,
+      "MATCHED_MODEL_EVIDENCE_ROWS": 5050,
+      "SOURCE_UNIVERSE_ROWS": 5148,
+      "definitions": {
+        "ADMITTED_ROWS": "Rows satisfying every required contract field, emitted only if the contract as a whole can be satisfied.",
+        "CONTRACT_CANDIDATE_ROWS": "Rows that cleared every semantic gate and reached the contract's field-completeness checks. The difference between this and ADMITTED_ROWS is exactly the field shortfall.",
+        "EXCLUDED_ROWS": "SOURCE_UNIVERSE_ROWS minus ADMITTED_ROWS. The ordered exclusion census partitions this exactly.",
+        "MATCHED_MODEL_EVIDENCE_ROWS": "Source rows that join by game identifier to a Baxter walk-forward row, before any admissibility question is asked.",
+        "SOURCE_UNIVERSE_ROWS": "Every row of the audited source population. The input, never a target."
+      }
+    },
+    "population_reconciliation": {
+      "by_season": {
+        "2006": {
+          "ADMITTED_ROWS": 328,
+          "CONTRACT_CANDIDATE_ROWS": 353,
+          "ELIGIBLE_WALKFORWARD_ROWS": 365,
+          "EXCLUDED_ROWS": 208,
+          "ROWS_MISSING_EXPECTED_MARGIN": 1,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 535,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 0,
+          "SOURCE_UNIVERSE_ROWS": 536,
+          "WALKFORWARD_EVIDENCE_ROWS": 536
+        },
+        "2007": {
+          "ADMITTED_ROWS": 335,
+          "CONTRACT_CANDIDATE_ROWS": 348,
+          "ELIGIBLE_WALKFORWARD_ROWS": 354,
+          "EXCLUDED_ROWS": 192,
+          "ROWS_MISSING_EXPECTED_MARGIN": 1,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 526,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 0,
+          "SOURCE_UNIVERSE_ROWS": 527,
+          "WALKFORWARD_EVIDENCE_ROWS": 527
+        },
+        "2008": {
+          "ADMITTED_ROWS": 393,
+          "CONTRACT_CANDIDATE_ROWS": 450,
+          "ELIGIBLE_WALKFORWARD_ROWS": 460,
+          "EXCLUDED_ROWS": 231,
+          "ROWS_MISSING_EXPECTED_MARGIN": 164,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 460,
+          "SOURCE_UNIVERSE_ROWS": 624,
+          "WALKFORWARD_EVIDENCE_ROWS": 624
+        },
+        "2009": {
+          "ADMITTED_ROWS": 362,
+          "CONTRACT_CANDIDATE_ROWS": 409,
+          "ELIGIBLE_WALKFORWARD_ROWS": 457,
+          "EXCLUDED_ROWS": 263,
+          "ROWS_MISSING_EXPECTED_MARGIN": 9,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 616,
+          "SOURCE_UNIVERSE_ROWS": 625,
+          "WALKFORWARD_EVIDENCE_ROWS": 625
+        },
+        "2010": {
+          "ADMITTED_ROWS": 412,
+          "CONTRACT_CANDIDATE_ROWS": 449,
+          "ELIGIBLE_WALKFORWARD_ROWS": 466,
+          "EXCLUDED_ROWS": 230,
+          "ROWS_MISSING_EXPECTED_MARGIN": 5,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 637,
+          "SOURCE_UNIVERSE_ROWS": 642,
+          "WALKFORWARD_EVIDENCE_ROWS": 642
+        },
+        "2011": {
+          "ADMITTED_ROWS": 456,
+          "CONTRACT_CANDIDATE_ROWS": 491,
+          "ELIGIBLE_WALKFORWARD_ROWS": 493,
+          "EXCLUDED_ROWS": 257,
+          "ROWS_MISSING_EXPECTED_MARGIN": 6,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 705,
+          "SOURCE_UNIVERSE_ROWS": 713,
+          "WALKFORWARD_EVIDENCE_ROWS": 711
+        },
+        "2024": {
+          "ADMITTED_ROWS": 404,
+          "CONTRACT_CANDIDATE_ROWS": 526,
+          "ELIGIBLE_WALKFORWARD_ROWS": 528,
+          "EXCLUDED_ROWS": 320,
+          "ROWS_MISSING_EXPECTED_MARGIN": 0,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 682,
+          "SOURCE_UNIVERSE_ROWS": 724,
+          "WALKFORWARD_EVIDENCE_ROWS": 682
+        },
+        "2025": {
+          "ADMITTED_ROWS": 569,
+          "CONTRACT_CANDIDATE_ROWS": 569,
+          "ELIGIBLE_WALKFORWARD_ROWS": 569,
+          "EXCLUDED_ROWS": 188,
+          "ROWS_MISSING_EXPECTED_MARGIN": 0,
+          "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 0,
+          "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 703,
+          "SOURCE_UNIVERSE_ROWS": 757,
+          "WALKFORWARD_EVIDENCE_ROWS": 703
+        }
+      },
+      "column_definitions": {
+        "ADMITTED_ROWS": "Rows satisfying every required contract field.",
+        "CONTRACT_CANDIDATE_ROWS": "Rows that cleared every semantic gate and reached the field-completeness checks.",
+        "ELIGIBLE_WALKFORWARD_ROWS": "Of those, the ones the governed ledger's own eligibility flag marks eligible under the frozen BAXTER-MOV-v1.0-R minimum of three prior games per team. The flag is read, never re-derived.",
+        "EXCLUDED_ROWS": "SOURCE_UNIVERSE_ROWS minus ADMITTED_ROWS, per season.",
+        "ROWS_MISSING_EXPECTED_MARGIN": "Rows with a walk-forward row that records no predicted margin. Never filled from the result.",
+        "ROWS_WITH_RECORDED_COMPONENT_RATINGS": "Rows whose walk-forward row records BOTH pregame component ratings. These are admitted under DERIVED_AT_INGESTION and emit the components.",
+        "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": "Rows whose walk-forward row records a predicted margin but NOT both components. These are the SOURCE_RECORDED_WALKFORWARD candidates under ruling R8.",
+        "SOURCE_UNIVERSE_ROWS": "Every row of the audited source population. The input, never a target.",
+        "WALKFORWARD_EVIDENCE_ROWS": "Source rows that join by game identifier to a Baxter walk-forward row."
+      },
+      "prior_count_discrepancy_resolved": {
+        "arithmetic": "4,087 = 3,989 + 98. The 98 are source rows with no walk-forward evidence row at all, so they have no component rating either; 97 of them are charged to MODEL_EVIDENCE_ROW_ABSENT and the remaining one (G2011_P3056) is charged earlier to SOURCE_ROW_MALFORMED_ARTIFACT. 5,148 - 5,050 = 98.",
+        "field_support_gap_4087": "Source rows for which the source records no pregame_team_rating at all, counted against the whole 5,148 universe. This is the number the prior handoff called 'independent', and it is not the independent gate census.",
+        "independent_gate_census_3989": "Rows that have a walk-forward evidence row and lack at least one component rating, asked on its own gate regardless of what else excluded them. 3,989 rows: 5,050 with evidence minus 1,061 carrying both components.",
+        "ordered_exclusion_census_2596": "Rows charged to PREGAME_RATING_STATE_NOT_RECORDED as the FIRST gate they failed, under the pre-R8 contract. Rows already excluded by an earlier gate \u2014 eligibility, missing date, division, FCS \u2014 never reached it.",
+        "question": "A previous handoff quoted the pregame-rating gap as '2,596 in the ordered census; 4,087 counted independently'. Those are two different populations and neither number was wrong; quoting them side by side without their definitions was.",
+        "under_r8": "All three populations are now historical accounting. The 2,596 rows the ordered census charged to the gate are admitted under SOURCE_RECORDED_WALKFORWARD, and the gate fires only where the source-bound provenance does not prove the mode."
+      },
+      "totals": {
+        "ADMITTED_ROWS": 3259,
+        "CONTRACT_CANDIDATE_ROWS": 3595,
+        "ELIGIBLE_WALKFORWARD_ROWS": 3692,
+        "EXCLUDED_ROWS": 1889,
+        "ROWS_MISSING_EXPECTED_MARGIN": 186,
+        "ROWS_WITH_RECORDED_COMPONENT_RATINGS": 1061,
+        "ROWS_WITH_SOURCE_RECORDED_WALKFORWARD_MARGIN": 3803,
+        "SOURCE_UNIVERSE_ROWS": 5148,
+        "WALKFORWARD_EVIDENCE_ROWS": 5050
+      }
+    },
+    "temporal_basis_census": {
+      "EXACT_EVENT_TIME": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 0,
+        "2025": 0
+      },
+      "EXACT_GAME_DATE": {
+        "2006": 493,
+        "2007": 506,
+        "2008": 559,
+        "2009": 558,
+        "2010": 546,
+        "2011": 675,
+        "2024": 550,
+        "2025": 757
+      },
+      "GOVERNED_SOURCE_SEQUENCE": {
+        "2006": 19,
+        "2007": 8,
+        "2008": 32,
+        "2009": 43,
+        "2010": 70,
+        "2011": 38,
+        "2024": 16,
+        "2025": 0
+      },
+      "NO_SUPPORTABLE_BASIS": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 0,
+        "2025": 0
+      },
+      "WEEK_STAGE_DATE": {
+        "2006": 24,
+        "2007": 13,
+        "2008": 33,
+        "2009": 24,
+        "2010": 26,
+        "2011": 0,
+        "2024": 158,
+        "2025": 0
+      }
+    }
+  },
+  "approval_token": "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+  "artifact": "V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_STATUS_R1.json",
+  "artifact_status": "SUCCESSOR_EVIDENCE_AND_STATUS_RECORD",
+  "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+  "base_sha": "77e716a7d5179246589ad43b6e68f0a79aec2a0d",
+  "blocker_count_before": 8,
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blockers_retired_by_this_ruling": [],
+  "calibration_values_promoted": [],
+  "canonical_config_written": false,
+  "chairman_ruling": {
+    "approval_token": "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+    "chairman_ruling_id": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    "convergence_id": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    "decision": "The V3 calibration contract recognises two expected-margin provenance modes. MODE A, DERIVED_AT_INGESTION: where expected_margin is computed, reconstructed, transformed or otherwise derived by the V3 calibration adapter from underlying team rating states, pregame_team_rating and pregame_opponent_rating remain mandatory alongside expected_margin, expected_margin_transform, expected_margin_model_id, rating_scale_declaration and complete source provenance. Nothing about this mode changes. MODE B, SOURCE_RECORDED_WALKFORWARD: where a governed source artifact itself records the prediction generated before the target game, the observation requires expected_margin, expected_margin_source_type = SOURCE_RECORDED_WALKFORWARD, expected_margin_model_id, expected_margin_transform or sufficient source-bound model specification, rating_scale_declaration, source artifact identity, source artifact SHA256, source member identity, source row / game identity, temporal provenance proving the prediction belongs to the pregame walk-forward state, and evidence domain GOVERNED_SYNTHETIC for the current corpus; pregame_team_rating and pregame_opponent_rating may then be null ONLY where those component states are not recorded by the governed source. A generic expected-margin value is not sufficient and the mode may not be obtained by declaring it: SOURCE_RECORDED_WALKFORWARD fails closed unless the source provenance establishes that the prediction is present in the governed source artifact, is associated deterministically with the target game, was produced within the source's documented walk-forward chronology, is not a retrospective full-season prediction, is not calculated from the target game's actual result, has known model identity and scale, and rests on valid source digest continuity. Where the governed source does record component ratings \u2014 2006 and 2007 \u2014 they are preserved and are never deliberately nulled. No Baxter replay may be constructed solely to populate component ratings, and reconstructed component states may never be represented as source observations. This ruling authorises no retrospective expected margins, no final-season ratings as pregame states, no fabricated ratings, event_time, overtime status or team classification, no actual-margin-derived predictions, no arbitrary synthetic inputs, no Phase5E FCS Elo 1500, no coefficient promotion and no FCS point-scale promotion. V3 FCS Elo remains 1250.",
+    "evidence": [
+      "OPERATION SYTHALAX \u2014 SOURCE-RECORDED WALK-FORWARD MARGIN SUCCESSOR R1, issued APPROVED under DIRECT_CHAIRMAN_AUTHORITY with approval token APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1 and RULING_ID R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN.",
+      "The ruling records its own rationale: the governed Baxter historical and modern evidence frequently preserves the actual pregame walk-forward predicted margin but does not preserve both underlying pregame rating components, and a deterministic replay solely to manufacture missing observation fields would be weaker provenance than preserving the prediction the governed source actually recorded.",
+      "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip!Baxter_Ratings_v1_<season>_External_Validation.xlsx [Walk Forward] \u2014 every season's prediction is read from a sheet named Walk Forward. rating_a_pre and rating_b_pre exist for 2006 and 2007 and for no later season.",
+      "V3_CALIBRATION_DATA_CONTRACT.json revision R1-TEMPORAL-ORDER-SUCCESSOR \u2014 pregame_team_rating and pregame_opponent_rating recorded as unconditionally required. That clause predates this ruling, is preserved in repository history, and is superseded only to the extent stated here."
+    ],
+    "instruction": "OPERATION SYTHALAX \u2014 SOURCE-RECORDED WALK-FORWARD MARGIN SUCCESSOR R1",
+    "provenance": "FACT",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "retires": [],
+    "subject": "Expected-margin provenance modes and the conditional pregame rating requirement",
+    "supersedes": [
+      "pregame_team_rating and pregame_opponent_rating read as unconditionally required of every observation \u2014 superseded to exactly the extent that a governed source artifact recorded the pregame walk-forward prediction and records no component states. They remain mandatory under DERIVED_AT_INGESTION, and they are never nulled where the source records them.",
+      "Any reading under which a retrospective full-season fit, a final-season rating, or a value computed from the actual result could serve as a source-recorded walk-forward prediction."
+    ]
+  },
+  "classification": "CALIBRATION_EXPECTED_MARGIN_PROVENANCE",
+  "contract_representation": {
+    "columns_admitted_by_this_ruling": [
+      "expected_margin_source_type",
+      "expected_margin_provenance"
+    ],
+    "condition": "REQUIRED under expected-margin provenance mode DERIVED_AT_INGESTION, where the adapter computed expected_margin from rating states: without the components the transform is unidentifiable and any residual can be explained by re-scaling it. MAY BE NULL under SOURCE_RECORDED_WALKFORWARD, and only where the governed source records no component state, per ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN. It is not globally optional, and a component the source does record is never deliberately nulled to reach the weaker mode.",
+    "conditionally_required": true,
+    "globally_optional": false,
+    "pregame_opponent_rating_required": false,
+    "pregame_team_rating_required": false
+  },
+  "convergence_id": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+  "derived_dataset": {
+    "admission_loader": "calibration.load_admitted_observations",
+    "bytes": 8591303,
+    "columns": [
+      "game_id",
+      "season",
+      "week",
+      "evidence_domain",
+      "expected_margin_source_type",
+      "expected_margin_provenance",
+      "event_time",
+      "temporal_order_basis",
+      "temporal_order_key",
+      "temporal_order_source",
+      "temporal_order_source_sha256",
+      "team",
+      "opponent",
+      "venue",
+      "pregame_team_rating",
+      "pregame_opponent_rating",
+      "expected_margin",
+      "actual_margin",
+      "game_result",
+      "prior_rating_state",
+      "subsequent_outcomes",
+      "source_provenance",
+      "observed_at",
+      "recorded_at",
+      "model_version",
+      "configuration_version",
+      "split"
+    ],
+    "deterministic_rebuild": "BYTE_IDENTICAL",
+    "partition_counts": {
+      "holdout": 569,
+      "training": 2286,
+      "validation": 404
+    },
+    "passes_authoritative_admission_loader": true,
+    "path": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_OBSERVATIONS_R8.csv",
+    "rebuilt_twice_and_compared": true,
+    "rows": 3259,
+    "season_counts": {
+      "2006": 328,
+      "2007": 335,
+      "2008": 393,
+      "2009": 362,
+      "2010": 412,
+      "2011": 456,
+      "2024": 404,
+      "2025": 569
+    },
+    "sha256": "eb5179ef6e8b5379c96a1423c826af61876712d1f4138110d6a66bf81744ac43"
+  },
+  "expected_margin_semantics": {
+    "approval_token": "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "caller_asserted_mode_sufficient": false,
+    "component_ratings_conditionally_null_in": [
+      "SOURCE_RECORDED_WALKFORWARD"
+    ],
+    "component_ratings_globally_optional": false,
+    "component_ratings_nulled_when_the_source_records_them": false,
+    "component_ratings_required_in": [
+      "DERIVED_AT_INGESTION"
+    ],
+    "gate": "calibration.require_expected_margin_provenance",
+    "missing_expected_margin_admissible": false,
+    "modes": [
+      "DERIVED_AT_INGESTION",
+      "SOURCE_RECORDED_WALKFORWARD"
+    ],
+    "outcome_derived_markers_refused": [
+      "ACTUAL_MARGIN",
+      "ACTUAL MARGIN",
+      "FINAL_MARGIN",
+      "FINAL SCORE",
+      "RESULT_DERIVED",
+      "FROM_RESULT",
+      "POSTGAME",
+      "POST_GAME"
+    ],
+    "replay_to_manufacture_component_ratings_authorised": false,
+    "retrospective_markers_refused": [
+      "FULL_SEASON",
+      "FULLSEASON",
+      "FULL SEASON",
+      "RETROSPECTIVE",
+      "PRED_MARGIN_FULL",
+      "RESIDUAL_FULL",
+      "FINAL_RATING",
+      "FINAL SEASON",
+      "GAME RESIDUALS",
+      "FULL GAME FIT",
+      "_FIT"
+    ],
+    "ruling": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    "source_recorded_checks": [
+      "the prediction is present in the governed source artifact",
+      "it is associated deterministically with the target game",
+      "it came from the source's documented walk-forward chronology",
+      "it is not a retrospective full-season prediction",
+      "it is not calculated from the target game's actual result",
+      "its model identity and rating scale are known",
+      "source digest continuity is verified against bytes that were read"
+    ],
+    "source_recorded_required_fields": [
+      "model_id",
+      "transform",
+      "rating_scale",
+      "source_artifact",
+      "source_artifact_sha256",
+      "source_member",
+      "source_member_sha256",
+      "source_row",
+      "source_game_id",
+      "walkforward_chronology"
+    ],
+    "source_recorded_requires_approval_token": true
+  },
+  "fcs_elo_policy": 1250,
+  "fcs_mapping_promoted": null,
+  "findings_versus_blockers": {
+    "neither_was_softened": "Both keep their row counts, their per-season breakdown and their statement of what they restrict.",
+    "reason": "A blocker is a stated contract requirement this corpus does not meet and it stops emission; a finding is a real gap in what the sources record that the issued contract does not make a condition of admission, and it is reported in full without stopping emission. The pregame gap became a provenance-mode question under this ruling. The overtime gap was never an admission condition: overtime_periods is not on the governed observation allowlist and its own entry already read 'It does not block admission' while sitting in the list that blocks it.",
+    "reclassified_in_this_lane": [
+      "PREGAME_RATING_STATE_NOT_RECORDED_BY_SOURCE",
+      "OVERTIME_STATUS_NOT_RECORDED_BY_SOURCE"
+    ]
+  },
+  "handoff": "CALIBRATION_5148_ADAPTER_R8_READY",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it.",
+  "historical_status_records": [
+    "V3_GOVERNANCE_STATUS_R2.json",
+    "V3_GOVERNANCE_STATUS_R3.json",
+    "V3_GOVERNANCE_STATUS_R4.json",
+    "V3_BOARD_IK_MOUNT_STATUS_R1.json",
+    "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.json",
+    "V3_GOVERNED_SYNTHETIC_EVIDENCE_STATUS_R1.json",
+    "V3_BUILD_MANIFEST.json"
+  ],
+  "historical_status_records_rewritten": false,
+  "holdout": {
+    "admitted_rows": 569,
+    "excluded_from": [
+      "model selection",
+      "hyperparameter selection",
+      "coefficient selection",
+      "exclusion-threshold selection",
+      "transform selection",
+      "game-SD selection",
+      "FCS mapping selection"
+    ],
+    "scored_for_model_selection_in_this_lane": false,
+    "season": 2025,
+    "status": "UNTOUCHED_FOR_MODEL_SELECTION",
+    "use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION"
+  },
+  "holdout_status": "UNTOUCHED_FOR_MODEL_SELECTION",
+  "instruction": "OPERATION SYTHALAX \u2014 SOURCE-RECORDED WALK-FORWARD MARGIN SUCCESSOR R1",
+  "live_blocker_count": 8,
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "minimum_observation_volume": {
+    "adapter_local_condition_satisfied": true,
+    "admitted_distinct_seasons": 8,
+    "admitted_holdout": 569,
+    "admitted_total": 3259,
+    "governed_minimum_distinct_seasons": 3,
+    "governed_minimum_holdout_observations": 300,
+    "governed_minimum_observations_total": 1500,
+    "note": "An adapter-local condition only. Satisfying it promotes no numerical parameter, retires no global execution blocker and scores nothing."
+  },
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "opened_blockers": [],
+  "phase5e_fcs_elo_1500_authorised": false,
+  "problem": "The contract required both pregame component ratings of every observation. That is right where the adapter computes the prediction: without the components the transform is unidentifiable and any residual can be explained by re-scaling it. It was wrong where the governed source recorded the prediction itself. The Baxter walk-forward workbooks preserve the margin predicted before each game but preserve the two ratings behind it only for 2006 and 2007, so the requirement left two options: drop the evidence, or rebuild the ratings by replay and present the reconstruction as an observation.",
+  "promotion_status": "NOT_PROMOTED",
+  "provenance_class": {
+    "ASSUMPTION": "None recorded.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "FACT": "Issued verbatim by the Chairman, or reproduced from a mounted artifact."
+  },
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "resolution": "The rating requirement becomes conditional on which of two provenance modes an observation is admitted under. DERIVED_AT_INGESTION is unchanged and keeps both components mandatory. SOURCE_RECORDED_WALKFORWARD permits them to be null, and only where the governed source records none, in exchange for source-bound provenance that proves the prediction is present in the artifact, belongs to this game, came from the source's documented walk-forward chronology, is not retrospective, is not computed from the result, names its model and scale, and rests on verified digests.",
+  "resolved_blockers": [],
+  "retained_findings": {
+    "duplicate_2024_identifier": {
+      "emission_guard": "calibration_5148_adapter.require_no_duplicate_emitted_keys",
+      "game_id": "T073vT114",
+      "note": "Both rows carrying the repeated key are excluded by the gate chain and both remain counted in the 724-row 2024 source universe. The emission guard now refuses a duplicate inside the derived file rather than refusing the whole dataset because the universe contains one.",
+      "present_in_source_universe_accounting": true,
+      "rows_excluded": 2,
+      "silently_deduplicated": false
+    },
+    "lineage_2011": {
+      "canonical_eligible_rows": 712,
+      "canonical_rebuild_rows": 713,
+      "engine_comparison_exclusion_game_id": "G2011_P2932",
+      "engine_comparison_exclusion_note": "Texas Tech 63, DIVISION II 6; omitted by the established rating universe",
+      "engine_comparison_universe": 711,
+      "malformed_artifact_excluded": 1,
+      "malformed_artifact_game_id": "G2011_P3056",
+      "malformed_artifact_note": "Weber St. vs CONFW; level_a DIV_II, level_b ARTIFACT"
+    },
+    "overtime": {
+      "absent_from_source_rows": 4217,
+      "is_a_row_admission_gate": false,
+      "recorded_by_source_rows": 931,
+      "restricts": [
+        "calibration.game_sd_points",
+        "calibration.blowout_treatment"
+      ],
+      "status": "UNKNOWN_PRESERVED_NEVER_DEFAULTED_TO_FALSE"
+    },
+    "pregame_component_ratings": {
+      "emitted_component_ratings": 663,
+      "null_because_unrecorded": 2596,
+      "recorded_rows": 1061,
+      "recorded_seasons": [
+        2006,
+        2007
+      ],
+      "replay_constructed": false
+    }
+  },
+  "ruling_id": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+  "ruling_status": "APPROVED",
+  "rulings_applied": [
+    "R6-CAL-TEMPORAL-ORDER",
+    "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN"
+  ],
+  "scope": "EXPECTED_MARGIN_PROVENANCE_MODES_AND_ADAPTER_RE_RUN",
+  "simulation_run": false,
+  "source_members_consumed": [
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2006_External_Validation.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2007_External_Validation.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2008_External_Validation.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2009_External_Validation.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2010_External_Validation_CLASSIFICATION_CORRECTED.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_2011_External_Validation.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_Ratings_v1_Joint_2024_2025_Validation_and_Freeze.xlsx",
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip::Baxter_v1_complete_metrics.csv",
+    "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip::NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/coverage_summary.csv",
+    "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip::NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/verified_week_by_week_2006_2011.csv",
+    "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip::NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/reports/PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/01_Registries/modern_fbs_alignment_registry.csv",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/02_Event_Stream/official_synthetic_event_stream_2024_2025.csv",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/03_Pregame_States/pregame_states_2024_2025.csv",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2024.csv",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2025_untouched.csv",
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx"
+  ],
+  "source_packages": {
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip": {
+      "bytes": 1676242,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": null,
+      "role": "primary Baxter Rating walk-forward / expected-margin evidence (BAXTER-MOV-v1.0-R)",
+      "sha256": "579931ba051067c5665eef930dab2f19c095ff014252a8c3f4c5c5b4b5086e71"
+    },
+    "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip": {
+      "bytes": 501149,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": 3667,
+      "role": "2006-2011 factual game ledger, chronology and source classification",
+      "sha256": "c4e588dd82d0a03c99958538dc0e3b84c5b293142db33d8458e6defb850f18cc"
+    },
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip": {
+      "bytes": 796268,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": 1481,
+      "role": "2024-2025 official synthetic event stream, pregame states, walk-forward evidence",
+      "sha256": "9a018a64b17d682e8c168524937ab70697e2f57a5b3ccae77f731fa3beba4f48"
+    },
+    "Power_Crunch_Research_Lab_Phase5E_Package.zip": {
+      "bytes": 1054989,
+      "consumed_by_this_lane": false,
+      "expected_source_universe_rows": null,
+      "role": "supporting model-selection, chronology-sensitivity and margin-model evidence; NOT consumed as a V3 calibration model",
+      "sha256": "3980d5cf66a2588ddd094a1ce64500b08d48cbfbdfea3c37bcb011d6aa397d3f"
+    }
+  },
+  "status_artifact": {
+    "path": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_5148_ADAPTER_STATUS_R1.json",
+    "sha256": "e301c7aeb94e244c7a116f66c1849f5e915b3d1c59fe45905e7b3be6d9f1973f"
+  }
+}

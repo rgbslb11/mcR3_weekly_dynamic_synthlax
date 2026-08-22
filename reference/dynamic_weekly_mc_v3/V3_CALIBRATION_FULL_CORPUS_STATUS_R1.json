@@ -1,0 +1,985 @@
+{
+  "artifact": "V3_CALIBRATION_FULL_CORPUS_STATUS_R1.json",
+  "artifact_status": "SUCCESSOR_EVIDENCE_AND_STATUS_RECORD",
+  "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+  "base_sha": "77e716a7d5179246589ad43b6e68f0a79aec2a0d",
+  "blocker_count_before": 8,
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "blockers_retired_by_this_ruling": [],
+  "calibration_values_promoted": [],
+  "canonical_config_written": false,
+  "canonical_corpus": {
+    "SOURCE_CORPUS_ROWS": 5148,
+    "columns": [
+      "provenance_identity_sha256",
+      "provenance_identity",
+      "source_game_id",
+      "source_member",
+      "source_member_sha256",
+      "source_row_ordinal",
+      "season",
+      "split",
+      "evidence_domain",
+      "team",
+      "opponent",
+      "team_division",
+      "opponent_division",
+      "venue",
+      "week",
+      "week_label",
+      "stage_label",
+      "game_date",
+      "source_sequence",
+      "temporal_order_basis",
+      "temporal_order_key",
+      "actual_margin",
+      "expected_margin",
+      "expected_margin_source_type",
+      "pregame_team_rating",
+      "pregame_opponent_rating",
+      "overtime_status",
+      "overtime_periods",
+      "source_provenance_label",
+      "malformed_note",
+      "lineage_flags",
+      "cap_actual_margin_available",
+      "cap_expected_margin_available",
+      "cap_component_ratings_available",
+      "cap_temporal_order_supported",
+      "cap_participant_division_supported",
+      "cap_overtime_status_known",
+      "cap_fcs_participant",
+      "cap_requires_unresolved_fcs_point_adapter",
+      "cap_source_game_id_unique",
+      "cap_source_row_provenance_identity_available",
+      "cap_malformed_source_fields",
+      "cap_walkforward_evidence_present",
+      "cap_walkforward_eligibility_flag_set",
+      "cap_observation_date_recorded",
+      "eligible_uses"
+    ],
+    "evidence_domain_counts": {
+      "GOVERNED_SYNTHETIC": 4598,
+      "OBSERVED_REAL_WORLD": 550
+    },
+    "membership_basis": "VERIFIED_SOURCE_UNIVERSE_ROW",
+    "missing_values_fabricated": 0,
+    "path": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_CORPUS_R9.csv",
+    "record_kind": "CANONICAL_CALIBRATION_CORPUS_RECORD",
+    "rows_globally_discarded": 0,
+    "ruling": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    "season_counts": {
+      "2006": 536,
+      "2007": 527,
+      "2008": 624,
+      "2009": 625,
+      "2010": 642,
+      "2011": 713,
+      "2024": 724,
+      "2025": 757
+    },
+    "sha256": "1b91fe0ffc6e205243b88b996c3489735ea90cac1635126b487a11e5cec5f720",
+    "unique_provenance_identities": 5148,
+    "unique_source_game_ids": 5147
+  },
+  "capability_census": {
+    "actual_margin_available": {
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 622,
+        "2010": 642,
+        "2011": 712,
+        "2024": 724,
+        "2025": 757
+      },
+      "rows": 5144
+    },
+    "component_ratings_available": {
+      "by_season": {
+        "2006": 535,
+        "2007": 526,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 0,
+        "2025": 0
+      },
+      "rows": 1061
+    },
+    "expected_margin_available": {
+      "by_season": {
+        "2006": 535,
+        "2007": 526,
+        "2008": 460,
+        "2009": 616,
+        "2010": 637,
+        "2011": 705,
+        "2024": 682,
+        "2025": 703
+      },
+      "rows": 4864
+    },
+    "fcs_participant": {
+      "by_season": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 1,
+        "2009": 1,
+        "2010": 4,
+        "2011": 63,
+        "2024": 0,
+        "2025": 0
+      },
+      "rows": 69
+    },
+    "malformed_source_fields": {
+      "by_season": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 3,
+        "2010": 0,
+        "2011": 1,
+        "2024": 0,
+        "2025": 0
+      },
+      "rows": 4
+    },
+    "observation_date_recorded": {
+      "by_season": {
+        "2006": 493,
+        "2007": 506,
+        "2008": 559,
+        "2009": 558,
+        "2010": 546,
+        "2011": 675,
+        "2024": 550,
+        "2025": 757
+      },
+      "rows": 4644
+    },
+    "overtime_status_known": {
+      "by_season": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 174,
+        "2025": 757
+      },
+      "rows": 931
+    },
+    "participant_division_supported": {
+      "by_season": {
+        "2006": 520,
+        "2007": 518,
+        "2008": 608,
+        "2009": 563,
+        "2010": 595,
+        "2011": 700,
+        "2024": 724,
+        "2025": 757
+      },
+      "rows": 4985
+    },
+    "requires_unresolved_fcs_point_adapter": {
+      "by_season": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 1,
+        "2009": 1,
+        "2010": 4,
+        "2011": 63,
+        "2024": 0,
+        "2025": 0
+      },
+      "rows": 69
+    },
+    "source_game_id_unique": {
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 722,
+        "2025": 757
+      },
+      "rows": 5146
+    },
+    "source_row_provenance_identity_available": {
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 724,
+        "2025": 757
+      },
+      "rows": 5148
+    },
+    "temporal_order_supported": {
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 713,
+        "2024": 724,
+        "2025": 757
+      },
+      "rows": 5148
+    },
+    "walkforward_eligibility_flag_set": {
+      "by_season": {
+        "2006": 365,
+        "2007": 354,
+        "2008": 460,
+        "2009": 457,
+        "2010": 466,
+        "2011": 493,
+        "2024": 528,
+        "2025": 569
+      },
+      "rows": 3692
+    },
+    "walkforward_evidence_present": {
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 625,
+        "2010": 642,
+        "2011": 711,
+        "2024": 682,
+        "2025": 703
+      },
+      "rows": 5050
+    }
+  },
+  "chairman_ruling": {
+    "approval_token": null,
+    "chairman_ruling_id": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    "convergence_id": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    "decision": "The complete audited 5,148-game corpus is the canonical historical calibration corpus. The prior treatment of 3,259 rows as the calibration dataset and 1,889 rows as globally excluded is superseded. A field missing for one calibration purpose must not globally discard a game that is valid evidence for other calibration purposes. The universal ADMITTED / EXCLUDED model is replaced by CORPUS MEMBERSHIP plus USE-SPECIFIC ELIGIBILITY: a game belongs to the canonical calibration corpus if its source row belongs to the verified 5,148-game source universe, and whether it may participate in a specific numerical procedure depends on the evidence that procedure requires. SOURCE_CORPUS_ROWS equals 5,148 and the canonical derived corpus carries all 5,148 source-game records with provenance and field-availability metadata; no missing value is fabricated and no completeness is manufactured. Source provenance is preserved exactly: OBSERVED_REAL_WORLD and GOVERNED_SYNTHETIC are never relabeled, evidence domain is provenance metadata and does not by itself determine corpus membership, and both may participate where their required fields are supported. Any calculation of actual_margin minus expected_margin requires a legitimate pregame expected margin under R8 semantics; a row lacking one remains in the corpus but is ineligible for that residual calculation. Outcome-only analyses require no pregame prediction and must not be silently converted into model-residual analyses. Overtime UNKNOWN remains UNKNOWN and is never converted to False; a game with unknown overtime remains usable for procedures that do not require overtime classification, and an overtime-sensitive procedure requires known status. Every FCS game remains in the canonical corpus, FCS Elo remains 1250, the Elo-1250-to-V3-point-scale adapter remains unresolved, and an FCS game participates in calculations that do not depend on that unresolved mapping. Both T073vT114 contests remain in the corpus with source_game_id preserved, source_game_id_unique false, and a distinct deterministic provenance identity each; any calculation requiring a globally unique source_game_id must refuse that key and use the provenance identity. All 713 2011 source records remain, with lineage flags for G2011_P3056 and G2011_P2932; a procedure needing the historical 711-game engine-comparison universe expresses that as a use-specific eligibility mask. Malformed source rows remain represented and may be numerically ineligible where their factual fields cannot be established. All 757 2025 games remain in the corpus and 2025 remains HOLDOUT: corpus membership yes, model selection participation no.",
+    "evidence": [
+      "OPERATION SYTHALAX \u2014 FULL 5,148 CORPUS / USE-SPECIFIC ELIGIBILITY R1, issued APPROVED under DIRECT_CHAIRMAN_AUTHORITY with RULING_ID R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY.",
+      "V3_CALIBRATION_5148_ADAPTER_STATUS_R1.json under rulings R6/R7/R8 recorded ADMITTED_ROWS 3,259 and EXCLUDED_ROWS 1,889 against a single universal observation contract. That accounting is preserved as the record of the prior run and is superseded as a description of the usable calibration population.",
+      "The 1,889 rows carry real, byte-verified game results. 1,223 of them are excluded only by the walk-forward eligibility flag and 336 only by an unresolved observation date \u2014 neither of which is required by an outcome-only analysis."
+    ],
+    "instruction": "OPERATION SYTHALAX \u2014 FULL 5,148 CORPUS / USE-SPECIFIC ELIGIBILITY R1",
+    "provenance": "FACT",
+    "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+    "retires": [],
+    "subject": "Canonical 5,148-game calibration corpus and use-specific eligibility",
+    "supersedes": [
+      "The universal ADMITTED / EXCLUDED model in which a row failing the full walk-forward observation contract was reported as excluded from calibration altogether \u2014 superseded by corpus membership plus use-specific eligibility. The full contract itself is unchanged and is one use among several.",
+      "The characterisation of 3,259 rows as the calibration dataset and 1,889 as globally excluded. The 3,259 are the fully paired, contract-complete walk-forward subset; the 1,889 remain corpus members."
+    ]
+  },
+  "classification": "CALIBRATION_CORPUS_ARCHITECTURE",
+  "convergence_id": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+  "corpus_semantics": {
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "calibration_uses": {
+      "ACTUAL_MARGIN_DISTRIBUTION": {
+        "description": "Descriptive analysis of realised margins: distribution, tails, blowout frequency, season and era comparison. Mathematically a function of the result alone, so it requires no pregame prediction.",
+        "is_model_residual_use": false,
+        "refuses": [
+          "malformed_source_fields"
+        ],
+        "requires": [
+          "actual_margin_available"
+        ]
+      },
+      "EXPECTED_MARGIN_RESIDUAL": {
+        "description": "Any calculation of actual_margin - expected_margin. Requires a legitimate pregame expected margin under R8 semantics; an expected margin is never manufactured for a row that lacks one.",
+        "is_model_residual_use": true,
+        "refuses": [
+          "malformed_source_fields",
+          "requires_unresolved_fcs_point_adapter"
+        ],
+        "requires": [
+          "actual_margin_available",
+          "expected_margin_available",
+          "temporal_order_supported",
+          "participant_division_supported"
+        ]
+      },
+      "FBS_ONLY": {
+        "description": "Procedures restricted to FBS-versus-FBS contests.",
+        "is_model_residual_use": false,
+        "refuses": [
+          "malformed_source_fields",
+          "fcs_participant"
+        ],
+        "requires": [
+          "participant_division_supported"
+        ]
+      },
+      "FULL_WALKFORWARD_OBSERVATION_CONTRACT": {
+        "description": "The strictest use: the full residual-model observation contract enforced by calibration.load_admitted_observations. Unchanged by ruling R9, which widens membership rather than this gate.",
+        "is_model_residual_use": true,
+        "refuses": [
+          "malformed_source_fields",
+          "requires_unresolved_fcs_point_adapter"
+        ],
+        "requires": [
+          "actual_margin_available",
+          "expected_margin_available",
+          "temporal_order_supported",
+          "participant_division_supported",
+          "observation_date_recorded",
+          "walkforward_eligibility_flag_set",
+          "source_game_id_unique"
+        ]
+      },
+      "OVERTIME_SENSITIVE": {
+        "description": "Any procedure that filters, removes or conditions on overtime. Requires KNOWN overtime status; UNKNOWN is never read as False.",
+        "is_model_residual_use": false,
+        "refuses": [
+          "malformed_source_fields"
+        ],
+        "requires": [
+          "actual_margin_available",
+          "overtime_status_known"
+        ]
+      },
+      "POINT_SCALE_DEPENDENT": {
+        "description": "Any procedure that must place every participant on the V3 unified point axis. Blocked for FCS participants while model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER is open; the mapping is not invented to unblock it.",
+        "is_model_residual_use": false,
+        "refuses": [
+          "malformed_source_fields",
+          "requires_unresolved_fcs_point_adapter"
+        ],
+        "requires": [
+          "participant_division_supported"
+        ]
+      }
+    },
+    "evidence_capabilities": [
+      "actual_margin_available",
+      "expected_margin_available",
+      "component_ratings_available",
+      "temporal_order_supported",
+      "participant_division_supported",
+      "overtime_status_known",
+      "fcs_participant",
+      "requires_unresolved_fcs_point_adapter",
+      "source_game_id_unique",
+      "source_row_provenance_identity_available",
+      "malformed_source_fields",
+      "walkforward_evidence_present",
+      "walkforward_eligibility_flag_set",
+      "observation_date_recorded"
+    ],
+    "fcs_point_mapping_invented": false,
+    "full_contract_gate": "calibration.load_admitted_observations",
+    "full_contract_gate_weakened": false,
+    "global_exclusion_model": "SUPERSEDED",
+    "holdout_corpus_membership": true,
+    "holdout_model_selection_participation": false,
+    "holdout_season": 2025,
+    "membership_basis": "VERIFIED_SOURCE_UNIVERSE_ROW",
+    "membership_decided_by_completeness": false,
+    "membership_decided_by_evidence_domain": false,
+    "missing_facts_fabricated": false,
+    "outcome_only_use_may_become_residual_use": false,
+    "record_kinds": [
+      "CANONICAL_CALIBRATION_CORPUS_RECORD",
+      "USE_SPECIFIC_ADMITTED_OBSERVATION"
+    ],
+    "ruling": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+    "unknown_overtime_read_as_false": false
+  },
+  "derived_artifacts": {
+    "canonical_corpus": {
+      "bytes": 4901275,
+      "deterministic_rebuild": "BYTE_IDENTICAL",
+      "emitted_unconditionally": true,
+      "path": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_CORPUS_R9.csv",
+      "rows": 5148,
+      "sha256": "1b91fe0ffc6e205243b88b996c3489735ea90cac1635126b487a11e5cec5f720"
+    },
+    "full_contract_observation_dataset": {
+      "deterministic_rebuild": "BYTE_IDENTICAL",
+      "passes_authoritative_admission_loader": true,
+      "path": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_OBSERVATIONS_R8.csv",
+      "rows": 3259,
+      "sha256": "eb5179ef6e8b5379c96a1423c826af61876712d1f4138110d6a66bf81744ac43"
+    }
+  },
+  "fcs_mapping_promoted": null,
+  "handoff": "CALIBRATION_5148_FULL_CORPUS_READY",
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it.",
+  "headline_census": {
+    "ACTUAL_MARGIN_ELIGIBLE_ROWS": 5144,
+    "AMBIGUOUS_SOURCE_GAME_ID_ROWS": 2,
+    "EXPECTED_MARGIN_RESIDUAL_ELIGIBLE_ROWS": 4643,
+    "FBS_ONLY_ELIGIBLE_ROWS": 4916,
+    "FCS_ROWS_PENDING_POINT_ADAPTER_FOR_POINT_BASED_USES": 69,
+    "FULLY_PAIRED_WALKFORWARD_ROWS": 3259,
+    "MALFORMED_SOURCE_ROWS": 4,
+    "OT_KNOWN_ROWS": 931,
+    "OT_UNKNOWN_ROWS": 4217,
+    "SOURCE_CORPUS_ROWS": 5148
+  },
+  "headline_census_by_season": {
+    "ACTUAL_MARGIN_ELIGIBLE_ROWS": {
+      "2006": 536,
+      "2007": 527,
+      "2008": 624,
+      "2009": 622,
+      "2010": 642,
+      "2011": 712,
+      "2024": 724,
+      "2025": 757
+    },
+    "AMBIGUOUS_SOURCE_GAME_ID_ROWS": {
+      "2006": 0,
+      "2007": 0,
+      "2008": 0,
+      "2009": 0,
+      "2010": 0,
+      "2011": 0,
+      "2024": 2,
+      "2025": 0
+    },
+    "EXPECTED_MARGIN_RESIDUAL_ELIGIBLE_ROWS": {
+      "2006": 519,
+      "2007": 517,
+      "2008": 450,
+      "2009": 553,
+      "2010": 586,
+      "2011": 633,
+      "2024": 682,
+      "2025": 703
+    },
+    "FBS_ONLY_ELIGIBLE_ROWS": {
+      "2006": 520,
+      "2007": 518,
+      "2008": 607,
+      "2009": 562,
+      "2010": 591,
+      "2011": 637,
+      "2024": 724,
+      "2025": 757
+    },
+    "FCS_ROWS_PENDING_POINT_ADAPTER_FOR_POINT_BASED_USES": {
+      "2006": 0,
+      "2007": 0,
+      "2008": 1,
+      "2009": 1,
+      "2010": 4,
+      "2011": 63,
+      "2024": 0,
+      "2025": 0
+    },
+    "FULLY_PAIRED_WALKFORWARD_ROWS": {
+      "2006": 328,
+      "2007": 335,
+      "2008": 393,
+      "2009": 362,
+      "2010": 412,
+      "2011": 456,
+      "2024": 404,
+      "2025": 569
+    },
+    "MALFORMED_SOURCE_ROWS": {
+      "2006": 0,
+      "2007": 0,
+      "2008": 0,
+      "2009": 3,
+      "2010": 0,
+      "2011": 1,
+      "2024": 0,
+      "2025": 0
+    },
+    "OT_KNOWN_ROWS": {
+      "2006": 0,
+      "2007": 0,
+      "2008": 0,
+      "2009": 0,
+      "2010": 0,
+      "2011": 0,
+      "2024": 174,
+      "2025": 757
+    },
+    "OT_UNKNOWN_ROWS": {
+      "2006": 536,
+      "2007": 527,
+      "2008": 624,
+      "2009": 625,
+      "2010": 642,
+      "2011": 713,
+      "2024": 550,
+      "2025": 0
+    },
+    "SOURCE_CORPUS_ROWS": {
+      "2006": 536,
+      "2007": 527,
+      "2008": 624,
+      "2009": 625,
+      "2010": 642,
+      "2011": 713,
+      "2024": 724,
+      "2025": 757
+    }
+  },
+  "historical_status_records": [
+    "V3_GOVERNANCE_STATUS_R2.json",
+    "V3_GOVERNANCE_STATUS_R3.json",
+    "V3_GOVERNANCE_STATUS_R4.json",
+    "V3_BOARD_IK_MOUNT_STATUS_R1.json",
+    "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.json",
+    "V3_GOVERNED_SYNTHETIC_EVIDENCE_STATUS_R1.json",
+    "V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_STATUS_R1.json",
+    "V3_BUILD_MANIFEST.json"
+  ],
+  "historical_status_records_rewritten": false,
+  "holdout": {
+    "corpus_membership": true,
+    "corpus_rows": 757,
+    "excluded_from": [
+      "model selection",
+      "hyperparameter selection",
+      "coefficient selection",
+      "exclusion-threshold selection",
+      "transform selection",
+      "game-SD selection",
+      "FCS mapping selection"
+    ],
+    "gate": "calibration.refuse_model_selection_on_holdout",
+    "model_selection_participation": false,
+    "scored_in_this_lane": false,
+    "season": 2025,
+    "use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION"
+  },
+  "holdout_status": "UNTOUCHED_FOR_MODEL_SELECTION",
+  "instruction": "OPERATION SYTHALAX \u2014 FULL 5,148 CORPUS / USE-SPECIFIC ELIGIBILITY R1",
+  "live_blocker_count": 8,
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "missing_facts_fabricated": false,
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "opened_blockers": [],
+  "parameter_candidate_populations": {
+    "blowout_treatment": {
+      "additional_capabilities": [],
+      "additional_row_predicate": null,
+      "base_use": "ACTUAL_MARGIN_DISTRIBUTION",
+      "candidate_rows": 5144,
+      "candidate_rows_by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 622,
+        "2010": 642,
+        "2011": 712,
+        "2024": 724,
+        "2025": 757
+      },
+      "candidate_rows_excluding_holdout": 4387,
+      "fitted": false,
+      "open_governance_question": "The blowout threshold itself is unresolved. This reports the outcome-only population a descriptive blowout-frequency analysis could read; the margin at which a game becomes a blowout, and whether the treatment is fitted on residuals rather than outcomes, both require a ruling.",
+      "promoted": false
+    },
+    "game_sd_points": {
+      "additional_capabilities": [],
+      "additional_row_predicate": null,
+      "base_use": "EXPECTED_MARGIN_RESIDUAL",
+      "candidate_rows": 4643,
+      "candidate_rows_by_season": {
+        "2006": 519,
+        "2007": 517,
+        "2008": 450,
+        "2009": 553,
+        "2010": 586,
+        "2011": 633,
+        "2024": 682,
+        "2025": 703
+      },
+      "candidate_rows_excluding_holdout": 3940,
+      "candidate_rows_restricted_to_known_overtime": 860,
+      "fitted": false,
+      "open_governance_question": "Whether overtime games are excluded from the residual pool is unresolved and materially affects the estimate, so the overtime-restricted population is reported alongside. College overtime manufactures margins no pregame model predicts, which is the direction of the unexplained 20.2 observation.",
+      "promoted": false
+    },
+    "recent_form_weights": {
+      "additional_capabilities": [],
+      "additional_row_predicate": "week ordinal recorded",
+      "base_use": "EXPECTED_MARGIN_RESIDUAL",
+      "candidate_rows": 4448,
+      "candidate_rows_by_season": {
+        "2006": 505,
+        "2007": 509,
+        "2008": 421,
+        "2009": 524,
+        "2010": 563,
+        "2011": 598,
+        "2024": 666,
+        "2025": 662
+      },
+      "candidate_rows_excluding_holdout": 3786,
+      "fitted": false,
+      "open_governance_question": null,
+      "promoted": false
+    },
+    "sample_size_regularization": {
+      "additional_capabilities": [],
+      "additional_row_predicate": "prior games-played count recorded",
+      "base_use": "EXPECTED_MARGIN_RESIDUAL",
+      "candidate_rows": 4643,
+      "candidate_rows_by_season": {
+        "2006": 519,
+        "2007": 517,
+        "2008": 450,
+        "2009": 553,
+        "2010": 586,
+        "2011": 633,
+        "2024": 682,
+        "2025": 703
+      },
+      "candidate_rows_excluding_holdout": 3940,
+      "fitted": false,
+      "open_governance_question": "games_played_to_date is not on the governed observation allowlist and sits in calibration_contract.FIELDS_REQUIRING_ADMISSION_RULING. The count is recorded by the walk-forward ledger and reported here as a population, but admitting it as an observation field requires its own ruling.",
+      "promoted": false
+    },
+    "weekly_movement_cap_points": {
+      "additional_capabilities": [
+        "component_ratings_available"
+      ],
+      "additional_row_predicate": "week ordinal recorded",
+      "base_use": "EXPECTED_MARGIN_RESIDUAL",
+      "candidate_rows": 1014,
+      "candidate_rows_by_season": {
+        "2006": 505,
+        "2007": 509,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 0,
+        "2025": 0
+      },
+      "candidate_rows_excluding_holdout": 1014,
+      "fitted": false,
+      "open_governance_question": "A cap on week-over-week rating movement is measured against rating states, so this reports the population that carries recorded component ratings. Whether the cap may instead be fitted against recorded predicted-margin movement alone is a governance question this lane does not answer.",
+      "promoted": false
+    },
+    "weekly_performance_residual_coefficient": {
+      "additional_capabilities": [],
+      "additional_row_predicate": "week ordinal recorded",
+      "base_use": "EXPECTED_MARGIN_RESIDUAL",
+      "candidate_rows": 4448,
+      "candidate_rows_by_season": {
+        "2006": 505,
+        "2007": 509,
+        "2008": 421,
+        "2009": 524,
+        "2010": 563,
+        "2011": 598,
+        "2024": 666,
+        "2025": 662
+      },
+      "candidate_rows_excluding_holdout": 3786,
+      "fitted": false,
+      "open_governance_question": null,
+      "promoted": false
+    }
+  },
+  "parameter_populations_note": "Populations, never fits. Nothing here estimates, ranks, scores or promotes any parameter; each entry says how much evidence presently exists and, where defining the required evidence is itself a governance decision, reports that question rather than answering it.",
+  "prior_run_preserved": {
+    "artifact": "V3_CALIBRATION_5148_ADAPTER_STATUS_R1.json",
+    "exclusion_census_retained": true,
+    "note": "The earlier ordered exclusion census is retained unedited in the adapter status artifact and above. It still names exactly why a record cannot enter the full contract; it no longer describes the usable calibration population.",
+    "population_accounting": {
+      "ADMITTED_ROWS": 3259,
+      "CONTRACT_CANDIDATE_ROWS": 3595,
+      "EXCLUDED_ROWS": 1889,
+      "MATCHED_MODEL_EVIDENCE_ROWS": 5050,
+      "SOURCE_UNIVERSE_ROWS": 5148,
+      "definitions": {
+        "ADMITTED_ROWS": "Rows satisfying every required contract field, emitted only if the contract as a whole can be satisfied.",
+        "CONTRACT_CANDIDATE_ROWS": "Rows that cleared every semantic gate and reached the contract's field-completeness checks. The difference between this and ADMITTED_ROWS is exactly the field shortfall.",
+        "EXCLUDED_ROWS": "SOURCE_UNIVERSE_ROWS minus ADMITTED_ROWS. The ordered exclusion census partitions this exactly.",
+        "MATCHED_MODEL_EVIDENCE_ROWS": "Source rows that join by game identifier to a Baxter walk-forward row, before any admissibility question is asked.",
+        "SOURCE_UNIVERSE_ROWS": "Every row of the audited source population. The input, never a target."
+      }
+    },
+    "sha256": "3ee7b062bf99e39e4169c6dd41f929314bda6f8846ae461f70af283feb34562d"
+  },
+  "problem": "One question \u2014 may this row enter the full walk-forward residual contract \u2014 was allowed to stand in for every other question. A game whose source records no pregame prediction cannot enter a residual calculation, and it is still a byte-verified factual result, which is exactly what an actual-margin distribution is made of. Reporting it as excluded discarded evidence for uses that never needed the missing field, and discarded it silently, because the word made the loss look like a decision.",
+  "promotion_status": "NOT_PROMOTED",
+  "provenance_class": {
+    "ASSUMPTION": "None recorded.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "FACT": "Issued verbatim by the Chairman, or reproduced from a mounted artifact."
+  },
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "resolution": "Membership and eligibility are separated. A row belongs to the canonical corpus because its source row belongs to the verified 5,148-game universe; whether it may enter a particular procedure depends on the evidence that procedure requires, asked per procedure. The full contract is one use among several and is unchanged.",
+  "resolved_blockers": [],
+  "retained_findings": {
+    "duplicate_2024_identifier": {
+      "distinct_provenance_identities": true,
+      "identity_basis": "source_member_sha256 + source_member + source_row_ordinal",
+      "note": "Both contests are canonical corpus members. Any calculation needing a globally unique key must use provenance_identity; source_game_id alone is refused.",
+      "records_retained": 2,
+      "silently_deduplicated": false,
+      "source_game_id": "T073vT114",
+      "source_game_id_unique": false
+    },
+    "fcs": {
+      "blocks_only": [
+        "POINT_SCALE_DEPENDENT",
+        "FBS_ONLY",
+        "EXPECTED_MARGIN_RESIDUAL"
+      ],
+      "fcs_elo_policy": 1250,
+      "point_adapter_status": "UNRESOLVED",
+      "point_mapping_invented": false,
+      "retained_in_corpus": true,
+      "rows": 69
+    },
+    "lineage_2011": {
+      "canonical_corpus_rows": 713,
+      "canonical_eligible_rows": 712,
+      "canonical_rebuild_rows": 713,
+      "engine_comparison_exclusion_game_id": "G2011_P2932",
+      "engine_comparison_exclusion_note": "Texas Tech 63, DIVISION II 6; omitted by the established rating universe",
+      "engine_comparison_universe": 711,
+      "engine_comparison_universe_expressed_as": "USE_SPECIFIC_MASK",
+      "malformed_artifact_excluded": 1,
+      "malformed_artifact_game_id": "G2011_P3056",
+      "malformed_artifact_note": "Weber St. vs CONFW; level_a DIV_II, level_b ARTIFACT",
+      "mask_flag": "OUTSIDE_2011_ENGINE_COMPARISON_UNIVERSE"
+    },
+    "malformed_rows": {
+      "eligible_uses": "none; their factual fields cannot be established",
+      "facts_synthesised": false,
+      "retained_in_corpus": true,
+      "rows": 4
+    },
+    "overtime": {
+      "blocks_only": "OVERTIME_SENSITIVE",
+      "known_rows": 931,
+      "restricts_calibration_fields": [
+        "calibration.game_sd_points",
+        "calibration.blowout_treatment"
+      ],
+      "status": "UNKNOWN_PRESERVED_NEVER_DEFAULTED_TO_FALSE",
+      "unknown_rows": 4217
+    }
+  },
+  "rows_globally_discarded": 0,
+  "ruling_id": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY",
+  "ruling_status": "APPROVED",
+  "scope": "CORPUS_MEMBERSHIP_AND_USE_SPECIFIC_ELIGIBILITY",
+  "simulation_run": false,
+  "supersession": {
+    "exclusion_reason_to_capability_map": {
+      "BAXTER_MINIMUM_PRIOR_GAMES_NOT_MET": "walkforward_eligibility_flag_set = false",
+      "EVIDENCE_DOMAIN_NOT_ADMISSIBLE": "evidence_domain outside the admitted set; no record in this mount",
+      "EXPECTED_MARGIN_NOT_RECORDED": "expected_margin_available = false",
+      "FCS_PARTICIPANT_PENDING_V3_POINT_SCALE_ADAPTER": "fcs_participant = true and requires_unresolved_fcs_point_adapter = true",
+      "MODEL_EVIDENCE_ROW_ABSENT": "walkforward_evidence_present = false",
+      "PARTICIPANT_DIVISION_NOT_ESTABLISHED": "participant_division_supported = false",
+      "PARTICIPANT_DIVISION_OUTSIDE_CONTRACT_ENUM": "participant_division_supported = false",
+      "PREGAME_RATING_STATE_NOT_RECORDED": "component_ratings_available = false; expected_margin_available may still be true under SOURCE_RECORDED_WALKFORWARD",
+      "RESULT_OBSERVATION_DATE_NOT_RECORDED": "observation_date_recorded = false",
+      "SOURCE_KEY_DUPLICATE_UNRECONCILED": "source_game_id_unique = false",
+      "SOURCE_ROW_MALFORMED_ARTIFACT": "malformed_source_fields = true",
+      "TEMPORAL_ORDER_EVIDENCE_INSUFFICIENT": "temporal_order_supported = false"
+    },
+    "note": "The earlier accounting is preserved above under population_accounting and exclusion_census, unedited. What changed is what it is a statement about: the 3,259 are the subset that satisfies the full walk-forward observation contract, and the 1,889 are corpus members whose evidence supports fewer uses.",
+    "prior_admitted_rows": 3259,
+    "prior_admitted_rows_are_now": "FULLY_PAIRED_CONTRACT_COMPLETE_WALKFORWARD_SUBSET",
+    "prior_excluded_rows": 1889,
+    "prior_excluded_rows_are_now": "CANONICAL_CORPUS_MEMBERS",
+    "prior_excluded_rows_globally_discarded": false,
+    "prior_model": "UNIVERSAL_ADMITTED_OR_EXCLUDED",
+    "reconciles": "3259 + 1889 = 5148",
+    "ruling": "R9-CAL-FULL-CORPUS-USE-SPECIFIC-ELIGIBILITY"
+  },
+  "use_specific_census": {
+    "ACTUAL_MARGIN_DISTRIBUTION": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 4594,
+        "OBSERVED_REAL_WORLD": 550
+      },
+      "by_season": {
+        "2006": 536,
+        "2007": 527,
+        "2008": 624,
+        "2009": 622,
+        "2010": 642,
+        "2011": 712,
+        "2024": 724,
+        "2025": 757
+      },
+      "refuses": [
+        "malformed_source_fields"
+      ],
+      "requires": [
+        "actual_margin_available"
+      ],
+      "rows": 5144
+    },
+    "EXPECTED_MARGIN_RESIDUAL": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 4118,
+        "OBSERVED_REAL_WORLD": 525
+      },
+      "by_season": {
+        "2006": 519,
+        "2007": 517,
+        "2008": 450,
+        "2009": 553,
+        "2010": 586,
+        "2011": 633,
+        "2024": 682,
+        "2025": 703
+      },
+      "refuses": [
+        "malformed_source_fields",
+        "requires_unresolved_fcs_point_adapter"
+      ],
+      "requires": [
+        "actual_margin_available",
+        "expected_margin_available",
+        "temporal_order_supported",
+        "participant_division_supported"
+      ],
+      "rows": 4643
+    },
+    "FBS_ONLY": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 4366,
+        "OBSERVED_REAL_WORLD": 550
+      },
+      "by_season": {
+        "2006": 520,
+        "2007": 518,
+        "2008": 607,
+        "2009": 562,
+        "2010": 591,
+        "2011": 637,
+        "2024": 724,
+        "2025": 757
+      },
+      "refuses": [
+        "malformed_source_fields",
+        "fcs_participant"
+      ],
+      "requires": [
+        "participant_division_supported"
+      ],
+      "rows": 4916
+    },
+    "FULL_WALKFORWARD_OBSERVATION_CONTRACT": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 2855,
+        "OBSERVED_REAL_WORLD": 404
+      },
+      "by_season": {
+        "2006": 328,
+        "2007": 335,
+        "2008": 393,
+        "2009": 362,
+        "2010": 412,
+        "2011": 456,
+        "2024": 404,
+        "2025": 569
+      },
+      "refuses": [
+        "malformed_source_fields",
+        "requires_unresolved_fcs_point_adapter"
+      ],
+      "requires": [
+        "actual_margin_available",
+        "expected_margin_available",
+        "temporal_order_supported",
+        "participant_division_supported",
+        "observation_date_recorded",
+        "walkforward_eligibility_flag_set",
+        "source_game_id_unique"
+      ],
+      "rows": 3259
+    },
+    "OVERTIME_SENSITIVE": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 931,
+        "OBSERVED_REAL_WORLD": 0
+      },
+      "by_season": {
+        "2006": 0,
+        "2007": 0,
+        "2008": 0,
+        "2009": 0,
+        "2010": 0,
+        "2011": 0,
+        "2024": 174,
+        "2025": 757
+      },
+      "refuses": [
+        "malformed_source_fields"
+      ],
+      "requires": [
+        "actual_margin_available",
+        "overtime_status_known"
+      ],
+      "rows": 931
+    },
+    "POINT_SCALE_DEPENDENT": {
+      "by_evidence_domain": {
+        "GOVERNED_SYNTHETIC": 4366,
+        "OBSERVED_REAL_WORLD": 550
+      },
+      "by_season": {
+        "2006": 520,
+        "2007": 518,
+        "2008": 607,
+        "2009": 562,
+        "2010": 591,
+        "2011": 637,
+        "2024": 724,
+        "2025": 757
+      },
+      "refuses": [
+        "malformed_source_fields",
+        "requires_unresolved_fcs_point_adapter"
+      ],
+      "requires": [
+        "participant_division_supported"
+      ],
+      "rows": 4916
+    }
+  }
+}

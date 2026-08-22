@@ -14,14 +14,191 @@
   "contract_revision_supersedes": "The first issue of this contract, in which event_time was unconditionally required of every observation. That clause is superseded to exactly the extent that a governed source recorded no kickoff timestamp. It is not relaxed: such an observation must keep event_time null and carry the temporal_order provenance ruling R6-CAL-TEMPORAL-ORDER requires. The first issue is preserved in the repository history and was not rewritten.",
   "dataset_provenance_requirements": {
     "dataset_id": "Stable identifier recorded in the experiment record.",
-    "expected_margin_transform": "The named rating-to-margin transform used. Without it, weekly_performance_residual_coefficient is unidentifiable: any residual can be explained by re-scaling the transform instead.",
+    "evidence_domain": "Every dataset declares one of ['OBSERVED_REAL_WORLD', 'GOVERNED_SYNTHETIC']. GOVERNED_SYNTHETIC evidence establishes calibration, validation and holdout evidence for the synthetic V3 model and establishes no real-world predictive validity, sportsbook validity, actual historical NCAA forecasting performance or independent external empirical validation. It may never be recorded or serialized as observed, empirical or real-world evidence.",
+    "expected_margin_transform": "The named rating-to-margin transform used. Without it, weekly_performance_residual_coefficient is unidentifiable: any residual can be explained by re-scaling the transform instead. Under ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN a source-recorded prediction may name the transform through a sufficient source-bound model specification instead of reproducing it, but never through neither.",
     "forbidden_content": "No public betting flow, handle, ticket or steam signal under any spelling, and no injury adjustment. Refused at registration by calibration.register_dataset, not by review.",
     "rating_scale_declaration": "The units of pregame_team_rating and expected_margin. A residual computed across two scales is arithmetic, not evidence.",
     "retrieval_method": "How the bytes were obtained, reproducibly.",
     "retrieved_at": "UTC timestamp of retrieval.",
     "sha256": "SHA-256 of the exact bytes scored, so a result can be re-tied to its input.",
     "source_authority": "Named authority that certifies the results. Must be a result source, not the V2.1 static control workbook and not any engine output.",
-    "synthetic_content": "REFUSED. A synthetic or simulated observation set may never be registered as governed calibration data."
+    "synthetic_content": "REFUSED for an ungoverned synthetic or simulated observation set, unchanged. Ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE opens one narrower door beside this clause and does not widen it: a corpus that is byte-verified, provenance-bound and declared synthetic by its own governed source may be admitted as GOVERNED_SYNTHETIC evidence for the synthetic V3 model, through calibration.require_evidence_domain and its approval token. A fixture that merely claims the domain receives no authority."
+  },
+  "evidence_domain_policy": {
+    "admissible_domains": [
+      "OBSERVED_REAL_WORLD",
+      "GOVERNED_SYNTHETIC"
+    ],
+    "approval_token": "APPROVE_V3_GOVERNED_SYNTHETIC_CALIBRATION_EVIDENCE_R1",
+    "arbitrary_or_test_synthetic_admissible": false,
+    "authorises_phase5e_fcs_elo_1500": false,
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "coefficients_promoted": [],
+    "controls_that_remain_mandatory": [
+      "temporal admission",
+      "digest continuity",
+      "expected-margin provenance",
+      "rating-scale declaration",
+      "opponent classification",
+      "split integrity",
+      "holdout isolation"
+    ],
+    "does_not_establish": [
+      "real_world_predictive_validity",
+      "sportsbook_predictive_validity",
+      "actual_historical_ncaa_forecasting_performance",
+      "independent_external_empirical_validation"
+    ],
+    "establishes": [
+      "calibration_dataset_construction",
+      "calibration_parameter_estimation",
+      "validation",
+      "untouched_holdout_scoring",
+      "later_human_promotion_consideration_for_the_synthetic_v3_model"
+    ],
+    "fcs_elo_policy": 1250,
+    "fcs_elo_policy_unchanged": 1250,
+    "fills_missing_source_facts": false,
+    "gate": "calibration.require_evidence_domain",
+    "governed_synthetic_admissible": true,
+    "governed_synthetic_requires_approval_token": true,
+    "governed_synthetic_requires_source_lineage": [
+      "source_package",
+      "source_package_sha256",
+      "source_member",
+      "source_member_sha256",
+      "declared_by",
+      "declaration"
+    ],
+    "holdout_excluded_from": [
+      "model selection",
+      "hyperparameter selection",
+      "coefficient selection",
+      "exclusion-threshold selection",
+      "transform selection",
+      "game-SD selection",
+      "FCS mapping selection"
+    ],
+    "holdout_season": 2025,
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "necessity": "The intended V3 calibration architecture uses the audited 2006-2011 and 2024-2025 synthetic universes. A blanket refusal leaves a synthetic model uncalibrated while the reason for the refusal \u2014 an engine scored on its own replayed beliefs and the result reported as accuracy \u2014 does not apply.",
+    "observed_real_world_semantics_changed": false,
+    "refused_relabels": [
+      "OBSERVED_REAL_WORLD",
+      "EMPIRICAL_REAL_WORLD",
+      "REAL_WORLD_EXTERNAL_VALIDATION",
+      "REAL_WORLD",
+      "EMPIRICAL",
+      "OBSERVED_REAL",
+      "EXTERNAL_VALIDATION",
+      "ACTUAL_HISTORICAL",
+      "SPORTSBOOK"
+    ],
+    "ruling": "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE",
+    "still_refused": "An ungoverned synthetic or simulated observation set; a test fixture that declares GOVERNED_SYNTHETIC without source lineage; any corpus whose package or member digest does not verify.",
+    "ungoverned_synthetic_admissible": false
+  },
+  "expected_margin_policy": {
+    "approval_token": "APPROVE_V3_SOURCE_RECORDED_WALKFORWARD_MARGIN_R1",
+    "authorises": [],
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "caller_asserted_mode_sufficient": false,
+    "component_ratings_conditionally_null_in": [
+      "SOURCE_RECORDED_WALKFORWARD"
+    ],
+    "component_ratings_globally_optional": false,
+    "component_ratings_nulled_when_the_source_records_them": false,
+    "component_ratings_preserved_where_recorded": {
+      "cross_check": "2006: 365/365 and 2007: 354/354 eligible recorded walk-forward predictions reproduce from the recorded pregame component ratings with zero mismatches. Retained as cross-check evidence; the recorded components are emitted, not nulled.",
+      "seasons": [
+        2006,
+        2007
+      ]
+    },
+    "component_ratings_required_in": [
+      "DERIVED_AT_INGESTION"
+    ],
+    "does_not_authorise": [
+      "retrospective expected margins",
+      "final-season ratings as pregame states",
+      "fabricated ratings",
+      "fabricated event_time",
+      "fabricated overtime status",
+      "fabricated team classification",
+      "actual-margin-derived predictions",
+      "arbitrary synthetic inputs",
+      "Phase5E FCS Elo 1500",
+      "coefficient promotion",
+      "FCS point-scale promotion"
+    ],
+    "fcs_elo_policy_unchanged": 1250,
+    "gate": "calibration.require_expected_margin_provenance",
+    "missing_expected_margin_admissible": false,
+    "mode_a": {
+      "applies_when": "expected_margin is computed, reconstructed, transformed or otherwise derived by the V3 calibration adapter from underlying team rating states.",
+      "changed_by_this_ruling": false,
+      "component_ratings": "MANDATORY",
+      "name": "DERIVED_AT_INGESTION"
+    },
+    "mode_b": {
+      "applies_when": "a governed source artifact itself records the prediction generated before the target game.",
+      "component_ratings": "MAY BE NULL, and only where the governed source records no component state.",
+      "generic_expected_margin_sufficient": false,
+      "name": "SOURCE_RECORDED_WALKFORWARD"
+    },
+    "modes": [
+      "DERIVED_AT_INGESTION",
+      "SOURCE_RECORDED_WALKFORWARD"
+    ],
+    "outcome_derived_markers_refused": [
+      "ACTUAL_MARGIN",
+      "ACTUAL MARGIN",
+      "FINAL_MARGIN",
+      "FINAL SCORE",
+      "RESULT_DERIVED",
+      "FROM_RESULT",
+      "POSTGAME",
+      "POST_GAME"
+    ],
+    "reconstructed_components_as_source_observations": false,
+    "replay_to_manufacture_component_ratings_authorised": false,
+    "replay_to_populate_components_authorised": false,
+    "retrospective_markers_refused": [
+      "FULL_SEASON",
+      "FULLSEASON",
+      "FULL SEASON",
+      "RETROSPECTIVE",
+      "PRED_MARGIN_FULL",
+      "RESIDUAL_FULL",
+      "FINAL_RATING",
+      "FINAL SEASON",
+      "GAME RESIDUALS",
+      "FULL GAME FIT",
+      "_FIT"
+    ],
+    "ruling": "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN",
+    "source_recorded_checks": [
+      "the prediction is present in the governed source artifact",
+      "it is associated deterministically with the target game",
+      "it came from the source's documented walk-forward chronology",
+      "it is not a retrospective full-season prediction",
+      "it is not calculated from the target game's actual result",
+      "its model identity and rating scale are known",
+      "source digest continuity is verified against bytes that were read"
+    ],
+    "source_recorded_required_fields": [
+      "model_id",
+      "transform",
+      "rating_scale",
+      "source_artifact",
+      "source_artifact_sha256",
+      "source_member",
+      "source_member_sha256",
+      "source_row",
+      "source_game_id",
+      "walkforward_chronology"
+    ],
+    "source_recorded_requires_approval_token": true
   },
   "fields_requiring_admission_ruling": [
     {
@@ -82,6 +259,9 @@
     "game_id",
     "season",
     "week",
+    "evidence_domain",
+    "expected_margin_source_type",
+    "expected_margin_provenance",
     "event_time",
     "temporal_order_basis",
     "temporal_order_key",
@@ -149,6 +329,7 @@
       "game_id",
       "season",
       "week",
+      "evidence_domain",
       "event_time",
       "temporal_order_basis",
       "temporal_order_key",
@@ -159,6 +340,8 @@
       "venue",
       "pregame_team_rating",
       "pregame_opponent_rating",
+      "expected_margin_source_type",
+      "expected_margin_provenance",
       "expected_margin",
       "actual_margin",
       "game_result",
@@ -227,6 +410,18 @@
         "sample_size_regularization"
       ],
       "provenance_requirement": "Must be the week in which the game was PLAYED, not the week it was ingested.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "conditional_requirement": null,
+      "definition": "The domain of the corpus this observation came from. Preserved on every derived evidence object so the limits of the evidence travel with it.",
+      "dtype": "enum[OBSERVED_REAL_WORLD|GOVERNED_SYNTHETIC]",
+      "name": "evidence_domain",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "GOVERNED_SYNTHETIC requires the approval token issued with ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE and complete source lineage: package, member, both digests, the declaring authority and the source's own words. It may never be relabeled as observed, empirical or real-world evidence, and it establishes none of ['real_world_predictive_validity', 'sportsbook_predictive_validity', 'actual_historical_ncaa_forecasting_performance', 'independent_external_empirical_validation'].",
       "required": true
     },
     {
@@ -328,9 +523,9 @@
     },
     {
       "admitted_by_governed_allowlist": true,
-      "conditional_requirement": null,
-      "definition": "Subject team's strength immediately before kickoff, on a declared scale.",
-      "dtype": "float",
+      "conditional_requirement": "REQUIRED under expected-margin provenance mode DERIVED_AT_INGESTION, where the adapter computed expected_margin from rating states: without the components the transform is unidentifiable and any residual can be explained by re-scaling it. MAY BE NULL under SOURCE_RECORDED_WALKFORWARD, and only where the governed source records no component state, per ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN. It is not globally optional, and a component the source does record is never deliberately nulled to reach the weaker mode.",
+      "definition": "Subject team's strength immediately before kickoff, on a declared scale, where the governed source records one.",
+      "dtype": "float|null",
       "name": "pregame_team_rating",
       "needed_by": [
         "weekly_performance_residual_coefficient",
@@ -338,19 +533,43 @@
         "sample_size_regularization"
       ],
       "provenance_requirement": "Must be the rating as it stood BEFORE kickoff, carrying its own as-of stamp. A post-hoc rating recomputed from the full season leaks the outcome into its own predictor and makes every out-of-sample number optimistic.",
-      "required": true
+      "required": false
     },
     {
       "admitted_by_governed_allowlist": true,
-      "conditional_requirement": null,
-      "definition": "Opponent's strength immediately before kickoff, on the same declared scale.",
-      "dtype": "float",
+      "conditional_requirement": "REQUIRED under expected-margin provenance mode DERIVED_AT_INGESTION, where the adapter computed expected_margin from rating states: without the components the transform is unidentifiable and any residual can be explained by re-scaling it. MAY BE NULL under SOURCE_RECORDED_WALKFORWARD, and only where the governed source records no component state, per ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN. It is not globally optional, and a component the source does record is never deliberately nulled to reach the weaker mode.",
+      "definition": "Opponent's strength immediately before kickoff, on the same declared scale, where the governed source records one.",
+      "dtype": "float|null",
       "name": "pregame_opponent_rating",
       "needed_by": [
         "weekly_performance_residual_coefficient",
         "game_sd_points"
       ],
       "provenance_requirement": "Must be the rating as it stood BEFORE kickoff, carrying its own as-of stamp. A post-hoc rating recomputed from the full season leaks the outcome into its own predictor and makes every out-of-sample number optimistic.",
+      "required": false
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "conditional_requirement": "REQUIRED of every observation. Names which of DERIVED_AT_INGESTION / SOURCE_RECORDED_WALKFORWARD the row is admitted under, and therefore whether the two component ratings are mandatory. The mode is not obtained by declaring it: SOURCE_RECORDED_WALKFORWARD fails closed unless the source provenance proves it.",
+      "definition": "Which provenance mode this observation's expected_margin was admitted under.",
+      "dtype": "enum[DERIVED_AT_INGESTION|SOURCE_RECORDED_WALKFORWARD]",
+      "name": "expected_margin_source_type",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "SOURCE_RECORDED_WALKFORWARD requires the approval token issued with ruling R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN and source-bound provenance proving the prediction is present in the artifact, belongs to this game, came from the source's documented walk-forward chronology, is not retrospective, is not computed from the result, names its model and scale, and rests on verified digests.",
+      "required": true
+    },
+    {
+      "admitted_by_governed_allowlist": true,
+      "conditional_requirement": null,
+      "definition": "The provenance behind expected_margin, carried as named fields and serialized as a self-describing canonical JSON object: ['model_id', 'transform', 'rating_scale'] in every mode, plus ['source_artifact', 'source_artifact_sha256', 'source_member', 'source_member_sha256', 'source_row', 'source_game_id', 'walkforward_chronology'] under SOURCE_RECORDED_WALKFORWARD.",
+      "dtype": "named_fields_canonical_json",
+      "name": "expected_margin_provenance",
+      "needed_by": [
+        "all"
+      ],
+      "provenance_requirement": "Digests are checked against the bytes that were read, never against the declaration itself. A retrospective or outcome-derived marker anywhere in the transform, member or row locator is refused.",
       "required": true
     },
     {

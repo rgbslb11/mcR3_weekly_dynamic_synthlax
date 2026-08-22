@@ -109,6 +109,23 @@ _PREGAME = (
     "own predictor and makes every out-of-sample number optimistic."
 )
 
+_MODE_CONDITIONAL = (
+    "REQUIRED under expected-margin provenance mode DERIVED_AT_INGESTION, where the "
+    "adapter computed expected_margin from rating states: without the components the "
+    "transform is unidentifiable and any residual can be explained by re-scaling it. "
+    "MAY BE NULL under SOURCE_RECORDED_WALKFORWARD, and only where the governed source "
+    "records no component state, per ruling "
+    "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN. It is not globally optional, and a "
+    "component the source does record is never deliberately nulled to reach the "
+    "weaker mode."
+)
+_EXPECTED_MARGIN_MODE = (
+    "REQUIRED of every observation. Names which of "
+    "DERIVED_AT_INGESTION / SOURCE_RECORDED_WALKFORWARD the row is admitted under, and "
+    "therefore whether the two component ratings are mandatory. The mode is not "
+    "obtained by declaring it: SOURCE_RECORDED_WALKFORWARD fails closed unless the "
+    "source provenance proves it."
+)
 _TEMPORAL_SUCCESSOR = (
     "REQUIRED wherever the governed source recorded a kickoff or event timestamp. "
     "Where the source recorded none, this field MUST remain null and the observation "
@@ -144,6 +161,18 @@ REQUIRED_CONTRACT_FIELDS: tuple[ContractField, ...] = (
         ("recent_form_weights", "weekly_movement_cap_points",
          "weekly_performance_residual_coefficient", "sample_size_regularization"),
         "Must be the week in which the game was PLAYED, not the week it was ingested.",
+    ),
+    ContractField(
+        "evidence_domain", f"enum[{'|'.join(cal.ADMISSIBLE_EVIDENCE_DOMAINS)}]", True,
+        "The domain of the corpus this observation came from. Preserved on every "
+        "derived evidence object so the limits of the evidence travel with it.",
+        ("all",),
+        "GOVERNED_SYNTHETIC requires the approval token issued with ruling "
+        "R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE and complete source lineage: package, "
+        "member, both digests, the declaring authority and the source's own words. "
+        "It may never be relabeled as observed, empirical or real-world evidence, "
+        "and it establishes none of "
+        f"{list(cal.GOVERNED_SYNTHETIC_DOES_NOT_ESTABLISH)}.",
     ),
     ContractField(
         "event_time", "iso8601|null", False,
@@ -219,17 +248,46 @@ REQUIRED_CONTRACT_FIELDS: tuple[ContractField, ...] = (
         "Must come from the governed schedule/result source, not inferred from team order.",
     ),
     ContractField(
-        "pregame_team_rating", "float", True,
-        "Subject team's strength immediately before kickoff, on a declared scale.",
+        "pregame_team_rating", "float|null", False,
+        "Subject team's strength immediately before kickoff, on a declared scale, "
+        "where the governed source records one.",
         ("weekly_performance_residual_coefficient", "weekly_movement_cap_points",
          "sample_size_regularization"),
         _PREGAME,
+        conditional_requirement=_MODE_CONDITIONAL,
     ),
     ContractField(
-        "pregame_opponent_rating", "float", True,
-        "Opponent's strength immediately before kickoff, on the same declared scale.",
+        "pregame_opponent_rating", "float|null", False,
+        "Opponent's strength immediately before kickoff, on the same declared scale, "
+        "where the governed source records one.",
         ("weekly_performance_residual_coefficient", "game_sd_points"),
         _PREGAME,
+        conditional_requirement=_MODE_CONDITIONAL,
+    ),
+    ContractField(
+        "expected_margin_source_type",
+        f"enum[{'|'.join(cal.EXPECTED_MARGIN_MODES)}]", True,
+        "Which provenance mode this observation's expected_margin was admitted under.",
+        ("all",),
+        "SOURCE_RECORDED_WALKFORWARD requires the approval token issued with ruling "
+        "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN and source-bound provenance proving "
+        "the prediction is present in the artifact, belongs to this game, came from the "
+        "source's documented walk-forward chronology, is not retrospective, is not "
+        "computed from the result, names its model and scale, and rests on verified "
+        "digests.",
+        conditional_requirement=_EXPECTED_MARGIN_MODE,
+    ),
+    ContractField(
+        "expected_margin_provenance", "named_fields_canonical_json", True,
+        "The provenance behind expected_margin, carried as named fields and "
+        "serialized as a self-describing canonical JSON object: "
+        f"{list(cal.EXPECTED_MARGIN_COMMON_FIELDS)} in every mode, plus "
+        f"{list(cal.EXPECTED_MARGIN_SOURCE_RECORDED_FIELDS)} under "
+        "SOURCE_RECORDED_WALKFORWARD.",
+        ("all",),
+        "Digests are checked against the bytes that were read, never against the "
+        "declaration itself. A retrospective or outcome-derived marker anywhere in the "
+        "transform, member or row locator is refused.",
     ),
     ContractField(
         "expected_margin", "float_points", True,
@@ -503,6 +561,120 @@ TEMPORAL_ORDER_POLICY: dict[str, Any] = {
     ),
 }
 
+#: Evidence-domain policy under ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE.
+#:
+#: The original provenance clause fused two questions: is this corpus synthetic,
+#: and is it governed. That fusion was safe while the only synthetic corpus in
+#: view was an engine's own replayed beliefs. It stopped being safe once the
+#: model under calibration was itself a synthetic-season model calibrated against
+#: audited synthetic universes, because the refusal then blocked the evidence
+#: without addressing the risk. This policy separates the two questions and
+#: keeps the refusal for the ungoverned half.
+EVIDENCE_DOMAIN_POLICY: dict[str, Any] = dict(cal.evidence_domain_governance_as_dict())
+EVIDENCE_DOMAIN_POLICY.update(
+    {
+        "necessity": (
+            "The intended V3 calibration architecture uses the audited 2006-2011 and "
+            "2024-2025 synthetic universes. A blanket refusal leaves a synthetic model "
+            "uncalibrated while the reason for the refusal — an engine scored on its "
+            "own replayed beliefs and the result reported as accuracy — does not apply."
+        ),
+        "still_refused": (
+            "An ungoverned synthetic or simulated observation set; a test fixture that "
+            "declares GOVERNED_SYNTHETIC without source lineage; any corpus whose "
+            "package or member digest does not verify."
+        ),
+        "controls_that_remain_mandatory": [
+            "temporal admission",
+            "digest continuity",
+            "expected-margin provenance",
+            "rating-scale declaration",
+            "opponent classification",
+            "split integrity",
+            "holdout isolation",
+        ],
+        "fills_missing_source_facts": False,
+        "authorises_phase5e_fcs_elo_1500": False,
+        "fcs_elo_policy_unchanged": 1250,
+        "holdout_season": 2025,
+        "holdout_excluded_from": [
+            "model selection",
+            "hyperparameter selection",
+            "coefficient selection",
+            "exclusion-threshold selection",
+            "transform selection",
+            "game-SD selection",
+            "FCS mapping selection",
+        ],
+    }
+)
+
+#: Expected-margin provenance policy under ruling
+#: R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN.
+#:
+#: The component-rating requirement was written for the case where the adapter
+#: computes the prediction, and it is still exactly right there. Where the
+#: governed source recorded the prediction itself, demanding the components
+#: bought nothing and cost the evidence: the only way to supply them would have
+#: been a replay, and a reconstructed rating presented as an observation is
+#: weaker provenance than the recorded prediction it would be used to justify.
+#: So the requirement is conditional on the mode rather than dropped.
+EXPECTED_MARGIN_POLICY: dict[str, Any] = dict(
+    cal.expected_margin_governance_as_dict()
+)
+EXPECTED_MARGIN_POLICY.update(
+    {
+        "mode_a": {
+            "name": cal.EXPECTED_MARGIN_MODE_DERIVED,
+            "applies_when": (
+                "expected_margin is computed, reconstructed, transformed or otherwise "
+                "derived by the V3 calibration adapter from underlying team rating "
+                "states."
+            ),
+            "component_ratings": "MANDATORY",
+            "changed_by_this_ruling": False,
+        },
+        "mode_b": {
+            "name": cal.EXPECTED_MARGIN_MODE_SOURCE_RECORDED,
+            "applies_when": (
+                "a governed source artifact itself records the prediction generated "
+                "before the target game."
+            ),
+            "component_ratings": (
+                "MAY BE NULL, and only where the governed source records no component "
+                "state."
+            ),
+            "generic_expected_margin_sufficient": False,
+        },
+        "component_ratings_preserved_where_recorded": {
+            "seasons": [2006, 2007],
+            "cross_check": (
+                "2006: 365/365 and 2007: 354/354 eligible recorded walk-forward "
+                "predictions reproduce from the recorded pregame component ratings "
+                "with zero mismatches. Retained as cross-check evidence; the recorded "
+                "components are emitted, not nulled."
+            ),
+        },
+        "replay_to_populate_components_authorised": False,
+        "reconstructed_components_as_source_observations": False,
+        "authorises": [],
+        "does_not_authorise": [
+            "retrospective expected margins",
+            "final-season ratings as pregame states",
+            "fabricated ratings",
+            "fabricated event_time",
+            "fabricated overtime status",
+            "fabricated team classification",
+            "actual-margin-derived predictions",
+            "arbitrary synthetic inputs",
+            "Phase5E FCS Elo 1500",
+            "coefficient promotion",
+            "FCS point-scale promotion",
+        ],
+        "fcs_elo_policy_unchanged": 1250,
+    }
+)
+
 #: Split policy. Stated separately from the field list because the split rule is
 #: what makes the primary objective out-of-sample rather than in-sample.
 SPLIT_POLICY: dict[str, Any] = {
@@ -553,7 +725,10 @@ DATASET_PROVENANCE_REQUIREMENTS: dict[str, Any] = {
     "expected_margin_transform": (
         "The named rating-to-margin transform used. Without it, "
         "weekly_performance_residual_coefficient is unidentifiable: any residual can be "
-        "explained by re-scaling the transform instead."
+        "explained by re-scaling the transform instead. Under ruling "
+        "R8-CAL-SOURCE-RECORDED-WALKFORWARD-MARGIN a source-recorded prediction may "
+        "name the transform through a sufficient source-bound model specification "
+        "instead of reproducing it, but never through neither."
     ),
     "forbidden_content": (
         "No public betting flow, handle, ticket or steam signal under any spelling, and "
@@ -561,8 +736,22 @@ DATASET_PROVENANCE_REQUIREMENTS: dict[str, Any] = {
         "calibration.register_dataset, not by review."
     ),
     "synthetic_content": (
-        "REFUSED. A synthetic or simulated observation set may never be registered as "
-        "governed calibration data."
+        "REFUSED for an ungoverned synthetic or simulated observation set, unchanged. "
+        "Ruling R7-CAL-GOVERNED-SYNTHETIC-EVIDENCE opens one narrower door beside this "
+        "clause and does not widen it: a corpus that is byte-verified, "
+        "provenance-bound and declared synthetic by its own governed source may be "
+        "admitted as GOVERNED_SYNTHETIC evidence for the synthetic V3 model, through "
+        "calibration.require_evidence_domain and its approval token. A fixture that "
+        "merely claims the domain receives no authority."
+    ),
+    "evidence_domain": (
+        "Every dataset declares one of "
+        f"{list(cal.ADMISSIBLE_EVIDENCE_DOMAINS)}. GOVERNED_SYNTHETIC evidence "
+        "establishes calibration, validation and holdout evidence for the synthetic V3 "
+        "model and establishes no real-world predictive validity, sportsbook validity, "
+        "actual historical NCAA forecasting performance or independent external "
+        "empirical validation. It may never be recorded or serialized as observed, "
+        "empirical or real-world evidence."
     ),
 }
 
@@ -622,6 +811,8 @@ def contract_as_dict() -> dict[str, Any]:
         "governed_allowlist": list(cal.CALIBRATION_OBSERVATION_COLUMNS),
         "split_policy": dict(SPLIT_POLICY),
         "temporal_order_policy": dict(TEMPORAL_ORDER_POLICY),
+        "evidence_domain_policy": dict(EVIDENCE_DOMAIN_POLICY),
+        "expected_margin_policy": dict(EXPECTED_MARGIN_POLICY),
         "minimum_volume": dict(MINIMUM_VOLUME_REQUIREMENTS),
         "dataset_provenance_requirements": dict(DATASET_PROVENANCE_REQUIREMENTS),
         "supported_formats": list(cal.SUPPORTED_DATASET_FORMATS),
