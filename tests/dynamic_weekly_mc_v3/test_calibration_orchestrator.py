@@ -15,6 +15,7 @@ the model.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -24,6 +25,7 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration_aggregate a
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration_fixture as fixture
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration_scoring as scoring
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration_search as search
+from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration_stage0 as stage0
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import (
     GovernanceBlock,
     InputValidationError,
@@ -186,18 +188,119 @@ def test_game_sd_is_never_a_searched_axis() -> None:
         )
 
 
-def test_pending_ranges_refuse_a_citable_search(space: search.SearchSpace) -> None:
-    """The grid enumerates today and may not be scored for real until evidence lands."""
-    assert all(a.evidence_status == search.EVIDENCE_PENDING for a in space.axes)
+def test_predeclared_hash_bound_ranges_execute_without_a_named_authority(
+    space: search.SearchSpace,
+) -> None:
+    """The correction, asserted directly.
+
+    Choosing which numbers to *try* and choosing which number becomes *canonical*
+    are different acts. Only the second needs an authority, and this proves the
+    first no longer waits on one.
+    """
+    assert all(a.evidence_status == search.EVIDENCE_PREDECLARED for a in space.axes)
+    assert search.range_status(space) == search.EVIDENCE_PREDECLARED
+
+    declaration = search.predeclare(space, experiment_id="TEST-COARSE")
+    gate = search.require_executable_ranges(space, predeclaration=declaration)
+    assert gate["range_status"] == search.EVIDENCE_PREDECLARED
+    assert gate["ruling_required"] is False
+    assert gate["confers_promotion_authority"] is False
+    assert gate["obligations"]["boundary_optimum_must_expand"] is True
+    assert gate["obligations"]["holdout_sealed_until_final_evaluation"] is True
+    assert gate["obligations"]["automatic_promotion"] is False
+
+    # Executing a research search still confers nothing toward a promotion: the
+    # promotion-grade gate is untouched and still refuses.
     with pytest.raises(GovernanceBlock):
         search.require_range_authority(space)
+
+
+def test_the_experiment_digest_is_what_binds_the_declared_ranges(
+    space: search.SearchSpace, universe: tuple[search.CalibrationCandidate, ...]
+) -> None:
+    """Narrowing a range after seeing results changes the digest, so peeking shows."""
+    declaration = search.predeclare(space, experiment_id="TEST-COARSE")
+    assert declaration.config_sha == space.config_sha
+
+    narrowed = search.refine_space(space, [universe[0]])
+    with pytest.raises(GovernanceBlock, match="not the ranges that were declared"):
+        search.require_executable_ranges(narrowed, predeclaration=declaration)
+
+    # And a declaration is required at all; a bare space is not self-authorising.
+    with pytest.raises(GovernanceBlock, match="no predeclaration was supplied"):
+        search.require_executable_ranges(space)
+
+    # A fixture-marked space is refused on both paths, always.
     with pytest.raises(GovernanceBlock):
-        search.require_range_authority(
-            search.coarse_space(range_authority=search.FIXTURE_RANGE_AUTHORITY)
+        search.require_executable_ranges(
+            search.coarse_space(range_authority=search.FIXTURE_RANGE_AUTHORITY),
+            predeclaration=declaration,
         )
-    # Naming an authority is not enough while the axes still say PENDING.
-    with pytest.raises(GovernanceBlock):
-        search.require_range_authority(search.coarse_space(range_authority="SOME-RULING"))
+
+
+def test_a_range_too_narrow_to_test_anything_is_refused(
+    space: search.SearchSpace,
+) -> None:
+    """A one-point "range" would satisfy every other predeclaration condition."""
+    assert search.require_predeclared_breadth(space)["broad_enough"] is True
+
+    axes = tuple(
+        search.SearchAxis(
+            family=axis.family,
+            levels=axis.levels[:1],
+            evidence_status=search.EVIDENCE_PREDECLARED,
+            boundary_expandable=axis.boundary_expandable,
+            rationale="deliberately degenerate",
+        )
+        if axis.family == "weekly_performance_residual_coefficient"
+        else axis
+        for axis in space.axes
+    )
+    degenerate = search.SearchSpace(
+        space_id="TOO-NARROW", stage=search.STAGE_COARSE, axes=axes
+    )
+    with pytest.raises(GovernanceBlock, match="too narrow"):
+        search.require_predeclared_breadth(degenerate)
+    with pytest.raises(GovernanceBlock, match="too narrow"):
+        search.predeclare(degenerate, experiment_id="TEST-NARROW")
+
+
+def test_an_undeclared_axis_is_still_refused() -> None:
+    """The relaxation is to *predeclared*, not to anything at all."""
+    base = search.coarse_space()
+    axes = tuple(
+        search.SearchAxis(
+            family=axis.family,
+            levels=axis.levels,
+            evidence_status=search.EVIDENCE_PENDING,
+            boundary_expandable=axis.boundary_expandable,
+            rationale=axis.rationale,
+        )
+        if axis.family == "blowout_treatment"
+        else axis
+        for axis in base.axes
+    )
+    undeclared = search.SearchSpace(
+        space_id="UNDECLARED", stage=search.STAGE_COARSE, axes=axes
+    )
+    assert search.range_status(undeclared) == search.EVIDENCE_PENDING
+    with pytest.raises(GovernanceBlock, match="undeclared axes"):
+        search.require_executable_ranges(undeclared)
+
+
+def test_ranges_may_never_be_selected_against_the_holdout(
+    space: search.SearchSpace,
+) -> None:
+    with pytest.raises(GovernanceBlock, match="holdout"):
+        search.predeclare(space, experiment_id="TEST", scored_split="holdout")
+    with pytest.raises(GovernanceBlock, match="not a predeclaration"):
+        search.ExperimentPredeclaration(
+            experiment_id="TEST",
+            config_sha=space.config_sha,
+            stage=search.STAGE_COARSE,
+            declared_scored_split="validation",
+            declared_before_results=False,
+        )
 
 
 def test_prior_experiment_is_context_and_not_an_anchor(space: search.SearchSpace) -> None:
@@ -313,7 +416,7 @@ def test_walk_forward_never_predicts_from_its_own_future(
     proof = score.leakage_proof
     assert proof["leak_free"] is True
     assert proof["violations"] == 0
-    assert proof["predictions_checked"] == len(observations.rows)
+    assert proof["predictions_checked"] == len(observations.calibration_rows)
     for prediction in score.predictions:
         if prediction.information_cutoff is not None:
             assert prediction.information_cutoff < prediction.event_time
@@ -1011,35 +1114,398 @@ def test_the_orchestrator_record_is_byte_identical_to_the_committed_reference(
 
 
 def test_readiness_is_computed_from_the_real_gates(
-    observations: scoring.ObservationSet, authority: scoring.ExpectedMarginAuthority
+    observations: scoring.ObservationSet,
 ) -> None:
-    """It must flip on admissible inputs, not on an edited constant."""
+    """It must flip on admissible inputs, not on an edited constant.
+
+    And it must report the three dependencies that actually block a research run.
+    Neither a ruling on the search ranges nor a ruling on the historical point
+    scale is among them any longer.
+    """
     from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import (
         calibration_orchestrator as orch,
     )
 
     today = orch.readiness()
-    assert today["real_calibration_executable"] is False
     assert today["machinery_complete"] is True
-    assert {b["input"] for b in today["blocking_inputs"]} == {
-        "GOVERNED_HISTORICAL_OBSERVATION_CORPUS",
-        "GOVERNED_EXPECTED_MARGIN_AUTHORITY",
-        "SEARCH_RANGE_AUTHORITY",
-    }
+    assert today["real_calibration_executable"] is False
+    assert {b["input"] for b in today["blocking_inputs"]} == set(
+        orch.REAL_EXECUTION_DEPENDENCIES
+    )
+    assert len(orch.REAL_EXECUTION_DEPENDENCIES) == 3
+
+    # The two corrected gates are open and neither asks for a ruling.
+    assert today["search_ranges_executable"] is True
+    assert today["search_range_status"] == search.EVIDENCE_PREDECLARED
+    assert today["search_range_ruling_required"] is False
+    assert today["historical_point_scale"]["ruling_required"] is False
+    assert (
+        today["historical_point_scale"]["status"] == scoring.SCALE_EXPERIMENT_BOUND
+    )
+    assert today["governed_model_structure"]["counts_as_lane_dependency"] is False
     assert orch.terminal_status() == orch.TERMINAL_READY_FOR_INPUTS
 
-    # A corpus that passes its own temporal gate clears exactly one input, and the
-    # fixture authority still does not clear the authority gate.
-    with_corpus = orch.readiness(observations=observations, authority=authority)
-    assert with_corpus["corpus_mounted"] is True
-    assert with_corpus["expected_margin_authority_mounted"] is False
-    assert with_corpus["real_calibration_executable"] is False
+    # Supplying every real input clears every blocker; nothing else is waiting.
+    ready = orch.readiness(
+        observations=observations,
+        structure=fixture.governed_structure_for_tests(),
+        opening_state=fixture.fixture_opening_standardized_state(),
+        venue_classification=fixture.fixture_venue_classification(),
+    )
+    assert ready["blocking_inputs"] == []
+    assert ready["real_calibration_executable"] is True
 
-    # A corpus whose transform disagrees does not clear it either.
+    # A corpus whose transform disagrees still fails, so the gate is real.
     broken = orch.readiness(
-        observations=observations, authority=fixture.fixture_authority(hfa_points=9.0)
+        observations=observations,
+        structure=fixture.governed_structure_for_tests(hfa_points=9.0),
+        opening_state=fixture.fixture_opening_standardized_state(),
+        venue_classification=fixture.fixture_venue_classification(),
     )
     assert broken["corpus_mounted"] is False
+
+
+# --- stage 0: historical point-scale identification --------------------------
+
+
+@pytest.fixture(scope="module")
+def structure() -> scoring.ExpectedMarginAuthority:
+    return fixture.governed_structure_for_tests()
+
+
+@pytest.fixture(scope="module")
+def opening_state() -> stage0.SealedInput:
+    return fixture.fixture_opening_standardized_state()
+
+
+@pytest.fixture(scope="module")
+def venue_classification() -> stage0.SealedInput:
+    return fixture.fixture_venue_classification()
+
+
+def test_the_point_scale_is_an_experimental_candidate_not_an_authority() -> None:
+    """It is empirically calibratable, so it needs no ruling in order to be tried."""
+    grid = stage0.default_point_scale_space()
+    assert grid.evidence_status == search.EVIDENCE_PREDECLARED
+    assert grid.as_dict()["confers_promotion_authority"] is False
+
+    candidate = grid.enumerate()[0]
+    assert candidate.status == scoring.SCALE_EXPERIMENT_BOUND
+    assert candidate.as_dict()["confers_promotion_authority"] is False
+
+    # An experiment-bound scale is admissible for research and refused for promotion.
+    experimental = fixture.governed_structure_for_tests(
+        points_per_standardized_unit=10.0
+    )
+    assert scoring.require_governed_structure(experimental) is experimental
+    with pytest.raises(GovernanceBlock, match="canonical promotion requires"):
+        scoring.require_canonical_scale(experimental)
+    with pytest.raises(GovernanceBlock):
+        scoring.require_governed_authority(experimental)
+
+    # The scale is one of the experimental values, never one of the structure fields.
+    assert (
+        "historical_points_per_standardized_unit"
+        in scoring.EXPERIMENTAL_CALIBRATION_VALUES
+    )
+    assert "historical_points_per_standardized_unit" not in (
+        scoring.GOVERNED_STRUCTURE_FIELDS
+    )
+
+
+def test_week_1_2_scale_scoring_uses_no_rerating_parameter(
+    observations: scoring.ObservationSet,
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+) -> None:
+    """The whole point of Stage 0: one unknown, so the scale is identified.
+
+    If a coefficient, cap, recent-form weighting or regularization entered here,
+    the scale would be confounded with it and no later stage could separate them.
+    """
+    window = stage0.weeks_1_2_rows(observations)
+    assert window
+    assert {int(r.week) for r in window} <= set(stage0.stage0_weeks)
+
+    result = stage0.score_point_scale(
+        stage0.PointScaleCandidate(12.0),
+        observations=observations,
+        structure=structure,
+        opening_state=opening_state,
+    )
+    assert result.rerating_parameters_used == 0
+    assert result.as_dict()["rerating_parameters_used"] == 0
+    assert result.scored_count > 0
+    assert result.rmse > 0.0
+
+
+def test_week_1_2_expected_margin_moves_with_the_point_scale(
+    observations: scoring.ObservationSet,
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+) -> None:
+    """A scale that changed nothing could not be identified by any amount of data."""
+    scored = {
+        k: stage0.score_point_scale(
+            stage0.PointScaleCandidate(k),
+            observations=observations,
+            structure=structure,
+            opening_state=opening_state,
+        ).rmse
+        for k in (4.0, 12.0, 40.0)
+    }
+    assert len({round(v, 9) for v in scored.values()}) == 3
+
+    # And the arithmetic itself is the declared one: points are k * standardized.
+    at_ten = structure.with_scale(10.0)
+    at_twenty = structure.with_scale(20.0)
+    assert at_ten.expected_margin_from_standardized(1.0, 0.0, "NEUTRAL") == pytest.approx(
+        10.0
+    )
+    assert at_twenty.expected_margin_from_standardized(
+        1.0, 0.0, "NEUTRAL"
+    ) == pytest.approx(20.0)
+
+
+def test_stage_0_recovers_the_scale_its_corpus_was_generated_at(
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+    venue_classification: stage0.SealedInput,
+) -> None:
+    """Identifiability, demonstrated rather than assumed.
+
+    Run against a low-noise corpus whose true scale is known, the ranked leader
+    must be that scale. On the default noisy fixture the estimate is attenuated by
+    sampling error, which is a property of 24 Weeks 1-2 games rather than of the
+    estimator, so the instrument is quietened here instead of the claim weakened.
+    """
+    quiet = fixture.fixture_observations(noise_points=1.0)
+    report = stage0.identify_point_scale(
+        observations=quiet,
+        structure=structure,
+        opening_state=opening_state,
+        venue_classification=venue_classification,
+    )
+    assert report["leader"]["points_per_standardized_unit"] == pytest.approx(
+        fixture.TRUE_POINT_SCALE
+    )
+    assert report["boundary_report"]["status"] == search.INTERIOR_OPTIMUM
+    assert report["expansion_required"] is False
+    assert report["scale_selected"] is False
+    assert report["parameters_promoted"] == 0
+    assert report["writes_canonical_config"] is False
+    assert report["primary_objective"] == stage0.STAGE0_PRIMARY_OBJECTIVE
+
+
+def test_a_scale_optimum_on_the_boundary_expands_rather_than_concludes(
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+    venue_classification: stage0.SealedInput,
+) -> None:
+    """The grid running out is not an optimum."""
+    quiet = fixture.fixture_observations(noise_points=1.0)
+    narrow = stage0.PointScaleSpace(space_id="NARROW", levels=(2.0, 4.0, 6.0, 8.0))
+    report = stage0.identify_point_scale(
+        observations=quiet,
+        structure=structure,
+        opening_state=opening_state,
+        venue_classification=venue_classification,
+        space=narrow,
+    )
+    assert report["boundary_report"]["status"] == search.BOUNDARY_OPTIMUM
+    assert report["boundary_report"]["edge"] == "high"
+    assert report["expansion_required"] is True
+
+    widened = stage0.expand_point_scale_space(
+        narrow, stage0.PointScaleCandidate(report["leader"]["points_per_standardized_unit"])
+    )
+    assert max(widened.levels) > max(narrow.levels)
+    assert widened.parent_config_sha == narrow.config_sha
+    assert widened.config_sha != narrow.config_sha
+
+    # An interior optimum has no boundary to expand past, and says so.
+    with pytest.raises(InputValidationError, match="interior"):
+        stage0.expand_point_scale_space(widened, stage0.PointScaleCandidate(6.0))
+
+
+def test_stage_0_refuses_to_select_a_scale_against_the_holdout(
+    observations: scoring.ObservationSet,
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+) -> None:
+    with pytest.raises(GovernanceBlock, match="may not select a scale against the holdout"):
+        stage0.score_point_scale(
+            stage0.PointScaleCandidate(12.0),
+            observations=observations,
+            structure=structure,
+            opening_state=opening_state,
+            scored_split="holdout",
+        )
+
+
+def test_stage_0_refuses_without_its_real_inputs() -> None:
+    """Called with nothing it names the three dependencies rather than estimating."""
+    with pytest.raises(GovernanceBlock) as excinfo:
+        stage0.identify_point_scale()
+    message = str(excinfo.value)
+    for dependency in (
+        "AUDITED_HISTORICAL_OBSERVATION_CORPUS",
+        "HISTORICAL_OPENING_STANDARDIZED_STATE",
+        "DEFENSIBLE_VENUE_HFA_CLASSIFICATION",
+    ):
+        assert dependency in message
+
+    plan = stage0.stage0_plan()
+    assert plan["ruling_required"] is False
+    assert plan["rerating_parameters_used"] == 0
+    assert plan["scale_selected"] is False
+    assert plan["window_weeks"] == [1, 2]
+
+
+def test_stage_0_inputs_arrive_sealed_and_are_never_read_from_a_sibling_worktree(
+    tmp_path: Path,
+) -> None:
+    """A digest-bound payload can be cited; a path into another lane cannot."""
+    sealed = fixture.fixture_opening_standardized_state()
+    assert sealed.verify() == sealed.sha256
+    assert stage0.require_sealed(
+        sealed, producer=stage0.PRODUCER_OPENING_STATE
+    ) is sealed
+
+    tampered = stage0.SealedInput(
+        input_id=sealed.input_id,
+        producer=sealed.producer,
+        sha256=sealed.sha256,
+        payload={**sealed.payload, "2021|T000": 999.0},
+    )
+    with pytest.raises(GovernanceBlock, match="not the bytes supplied"):
+        tampered.verify()
+
+    with pytest.raises(GovernanceBlock, match="expected"):
+        stage0.require_sealed(sealed, producer=stage0.PRODUCER_VENUE_CLASSIFICATION)
+    with pytest.raises(GovernanceBlock, match="none was supplied"):
+        stage0.require_sealed(None, producer=stage0.PRODUCER_OPENING_STATE)
+    with pytest.raises(GovernanceBlock, match="expects"):
+        stage0.require_sealed(
+            sealed, producer=stage0.PRODUCER_OPENING_STATE, expected_sha="00" * 32
+        )
+
+    repo_root = Path(__file__).resolve().parents[2]
+    stage0.refuse_direct_worktree_read(repo_root / "src", repo_root=repo_root)
+    with pytest.raises(GovernanceBlock, match="outside"):
+        stage0.refuse_direct_worktree_read(tmp_path, repo_root=repo_root)
+
+
+def test_stage_0_fails_closed_on_a_game_with_no_opening_state(
+    observations: scoring.ObservationSet,
+    structure: scoring.ExpectedMarginAuthority,
+) -> None:
+    """A missing opening strength is refused, never treated as zero."""
+    thin = stage0.SealedInput.seal(
+        input_id="THIN",
+        producer=stage0.PRODUCER_OPENING_STATE,
+        payload={"2021|T000": 0.5},
+    )
+    with pytest.raises(GovernanceBlock, match="no opening standardized state"):
+        stage0.score_point_scale(
+            stage0.PointScaleCandidate(12.0),
+            observations=observations,
+            structure=structure,
+            opening_state=thin,
+        )
+
+
+def test_stage_0_shards_by_the_same_arithmetic_as_stage_1() -> None:
+    grid = stage0.default_point_scale_space()
+    candidates = grid.enumerate()
+    seen: set[int] = set()
+    for index in range(4):
+        member = {
+            c.candidate_id for c in stage0.shard_point_scale(candidates, 4, index)
+        }
+        assert not (member & seen)
+        seen |= member
+    assert seen == {c.candidate_id for c in candidates}
+    with pytest.raises(InputValidationError):
+        stage0.shard_point_scale(candidates, 3, 0)
+
+
+# --- FCS exclusion -----------------------------------------------------------
+
+
+def test_fcs_games_are_excluded_from_every_calibration_path(
+    observations: scoring.ObservationSet,
+    structure: scoring.ExpectedMarginAuthority,
+    opening_state: stage0.SealedInput,
+) -> None:
+    """Their point scale is a separate open blocker, so they are not fitted here."""
+    report = observations.fcs_exclusion_report()
+    assert report["excluded_count"] > 0
+    assert report["policy"] == scoring.FCS_FAIL_CLOSED
+    assert report["blocker"] == "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+
+    fcs_ids = {r.game_id for r in observations.ordered_rows if r.is_fcs}
+    assert fcs_ids
+    assert not fcs_ids & {r.game_id for r in observations.calibration_rows}
+
+    # Stage 1 never predicts them.
+    scored = scoring.score_candidate(_candidate(), observations, structure)
+    assert not fcs_ids & {p.game_id for p in scored.predictions}
+
+    # Stage 0 never scores them either - and their opponents deliberately carry no
+    # opening state, so a regression that stopped excluding them fails loudly.
+    assert not fcs_ids & {r.game_id for r in stage0.weeks_1_2_rows(observations)}
+    stage0.score_point_scale(
+        stage0.PointScaleCandidate(12.0),
+        observations=observations,
+        structure=structure,
+        opening_state=opening_state,
+    )
+
+    # An unknown division is refused rather than assumed to be FBS.
+    with pytest.raises(InputValidationError, match="opponent_division"):
+        _row(opponent_division="FCS-AA")
+
+
+def test_governed_structure_is_required_and_the_scale_is_not(
+    observations: scoring.ObservationSet,
+) -> None:
+    """A. is demanded, B. is permitted - the correction in one assertion."""
+    with pytest.raises(GovernanceBlock, match="No expected-margin authority"):
+        scoring.require_governed_structure(None)
+    with pytest.raises(GovernanceBlock, match="structure status"):
+        scoring.require_governed_structure(fixture.fixture_authority())
+
+    # Governed structure with no scale at all is fine for a Stage 1 walk, whose
+    # corpus already carries points.
+    no_scale = fixture.governed_structure_for_tests()
+    assert no_scale.scale_status == scoring.SCALE_NOT_APPLICABLE
+    assert scoring.score_candidate(_candidate(), observations, no_scale).metrics[
+        "baxter_rmse"
+    ] > 0.0
+
+    # But asking it to convert a standardized state refuses, because that is a
+    # structural input this particular computation needs and does not have.
+    with pytest.raises(GovernanceBlock, match="no points_per_standardized_unit"):
+        no_scale.expected_margin_from_standardized(1.0, 0.0, "NEUTRAL")
+
+
+def test_the_governed_structure_states_the_semantics_it_governs() -> None:
+    structure = fixture.governed_structure_for_tests(hfa_points=3.5)
+    payload = structure.as_dict()
+    assert payload["subject_orientation"] == "SUBJECT_TEAM_PERSPECTIVE"
+    assert payload["point_domain"] == "V3_FOOTBALL_POINTS"
+    assert payload["first_promoted_rerating_after_week"] == 2
+    assert payload["fcs_policy"] == scoring.FCS_FAIL_CLOSED
+    assert structure.signed_venue_adjustment("HOME") == 3.5
+    assert structure.signed_venue_adjustment("AWAY") == -3.5
+    assert structure.signed_venue_adjustment("NEUTRAL") == 0.0
+
+    # The governed structure may not contradict V3's weekly rule or FCS policy.
+    with pytest.raises(GovernanceBlock, match="first promoted rerating"):
+        replace(structure, first_promoted_rerating_after_week=1)
+    with pytest.raises(GovernanceBlock, match="FCS policy"):
+        replace(structure, fcs_policy="FCS_INCLUDED")
 
 
 def test_the_record_states_the_operator_interface_and_promotes_nothing() -> None:
@@ -1065,6 +1531,22 @@ def test_the_record_states_the_operator_interface_and_promotes_nothing() -> None
     assert record["temporal_controls"]["first_promoted_rerating_after_week"] == 2
     assert record["temporal_controls"]["random_split_permitted"] is False
     assert record["operator_interface"]["worker_may_choose_its_own_grid"] is False
+    assert record["operator_interface"]["range_authority_flag_required"] is False
+
+    # The two corrected gates, as the record states them.
+    assert record["search_ranges"]["status"] == search.EVIDENCE_PREDECLARED
+    assert record["search_ranges"]["ruling_required"] is False
+    assert record["search_ranges"]["breadth"]["broad_enough"] is True
+    assert record["stage0"]["ruling_required"] is False
+    assert record["stage0"]["rerating_parameters_used"] == 0
+    assert record["promotions"]["point_scale_selected"] is False
+    assert list(record["stage_plan"])[0] == search.STAGE_POINT_SCALE
+    assert record["real_execution_dependencies"] == [
+        "AUDITED_HISTORICAL_OBSERVATION_CORPUS",
+        "HISTORICAL_OPENING_STANDARDIZED_STATE",
+        "DEFENSIBLE_VENUE_HFA_CLASSIFICATION",
+    ]
+    assert record["fcs_policy"]["policy"] == scoring.FCS_FAIL_CLOSED
 
     for count in ("1", "2", "4", "8"):
         proof = record["shard_partition_proofs"][count]

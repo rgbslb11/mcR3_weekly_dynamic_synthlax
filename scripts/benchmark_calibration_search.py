@@ -3,7 +3,7 @@
 This runs the real scorer over a synthetic corpus of realistic shape so that a
 shard count can be chosen before governed inputs arrive. It is a timing
 instrument: :mod:`calibration_fixture` refuses to be mounted as a governed
-source, the fixture authority is refused by :func:`require_governed_authority`,
+source, the fixture authority is refused by :func:`require_governed_structure`,
 and no number this prints is evidence about any parameter.
 
 Wall-time projections assume workers are separate processes on distinct cores and

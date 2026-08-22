@@ -30,24 +30,41 @@ and Python versions without depending on the global RNG's implementation.
 from __future__ import annotations
 
 import hashlib
+from dataclasses import replace
 from typing import Any, Sequence
 
 from .calibration_scoring import (
     ExpectedMarginAuthority,
     ObservationRow,
     ObservationSet,
+    STRUCTURE_GOVERNED,
     fixture_authority,
 )
 from .calibration_search import canonical_json
+from .calibration_stage0 import (
+    PRODUCER_OPENING_STATE,
+    PRODUCER_VENUE_CLASSIFICATION,
+    SealedInput,
+    opening_state_key,
+)
 from .errors import GovernanceBlock
 
 __all__ = [
     "FIXTURE_DATASET_SHA_PREFIX",
     "FIXTURE_PROVENANCE",
+    "TRUE_POINT_SCALE",
     "assert_refused_as_governed_source",
     "fixture_authority",
     "fixture_observations",
+    "fixture_opening_standardized_state",
+    "fixture_venue_classification",
+    "governed_structure_for_tests",
 ]
+
+#: The scale the fixture's margins are generated at, in points per standardized
+#: unit. Stage 0 should recover a neighbourhood of this from Weeks 1-2, which is
+#: what makes "the scale is identifiable" a test rather than an assertion.
+TRUE_POINT_SCALE = 12.0
 
 #: Deliberately contains "synthetic" so the governed mount path refuses it.
 FIXTURE_PROVENANCE = (
@@ -90,6 +107,75 @@ def _round_robin(team_count: int, round_index: int) -> list[tuple[int, int]]:
     return pairs
 
 
+def _true_strengths(team_count: int) -> list[float]:
+    """Arithmetic, not football. Spread symmetrically about zero."""
+    return [((i * 37) % team_count) - (team_count - 1) / 2.0 for i in range(team_count)]
+
+
+def fixture_opening_standardized_state(
+    *, seasons: Sequence[int] = (2021, 2022, 2023), team_count: int = 24
+) -> SealedInput:
+    """Stand-in for Agent 6's output: opening strength in standardized units.
+
+    Generated as ``true_strength / TRUE_POINT_SCALE`` so that a candidate scale of
+    :data:`TRUE_POINT_SCALE` reproduces the fixture's margins exactly, up to noise.
+    Sealed the same way a real upstream payload would be, so the digest check is
+    exercised rather than bypassed.
+    """
+    truth = _true_strengths(team_count)
+    payload = {
+        opening_state_key(season, f"T{i:03d}"): truth[i] / TRUE_POINT_SCALE
+        for season in seasons
+        for i in range(team_count)
+    }
+    return SealedInput.seal(
+        input_id="FIXTURE_OPENING_STANDARDIZED_STATE",
+        producer=PRODUCER_OPENING_STATE,
+        payload=payload,
+    )
+
+
+def fixture_venue_classification(
+    *, seasons: Sequence[int] = (2021, 2022, 2023), hfa_points: float = 2.5
+) -> SealedInput:
+    """Stand-in for Agent 5's output: the venue/HFA classification for used games."""
+    return SealedInput.seal(
+        input_id="FIXTURE_VENUE_CLASSIFICATION",
+        producer=PRODUCER_VENUE_CLASSIFICATION,
+        payload={
+            f"{season}": {
+                "hfa_points": float(hfa_points),
+                "neutral_site_adjustment_points": 0.0,
+                "classification": "FIXTURE_DETERMINISTIC",
+            }
+            for season in seasons
+        },
+    )
+
+
+def governed_structure_for_tests(
+    *, hfa_points: float = 2.5, points_per_standardized_unit: float | None = None
+) -> ExpectedMarginAuthority:
+    """A governed *structure* for exercising Stage 0 and the research gate.
+
+    This is arithmetic, not evidence, which is why it may legitimately be built in
+    a test while a synthetic *corpus* may not: the structure states subject
+    orientation, point domain and venue semantics, and a test asserting how the
+    scorer behaves under them has to be able to state them.
+
+    Constructing this is not the audited model layer having produced one. The gate
+    that actually blocks a real run is the corpus gate, which no fixture clears.
+    """
+    base = fixture_authority(
+        hfa_points=hfa_points, points_per_standardized_unit=points_per_standardized_unit
+    )
+    return replace(
+        base,
+        authority_id="TEST_GOVERNED_EXPECTED_MARGIN_STRUCTURE",
+        structure_status=STRUCTURE_GOVERNED,
+    )
+
+
 def fixture_observations(
     *,
     seasons: Sequence[int] = (2021, 2022, 2023),
@@ -98,6 +184,7 @@ def fixture_observations(
     seed: int = 20260822,
     noise_points: float = 12.0,
     hfa_points: float = 2.5,
+    fcs_games_per_season: int = 2,
 ) -> ObservationSet:
     """Build a chronologically ordered synthetic corpus with a temporal partition.
 
@@ -112,11 +199,7 @@ def fixture_observations(
             "one each for training, validation and holdout."
         )
     rng = _Lcg(seed)
-    # True strengths are arithmetic, not football. Spread symmetrically about zero
-    # so the identity point axis produces margins of a plausible magnitude.
-    true_strength = [
-        ((i * 37) % team_count) - (team_count - 1) / 2.0 for i in range(team_count)
-    ]
+    true_strength = _true_strengths(team_count)
     authority = fixture_authority(hfa_points=hfa_points)
 
     validation_season = seasons[-2]
@@ -140,7 +223,7 @@ def fixture_observations(
         for week in range(1, weeks + 1):
             for slot, (home, away) in enumerate(_round_robin(team_count, week - 1)):
                 venue = "NEUTRAL" if (week + slot) % 11 == 0 else "HOME"
-                signed_hfa = authority.signed_hfa(venue)
+                signed_hfa = authority.signed_venue_adjustment(venue)
                 margin = (
                     true_strength[home]
                     - true_strength[away]
@@ -174,6 +257,33 @@ def fixture_observations(
                         provenance=FIXTURE_PROVENANCE,
                     )
                 )
+        # A handful of FCS games per season, so "excluded" is something the tests
+        # can observe rather than something the code merely claims. Their opponents
+        # deliberately carry no opening standardized state, so a regression that
+        # stopped excluding them would fail loudly in Stage 0 rather than quietly
+        # fitting them on the very axis Stage 0 is identifying.
+        for extra in range(fcs_games_per_season):
+            home = (extra * 5) % team_count
+            venue = "HOME"
+            signed_hfa = authority.signed_venue_adjustment(venue)
+            rows.append(
+                ObservationRow(
+                    game_id=f"G{season}-FCS{extra:02d}",
+                    season=season,
+                    week=1,
+                    event_time=f"{season:04d}-08-01T12:{extra:02d}:00+00:00",
+                    team=f"T{home:03d}",
+                    opponent=f"F{extra:03d}",
+                    venue=venue,
+                    pregame_team_points=opening[home],
+                    pregame_opponent_points=opening[home] - 21.0,
+                    governed_expected_margin=21.0 + signed_hfa,
+                    actual_margin=21.0 + noise_points * 0.25 * rng.next_unit(),
+                    split=split,
+                    provenance=FIXTURE_PROVENANCE,
+                    opponent_division="FCS",
+                )
+            )
         del season_index
 
     digest = hashlib.sha256(

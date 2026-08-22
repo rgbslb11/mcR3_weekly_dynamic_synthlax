@@ -6,6 +6,14 @@ Branch: `claude/v3-calibration-orchestrator-r1`
 Frozen base: `5479f2ae7687c36c0ed4117334171289693dd5c9`
 Disposition: **SEARCH MACHINERY COMPLETE — INPUTS NOT MOUNTED**
 
+**R1 remediation applied.** Two input gates were too strong for an experimental,
+non-promoting research path and have been corrected. Search ranges are now
+`EXPERIMENT_PREDECLARED_AND_HASH_BOUND` and need no governance ruling; the
+historical point scale is an empirically calibratable experimental value and
+needs no ruling either. A new Stage 0 identifies it from Weeks 1–2. The
+real-execution dependency list drops from a governance-shaped set to three data
+inputs. Sections 3, 4, 6 and 13 carry the corrections.
+
 Machine-readable record: `reference/dynamic_weekly_mc_v3/V3_CALIBRATION_ORCHESTRATOR_R1.json`,
 emitted deterministically by `calibration_orchestrator.write_orchestrator_record`
 and compared byte-for-byte against the committed copy by the test suite.
@@ -27,10 +35,17 @@ coarse winners, local refinement, sealed holdout — with every step determinist
 and every identification defect of the prior experiment reported rather than
 repeated.
 
-What does not exist is the inputs. A governed observation corpus and a settled
-expected-margin authority are both absent, and every path that would score
-against them fails closed. The coarse grid enumerates, shards and benchmarks
-today; it refuses to produce a citable number.
+What does not exist is the inputs — and after the R1 remediation that list is
+shorter and entirely made of data. Three things block a real run: an audited
+observation corpus, the historical opening standardized state, and a defensible
+venue/HFA classification. Nothing waits on a Chairman ruling. Every path that
+would score without those three fails closed; the coarse grid enumerates, shards
+and benchmarks today and refuses to produce a citable number.
+
+The correction worth stating plainly: *choosing which numbers to try* and
+*choosing which number becomes canonical* are different acts, and only the second
+needs an authority. The first needs to be honest, and honesty here is mechanical
+— predeclared, hash-bound, breadth-checked — rather than procedural.
 
 The compute estimate is the mildly surprising part. The full coarse universe of
 2,160 candidates over a 2,144-game corpus takes **30 seconds on one worker** and
@@ -43,7 +58,8 @@ still is.
 
 | Module | Role |
 | --- | --- |
-| `calibration_search.py` | Candidate universe, content-addressed ids, sharding, staged plan, holdout custody |
+| `calibration_stage0.py` | Stage 0: historical point-scale identification, sealed inputs |
+| `calibration_search.py` | Candidate universe, content-addressed ids, sharding, predeclaration, staged plan, holdout custody |
 | `calibration_scoring.py` | Temporal walk-forward scorer, metrics, `game_sd_points`, shard output |
 | `calibration_aggregate.py` | Shard merge, coverage and homogeneity proofs, declared ranking |
 | `calibration_orchestrator.py` | Lane facade: readiness, operator interface, machine-readable record |
@@ -51,7 +67,7 @@ still is.
 | `calibration_fixture.py` | Synthetic non-promoting corpus, for benchmarks and tests only |
 | `scripts/benchmark_calibration_search.py` | Timing instrument |
 
-58 tests in `tests/dynamic_weekly_mc_v3/test_calibration_orchestrator.py`.
+79 tests in `tests/dynamic_weekly_mc_v3/test_calibration_orchestrator.py`.
 
 ---
 
@@ -105,11 +121,30 @@ A worker is handed a space and checks its `config_sha` against what it was told
 to expect. A worker that built a different grid fails at startup rather than
 returning a shard of a universe nobody else searched.
 
-### Ranges are PENDING, and pending means refused
+### Ranges are predeclared and hash-bound — which is what makes them executable
 
-Every coarse axis carries `RANGE_PENDING_EVIDENCE`. The levels are scaffolding
-chosen to exercise the harness, and `require_range_authority` refuses to score
-them until a named authority fixes them.
+*Corrected in R1.* Every coarse axis carries
+`EXPERIMENT_PREDECLARED_AND_HASH_BOUND`. A research search runs through
+`require_executable_ranges` and needs no governance ruling. Three things carry
+the weight, and none of them is a promise:
+
+* **`config_sha` covers every axis and every level.** Narrowing a range after
+  seeing the table changes the digest, so the narrowed run is visibly a
+  *different experiment* rather than the same one reported differently. Nobody
+  has to be trusted not to peek; peeking leaves a mark.
+* **Breadth is checked.** `require_predeclared_breadth` refuses an ordered family
+  carrying fewer than three distinct levels or no spread. A one-point "range"
+  would satisfy every other condition while being a declaration of the answer
+  wearing a search's clothes.
+* **The obligations travel with the declaration.** Boundary optima must expand,
+  the holdout stays sealed, nothing promotes automatically — recorded on the
+  declaration so an aggregate can be checked against what was promised.
+
+A predeclaration may never nominate the holdout as its scored split, and one that
+does not claim to precede its results is refused at construction.
+
+`require_range_authority` is kept and is now the *promotion-grade* gate: reaching
+a canonical value still needs a named authority. Running an experiment does not.
 
 The grid is deliberately **not** centred on the prior result. `0.18` is not a
 coefficient level and `6.0` is not a cap level. That experiment's corpus is
@@ -124,6 +159,34 @@ their ladder so a boundary optimum is detectable.
 ---
 
 ## 4. Staged search
+
+**Stage 0 — historical point scale.** *New in R1.* Weeks 1–2 are the clean
+window: nothing has been promoted yet, so every prediction comes from opening
+strength alone and exactly one unknown remains.
+
+```
+team_points     = k * opening_standardized_state
+opponent_points = k * opponent_opening_standardized_state
+expected_margin = (team_points - opponent_points) + governed venue adjustment
+```
+
+No weekly residual coefficient, no cap, no recent-form weighting, no
+regularization — `rerating_parameters_used` is reported as `0` so that claim is a
+field rather than a sentence. That is why Stage 0 runs *first*: a scale
+identified after the rerating parameters have been chosen is confounded with
+them, since a large `k` and a small coefficient buy much the same thing.
+
+The grid is broad (2.0–40.0 points per standardized unit, 20 levels), predeclared
+and hash-bound, and `expand_point_scale_space` widens it deterministically if the
+optimum lands on an edge. Scored on validation Weeks 1–2; selecting against the
+holdout is refused outright. The primary objective is
+`out_of_sample_expected_margin_rmse_weeks_1_2`.
+
+Stage 0's two upstream inputs arrive as `SealedInput` — a payload plus the digest
+over it — from Agent 6 (opening standardized state) and Agent 5 (venue
+classification). `refuse_direct_worktree_read` refuses any path outside this
+repository: reading a sibling lane's working tree would make this result depend
+on a file nobody versioned.
 
 **Stage 1 — coarse.** 2,160 candidates. Deliberately coarse: resolving a third
 decimal place costs the same compute as covering twice the space, and Stage 2
@@ -182,12 +245,29 @@ rating forward would score a model nobody proposed.
 
 ---
 
-## 6. Expected-margin input contract
+## 6. Expected-margin: governed structure vs experimental calibration values
 
-The disputed historical point-axis resolution is **not** implemented here. The
-rating-to-margin transform arrives as an `ExpectedMarginAuthority` declaring its
-`point_axis_id`, `transform_id`, HFA treatment and status.
-`require_governed_authority` refuses anything that is not `GOVERNED`.
+*Corrected in R1.* Conflating these two was the second defect. Requiring the
+*scale* to be governed before any experiment could run treated an empirically
+calibratable quantity as a prerequisite ruling — which forbids the very
+measurement that would settle it.
+
+**A. Governed model structure**, supplied by the audited model layer and never
+guessed here: expected-margin arithmetic, subject orientation, V3 football-point
+domain, HFA semantics, neutral-site adjustment, the Weeks 1–2 opening-state rule,
+first promoted rerating after Week 2, and FCS fail-closed behaviour.
+`require_governed_structure` refuses a fixture or absent structure, and the
+structure may not contradict V3's weekly rule or FCS policy — both are checked at
+construction.
+
+**B. Experimental calibration values**, which the search exists to estimate and
+none of which needs a ruling in order to be *tried*: the historical
+points-per-standardized-unit scale, the five mean-model families, and
+`game_sd_points`.
+
+`require_canonical_scale` is the separate, promotion-only gate; an
+experiment-bound scale is a candidate, not a value. `require_governed_authority`
+now means both together and is used only on the promotion path.
 
 `EXPECTED_MARGIN_INPUT_CONTRACT` in `calibration_scoring.py` states, field by
 field, what the parallel lane must supply. Two boundaries are strict:
@@ -200,9 +280,25 @@ field, what the parallel lane must supply. Two boundaries are strict:
   corpus never used, and the search optimises a model of the wrong thing. This is
   checked once, before any compute is spent.
 
-A fixture authority exists for benchmarking. It asserts that a point of strength
-is a point of margin — precisely the assumption the governed lane exists to
-replace — and it is refused for any run whose results could be cited.
+A fixture structure exists for benchmarking. It asserts that a point of strength
+is a point of margin — precisely the assumption the audited model layer replaces
+— and it is refused for any run whose results could be cited.
+
+**No numeric expected margin is emitted while a structural input that particular
+computation needs is absent.** The check is per-candidate rather than global:
+a Stage 0 evaluation converts a standardized state and therefore requires a
+scale; a Stage 1 walk over a corpus that already carries points does not, and
+demanding one from it would block work for an input it never uses.
+
+### FCS observations
+
+Excluded from every calibration path — Stage 0, coarse, refinement and holdout —
+until the adapter named by `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`
+exists. Their point scale is a separate open blocker, so fitting them here would
+fit them on the very axis Stage 0 is trying to identify. They are excluded
+*visibly*: `fcs_exclusion_report()` counts them and the shard table carries the
+count, so "excluded" is a number a reviewer can see rather than an absence they
+have to notice.
 
 ---
 
@@ -382,7 +478,9 @@ larger than the one benchmarked. Compute is not what is blocking this program.
   six canonical values remain `null` and a test asserts it.
 * No canonical writer created. The strongest output is a ranked table.
 * No blocker retired. The formal set remains exactly 8; a test asserts that this
-  lane added none of its own to it.
+  lane added none of its own to it. Neither the search-range status nor the
+  historical point scale was added as a formal blocker — they are experimental
+  research parameters, not governance items.
 * No real calibration executed — the inputs are not there.
 * No season Monte Carlo of any size.
 * No governed allowlist widened, no ruling encoded, no existing module's contract
@@ -393,25 +491,32 @@ larger than the one benchmarked. Compute is not what is blocking this program.
 
 ## 13. Blocked on
 
-Three inputs, none of which this lane can supply:
+*Corrected in R1.* Three **data** inputs. No Chairman ruling on the historical
+scale, and none on the search ranges.
 
-1. **A governed historical observation corpus**, frozen and audited, registered
+1. **An audited historical observation corpus**, frozen and audited, registered
    through `calibration_evidence.register_governed_dataset` with an exact
    SHA-256. The parallel corpus lane reports roughly 2,241 admitted observations
    across 2021–2024; those numbers are not treated as governed here and the
    orchestrator is designed to accept an exact digest later, with no coupling to
    that worktree.
 
-2. **A settled expected-margin authority** — the disputed point-axis resolution —
-   supplied as an `ExpectedMarginAuthority` with status `GOVERNED`, naming its
-   axis and its rating-to-margin transform.
+2. **The historical opening standardized state** — Agent 6 — as a `SealedInput`
+   carrying its payload and the digest over it.
 
-3. **A search range authority**: a named ruling that fixes each pending axis,
-   flipping its evidence status to `RANGE_FIXED_BY_NAMED_AUTHORITY`.
+3. **A defensible venue/HFA classification for the games used** — Agent 5 — same
+   sealed form.
 
-When those three land, the sequence is: fix the ranges, run four shards of Stage
-1, aggregate, refine around the leaders, run Stage 2, shortlist at most eight,
-open the holdout ledger once. Roughly a minute of compute, and every number it
+The expected-margin *structure* is not on this list: it is supplied by the
+audited model layer once its own focused remediation passes, rather than owed by
+any of these lanes. The gate that enforces it still fails closed, and readiness
+reports it separately rather than silently dropping it.
+
+When the three land, the sequence is: run Stage 0 to identify the point scale
+from Weeks 1–2, expand the scale grid if the optimum sits on an edge, then four
+shards of Stage 1, aggregate, refine around the leaders, run Stage 2, shortlist
+at most eight, open the holdout ledger once, and read `game_sd_points` off the
+out-of-sample residuals. Roughly a minute of compute, and every number it
 produces carries its own provenance.
 
 **Terminal status: `CALIBRATION_ORCHESTRATOR_READY_FOR_INPUTS`.**

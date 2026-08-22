@@ -31,12 +31,21 @@ Raw observations and derived state are different types
     could write back into an observation, so the corpus cannot be quietly
     reshaped by the candidate being scored against it.
 
-Expected margin fails closed
-    The rating-to-margin transform is the disputed point-axis question, so it is
-    not implemented here. It arrives as an :class:`ExpectedMarginAuthority`, and
-    :func:`require_governed_authority` refuses the fixture one. A missing
-    expected margin raises; it never defaults to zero, because a zero expected
-    margin is a confident prediction of a tie, not an absence of one.
+Governed structure and experimental calibration values are separated
+    The expected-margin *arithmetic* - subject orientation, point domain, venue
+    semantics, the Weeks 1-2 opening-state rule, FCS fail-closed behaviour - is
+    governed structure supplied by the audited model layer, and
+    :func:`require_governed_structure` refuses a fixture one. The historical
+    points-per-standardized-unit *scale* is not structure: it is an empirically
+    calibratable quantity, so it may be an experiment-bound candidate and is
+    identified by Stage 0 in :mod:`.calibration_stage0`. Requiring a ruling on it
+    before the search could run would have forbidden the measurement that settles
+    it.
+
+    A missing expected margin still raises, and never defaults to zero, because a
+    zero expected margin is a confident prediction of a tie rather than the
+    absence of one. Likewise no numeric margin is emitted while a structural input
+    that particular computation needs is absent.
 
 ``game_sd_points`` is estimated, never fitted
     See :func:`estimate_game_sd_points`. The mean model is selected on RMSE,
@@ -54,8 +63,8 @@ from __future__ import annotations
 import hashlib
 import math
 import re
-from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from dataclasses import dataclass, field, replace
+from typing import Any, Callable, Mapping, Sequence
 
 from . import calibration as cal
 from . import colley as colley_witness
@@ -69,6 +78,9 @@ from .errors import GovernanceBlock, InputValidationError
 
 __all__ = [
     "EXPECTED_MARGIN_INPUT_CONTRACT",
+    "EXPERIMENTAL_CALIBRATION_VALUES",
+    "FCS_FAIL_CLOSED",
+    "GOVERNED_STRUCTURE_FIELDS",
     "FAILURE_DEGENERATE",
     "FAILURE_GOVERNANCE",
     "FAILURE_INPUT",
@@ -77,6 +89,11 @@ __all__ = [
     "FIXTURE_AUTHORITY_ID",
     "GAME_SD_METHOD_ACTUAL_MARGIN",
     "GAME_SD_METHOD_RESIDUAL",
+    "SCALE_CANONICAL",
+    "SCALE_EXPERIMENT_BOUND",
+    "SCALE_NOT_APPLICABLE",
+    "STRUCTURE_FIXTURE",
+    "STRUCTURE_GOVERNED",
     "VENUES",
     "CandidateScore",
     "CapIdentification",
@@ -94,7 +111,9 @@ __all__ = [
     "estimate_game_sd_points",
     "fixture_authority",
     "game_sd_from_actual_margins",
+    "require_canonical_scale",
     "require_governed_authority",
+    "require_governed_structure",
     "require_no_future_leakage",
     "require_residual_based_game_sd",
     "score_candidate",
@@ -105,6 +124,10 @@ __all__ = [
 
 
 VENUES = ("HOME", "AWAY", "NEUTRAL")
+
+#: Divisions an opponent may carry. FCS rows are excluded from calibration until
+#: the point-scale adapter exists; see :data:`FCS_FAIL_CLOSED`.
+DIVISIONS = ("FBS", "FCS")
 
 #: Governed V3 rule: Weeks 1-2 are audit-only and the first promoted rerating
 #: lands after Week 2. Restated here because the scorer enforces it directly;
@@ -224,18 +247,72 @@ def _prior_weight(week_completed: int) -> float:
     return 0.0
 
 
-# --- expected-margin authority ----------------------------------------------
+# --- expected-margin: governed structure vs experimental calibration values ---
+#
+# These are two different kinds of thing and conflating them was the defect this
+# section corrects. Requiring the *scale* to be GOVERNED before any experiment may
+# run treats an empirically calibratable quantity as a prerequisite ruling, which
+# blocks the very measurement that would settle it.
+#
+# A. GOVERNED MODEL STRUCTURE - the arithmetic and the semantics. Supplied by the
+#    audited model layer, never guessed here, and required before a numeric
+#    expected margin may be emitted.
+#
+# B. EXPERIMENTAL CALIBRATION VALUES - the numbers the search exists to estimate.
+#    The historical points-per-standardized-unit scale is one of these, alongside
+#    the five mean-model families and game_sd_points.
+
+#: A. What the audited model layer must fix before any margin can be computed.
+GOVERNED_STRUCTURE_FIELDS = (
+    "expected_margin_arithmetic",
+    "subject_orientation",
+    "point_domain",
+    "hfa_semantics",
+    "neutral_site_adjustment",
+    "weeks_1_2_opening_state_rule",
+    "first_promoted_rerating_after_week",
+    "fcs_fail_closed_behaviour",
+)
+
+#: B. What the calibration search exists to estimate. None of these is canonical,
+#: and none of them requires a ruling in order to be *tried*.
+EXPERIMENTAL_CALIBRATION_VALUES = (
+    "historical_points_per_standardized_unit",
+    "weekly_performance_residual_coefficient",
+    "weekly_movement_cap_points",
+    "recent_form_weights",
+    "blowout_treatment",
+    "sample_size_regularization",
+    "game_sd_points",
+)
+
+STRUCTURE_GOVERNED = "GOVERNED_MODEL_STRUCTURE"
+STRUCTURE_FIXTURE = "FIXTURE_NON_PROMOTING_STRUCTURE"
+
+#: The scale is an experiment-bound candidate until a promotion says otherwise.
+SCALE_EXPERIMENT_BOUND = "EXPERIMENT_BOUND_CANDIDATE_SCALE"
+SCALE_CANONICAL = "CANONICAL_PROMOTED_SCALE"
+SCALE_NOT_APPLICABLE = "SCALE_NOT_APPLICABLE_CORPUS_CARRIES_POINTS"
+SCALE_STATUSES = (SCALE_EXPERIMENT_BOUND, SCALE_CANONICAL, SCALE_NOT_APPLICABLE)
+
+#: FCS observations stay out of the main calibration until the point-scale adapter
+#: named by blocker ``model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`` exists.
+FCS_FAIL_CLOSED = "FCS_EXCLUDED_UNTIL_POINT_SCALE_ADAPTER"
 
 
 @dataclass(frozen=True)
 class ExpectedMarginAuthority:
-    """The rating-to-margin transform, supplied rather than invented.
+    """The expected-margin model: governed structure, plus an experimental scale.
 
-    The historical point-axis resolution is disputed and is not settled here. The
-    authority owns the transform, declares the axis it is on, and carries a status
-    that :func:`require_governed_authority` checks. ``transform`` is a callable so
-    the governed lane can supply something this module never anticipated without
-    the scorer having to model it.
+    The structure half is not negotiable and is not invented here. The scale half
+    is a calibration candidate like any other, and
+    :func:`require_governed_structure` deliberately permits it to be
+    experiment-bound: the historical point axis is empirically calibratable, so
+    demanding a ruling on it before measuring it would forbid the measurement that
+    settles it.
+
+    ``transform`` stays a callable so the audited model layer can supply an
+    arithmetic this module never anticipated without the scorer having to model it.
     """
 
     authority_id: str
@@ -243,8 +320,19 @@ class ExpectedMarginAuthority:
     point_axis_id: str
     hfa_points: float
     hfa_treatment: str
-    status: str
     transform: Callable[[float, float, float], float]
+    #: A. Governed model structure.
+    subject_orientation: str = "SUBJECT_TEAM_PERSPECTIVE"
+    point_domain: str = "V3_FOOTBALL_POINTS"
+    neutral_site_adjustment_points: float = 0.0
+    weeks_1_2_rule: str = "OPENING_STATE_EXACT_NOTHING_PROMOTED"
+    first_promoted_rerating_after_week: int = 2
+    fcs_policy: str = FCS_FAIL_CLOSED
+    structure_status: str = STRUCTURE_FIXTURE
+    #: B. Experimental calibration value. ``None`` when the corpus already carries
+    #: points and no standardized-to-points conversion is being applied.
+    points_per_standardized_unit: float | None = None
+    scale_status: str = SCALE_NOT_APPLICABLE
 
     def __post_init__(self) -> None:
         if not self.authority_id.strip():
@@ -254,9 +342,59 @@ class ExpectedMarginAuthority:
                 f"Authority {self.authority_id} declares non-finite HFA "
                 f"{self.hfa_points!r}."
             )
+        if not math.isfinite(float(self.neutral_site_adjustment_points)):
+            raise InputValidationError(
+                f"Authority {self.authority_id} declares a non-finite neutral-site "
+                f"adjustment {self.neutral_site_adjustment_points!r}."
+            )
+        if self.structure_status not in (STRUCTURE_GOVERNED, STRUCTURE_FIXTURE):
+            raise InputValidationError(
+                f"Unknown structure status {self.structure_status!r}; expected one of "
+                f"{[STRUCTURE_GOVERNED, STRUCTURE_FIXTURE]}."
+            )
+        if self.scale_status not in SCALE_STATUSES:
+            raise InputValidationError(
+                f"Unknown scale status {self.scale_status!r}; expected one of "
+                f"{list(SCALE_STATUSES)}."
+            )
+        if self.scale_status == SCALE_NOT_APPLICABLE:
+            if self.points_per_standardized_unit is not None:
+                raise InputValidationError(
+                    f"Authority {self.authority_id} declares {SCALE_NOT_APPLICABLE} but "
+                    f"carries a scale of {self.points_per_standardized_unit!r}."
+                )
+        elif (
+            self.points_per_standardized_unit is None
+            or not math.isfinite(float(self.points_per_standardized_unit))
+            or float(self.points_per_standardized_unit) <= 0.0
+        ):
+            raise InputValidationError(
+                f"Authority {self.authority_id} declares scale status "
+                f"{self.scale_status} but carries "
+                f"{self.points_per_standardized_unit!r}. A points-per-standardized-unit "
+                "scale must be positive and finite."
+            )
+        if int(self.first_promoted_rerating_after_week) != 2:
+            raise GovernanceBlock(
+                f"Authority {self.authority_id} declares the first promoted rerating "
+                f"after week {self.first_promoted_rerating_after_week}; V3 governs it as "
+                "week 2."
+            )
+        if self.fcs_policy != FCS_FAIL_CLOSED:
+            raise GovernanceBlock(
+                f"Authority {self.authority_id} declares FCS policy {self.fcs_policy!r}. "
+                f"Until the point-scale adapter exists the only admissible policy is "
+                f"{FCS_FAIL_CLOSED}."
+            )
 
-    def signed_hfa(self, venue: str) -> float:
-        """HFA in the subject team's favour, by venue."""
+    def signed_venue_adjustment(self, venue: str) -> float:
+        """The venue term in the subject team's favour.
+
+        Neutral sites carry their own declared adjustment rather than an assumed
+        zero. It is usually zero, and "usually zero" is exactly the kind of value
+        that should be stated by the governed structure instead of hard-coded into
+        a scorer.
+        """
         key = venue.strip().upper()
         if key not in VENUES:
             raise InputValidationError(
@@ -268,11 +406,41 @@ class ExpectedMarginAuthority:
             return float(self.hfa_points)
         if key == "AWAY":
             return -float(self.hfa_points)
-        return 0.0
+        return float(self.neutral_site_adjustment_points)
 
-    def expected_margin(self, team_points: float, opponent_points: float, venue: str) -> float:
+    #: Retained spelling of :meth:`signed_venue_adjustment` for the home/away term.
+    def signed_hfa(self, venue: str) -> float:
+        return self.signed_venue_adjustment(venue)
+
+    def require_structural_inputs(self, *, needs_scale: bool) -> None:
+        """Refuse to emit a number while a structural input this call needs is absent.
+
+        ``needs_scale`` is the caller stating whether it is about to convert a
+        standardized state into points. A Stage 0 evaluation does; a Stage 1 walk
+        over a corpus that already carries points does not. The check is
+        per-candidate rather than global for exactly that reason - demanding a
+        scale from a run that never uses one would block work for a missing input
+        that was never required.
+        """
+        if needs_scale and self.points_per_standardized_unit is None:
+            raise GovernanceBlock(
+                f"Authority {self.authority_id} was asked to convert a standardized "
+                "state into points but carries no points_per_standardized_unit. No "
+                "numeric expected margin is emitted while a structural input this "
+                "computation requires is missing."
+            )
+
+    def expected_margin(
+        self, team_points: float, opponent_points: float, venue: str
+    ) -> float:
+        """Expected margin from two point strengths. No scale conversion involved."""
+        self.require_structural_inputs(needs_scale=False)
         value = float(
-            self.transform(float(team_points), float(opponent_points), self.signed_hfa(venue))
+            self.transform(
+                float(team_points),
+                float(opponent_points),
+                self.signed_venue_adjustment(venue),
+            )
         )
         if not math.isfinite(value):
             raise InputValidationError(
@@ -281,6 +449,36 @@ class ExpectedMarginAuthority:
             )
         return value
 
+    def expected_margin_from_standardized(
+        self, team_standardized: float, opponent_standardized: float, venue: str
+    ) -> float:
+        """Expected margin from standardized strengths, via the candidate scale.
+
+        This is the Stage 0 arithmetic: points are ``k * standardized_state``, the
+        margin is their difference plus the governed venue adjustment, and ``k`` is
+        the experimental quantity being identified.
+        """
+        self.require_structural_inputs(needs_scale=True)
+        scale = float(self.points_per_standardized_unit or 0.0)
+        return self.expected_margin(
+            scale * float(team_standardized), scale * float(opponent_standardized), venue
+        )
+
+    def with_scale(
+        self, points_per_standardized_unit: float, *, status: str = SCALE_EXPERIMENT_BOUND
+    ) -> "ExpectedMarginAuthority":
+        """The same governed structure carrying a different candidate scale.
+
+        Stage 0 sweeps ``k`` by rebuilding the authority rather than by mutating
+        it, so a scored result can never be attributed to a structure that has
+        since changed underneath it.
+        """
+        return replace(
+            self,
+            points_per_standardized_unit=float(points_per_standardized_unit),
+            scale_status=status,
+        )
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "authority_id": self.authority_id,
@@ -288,48 +486,98 @@ class ExpectedMarginAuthority:
             "point_axis_id": self.point_axis_id,
             "hfa_points": float(self.hfa_points),
             "hfa_treatment": self.hfa_treatment,
-            "status": self.status,
+            "subject_orientation": self.subject_orientation,
+            "point_domain": self.point_domain,
+            "neutral_site_adjustment_points": float(self.neutral_site_adjustment_points),
+            "weeks_1_2_rule": self.weeks_1_2_rule,
+            "first_promoted_rerating_after_week": int(
+                self.first_promoted_rerating_after_week
+            ),
+            "fcs_policy": self.fcs_policy,
+            "structure_status": self.structure_status,
+            "scale_status": self.scale_status,
+            "points_per_standardized_unit": self.points_per_standardized_unit,
         }
 
 
-AUTHORITY_STATUS_GOVERNED = "GOVERNED"
-AUTHORITY_STATUS_FIXTURE = "FIXTURE_NON_PROMOTING"
+def require_governed_structure(
+    authority: ExpectedMarginAuthority | None,
+) -> ExpectedMarginAuthority:
+    """The research gate. Governed structure required; experimental scale permitted.
 
-
-def require_governed_authority(authority: ExpectedMarginAuthority | None) -> ExpectedMarginAuthority:
-    """Fail closed unless a governed expected-margin authority is mounted."""
+    This is what a scoring run calls. It refuses a fixture structure and an absent
+    authority, and it deliberately says nothing about the scale: the historical
+    point axis is empirically calibratable, and requiring it to be canonical before
+    the search may run would forbid the measurement that would make it canonical.
+    """
     if authority is None:
         raise GovernanceBlock(
             "No expected-margin authority supplied. Scoring is refused rather than run "
-            "against a default transform: the historical point-axis resolution is the "
-            "disputed question, and inventing one here would answer it by accident."
+            "against a default transform: the arithmetic, orientation, point domain and "
+            "venue semantics are governed structure and are never guessed here."
         )
-    if authority.status != AUTHORITY_STATUS_GOVERNED:
+    if authority.structure_status != STRUCTURE_GOVERNED:
         raise GovernanceBlock(
-            f"Expected-margin authority {authority.authority_id} has status "
-            f"{authority.status!r}. Only {AUTHORITY_STATUS_GOVERNED} authorities may "
-            "produce results that are cited; fixtures benchmark the harness and "
-            "nothing else."
+            f"Expected-margin authority {authority.authority_id} carries structure "
+            f"status {authority.structure_status!r}. Only {STRUCTURE_GOVERNED} may "
+            "produce results that are read as evidence; fixtures benchmark the harness "
+            "and nothing else."
         )
     return authority
 
 
-def fixture_authority(*, hfa_points: float = 2.5) -> ExpectedMarginAuthority:
+def require_canonical_scale(
+    authority: ExpectedMarginAuthority,
+) -> ExpectedMarginAuthority:
+    """The promotion gate. The scale itself must have been promoted.
+
+    Separate from :func:`require_governed_structure` because the two are asked at
+    different moments: the first before an experiment runs, this one only when a
+    value is about to become canonical.
+    """
+    if authority.scale_status != SCALE_CANONICAL:
+        raise GovernanceBlock(
+            f"Authority {authority.authority_id} carries scale status "
+            f"{authority.scale_status!r}. A canonical promotion requires "
+            f"{SCALE_CANONICAL}; an experiment-bound scale is a candidate, not a value."
+        )
+    return authority
+
+
+def require_governed_authority(
+    authority: ExpectedMarginAuthority | None,
+) -> ExpectedMarginAuthority:
+    """Promotion-grade: governed structure *and* a canonical scale."""
+    return require_canonical_scale(require_governed_structure(authority))
+
+
+def fixture_authority(
+    *, hfa_points: float = 2.5, points_per_standardized_unit: float | None = None
+) -> ExpectedMarginAuthority:
     """A non-promoting identity-axis transform, for benchmarking the harness only.
 
     It answers no disputed question: it asserts that a point of strength is a
     point of margin, which is the assumption the governed lane exists to replace.
-    :func:`require_governed_authority` refuses it, so it can measure how fast the
+    :func:`require_governed_structure` refuses it, so it can measure how fast the
     scorer runs and can never measure how good a candidate is.
     """
+    scale_status = (
+        SCALE_NOT_APPLICABLE
+        if points_per_standardized_unit is None
+        else SCALE_EXPERIMENT_BOUND
+    )
     return ExpectedMarginAuthority(
         authority_id=FIXTURE_AUTHORITY_ID,
-        transform_id="IDENTITY_POINTS_TO_MARGIN_PLUS_SIGNED_HFA",
+        transform_id="IDENTITY_POINTS_TO_MARGIN_PLUS_SIGNED_VENUE",
         point_axis_id="FIXTURE_UNRESOLVED_POINT_AXIS",
         hfa_points=float(hfa_points),
-        hfa_treatment="SIGNED_BY_VENUE_ZERO_AT_NEUTRAL",
-        status=AUTHORITY_STATUS_FIXTURE,
-        transform=lambda team, opponent, hfa: (team - opponent) + hfa,
+        hfa_treatment="SIGNED_BY_VENUE",
+        transform=lambda team, opponent, venue_adjustment: (
+            (team - opponent) + venue_adjustment
+        ),
+        structure_status=STRUCTURE_FIXTURE,
+        points_per_standardized_unit=points_per_standardized_unit,
+        scale_status=scale_status,
     )
 
 
@@ -353,6 +601,12 @@ class ObservationRow:
     actual_margin: float
     split: str
     provenance: str
+    #: Division of the opponent. Present for one purpose only: so FCS games can be
+    #: *excluded*. calibration_contract.FIELDS_REQUIRING_ADMISSION_RULING names this
+    #: field and says exactly why - until the FCS point-scale adapter exists, an
+    #: FCS game fitted alongside FBS games is fitted on an unresolved scale. It is
+    #: never used as a predictive signal, which is what would need a ruling.
+    opponent_division: str = "FBS"
 
     def __post_init__(self) -> None:
         if self.venue.strip().upper() not in VENUES:
@@ -379,6 +633,11 @@ class ObservationRow:
                 raise InputValidationError(
                     f"Observation {self.game_id} has non-finite {name}={value!r}."
                 )
+        if self.opponent_division.strip().upper() not in DIVISIONS:
+            raise InputValidationError(
+                f"Observation {self.game_id} has opponent_division "
+                f"{self.opponent_division!r}; expected one of {list(DIVISIONS)}."
+            )
         if not _EVENT_TIME.match(self.event_time):
             raise InputValidationError(
                 f"Observation {self.game_id} has event_time {self.event_time!r}, which is "
@@ -410,6 +669,10 @@ class ObservationRow:
     def normalized_split(self) -> str:
         return self.split.strip().lower()
 
+    @property
+    def is_fcs(self) -> bool:
+        return self.opponent_division.strip().upper() == "FCS"
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "game_id": self.game_id,
@@ -419,6 +682,7 @@ class ObservationRow:
             "team": self.team,
             "opponent": self.opponent,
             "venue": self.venue.strip().upper(),
+            "opponent_division": self.opponent_division.strip().upper(),
             "split": self.normalized_split,
             "provenance": self.provenance,
         }
@@ -454,6 +718,9 @@ class ObservationSet:
             self,
             "_split_sha",
             hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest(),
+        )
+        object.__setattr__(
+            self, "_calibration_rows", tuple(r for r in self._ordered if not r.is_fcs)
         )
 
     def _require_chronological(self) -> None:
@@ -513,6 +780,32 @@ class ObservationSet:
         return self._ordered  # type: ignore[attr-defined,no-any-return]
 
     @property
+    def calibration_rows(self) -> tuple[ObservationRow, ...]:
+        """The rows admissible into the main calibration: FBS opponents only.
+
+        FCS games are held out of every calibration path until the adapter named by
+        ``model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`` exists. They are
+        excluded rather than dropped quietly: :meth:`fcs_exclusion_report` counts
+        them, and the shard table carries the count, so "excluded" is a number a
+        reviewer can see rather than an absence they have to notice.
+        """
+        return self._calibration_rows  # type: ignore[attr-defined,no-any-return]
+
+    def fcs_exclusion_report(self) -> dict[str, Any]:
+        excluded = [r for r in self.ordered_rows if r.is_fcs]
+        return {
+            "policy": FCS_FAIL_CLOSED,
+            "excluded_count": len(excluded),
+            "admitted_count": len(self.calibration_rows),
+            "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+            "reason": (
+                "The FCS-to-V3 point scale is an open blocker. An FCS game fitted "
+                "alongside FBS games is fitted on an unresolved scale, so it is "
+                "excluded until the adapter exists."
+            ),
+        }
+
+    @property
     def split_sha(self) -> str:
         """Digest of the partition itself.
 
@@ -523,8 +816,9 @@ class ObservationSet:
         return self._split_sha  # type: ignore[attr-defined,no-any-return]
 
     def split_counts(self) -> dict[str, int]:
+        """Counts over the rows that are actually scored, FCS already excluded."""
         counts = {s: 0 for s in cal.DATA_SPLITS}
-        for row in self.rows:
+        for row in self.calibration_rows:
             counts[row.normalized_split] += 1
         return counts
 
@@ -546,7 +840,7 @@ class ObservationSet:
         once, before any compute is spent.
         """
         disagreements: list[str] = []
-        for row in self.ordered_rows:
+        for row in self.calibration_rows:
             governed = row.require_expected_margin()
             computed = authority.expected_margin(
                 row.pregame_team_points, row.pregame_opponent_points, row.venue
@@ -1324,7 +1618,7 @@ def score_candidate(
             f"scored_split {scored_split!r}; expected one of {list(cal.DATA_SPLITS)}."
         )
 
-    rows = observations.ordered_rows
+    rows = observations.calibration_rows
     predictions, cap, movement, extras = _walk_forward(candidate, rows, authority)
     leakage = require_no_future_leakage(predictions)
 
@@ -1586,7 +1880,7 @@ def score_shard(
     witnesses = compute_witnesses(
         [
             r
-            for r in observations.ordered_rows
+            for r in observations.calibration_rows
             if r.normalized_split == scored_split.strip().lower()
         ]
     )
@@ -1703,6 +1997,7 @@ def shard_table_as_dict(
         "model_version": model_version,
         "dataset_provenance": observations.provenance,
         "split_counts": observations.split_counts(),
+        "fcs_exclusion": observations.fcs_exclusion_report(),
         "writes_canonical_config": False,
         "parameters_promoted": 0,
         "rows": [r.as_dict() for r in sorted(rows, key=lambda r: r.candidate_id)],

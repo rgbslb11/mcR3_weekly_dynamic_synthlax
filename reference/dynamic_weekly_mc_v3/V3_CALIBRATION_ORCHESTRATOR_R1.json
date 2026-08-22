@@ -11,37 +11,37 @@
     "axes": [
       {
         "boundary_expandable": true,
-        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
         "family": "weekly_performance_residual_coefficient",
         "level_count": 5
       },
       {
         "boundary_expandable": true,
-        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
         "family": "weekly_movement_cap_points",
         "level_count": 4
       },
       {
         "boundary_expandable": true,
-        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
         "family": "recent_form_weights",
         "level_count": 9
       },
       {
         "boundary_expandable": false,
-        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
         "family": "blowout_treatment",
         "level_count": 4
       },
       {
         "boundary_expandable": true,
-        "evidence_status": "RANGE_PENDING_EVIDENCE",
+        "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
         "family": "sample_size_regularization",
         "level_count": 3
       }
     ],
     "candidate_count": 2160,
-    "config_sha": "18e17ef2e6297b54f61d41a9ce579e3c2bb20099c87207dcabb2272a9ae3d041",
+    "config_sha": "cdb993806e478d9eae1e6edc8b18963efba80b3376f2fee121b265fbef20d63b",
     "range_authority": null,
     "space_id": "V3-CAL-SEARCH-COARSE-001"
   },
@@ -81,6 +81,25 @@
     },
     "status": "SPECIFICATION_ONLY_NO_AUTHORITY_MOUNTED"
   },
+  "experimental_calibration_values": [
+    "historical_points_per_standardized_unit",
+    "weekly_performance_residual_coefficient",
+    "weekly_movement_cap_points",
+    "recent_form_weights",
+    "blowout_treatment",
+    "sample_size_regularization",
+    "game_sd_points"
+  ],
+  "fcs_policy": {
+    "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+    "excluded_from": [
+      "point_scale",
+      "coarse",
+      "refinement",
+      "holdout"
+    ],
+    "policy": "FCS_EXCLUDED_UNTIL_POINT_SCALE_ADAPTER"
+  },
   "game_sd_points": {
     "admissible_method": "OUT_OF_SAMPLE_RESIDUAL_DISPERSION",
     "estimated_on": "validation or holdout residuals; the training split is refused",
@@ -88,6 +107,16 @@
     "reason": "Selection is on RMSE, which needs no dispersion parameter, so the estimate cannot change which candidate wins. SD of actual margin measures the sport's variability rather than the model's error.",
     "refused_method": "SD_OF_ACTUAL_MARGIN"
   },
+  "governed_model_structure_fields": [
+    "expected_margin_arithmetic",
+    "subject_orientation",
+    "point_domain",
+    "hfa_semantics",
+    "neutral_site_adjustment",
+    "weeks_1_2_opening_state_rule",
+    "first_promoted_rerating_after_week",
+    "fcs_fail_closed_behaviour"
+  ],
   "historical_research_context": {
     "identification_defects": [
       "movement cap did not bind, so its value is not identified",
@@ -120,6 +149,7 @@
       "recent_form_weights",
       "sample_size_regularization"
     ],
+    "point_scale_boundary_expansion": "calibration_stage0.expand_point_scale_space",
     "policy": "A cap that never binds is not identified and is never reported as a finding. Where candidates tie on the primary metric and differ only in a family the corpus cannot see, the aggregate reports an equivalence class rather than a discovery.",
     "unidentified_tie_marker": "UNIDENTIFIED_EQUIVALENCE_CLASS"
   },
@@ -138,6 +168,7 @@
       "recent_form_effective_contributions",
       "regularization_early_and_late_season_impact"
     ],
+    "stage0_primary_metric": "out_of_sample_expected_margin_rmse_weeks_1_2",
     "winner_accuracy_may_override_primary": false,
     "witness_composite_authorised": false,
     "witness_reporting": "Colley and SRS are computed from outcomes alone and are candidate-independent. Each candidate reports a Spearman rank correlation against them as a coherence witness. Neither is converted onto the V3 point axis and neither enters the ranking.",
@@ -152,7 +183,8 @@
     "fan_out": "Run score_one_shard once per shard index with the same --shard-count and the same --expect-config-sha. Membership is candidate_id % shard_count, so the workers need no coordination and cannot overlap.",
     "module_prefix": "ncaaf_engine.simulation.dynamic_weekly_mc_v3",
     "plan_one_shard": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_search --stage coarse --shard-count 4 --shard-index 0 --plan",
-    "score_one_shard": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_search --stage coarse --shard-count 4 --shard-index 0 --observations <governed-corpus> --expected-margin-authority <authority-id> --range-authority <ruling-id>",
+    "range_authority_flag_required": false,
+    "score_one_shard": "python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_search --stage coarse --shard-count 4 --shard-index 0 --experiment-id <experiment-id> --observations <audited-corpus> --expected-margin-authority <structure-id>",
     "worker_may_choose_its_own_grid": false,
     "worker_may_write_canonical_config": false
   },
@@ -166,6 +198,7 @@
       "sample_size_regularization"
     ],
     "estimated_from_residuals": "game_sd_points",
+    "identified_in_stage_0": "historical_points_per_standardized_unit",
     "searched_as_mean_model": [
       "weekly_performance_residual_coefficient",
       "weekly_movement_cap_points",
@@ -180,6 +213,7 @@
     "blockers_retired": 0,
     "canonical_writer_created": false,
     "parameters_promoted": 0,
+    "point_scale_selected": false,
     "real_calibration_executed": false,
     "season_monte_carlo_executed": false
   },
@@ -228,31 +262,106 @@
   "readiness": {
     "blocking_inputs": [
       {
-        "input": "GOVERNED_HISTORICAL_OBSERVATION_CORPUS",
-        "reason": "BLOCKED_ON_CALIBRATION_DATA: no historical observation set is mounted, and none was supplied.",
-        "required_for": "Any scoring at all.",
-        "supplied_as": "An exact dataset SHA-256, registered through calibration_evidence.register_governed_dataset."
+        "input": "AUDITED_HISTORICAL_OBSERVATION_CORPUS",
+        "producer": "this lane",
+        "reason": "BLOCKED_ON_CALIBRATION_DATA: no audited historical observation set is mounted, and none was supplied.",
+        "supplied_as": "A sealed, digest-bound payload; never a path into another lane's working tree."
       },
       {
-        "input": "GOVERNED_EXPECTED_MARGIN_AUTHORITY",
-        "reason": "No expected-margin authority supplied. Scoring is refused rather than run against a default transform: the historical point-axis resolution is the disputed question, and inventing one here would answer it by accident.",
-        "required_for": "Converting point strengths into a predicted margin.",
-        "supplied_as": "An ExpectedMarginAuthority with status GOVERNED, naming its point axis and rating-to-margin transform."
+        "input": "HISTORICAL_OPENING_STANDARDIZED_STATE",
+        "producer": "AGENT_6_HISTORICAL_OPENING_STANDARDIZED_STATE",
+        "reason": "Stage 0 requires a sealed input from AGENT_6_HISTORICAL_OPENING_STANDARDIZED_STATE; none was supplied. It is not read from disk and has no default.",
+        "supplied_as": "A sealed, digest-bound payload; never a path into another lane's working tree."
       },
       {
-        "input": "SEARCH_RANGE_AUTHORITY",
-        "reason": "Search space V3-CAL-SEARCH-COARSE-001 carries no range authority. Its axes are RANGE_PENDING_EVIDENCE: the levels are scaffolding chosen to exercise the harness, not ranges any evidence supports. A real search requires a named authority that fixes them.",
-        "required_for": "Turning the pending coarse axes into fixed ranges.",
-        "supplied_as": "A named ruling that fixes each axis, flipping its evidence status to RANGE_FIXED_BY_NAMED_AUTHORITY."
+        "input": "DEFENSIBLE_VENUE_HFA_CLASSIFICATION",
+        "producer": "AGENT_5_VENUE_NEUTRAL_SITE_CLASSIFICATION",
+        "reason": "Stage 0 requires a sealed input from AGENT_5_VENUE_NEUTRAL_SITE_CLASSIFICATION; none was supplied. It is not read from disk and has no default.",
+        "supplied_as": "A sealed, digest-bound payload; never a path into another lane's working tree."
       }
     ],
     "corpus_mounted": false,
-    "expected_margin_authority_mounted": false,
+    "governed_model_structure": {
+      "counts_as_lane_dependency": false,
+      "mounted": false,
+      "note": "The arithmetic, orientation, point domain and venue semantics are governed structure and are refused if absent. They are not owed by the corpus or enrichment lanes, so they are reported here rather than counted among this lane's blocking inputs.",
+      "reason": "No expected-margin authority supplied. Scoring is refused rather than run against a default transform: the arithmetic, orientation, point domain and venue semantics are governed structure and are never guessed here.",
+      "supplied_by": "AUDITED_MODEL_LAYER"
+    },
+    "historical_point_scale": {
+      "identified_by": "V3-CAL-STAGE0-POINT-SCALE-001",
+      "note": "Empirically calibratable from Weeks 1-2, not a prerequisite governed value. Canonical promotion of a scale remains separately governed.",
+      "ruling_required": false,
+      "status": "EXPERIMENT_BOUND_CANDIDATE_SCALE"
+    },
     "machinery_complete": true,
+    "opening_standardized_state_mounted": false,
     "real_calibration_executable": false,
-    "search_ranges_fixed": false
+    "search_range_reason": null,
+    "search_range_ruling_required": false,
+    "search_range_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+    "search_ranges_executable": true,
+    "venue_classification_mounted": false
   },
-  "scope": "Deterministic candidate universe, temporal walk-forward scorer, shard protocol and aggregator for the six V3 calibration families. No parameter is selected, promoted, or written to canonical configuration.",
+  "real_execution_dependencies": [
+    "AUDITED_HISTORICAL_OBSERVATION_CORPUS",
+    "HISTORICAL_OPENING_STANDARDIZED_STATE",
+    "DEFENSIBLE_VENUE_HFA_CLASSIFICATION"
+  ],
+  "scope": "Deterministic point-scale identification, candidate universe, temporal walk-forward scorer, shard protocol and aggregator for the V3 calibration families. No parameter is selected, promoted, or written to canonical configuration.",
+  "search_ranges": {
+    "breadth": {
+      "broad_enough": true,
+      "checked_families": [
+        "weekly_performance_residual_coefficient",
+        "weekly_movement_cap_points",
+        "recent_form_weights",
+        "sample_size_regularization"
+      ],
+      "families": {
+        "recent_form_weights": {
+          "distinct_levels": 4,
+          "maximum": 8.0,
+          "minimum": 2.0
+        },
+        "sample_size_regularization": {
+          "distinct_levels": 3,
+          "maximum": 5.0,
+          "minimum": 0.0
+        },
+        "weekly_movement_cap_points": {
+          "distinct_levels": 4,
+          "maximum": 16.0,
+          "minimum": 2.0
+        },
+        "weekly_performance_residual_coefficient": {
+          "distinct_levels": 5,
+          "maximum": 0.45,
+          "minimum": 0.05
+        }
+      }
+    },
+    "correction": "Exploring an experimental range and promoting a value out of it are different acts. Only the second needs a named authority.",
+    "predeclaration": {
+      "config_sha": "cdb993806e478d9eae1e6edc8b18963efba80b3376f2fee121b265fbef20d63b",
+      "declared_before_results": true,
+      "declared_scored_split": "validation",
+      "experiment_id": "V3-CALIBRATION-ORCHESTRATOR-R1-COARSE",
+      "obligations": {
+        "automatic_promotion": false,
+        "boundary_optimum_must_expand": true,
+        "confers_promotion_authority": false,
+        "holdout_sealed_until_final_evaluation": true
+      },
+      "range_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+      "stage": "coarse"
+    },
+    "predeclaration_sha": "881fa7cc665d0fa2eb802a1a95f0e7a327ed089004b7857bc2f43469af47599d",
+    "promotion_grade_gate": "calibration_search.require_range_authority",
+    "research_gate": "calibration_search.require_executable_ranges",
+    "ruling_required": false,
+    "status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND"
+  },
   "shard_partition_proofs": {
     "1": {
       "duplicates": 0,
@@ -314,13 +423,80 @@
       "universe_size": 2160
     }
   },
+  "stage0": {
+    "arithmetic": "team_points = k * opening_standardized_state; expected_margin = (team_points - opponent_points) + governed venue adjustment",
+    "boundary_expansion": "expand_point_scale_space",
+    "config_sha": "d753be8d5311005889f56b234ad305bd19a7f6d412c124795362a61fc0db8980",
+    "fcs_policy": "EXCLUDED_UNTIL_POINT_SCALE_ADAPTER",
+    "parameters_promoted": 0,
+    "primary_objective": "out_of_sample_expected_margin_rmse_weeks_1_2",
+    "range_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+    "required_inputs": {
+      "AUDITED_HISTORICAL_OBSERVATION_CORPUS": "this lane",
+      "DEFENSIBLE_VENUE_HFA_CLASSIFICATION": "AGENT_5_VENUE_NEUTRAL_SITE_CLASSIFICATION",
+      "HISTORICAL_OPENING_STANDARDIZED_STATE": "AGENT_6_HISTORICAL_OPENING_STANDARDIZED_STATE"
+    },
+    "rerating_parameters_used": 0,
+    "ruling_required": false,
+    "scale_selected": false,
+    "shard_counts_supported": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "space": {
+      "confers_promotion_authority": false,
+      "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+      "experimental_value": "historical_points_per_standardized_unit",
+      "level_count": 20,
+      "levels": [
+        2.0,
+        4.0,
+        6.0,
+        8.0,
+        10.0,
+        12.0,
+        14.0,
+        16.0,
+        18.0,
+        20.0,
+        22.0,
+        24.0,
+        26.0,
+        28.0,
+        30.0,
+        32.0,
+        34.0,
+        36.0,
+        38.0,
+        40.0
+      ],
+      "parent_config_sha": null,
+      "space_id": "V3-CAL-POINT-SCALE-001",
+      "stage": "point_scale"
+    },
+    "stage": "point_scale",
+    "stage0_id": "V3-CAL-STAGE0-POINT-SCALE-001",
+    "window_weeks": [
+      1,
+      2
+    ]
+  },
   "stage_plan": {
     "coarse": {
       "definition": "calibration_search.coarse_space()",
       "precision_policy": "Deliberately coarse. Resolving a third decimal place here costs the same compute as covering twice the space, and Stage 2 resolves it anyway over a region Stage 1 has already justified.",
-      "purpose": "Locate useful regions of the parameter space.",
+      "purpose": "Locate useful regions of the later-season parameter space.",
       "scored_split": "validation",
       "universe": "Cross product of the five mean-model families."
+    },
+    "final_residual": {
+      "definition": "calibration_scoring.estimate_game_sd_points(...)",
+      "method": "OUT_OF_SAMPLE_RESIDUAL_DISPERSION",
+      "purpose": "Estimate game_sd_points from out-of-sample residuals.",
+      "refused_method": "SD_OF_ACTUAL_MARGIN",
+      "runs_after": "mean-model selection, so dispersion cannot influence it"
     },
     "holdout": {
       "custody": "calibration_search.HoldoutLedger records the single consumption and refuses a second. Iterative tuning against the holdout is not discouraged; it is unavailable.",
@@ -329,6 +505,18 @@
       "purpose": "Score a shortlist once against a split nothing has touched.",
       "scored_split": "holdout",
       "universe": "An explicit shortlist, capped at 8 candidates."
+    },
+    "point_scale": {
+      "definition": "calibration_stage0.identify_point_scale()",
+      "purpose": "Identify the historical V3 point scale from Weeks 1-2.",
+      "rerating_parameters_used": 0,
+      "scored_split": "validation",
+      "universe": "One broad, predeclared, hash-bound scale axis.",
+      "why_first": "Weeks 1-2 promote nothing, so every prediction in that window comes from opening strength alone and the scale is the only unknown. Running it after Stage 1 would confound the scale with the rerating coefficient.",
+      "window": [
+        1,
+        2
+      ]
     },
     "refinement": {
       "boundary_policy": "A family whose leader sat on an edge of an expandable ladder is extended one full step past it. The search grows rather than reporting the edge.",

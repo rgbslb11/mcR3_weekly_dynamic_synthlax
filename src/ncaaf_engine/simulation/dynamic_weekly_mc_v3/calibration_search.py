@@ -36,12 +36,14 @@ The grid is defined once and distributed, never re-derived per worker
     :mod:`.calibration_scoring`. Putting it on the grid would let a candidate win
     by choosing the dispersion its own errors are scored against.
 
-The ranges are declared PENDING, and pending means refused
-    Every axis here carries :data:`EVIDENCE_PENDING`. The levels are wide,
-    deliberately not centred on the prior 0.18/depth-6 result, and
-    :func:`require_range_authority` refuses to score them for real until a named
-    authority supplies the evidence that fixes them. The machinery is complete;
-    the numbers in it are scaffolding, and the scaffolding says so.
+The ranges are predeclared and hash-bound, which is what makes them executable
+    Every axis here carries :data:`EVIDENCE_PREDECLARED`: declared before any
+    result existed, bound into the experiment digest, and broad enough that
+    :func:`require_predeclared_breadth` accepts it. A research search runs under
+    :func:`require_executable_ranges` and needs no governance ruling, because
+    choosing which numbers to *try* and choosing which number becomes *canonical*
+    are different acts and only the second needs an authority. The levels are
+    wide and deliberately not centred on the prior 0.18/depth-6 result.
 
 Nothing here promotes a value, writes canonical configuration, or retires a
 blocker.
@@ -68,19 +70,25 @@ __all__ = [
     "COARSE_SPACE_ID",
     "EVIDENCE_GOVERNED",
     "EVIDENCE_PENDING",
+    "EVIDENCE_PREDECLARED",
+    "EXECUTABLE_EVIDENCE_STATUSES",
     "FIXTURE_RANGE_AUTHORITY",
     "HISTORICAL_RESEARCH_CONTEXT",
     "MEAN_MODEL_FAMILIES",
+    "MEAN_MODEL_STAGES",
+    "MINIMUM_PREDECLARED_LEVELS",
     "PARAMETER_FAMILIES",
     "RECENT_FORM_SCHEMES",
     "REGULARIZATION_POLICY_IDS",
     "STAGES",
     "STAGE_COARSE",
     "STAGE_HOLDOUT",
+    "STAGE_POINT_SCALE",
     "STAGE_REFINEMENT",
     "SUPPORTED_SHARD_COUNTS",
     "BlowoutPolicy",
     "CalibrationCandidate",
+    "ExperimentPredeclaration",
     "HoldoutLedger",
     "RecentFormPolicy",
     "RegularizationPolicy",
@@ -94,8 +102,12 @@ __all__ = [
     "holdout_space",
     "main",
     "plan_as_dict",
+    "predeclare",
     "prove_shard_partition",
+    "range_status",
     "refine_space",
+    "require_executable_ranges",
+    "require_predeclared_breadth",
     "require_range_authority",
     "shard_candidates",
     "shard_of",
@@ -131,10 +143,21 @@ MEAN_MODEL_FAMILIES = (
 #: The family estimated from out-of-sample residuals rather than enumerated.
 DISPERSION_FAMILY = "game_sd_points"
 
+#: Stage 0 identifies the historical point scale from Weeks 1-2 and lives in
+#: :mod:`.calibration_stage0`. It is named here so the staged plan is readable in
+#: one place, and it is kept out of :data:`MEAN_MODEL_STAGES` because its universe
+#: is one experimental scale axis rather than a cross product of the five
+#: mean-model families - a :class:`SearchSpace` is the wrong shape for it.
+STAGE_POINT_SCALE = "point_scale"
 STAGE_COARSE = "coarse"
 STAGE_REFINEMENT = "refinement"
 STAGE_HOLDOUT = "holdout"
-STAGES = (STAGE_COARSE, STAGE_REFINEMENT, STAGE_HOLDOUT)
+
+#: Stages a :class:`SearchSpace` may carry.
+MEAN_MODEL_STAGES = (STAGE_COARSE, STAGE_REFINEMENT, STAGE_HOLDOUT)
+
+#: The whole staged plan, in execution order.
+STAGES = (STAGE_POINT_SCALE, *MEAN_MODEL_STAGES)
 
 SUPPORTED_SHARD_COUNTS = (1, 2, 4, 8)
 
@@ -143,9 +166,32 @@ SUPPORTED_SHARD_COUNTS = (1, 2, 4, 8)
 #: use, including those whose integers are signed 64-bit.
 CANDIDATE_ID_BITS = 63
 
-#: Every axis level in this module is scaffolding until evidence fixes it.
+#: An axis nobody has declared. Enumerable and benchmarkable; never executable.
 EVIDENCE_PENDING = "RANGE_PENDING_EVIDENCE"
+
+#: An axis declared before any result was observed, bound into the experiment
+#: configuration digest, and broad enough to test the surface rather than assert
+#: an answer. This is the status a *research* search executes under.
+#:
+#: The correction this represents is worth stating plainly. Requiring a named
+#: governance ruling before an experimental range may be explored confuses two
+#: different acts: choosing which numbers to *try*, and choosing which number
+#: becomes canonical. Only the second needs an authority. The first needs to be
+#: honest, and honesty here is mechanical rather than procedural - see
+#: :class:`ExperimentPredeclaration`.
+EVIDENCE_PREDECLARED = "EXPERIMENT_PREDECLARED_AND_HASH_BOUND"
+
+#: An axis whose range a named authority has fixed. Required only on the path
+#: toward a canonical promotion, which remains separately governed.
 EVIDENCE_GOVERNED = "RANGE_FIXED_BY_NAMED_AUTHORITY"
+
+#: Statuses under which a real (non-fixture) search may run.
+EXECUTABLE_EVIDENCE_STATUSES = (EVIDENCE_PREDECLARED, EVIDENCE_GOVERNED)
+
+#: Distinct levels an ordered axis must carry before a predeclared range counts
+#: as testing the parameter surface. A "range" of one point is a declaration of
+#: the answer wearing a search's clothes.
+MINIMUM_PREDECLARED_LEVELS = 3
 
 #: The only range authority this module ships. It permits enumeration, sharding
 #: and micro-benchmarking, and :func:`require_range_authority` refuses it for a
@@ -567,7 +613,11 @@ class SearchAxis:
             )
         if not self.levels:
             raise InputValidationError(f"Axis {self.family} declares no levels.")
-        if self.evidence_status not in (EVIDENCE_PENDING, EVIDENCE_GOVERNED):
+        if self.evidence_status not in (
+            EVIDENCE_PENDING,
+            EVIDENCE_PREDECLARED,
+            EVIDENCE_GOVERNED,
+        ):
             raise InputValidationError(
                 f"Axis {self.family} has unknown evidence status {self.evidence_status!r}."
             )
@@ -607,9 +657,11 @@ class SearchSpace:
     explicit_candidates: tuple[CalibrationCandidate, ...] = ()
 
     def __post_init__(self) -> None:
-        if self.stage not in STAGES:
+        if self.stage not in MEAN_MODEL_STAGES:
             raise InputValidationError(
-                f"Unknown stage {self.stage!r}; expected one of {list(STAGES)}."
+                f"Unknown stage {self.stage!r} for a mean-model search space; expected "
+                f"one of {list(MEAN_MODEL_STAGES)}. Stage 0 ({STAGE_POINT_SCALE}) has a "
+                "single experimental scale axis and is built by calibration_stage0."
             )
         if self.explicit_candidates:
             if self.axes:
@@ -712,32 +764,253 @@ class SearchSpace:
         return _digest(canonical_json(self.as_dict()))
 
 
-def require_range_authority(space: SearchSpace) -> str:
-    """Fail closed unless a named authority has fixed this space's ranges.
+@dataclass(frozen=True)
+class ExperimentPredeclaration:
+    """A range declaration made before any result existed, bound to a digest.
 
-    The fixture authority is refused here specifically. It exists so the harness
-    can be enumerated, sharded and benchmarked before any evidence arrives, and
-    the one thing it must never do is let a benchmark result be read as a search
+    This is what replaces "a named authority must first rule on the ranges" for a
+    *research* search. The substitution is only worth making if predeclaration is
+    mechanical rather than a promise, so three things carry the weight:
+
+    ``config_sha`` covers every axis and every level
+        Narrowing a range after seeing the table changes the digest. The narrowed
+        run is therefore visibly a different experiment rather than the same one
+        reported differently, and the aggregate record cites the declaration it
+        was run under. Nobody has to be trusted not to peek; peeking leaves a
+        mark.
+
+    Breadth is checked, not asserted
+        :func:`require_predeclared_breadth` refuses an ordered axis carrying fewer
+        than :data:`MINIMUM_PREDECLARED_LEVELS` distinct levels, or one with no
+        spread at all. A one-point "range" would satisfy every other condition
+        here while being a declaration of the answer wearing a search's clothes.
+
+    The obligations travel with the declaration
+        Boundary optima must expand rather than conclude, the holdout stays sealed
+        until its designated evaluation, and nothing promotes automatically. They
+        are recorded on the declaration so an aggregate can be checked against
+        what was promised rather than against what a reader assumes.
+
+    None of this confers promotion authority. Canonical promotion stays governed
+    by :func:`calibration.promote_regime_r2` and its human approval token.
+    """
+
+    experiment_id: str
+    config_sha: str
+    stage: str
+    declared_scored_split: str
+    declared_before_results: bool = True
+
+    def __post_init__(self) -> None:
+        if not self.experiment_id.strip():
+            raise InputValidationError("A predeclaration must name its experiment.")
+        if not self.declared_before_results:
+            raise GovernanceBlock(
+                f"Predeclaration {self.experiment_id} does not claim to precede its "
+                "results. A range declared after the table is not a predeclaration; it "
+                "is a description of the winner."
+            )
+        if self.declared_scored_split.strip().lower() == "holdout":
+            raise GovernanceBlock(
+                f"Predeclaration {self.experiment_id} nominates the holdout as its "
+                "scored split. Ranges may never be selected against the holdout; its "
+                "single use is reserved for final evaluation."
+            )
+
+    @property
+    def obligations(self) -> dict[str, Any]:
+        return {
+            "boundary_optimum_must_expand": True,
+            "holdout_sealed_until_final_evaluation": True,
+            "automatic_promotion": False,
+            "confers_promotion_authority": False,
+        }
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "experiment_id": self.experiment_id,
+            "config_sha": self.config_sha,
+            "stage": self.stage,
+            "declared_scored_split": self.declared_scored_split,
+            "declared_before_results": self.declared_before_results,
+            "range_status": EVIDENCE_PREDECLARED,
+            "obligations": self.obligations,
+        }
+
+    @property
+    def predeclaration_sha(self) -> str:
+        return _digest(canonical_json(self.as_dict()))
+
+
+def _ordered_levels(axis: SearchAxis) -> list[float]:
+    """The distinct positions of an ordered axis, as comparable numbers."""
+    if axis.family == "recent_form_weights":
+        return sorted({float(level.depth) for level in axis.levels})
+    if axis.family == "sample_size_regularization":
+        return sorted({float(level.prior_games or 0.0) for level in axis.levels})
+    return sorted({float(level) for level in axis.levels})
+
+
+def require_predeclared_breadth(space: SearchSpace) -> dict[str, Any]:
+    """Refuse a declared range too narrow to have tested anything.
+
+    Applied to ordered families only. ``blowout_treatment`` is exempt because its
+    levels are shapes rather than points on a ladder, and counting the shapes
+    somebody happened to write down would measure vocabulary, not breadth.
+    """
+    if space.explicit_candidates:
+        return {
+            "checked_families": [],
+            "broad_enough": True,
+            "reason": "An explicit shortlist is not a range and has no breadth to test.",
+        }
+    narrow: list[str] = []
+    detail: dict[str, Any] = {}
+    for family in ORDERED_FAMILIES:
+        levels = _ordered_levels(space.axis(family))
+        detail[family] = {
+            "distinct_levels": len(levels),
+            "minimum": levels[0],
+            "maximum": levels[-1],
+        }
+        if len(levels) < MINIMUM_PREDECLARED_LEVELS or levels[-1] <= levels[0]:
+            narrow.append(family)
+    if narrow:
+        raise GovernanceBlock(
+            f"Space {space.space_id} declares ranges too narrow to test the parameter "
+            f"surface on: {narrow}. Each ordered family needs at least "
+            f"{MINIMUM_PREDECLARED_LEVELS} distinct levels with real spread; a range of "
+            "one point is a declaration of the answer, not a search for it."
+        )
+    return {
+        "checked_families": list(ORDERED_FAMILIES),
+        "families": detail,
+        "broad_enough": True,
+    }
+
+
+def predeclare(
+    space: SearchSpace,
+    *,
+    experiment_id: str,
+    scored_split: str = "validation",
+) -> ExperimentPredeclaration:
+    """Bind a space's ranges to a digest, after proving they are broad enough."""
+    require_predeclared_breadth(space)
+    undeclared = [
+        a.family
+        for a in space.axes
+        if a.evidence_status not in EXECUTABLE_EVIDENCE_STATUSES
+    ]
+    if undeclared:
+        raise GovernanceBlock(
+            f"Space {space.space_id} cannot be predeclared while these axes are still "
+            f"{EVIDENCE_PENDING}: {undeclared}."
+        )
+    return ExperimentPredeclaration(
+        experiment_id=experiment_id,
+        config_sha=space.config_sha,
+        stage=space.stage,
+        declared_scored_split=scored_split.strip().lower(),
+    )
+
+
+def range_status(space: SearchSpace) -> str:
+    """The weakest status any axis of this space carries."""
+    statuses = {a.evidence_status for a in space.axes}
+    if not statuses:
+        return EVIDENCE_PREDECLARED
+    if EVIDENCE_PENDING in statuses:
+        return EVIDENCE_PENDING
+    if EVIDENCE_PREDECLARED in statuses:
+        return EVIDENCE_PREDECLARED
+    return EVIDENCE_GOVERNED
+
+
+def require_executable_ranges(
+    space: SearchSpace, *, predeclaration: ExperimentPredeclaration | None = None
+) -> dict[str, Any]:
+    """The gate a *research* search passes through. Two admissible paths.
+
+    A named governance ruling fixing the ranges is one of them, and it is not
+    required. Exploring an experimental parameter range is not an act that needs
+    an authority; promoting a value out of one is, and that gate lives elsewhere
+    and is untouched by this.
+
+    The fixture authority is refused on both paths. It exists so the harness can
+    be enumerated, sharded and benchmarked before any evidence arrives, and the
+    one thing it must never do is let a benchmark result be read as a search
     result.
+    """
+    if space.range_authority == FIXTURE_RANGE_AUTHORITY:
+        raise GovernanceBlock(
+            f"Search space {space.space_id} is marked {FIXTURE_RANGE_AUTHORITY}. That "
+            "permits enumeration, sharding and micro-benchmarking and never a scoring "
+            "run whose results are read as evidence about a parameter."
+        )
+    status = range_status(space)
+    if status == EVIDENCE_PENDING:
+        pending = [a.family for a in space.axes if a.evidence_status == EVIDENCE_PENDING]
+        raise GovernanceBlock(
+            f"Space {space.space_id} has undeclared axes {pending}. A research search "
+            f"needs ranges that are {EVIDENCE_PREDECLARED}: declared before results, "
+            "bound into the experiment digest, and broad enough to test the surface."
+        )
+    if status == EVIDENCE_GOVERNED:
+        return {
+            "range_status": EVIDENCE_GOVERNED,
+            "path": "NAMED_GOVERNANCE_AUTHORITY",
+            "range_authority": space.range_authority,
+            "ruling_required": False,
+            "confers_promotion_authority": False,
+        }
+    if predeclaration is None:
+        raise GovernanceBlock(
+            f"Space {space.space_id} declares {EVIDENCE_PREDECLARED} ranges but no "
+            "predeclaration was supplied. The digest binding is what makes 'declared "
+            "before results' checkable, so the declaration has to be present."
+        )
+    if predeclaration.config_sha != space.config_sha:
+        raise GovernanceBlock(
+            f"Predeclaration {predeclaration.experiment_id} binds config "
+            f"{predeclaration.config_sha} but this space digests to {space.config_sha}. "
+            "The ranges being searched are not the ranges that were declared."
+        )
+    require_predeclared_breadth(space)
+    return {
+        "range_status": EVIDENCE_PREDECLARED,
+        "path": EVIDENCE_PREDECLARED,
+        "experiment_id": predeclaration.experiment_id,
+        "predeclaration_sha": predeclaration.predeclaration_sha,
+        "ruling_required": False,
+        "confers_promotion_authority": False,
+        "obligations": predeclaration.obligations,
+    }
+
+
+def require_range_authority(space: SearchSpace) -> str:
+    """The promotion-grade gate: a named authority has fixed these ranges.
+
+    Kept, and deliberately no longer on the research path. Reaching a canonical
+    promotion still requires this; running an experiment does not.
+    :func:`require_executable_ranges` is what a worker calls.
     """
     if space.range_authority is None:
         raise GovernanceBlock(
-            f"Search space {space.space_id} carries no range authority. Its axes are "
-            f"{EVIDENCE_PENDING}: the levels are scaffolding chosen to exercise the "
-            "harness, not ranges any evidence supports. A real search requires a named "
-            "authority that fixes them."
+            f"Search space {space.space_id} carries no named range authority. A "
+            "research search does not need one - see require_executable_ranges - but a "
+            "promotion citing these ranges does."
         )
     if space.range_authority == FIXTURE_RANGE_AUTHORITY:
         raise GovernanceBlock(
             f"Search space {space.space_id} is authorised only as "
-            f"{FIXTURE_RANGE_AUTHORITY}. That authority permits enumeration, sharding "
-            "and micro-benchmarking and never a scoring run whose results are cited."
+            f"{FIXTURE_RANGE_AUTHORITY}, which is never a promotion authority."
         )
-    pending = [a.family for a in space.axes if a.evidence_status != EVIDENCE_GOVERNED]
-    if pending:
+    ungoverned = [a.family for a in space.axes if a.evidence_status != EVIDENCE_GOVERNED]
+    if ungoverned:
         raise GovernanceBlock(
             f"Space {space.space_id} names authority {space.range_authority} but these "
-            f"axes are still {EVIDENCE_PENDING}: {pending}."
+            f"axes are not {EVIDENCE_GOVERNED}: {ungoverned}."
         )
     return space.range_authority
 
@@ -748,11 +1021,16 @@ def require_range_authority(space: SearchSpace) -> str:
 def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
     """Stage 1. Broad, cheap, and deliberately not centred on the prior result.
 
-    Every level is :data:`EVIDENCE_PENDING`. The widths are chosen for a property
-    the search needs rather than for a belief about the answer: wide enough that a
-    winner in the interior is a finding, and coarse enough that Stage 1 spends its
-    compute locating regions instead of resolving a third decimal place that
-    Stage 2 will resolve anyway.
+    Every level is :data:`EVIDENCE_PREDECLARED`: fixed in source before any result
+    existed, bound into :attr:`SearchSpace.config_sha`, and broad enough to pass
+    :func:`require_predeclared_breadth`. That is what makes this executable as
+    research without a named governance ruling - and it confers nothing toward a
+    canonical promotion, which stays separately governed.
+
+    The widths are chosen for a property the search needs rather than for a belief
+    about the answer: wide enough that a winner in the interior is a finding, and
+    coarse enough that Stage 1 spends its compute locating regions instead of
+    resolving a third decimal place that Stage 2 will resolve anyway.
 
     Two levels are present specifically to be *falsified*. The 16-point cap is
     wide enough that it should never bind, so a search that ranks it first is
@@ -769,7 +1047,7 @@ def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
             SearchAxis(
                 family="weekly_performance_residual_coefficient",
                 levels=(0.05, 0.15, 0.25, 0.35, 0.45),
-                evidence_status=EVIDENCE_PENDING,
+                evidence_status=EVIDENCE_PREDECLARED,
                 boundary_expandable=True,
                 rationale=(
                     "Spans near-inert to strongly reactive on a 0.10 step. Not centred "
@@ -780,7 +1058,7 @@ def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
             SearchAxis(
                 family="weekly_movement_cap_points",
                 levels=(2.0, 4.0, 8.0, 16.0),
-                evidence_status=EVIDENCE_PENDING,
+                evidence_status=EVIDENCE_PREDECLARED,
                 boundary_expandable=True,
                 rationale=(
                     "Doubling ladder. 16.0 is included as a non-binding control: if it "
@@ -801,7 +1079,7 @@ def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
                     RecentFormPolicy(RECENT_FORM_GEOMETRIC, 8, 0.7),
                     RecentFormPolicy(RECENT_FORM_GEOMETRIC, 8, 0.9),
                 ),
-                evidence_status=EVIDENCE_PENDING,
+                evidence_status=EVIDENCE_PREDECLARED,
                 boundary_expandable=True,
                 rationale=(
                     "Depth and decay travel together because they are not separable: "
@@ -818,7 +1096,7 @@ def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
                     BlowoutPolicy(BLOWOUT_RESIDUAL_CLIP, 28.0),
                     BlowoutPolicy(BLOWOUT_SMOOTH_SATURATION, 24.0),
                 ),
-                evidence_status=EVIDENCE_PENDING,
+                evidence_status=EVIDENCE_PREDECLARED,
                 boundary_expandable=False,
                 rationale=(
                     "Two shapes plus the null policy. Thresholds are placeholders; the "
@@ -833,7 +1111,7 @@ def coarse_space(*, range_authority: str | None = None) -> SearchSpace:
                     RegularizationPolicy(REGULARIZATION_GAMES_PLAYED_SHRINKAGE, 2.0),
                     RegularizationPolicy(REGULARIZATION_GAMES_PLAYED_SHRINKAGE, 5.0),
                 ),
-                evidence_status=EVIDENCE_PENDING,
+                evidence_status=EVIDENCE_PREDECLARED,
                 boundary_expandable=True,
                 rationale=(
                     "The null policy competes explicitly, so 'no regularization' is a "
@@ -1352,7 +1630,17 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Refuse to run unless the built space digests to this value.",
     )
-    parser.add_argument("--range-authority", default=None)
+    parser.add_argument(
+        "--range-authority",
+        default=None,
+        help="Optional named governance authority. Not required: predeclared, "
+        "hash-bound ranges are executable for research on their own.",
+    )
+    parser.add_argument(
+        "--experiment-id",
+        default=None,
+        help="Identifier the predeclared ranges are bound under.",
+    )
     parser.add_argument(
         "--plan",
         action="store_true",
@@ -1362,7 +1650,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--expected-margin-authority",
         default=None,
-        help="Identifier of the governed expected-margin authority.",
+        help="Identifier of the governed expected-margin STRUCTURE. The point scale "
+        "it carries may be an experiment-bound candidate.",
     )
     parser.add_argument(
         "--output-dir", default="output/dynamic_weekly_mc_v3/calibration_search"
@@ -1406,15 +1695,21 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 0
 
-        require_range_authority(space)
+        predeclaration = (
+            predeclare(space, experiment_id=args.experiment_id)
+            if args.experiment_id
+            else None
+        )
+        require_executable_ranges(space, predeclaration=predeclaration)
         if not args.observations or not args.expected_margin_authority:
             raise GovernanceBlock(
-                "Scoring requires both a governed observation dataset and a named "
-                "expected-margin authority. Neither has a default: an expected margin "
-                "that defaults is an invented one."
+                "Scoring requires an audited observation corpus and a governed "
+                "expected-margin structure. Neither has a default: an expected margin "
+                "that defaults is an invented one. The point *scale* inside that "
+                "structure may be an experiment-bound candidate and needs no ruling."
             )
         raise GovernanceBlock(
-            "No governed calibration corpus is mounted in this repository. The search "
+            "No audited calibration corpus is mounted in this repository. The search "
             "universe, sharding and scorer are ready; the inputs are not."
         )
     except (GovernanceBlock, InputValidationError) as exc:
