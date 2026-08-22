@@ -1,0 +1,771 @@
+{
+  "artifact": "V3_OPENING_BACKCAST_R1.json",
+  "artifact_status": "HISTORICAL_OPENING_BACKCAST_RESEARCH_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "base_sha": "5479f2ae7687c36c0ed4117334171289693dd5c9",
+  "branch": "claude/v3-opening-backcast-r1",
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "decision": "PROXY_VALID_FOR_LIMITED_CALIBRATION_ONLY",
+  "decision_basis": [
+    "A strictly leak-free historical opening proxy is constructible for three of the four requested openings \u2014 2022, 2023 and 2024 \u2014 from real NCAA-published results and nothing else.",
+    "It is a SINGLE-FAMILY proxy. Only Pure Baxter, one of the four V3 preseason families and 0.25 of the ensemble weight, is reproducible from results. The multi-family ensemble that would be structurally analogous to Unified Z is refused by governance already in place (ACC-EXT-12 / R2-CAL-OBJECTIVE).",
+    "The 2021 opening is not constructible. 2020 is acquirable from the identical source family, and the 2020 season itself cannot supply a season-final state under the corpus's own admission rule.",
+    "Measured on the one season where a proxy-shaped state and the actual V3 opening ensemble both exist, agreement is high in aggregate (Pearson 0.9826) and poor where V3 is most sensitive (2 of the 4 top seeds differ).",
+    "The proxy carries a signed, measured bias into the parameters most people would reach for first. It attenuates the point-scale slope to 0.48-0.68 of a same-season reference and inflates residual dispersion. Three of the seven parameters remain research-supportable; four do not."
+  ],
+  "emitted_opening_values": {
+    "count": 0,
+    "rule": "No per-team historical opening strength is emitted for any season, in any unit, in any artifact of this lane. opening_backcast.require_no_canonical_opening_values fails closed on the attempt. The lane produces a methodology, coverage counts and agreement statistics."
+  },
+  "governance": {
+    "allowlist_widened": false,
+    "blocker_count_after": 8,
+    "blocker_count_before": 8,
+    "blockers_opened": [],
+    "blockers_retired": [],
+    "canonical_config_written": false,
+    "fcs_mapping_promoted": false,
+    "football_points_emitted": 0,
+    "parameters_promoted": [],
+    "season_monte_carlo_run": false
+  },
+  "lane": "claude/v3-opening-backcast-r1",
+  "lane_boundary": {
+    "does_not_duplicate": "claude/v3-opening-source-recovery-r1 is independently attempting to recover the exact historical V3 preseason component inputs. This lane assumes that recovery fails and asks a different question: whether a leak-free substitute can be built from results alone. Neither result depends on the other; if the exact inputs are recovered, this proxy is superseded and nothing here needs withdrawing, because nothing here was promoted.",
+    "extends": "claude/v3-historical-opening-state-r1 established that no V3 preseason family has a state before 2025. This lane takes that as given and does not re-derive it."
+  },
+  "leakage_proof": {
+    "construction": "opening_Z(Y) is a positive affine function of a rating fitted exclusively over games played in season Y-1, standardized over a population fixed before season Y begins. No season-Y quantity appears anywhere in the construction.",
+    "inputs_by_season": "For opening season Y the only inputs are the season Y-1 rows of the observation corpus and the season Y-1 rows of the venue enrichment. Season-Y rows are read only when the resulting state is scored, never when it is built.",
+    "population_note": "The standardization population is the set of teams holding a Y-1 state, which is determined by Y-1 participation alone. Using the season-Y membership list to choose the population would import a season-Y fact; it is not used for that.",
+    "prohibited_inputs_confirmed_absent": [
+      "season-Y final ratings",
+      "season-Y results",
+      "season-Y retrospective statistics",
+      "future opponent performance",
+      "market or public-money signals of any season"
+    ],
+    "temporal_order_evidence": "Every admitted observation carries a source-published start instant, so the season boundary is provable from the bytes rather than assumed from a season label.",
+    "what_is_deliberately_not_claimed": "Leak-freedom is a property of the construction, not a claim that the proxy is unbiased. The two are independent and the bias section below is the one that constrains use."
+  },
+  "measurements": {
+    "1_prior_season_final_states": {
+      "method": "Each season's final state is fitted over that season's own admitted games only. Three families are computed: the Baxter margin ridge under frozen doctrine BAXTER-MOV-v1.0-R, SRS under the repository's own solver, and a Colley matrix as a second witness.",
+      "per_season": [
+        {
+          "baxter_rating_sd": 12.328,
+          "corr_baxter_colley": 0.8935,
+          "corr_baxter_srs": 0.9899,
+          "fitted_season_hfa_points": 1.627,
+          "games": 556,
+          "games_per_team": {
+            "max": 12,
+            "median": 11,
+            "min": 8
+          },
+          "neutral_site_games": 18,
+          "schedule_graph_components": 1,
+          "season": 2021,
+          "srs_rating_sd": 9.835,
+          "teams": 105
+        },
+        {
+          "baxter_rating_sd": 12.625,
+          "corr_baxter_colley": 0.9252,
+          "corr_baxter_srs": 0.9885,
+          "fitted_season_hfa_points": 2.448,
+          "games": 524,
+          "games_per_team": {
+            "max": 12,
+            "median": 10,
+            "min": 8
+          },
+          "neutral_site_games": 14,
+          "schedule_graph_components": 1,
+          "season": 2022,
+          "srs_rating_sd": 10.5,
+          "teams": 101
+        },
+        {
+          "baxter_rating_sd": 11.944,
+          "corr_baxter_colley": 0.917,
+          "corr_baxter_srs": 0.9902,
+          "fitted_season_hfa_points": 2.977,
+          "games": 598,
+          "games_per_team": {
+            "max": 13,
+            "median": 11,
+            "min": 8
+          },
+          "neutral_site_games": 19,
+          "schedule_graph_components": 1,
+          "season": 2023,
+          "srs_rating_sd": 9.926,
+          "teams": 114
+        },
+        {
+          "baxter_rating_sd": 12.214,
+          "corr_baxter_colley": 0.9069,
+          "corr_baxter_srs": 0.9879,
+          "fitted_season_hfa_points": 3.005,
+          "games": 563,
+          "games_per_team": {
+            "max": 13,
+            "median": 10,
+            "min": 8
+          },
+          "neutral_site_games": 16,
+          "schedule_graph_components": 1,
+          "season": 2024,
+          "srs_rating_sd": 10.232,
+          "teams": 108
+        }
+      ],
+      "single_component_significance": "Each season's schedule graph is connected, so ratings are comparable across the whole population without the per-component centring the SRS solver falls back on. On a disconnected graph no single standardization would be defined."
+    },
+    "2_carryover_is_z_invariant": {
+      "consequence": "A proxy does not approximate the offseason regression step; it reproduces it. All proxy error therefore lives in the underlying rating engine, the population, and the omitted families \u2014 not in the carryover.",
+      "counterpart_consequence": "The 0.70 coefficient is not identifiable from standardized openings either, in the actual V3 construction or in any proxy of it. It is only visible on the native point axis.",
+      "finding": "Both governed offseason transitions are positive affine maps, and a Z score is invariant under one. For a team holding a prior state the opening Z of a carryover family IS the standardized prior-season final rating, exactly.",
+      "measured_slope_pure_baxter": 0.7,
+      "measured_slope_tolerance": "ratio of Master Ratings column AQ to column AM equals 0.70 for all 121 teams to within 1e-12"
+    },
+    "3_year_over_year_persistence": {
+      "note": "How much of a season's final ordering the previous season's final ordering carries. This is the signal a carryover proxy has to work with, measured leak-free.",
+      "pearson": {
+        "baxter": {
+          "2021_to_2022": 0.6831,
+          "2022_to_2023": 0.7148,
+          "2023_to_2024": 0.6518
+        },
+        "colley": {
+          "2021_to_2022": 0.549,
+          "2022_to_2023": 0.6249,
+          "2023_to_2024": 0.467
+        },
+        "srs": {
+          "2021_to_2022": 0.6658,
+          "2022_to_2023": 0.7284,
+          "2023_to_2024": 0.6566
+        }
+      },
+      "reading": "A margin-based prior season explains roughly 42-53 per cent of the next season's rating variance. A win-loss-only prior season explains materially less, which is why the win-loss witness is a witness and not the family.",
+      "spearman": {
+        "baxter": {
+          "2021_to_2022": 0.6277,
+          "2022_to_2023": 0.7017,
+          "2023_to_2024": 0.618
+        },
+        "colley": {
+          "2021_to_2022": 0.5541,
+          "2022_to_2023": 0.5941,
+          "2023_to_2024": 0.4315
+        },
+        "srs": {
+          "2021_to_2022": 0.6142,
+          "2022_to_2023": 0.7067,
+          "2023_to_2024": 0.632
+        }
+      }
+    },
+    "4_predictive_validity_leak_free": {
+      "hfa_witness_note": "The fitted venue term lands at 2.7-3.4 full-season and 3.9-5.4 in weeks 1-2. The governed V3 HFA of 3.5 is LOCKED under R2-HFA-3P5 and is not an estimand here; this is a witness in its own namespace and no HFA value is proposed.",
+      "model": "margin_home = k * (Z_home - Z_away) + h * non_neutral_indicator, ordinary least squares over the scored season, with the opening Z built only from season Y-1",
+      "per_season_baxter_proxy": [
+        {
+          "full_season_hfa": 3.34,
+          "full_season_k_points_per_sd": 7.619,
+          "full_season_n": 524,
+          "full_season_residual_sd": 17.6,
+          "multiple_r": 0.49,
+          "season": 2022,
+          "unconditional_margin_sd": 20.19,
+          "weeks_1_2_hfa": 4.11,
+          "weeks_1_2_k_points_per_sd": 12.472,
+          "weeks_1_2_n": 58,
+          "weeks_1_2_residual_sd": 16.14
+        },
+        {
+          "full_season_hfa": 2.74,
+          "full_season_k_points_per_sd": 8.529,
+          "full_season_n": 522,
+          "full_season_residual_sd": 17.18,
+          "multiple_r": 0.507,
+          "season": 2023,
+          "unconditional_margin_sd": 19.93,
+          "weeks_1_2_hfa": 5.35,
+          "weeks_1_2_k_points_per_sd": 9.192,
+          "weeks_1_2_n": 59,
+          "weeks_1_2_residual_sd": 16.31
+        },
+        {
+          "full_season_hfa": 3.35,
+          "full_season_k_points_per_sd": 6.185,
+          "full_season_n": 563,
+          "full_season_residual_sd": 18.31,
+          "multiple_r": 0.378,
+          "season": 2024,
+          "unconditional_margin_sd": 19.78,
+          "weeks_1_2_hfa": 4.1,
+          "weeks_1_2_k_points_per_sd": 7.098,
+          "weeks_1_2_n": 58,
+          "weeks_1_2_residual_sd": 17.58
+        }
+      ],
+      "reading": "The proxy carries real, leak-free predictive signal \u2014 every season's slope is positive and substantial, and residual dispersion falls below the unconditional dispersion in every season. It is a working opening state, not a null one.",
+      "weeks_1_2_caveat": "The weeks 1-2 subsets are 58-59 observations each. They are reported because that window is the one the identification graph names, not because 58 observations settle anything."
+    },
+    "5_attenuation_diagnostic": {
+      "classification": "LEAKY_REFERENCE_NOT_A_CALIBRATION_INPUT",
+      "method": "The same regression is refitted with the season's own final rating in place of the prior-season proxy. That predictor is built from season-Y games and is therefore leaky by construction. It is used only as an upper reference for how much slope the proxy gives up, and no number derived from it is offered toward any parameter.",
+      "per_season": [
+        {
+          "k_proxy": 7.619,
+          "k_same_season_reference": 13.381,
+          "ratio": 0.569,
+          "residual_sd_proxy": 17.6,
+          "residual_sd_reference": 12.72,
+          "sd_of_z_difference": 1.295,
+          "season": 2022
+        },
+        {
+          "k_proxy": 8.529,
+          "k_same_season_reference": 12.589,
+          "ratio": 0.677,
+          "residual_sd_proxy": 17.18,
+          "residual_sd_reference": 12.76,
+          "sd_of_z_difference": 1.188,
+          "season": 2023
+        },
+        {
+          "k_proxy": 6.185,
+          "k_same_season_reference": 12.88,
+          "ratio": 0.48,
+          "residual_sd_proxy": 18.31,
+          "residual_sd_reference": 12.66,
+          "sd_of_z_difference": 1.199,
+          "season": 2024
+        }
+      ],
+      "reading": "The proxy recovers roughly half to two thirds of the available slope and leaves 4.4-5.7 more points of residual dispersion behind. Both effects have the same cause and the same sign in every season, which is what makes them a bias rather than noise."
+    },
+    "6_proxy_versus_actual_opening_z": {
+      "actual_definition": "Unified Master Z, the published four-family V3 opening ensemble",
+      "comparability_caveat": "This is the only season in the programme where a proxy-shaped opening state and an actual V3 opening ensemble both exist, and it is not a historical test. The prior season it carries forward (2025) is synthetic, and the field is the closed synthetic 121-team 2026 universe. It measures the CONSTRUCTION difference \u2014 one results-carryover family standing in for four \u2014 and says nothing about the difference real historical data would add.",
+      "family_cross_correlation": {
+        "board_family_to_litkenhous": 0.9764,
+        "board_family_to_pure_baxter": 0.9396,
+        "board_family_to_trueskill": 0.8833,
+        "litkenhous_to_pure_baxter": 0.9884,
+        "litkenhous_to_trueskill": 0.8873,
+        "pure_baxter_to_trueskill": 0.8954
+      },
+      "n": 121,
+      "proxy_definition": "Pure Baxter Z, which is by construction the standardized prior-season margin-ridge fit carried forward; the exact shape a historical single-family proxy takes",
+      "single_family_vs_unified": {
+        "bias_mean_difference": 0.0,
+        "kendall_tau": 0.8416,
+        "max_abs_difference_points_at_14_per_sd": 6.72,
+        "max_abs_difference_sd": 0.48,
+        "pearson": 0.9826,
+        "rank_displacement": {
+          "max": 36,
+          "mean": 6.83,
+          "median": 4,
+          "p90": 18
+        },
+        "sd_of_difference": 0.1866,
+        "spearman": 0.96,
+        "top_10_overlap": "9/10",
+        "top_25_overlap": "24/25",
+        "top_4_overlap": "2/4"
+      },
+      "two_results_families_vs_unified": {
+        "definition": "mean of TrueSkill Z and Pure Baxter Z, restandardized \u2014 the shape a proxy would take if a TrueSkill engine were ever mounted",
+        "kendall_tau": 0.8644,
+        "max_abs_difference_sd": 0.4628,
+        "pearson": 0.9886,
+        "rank_displacement": {
+          "max": 37,
+          "mean": 6.21,
+          "median": 4,
+          "p90": 15
+        },
+        "sd_of_difference": 0.1512,
+        "spearman": 0.967,
+        "top_10_overlap": "9/10",
+        "top_25_overlap": "23/25"
+      },
+      "where_it_fails": "Two of the four highest-ranked teams differ. V3's postseason structure seeds byes from the top four, so a proxy that agrees at 0.98 in aggregate can still disagree about the thing the model is most sensitive to.",
+      "why_the_agreement_is_high": "The four families are not independent. Litkenhous Adjusted Power correlates 0.9884 with Pure Baxter because it too is largely a 2025 carryover with an offseason overlay on top. The ensemble diversifies less than a four-family structure suggests, which is precisely why a single carryover family tracks it so closely \u2014 and is also a reason not to read the correlation as evidence that the omitted families are unimportant."
+    },
+    "7_point_scale_arithmetic": {
+      "finding": "Under the provisional 14 points per standard deviation, and the 20.2-point game SD recorded in the V2.1 control, the implied total margin dispersion is far above anything observed.",
+      "implied_totals_on_the_2026_schedule": [
+        {
+          "implied_total_margin_sd": 26.44,
+          "k_points_per_sd": 14,
+          "predicted_margin_sd": 17.07
+        },
+        {
+          "implied_total_margin_sd": 23.59,
+          "k_points_per_sd": 10,
+          "predicted_margin_sd": 12.19
+        },
+        {
+          "implied_total_margin_sd": 22.43,
+          "k_points_per_sd": 8,
+          "predicted_margin_sd": 9.75
+        },
+        {
+          "implied_total_margin_sd": 21.93,
+          "k_points_per_sd": 7,
+          "predicted_margin_sd": 8.53
+        }
+      ],
+      "method": "sd(Z_home - Z_away) is measured directly over the locked 2026 schedule using the published Unified Master Z, and separately over each historical season's schedule using the proxy opening Z. Var(margin) = Var(k * dZ) + Var(residual) with an unbiased predictor.",
+      "observed_real_margin_sd_by_season": {
+        "2021": 20.87,
+        "2022": 20.192,
+        "2023": 20.166,
+        "2024": 19.779
+      },
+      "observed_real_margin_sd_note": "Signed margin standard deviation over every admitted game of each season. The slightly different figures quoted in the predictive-validity block are over the regression subset, which drops games where a team holds no prior-season state.",
+      "reading": "At most one of the two provisional values can survive against real football dispersion, and both are already recorded as open \u2014 the workbook says of the 14 'recalibrate against game margins' and ENG-CAL-MARGIN is OPEN against the 20.2. This observation corroborates the existing open items; it does not settle either value, and the 2026 field is synthetic so the arithmetic is indicative rather than decisive.",
+      "sd_of_z_difference_historical_proxy": [
+        1.188,
+        1.199,
+        1.295
+      ],
+      "sd_of_z_difference_locked_2026_schedule": 1.219,
+      "status": "RESEARCH_OBSERVATION_NOT_A_PROMOTION",
+      "structural_note": "The historical proxy field and the 2026 field have nearly identical difference dispersion (1.19-1.30 against 1.219). Assortative scheduling, not the rating system, sets that number: teams play opponents near their own strength, so sd(dZ) is well below the 1.414 of random pairing. The proxy and the production field are geometrically comparable on this axis."
+    },
+    "8_reimplementation_convergent_witness": {
+      "caveat": "This is convergent validity, not spec validation. The two fits run over different corpora \u2014 the mounted 2024 fit includes postseason games and 174 synthetic rows and covers 118 teams; this one is 563 real regular-season and conference-championship games over 108 teams \u2014 so spec fidelity and corpus difference are confounded and cannot be separated by this comparison.",
+      "method": "The BAXTER-MOV-v1.0-R reimplementation fitted on the real 2024 observations is compared with the mounted Baxter_Ratings_2024.csv on the 104 teams that resolve to both.",
+      "pearson": 0.9676,
+      "sd_mounted": 10.722,
+      "sd_reimplementation": 12.17,
+      "spearman": 0.9661,
+      "status": "NO_CANONICAL_VALIDATION_ANCHOR_IS_MOUNTED",
+      "status_note": "The position is the one srs.py already takes for SRS: the mathematics is verifiable and verified, and agreement with a canonical implementation cannot be demonstrated against artifacts that are not present."
+    }
+  },
+  "methodology": {
+    "candidate": "HISTORICAL_SINGLE_FAMILY_CARRYOVER_PROXY",
+    "family": "Pure Baxter",
+    "steps": [
+      "Admit only games from season Y-1 from the governed observation corpus.",
+      "Join the venue enrichment on the source game identifier to obtain the neutral-site indicator the Baxter doctrine requires; the join is exact and complete over the corpus.",
+      "Fit the season Y-1 margin ridge under frozen doctrine BAXTER-MOV-v1.0-R: predicted margin = season HFA * non-neutral indicator + rating(home) - rating(away); per-game margin cap 49 points; ridge lambda 0.3 on team terms only; HFA unpenalised; ratings sum to zero within the season.",
+      "Apply the governed carryover, pure_baxter_Y = 0.70 * baxter_ridge_(Y-1). This step is registered for fidelity and is provably inert once standardized.",
+      "Standardize over the set of teams holding a Y-1 state, sample deviation, ddof = 1, the divisor the 2026 workbook is measured to use.",
+      "Report SRS and a Colley matrix beside it as independent witnesses, never blended into it.",
+      "Emit no per-team value."
+    ],
+    "what_it_is": "HISTORICAL_CALIBRATION_PROXY",
+    "what_it_is_not": "EXACT_V3_PRESEASON_ENSEMBLE"
+  },
+  "multi_family_assessment": {
+    "conclusion": "NO_UNIFIED_Z_ANALOGOUS_ENSEMBLE_IS_ADMISSIBLE",
+    "conclusion_basis": "Two independent reasons, either sufficient. Three of the four V3 families cannot be rebuilt from results at all. And the families that CAN be computed from results \u2014 Baxter, SRS, Colley \u2014 may not be combined: ruling R2-CAL-OBJECTIVE names Baxter Rating RMSE the primary criterion with Colley and SRS as independent witnesses, and srs.reject_witness_composite raises on any weighted blend because that blend is the Body-of-Work Index recorded PROPOSAL ONLY / NOT ADOPTED in 18_ACC_POLICY_REFERENCE ACC-EXT-12.",
+    "equal_weights_note": "The 0.25 weights are authorised, and only for the four named 2026 families \u2014 the workbook's Ensemble Parameters sheet carries them explicitly and its Validation sheet checks that they sum to 1 over an included family count of 4. No authority extends them to any other family set, so no equal-weight proxy ensemble was constructed.",
+    "families": [
+      {
+        "availability": "2026 value present for 121 of 121 teams",
+        "effective_date": "before kickoff; the transition consumes only the prior-season posterior",
+        "family": "TrueSkill",
+        "historical_reproducibility": "NOT_REPRODUCIBLE",
+        "native_units": "TrueSkill skill mu, population prior mu 25 sigma 8.333333",
+        "reason": "No TrueSkill update engine is mounted anywhere in this repository, and the chain is initialised flat at mu 25 at 2025 week 1, so there is no pre-2025 posterior to carry. Fitting a substitute latent-skill model would be inventing a system, not reconstructing one.",
+        "standardization": "Z over the 121-team field, ddof 1",
+        "team_coverage_2026": 121,
+        "weight": 0.25
+      },
+      {
+        "availability": "2026 value present for 121 of 121 teams; 111 Complete, 9 Partial no market input, 1 Partial imputed 2025 base",
+        "effective_date": "before kickoff; consumes prior-season ratings plus an offseason composite",
+        "family": "Litkenhous",
+        "historical_reproducibility": "NOT_REPRODUCIBLE",
+        "native_units": "power margin, published rating = power + 100",
+        "reason": "The carryover half needs a prior Litkenhous rating and the lineage begins at the 2025 final ratings. The offseason composite half is not a function of results and no historical composite exists.",
+        "standardization": "Z over the 121-team field, ddof 1",
+        "team_coverage_2026": 121,
+        "weight": 0.25
+      },
+      {
+        "availability": "2026 value present for 121 of 121 teams; 119 from a 2025 fitted rating, 2 imputed",
+        "effective_date": "before kickoff; a fixed multiple of the prior-season fit",
+        "family": "Pure Baxter",
+        "historical_reproducibility": "REPRODUCIBLE",
+        "native_units": "zero-centred margin points, scale is season-specific and not comparable across seasons in native units",
+        "reason": "Frozen doctrine BAXTER-MOV-v1.0-R specifies the equation, the centring, the margin cap, the ridge penalty and the HFA treatment. It consumes scored games and a neutral-site indicator, both of which the corpus supplies for 2021-2024.",
+        "standardization": "Z over the 121-team field, ddof 1",
+        "team_coverage_2026": 121,
+        "weight": 0.25
+      },
+      {
+        "availability": "2026 value present for 121 of 121 teams from both boards",
+        "effective_date": "before kickoff; forward-looking by construction",
+        "family": "Board family",
+        "historical_reproducibility": "NOT_REPRODUCIBLE",
+        "native_units": "two distinct board power scales, standardized separately then averaged",
+        "reason": "Board J-B's components are baseline, returning production, movement, talent, coaching, market and 247 points. None is derivable from results, and no board of any letter exists for 2021-2024.",
+        "standardization": "each board standardized separately against its own field deviation, then the two Z scores averaged; not a Z of an average",
+        "team_coverage_2026": 121,
+        "weight": 0.25
+      }
+    ],
+    "reproducible_ensemble_weight": 0.25,
+    "witness_families_available_but_uncombinable": [
+      {
+        "availability": "implemented in this repository",
+        "family": "SRS",
+        "historical_reproducibility": "REPRODUCIBLE",
+        "native_units": "opponent-adjusted capped-margin points, per-game cap 24, centred on zero per connected component",
+        "role": "CALIBRATION_VALIDATION_WITNESS under ruling R2-SRS-WITNESS",
+        "standardization": "Z over the population, ddof 1",
+        "status_note": "srs.py records that no canonical SRS specification, reference implementation or historical validation anchor is mounted, and that blocker is unchanged by this lane."
+      },
+      {
+        "availability": "named as a witness; no implementation and no specification mounted in this repository",
+        "family": "Colley Matrix",
+        "historical_reproducibility": "REPRODUCIBLE_IN_PRINCIPLE",
+        "native_units": "dimensionless rating on (0, 1), centred at 0.5",
+        "role": "independent witness under ruling R2-CAL-OBJECTIVE",
+        "standardization": "Z over the population, ddof 1",
+        "status_note": "Computed here as a research witness from the standard published construction. It carries no mounted canonical specification, so it stands in exactly the position srs.py records for SRS."
+      }
+    ]
+  },
+  "new_entrant_and_continuity": {
+    "candidate_policies_evaluated": [
+      {
+        "authority": "TrueSkill Prior Method P0_POPULATION_PRIOR, used for the 2 teams carrying TrueSkill Carryover Status POPULATION_PRIOR_NO_2025_EVIDENCE",
+        "policy": "population mean prior",
+        "reproducible_historically": true,
+        "selected": false,
+        "why_not_selected": "The precedent belongs to the TrueSkill family. Borrowing a new-entrant rule across families is not authorised by anything mounted, and importing it would put a team at exactly the population mean on an axis whose mean is a different family's mean."
+      },
+      {
+        "authority": "Baxter Carryforward Status 'Imputed new entrant from Baxter~Board J baseline regression', used for 2 of 121 teams",
+        "policy": "cross-family regression imputation",
+        "reproducible_historically": false,
+        "selected": false,
+        "why_not_selected": "This is the governed precedent for the one family the proxy actually rebuilds, and it is the one that cannot be reproduced: it regresses on a Board J baseline, and no board exists for any historical season. The family whose imputation rule IS authorised is the family whose imputation rule is unavailable."
+      },
+      {
+        "authority": "none located",
+        "policy": "transition prior from a prior-division state",
+        "reproducible_historically": false,
+        "selected": false,
+        "why_not_selected": "It would require a rating for the entering programme on a scale that maps onto the FBS axis, which is the open FCS adapter blocker in a different costume."
+      },
+      {
+        "authority": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER, OPEN",
+        "policy": "FCS mapping",
+        "reproducible_historically": false,
+        "selected": false,
+        "why_not_selected": "The blocker is open and untouched. No FCS point value is derived here and none is proposed."
+      }
+    ],
+    "disposition": "EXCLUDE_AND_REPORT",
+    "disposition_basis": "No authority selects among the four. A team with no prior-season state is excluded from the proxy opening and named, rather than imputed silently onto an axis it has no measurement on.",
+    "excluded_by_opening_season": {
+      "2022": {
+        "count": 0,
+        "teams": []
+      },
+      "2023": {
+        "count": 13,
+        "teams": [
+          "ARMY",
+          "ARST",
+          "CCU",
+          "GASO",
+          "GAST",
+          "MRSH",
+          "ODU",
+          "TROY",
+          "TXST",
+          "UConn",
+          "ULL",
+          "ULM",
+          "USM"
+        ]
+      },
+      "2024": {
+        "count": 0,
+        "teams": []
+      }
+    },
+    "important_qualification": "None of the 13 is a new FBS entrant. They are teams whose 2022 games were pruned by the corpus's iterative eight-game floor after their opponents failed identity resolution, so the continuity gap is a corpus artifact and not a membership event. The real FBS entrants of the period \u2014 James Madison, Jacksonville State, Sam Houston, Kennesaw State \u2014 never enter the corpus at all, because the synthetic 2026 canonical universe does not carry them. The continuity problem is therefore masked by the identity filter rather than solved by it, and a corpus with a historically faithful universe would face it in full.",
+    "teams_with_a_prior_state_absent_from_the_later_season": {
+      "2021_state_absent_in_2022": [
+        "MRSH",
+        "ODU",
+        "UConn",
+        "USM"
+      ],
+      "2023_state_absent_in_2024": [
+        "FIU",
+        "LT",
+        "MTSU",
+        "NMSU",
+        "UTEP",
+        "WKU"
+      ]
+    }
+  },
+  "risks_and_bias": [
+    {
+      "detail": "A proxy opening state is a noisier measurement of the latent one. Every slope regressed on it is attenuated toward zero and every residual measured around it is inflated. Measured attenuation is 0.48-0.68 of a same-season reference. Because the sign is the same in every season, averaging across seasons does not remove it.",
+      "risk": "ERRORS_IN_VARIABLES_ATTENUATION",
+      "severity": "HIGH",
+      "signed": true
+    },
+    {
+      "detail": "Three quarters of the ensemble weight is unreproducible, and the two forward-looking families carry information no results history contains \u2014 returning production, portal movement, coaching change. The proxy is systematically blind to the offseason, which is exactly the period a preseason rating exists to price.",
+      "risk": "OMITTED_FAMILY_STRUCTURE",
+      "severity": "MEDIUM",
+      "signed": false
+    },
+    {
+      "detail": "The proxy standardizes over 101-114 teams resolved to the synthetic 2026 canonical universe. The real FBS population of those seasons was 130-133 and the sibling lane records two mutually inconsistent membership authorities for 2024 alone, 133 against 118. A Z score is defined only against a population, so a proxy standardized over a different population is not on the same axis as a state standardized over the real one.",
+      "risk": "POPULATION_NON_CORRESPONDENCE",
+      "severity": "HIGH",
+      "signed": false
+    },
+    {
+      "detail": "Between 214 and 265 games per season are excluded on unresolved identity, overwhelmingly against programmes absent from the 2026 universe. Opponent adjustment is a property of the whole graph, so every team's rating is adjusted against a truncated schedule, and teams lose different numbers of games. The fitted season HFA of 1.6-3.0 points, below the governed 3.5, is one visible symptom.",
+      "risk": "SCHEDULE_GRAPH_TRUNCATION",
+      "severity": "MEDIUM",
+      "signed": true
+    },
+    {
+      "detail": "The corpus prunes team-seasons below eight admitted games. That removes precisely the small-sample team-seasons that sample_size_regularization exists to govern, so the corpus is least informative exactly where that parameter is defined.",
+      "risk": "SMALL_SAMPLE_SELECTION",
+      "severity": "MEDIUM",
+      "signed": true
+    },
+    {
+      "detail": "The Baxter package states that raw rating scales are season-specific and not directly comparable across seasons, while the governed carryover multiplies a prior season's native rating by 0.70. Standardization removes the tension for the proxy, and it remains a live question for the production construction, which applies the carryover on the native axis.",
+      "risk": "SEASON_SPECIFIC_NATIVE_SCALE",
+      "severity": "LOW",
+      "signed": false
+    },
+    {
+      "detail": "Aggregate agreement of 0.98 coexists with disagreement on 2 of the 4 top seeds and single-team deviations up to 0.48 standard deviations, about 6.7 points at the provisional scale. Any conclusion that depends on individual team placement, bracket seeding or postseason structure is outside what the proxy supports.",
+      "risk": "SEED_SENSITIVITY",
+      "severity": "HIGH",
+      "signed": false
+    },
+    {
+      "detail": "The Baxter fit is a reimplementation of a documented doctrine, not the mounted fitting engine, which is not mounted. No canonical validation anchor exists for it, exactly as none exists for SRS. Convergent agreement of 0.968 with the mounted 2024 fit is evidence of family, not of specification.",
+      "risk": "UNVALIDATED_REIMPLEMENTATION",
+      "severity": "MEDIUM",
+      "signed": false
+    },
+    {
+      "detail": "Both observation inputs live on unmerged sibling branches. Every measurement here is conditional on those lanes being integrated as audited; the digests are recorded so the conditionality is checkable rather than assumed.",
+      "risk": "CROSS_LANE_DEPENDENCY",
+      "severity": "MEDIUM",
+      "signed": false
+    }
+  ],
+  "season_coverage": {
+    "2021_opening": {
+      "constructible": false,
+      "requires": 2020,
+      "status": "BLOCKED_ON_SEASON_QUALITY_NOT_ON_ACQUISITION"
+    },
+    "2022_opening": {
+      "constructible": true,
+      "prior_season_games": 556,
+      "prior_season_teams": 105,
+      "requires": 2021
+    },
+    "2023_opening": {
+      "constructible": true,
+      "prior_season_games": 524,
+      "prior_season_teams": 101,
+      "requires": 2022
+    },
+    "2024_opening": {
+      "constructible": true,
+      "prior_season_games": 563,
+      "prior_season_teams": 108,
+      "requires": 2023
+    }
+  },
+  "source_inputs": [
+    {
+      "digest_verified_in_this_lane": true,
+      "path": "reference/dynamic_weekly_mc_v3/observation_corpus_r6/V3_R6_OBSERVATION_CORPUS.csv",
+      "provenance_class": "GOVERNED_RESULT_SOURCE, TIER_1_NCAA_OFFICIAL",
+      "role": "scored observations, seasons 2021-2024, 2241 FBS-versus-FBS rows",
+      "sha256": "31504e8d03b68de549bb999f2ce6a62824eb3286e3802712534d3092fa3f7aac",
+      "source_branch": "claude/v3-historical-observation-corpus-r6",
+      "status": "UNMERGED_SIBLING_LANE_ARTIFACT_READ_AS_EVIDENCE"
+    },
+    {
+      "digest_verified_in_this_lane": true,
+      "join_result": "2241 of 2241 corpus rows matched, every one VENUE_EVIDENCE_BOUND; 67 neutral-site games; 2211 regular season and 30 conference championship",
+      "path": "reference/dynamic_weekly_mc_v3/venue_enrichment_r1/V3_VENUE_R1_ENRICHMENT.csv",
+      "role": "neutral-site indicator and competition type, without which the Baxter doctrine's HFA term cannot be applied",
+      "sha256": "3e7c965e1d0ebc03cff1330de577d131d1c6fe2ae0f47b9f239756f362d78778",
+      "source_branch": "claude/v3-historical-venue-enrichment-r1",
+      "status": "UNMERGED_SIBLING_LANE_ARTIFACT_READ_AS_EVIDENCE"
+    },
+    {
+      "digest_verified_in_this_lane": true,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+      "role": "the construction being proxied: family weights, carryover rules, standardization, and the actual opening Z the proxy is compared against",
+      "sha256": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+      "status": "GOVERNED_REPOSITORY_INPUT"
+    },
+    {
+      "digest_verified_in_this_lane": true,
+      "path": "reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+      "role": "the locked 2026 schedule, used to measure sd(Z_home - Z_away) on the production field",
+      "sha256": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+      "status": "GOVERNED_REPOSITORY_INPUT"
+    },
+    {
+      "digest_verified_in_this_lane": true,
+      "path": "Baxter_v1_2006_2011_2024_2025_Complete_Package/Baxter_Ratings_v1_Joint_2024_2025_Validation_and_Freeze.xlsx",
+      "role": "frozen doctrine BAXTER-MOV-v1.0-R, the Doctrine sheet, which is the specification the reimplementation follows",
+      "sha256": "a2bdb8a2eeea5ab16e516925b0d5331dce274fc460c66e1d6361ffb4fe86356e",
+      "status": "LOCAL_STAGED_PACKAGE_READ_AS_SPECIFICATION_NOT_AS_OBSERVATIONS"
+    },
+    {
+      "digest_verified_in_this_lane": true,
+      "path": "Baxter_v1_2006_2011_2024_2025_Complete_Package/Baxter_Ratings_2024.csv",
+      "role": "convergent-validity comparison only; classified ENGINE_OUTPUT and not admitted as observations",
+      "sha256": "b7d3e08490a68f2cd8dd4a08312a639a2622b7ea3dbd05d262939a419863920b",
+      "status": "LOCAL_STAGED_PACKAGE_READ_AS_A_WITNESS"
+    }
+  ],
+  "supersedes": "nothing; this record is additive to V3_CALIBRATION_EVIDENCE_DISCOVERY_R5.json and to the historical opening-state and observation-corpus lane records",
+  "terminal": "HISTORICAL_OPENING_BACKCAST_R1_COMPLETE",
+  "the_2020_requirement": {
+    "acquisition_probe": {
+      "base_url": "https://data.ncaa.com/casablanca/scoreboard/football",
+      "divisions_probed": [
+        "fbs",
+        "fcs"
+      ],
+      "fbs_weeks_http_200": "01 through 19, all 200; weeks 16-19 return a valid document carrying zero games",
+      "fcs_weeks_absent": [
+        13,
+        16,
+        17,
+        18,
+        19
+      ],
+      "fcs_weeks_http_200": "01 through 12, 14 and 15",
+      "method": "HTTP GET, python urllib.request, no query parameters; per-week response digests recorded below",
+      "result": "AVAILABLE",
+      "season": 2020,
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+      "source_authority_class": "GOVERNED_RESULT_SOURCE",
+      "weeks_probed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    "conclusion": "The 2020 data ARE acquirable from the identical authoritative source family the R6 corpus uses. The 2021 opening backcast is nevertheless refused, and the ground is the 2020 season rather than the retrieval: under the corpus's own iterative eight-game floor, the real 2020 FBS-versus-FBS season reduces to 171 games across 38 entities, before identity resolution against the 121-team canonical universe removes more. A 38-team remnant cannot standardize an opening state for the roughly 105 teams the other three openings cover, and a population of 38 is not the population any of them uses. Acquiring the bytes would not fix this; only a ruling that relaxes the admission floor for a pandemic-shortened season could, and issuing that ruling is not this lane's to make.",
+    "raw_response_digests_sha256": {
+      "fbs_wk01": "d19244e3cc5393310686d309fd9eb9f37c5b36b984cc0b25db4b41257b40abec",
+      "fbs_wk02": "780cdadc22b1e2a3cb54d52c09cab6b882b376ff99af3f2e5c8a0c0e60c5978d",
+      "fbs_wk03": "d9b9006c511651151dc8ed9b5789cf9da90c8232b2b934d7d3bba0f713333357",
+      "fbs_wk04": "d2ee21333e00c4636c5d6e33b82b2af54d424ab40d4512004e2b6c1165ffd10e",
+      "fbs_wk05": "5d7e2abf341ecfacd7ed62db73512b016ab18265af99772b5011ac14fc5c81d3",
+      "fbs_wk06": "d0528cf065ad1dddd074d09c7a749cf6c02fdcd60952bfc56d9a5b10194d89c2",
+      "fbs_wk07": "738527904d09b022734d07ba0d297d9478c4aeb8d4fe993c79a65c68943dbaf1",
+      "fbs_wk08": "626fc0e0e427e38347ab8d06e7908d36a3ec3e61ac8ee7755b181062c55ccb6d",
+      "fbs_wk09": "c455c36db6f66b767cb3c122618fe5689b83b207c7a6e0050e45ef9ac0b66af0",
+      "fbs_wk10": "e06cb3e7c79a04193b18179a13ae183754acc132389acefab0765ddf47428731",
+      "fbs_wk11": "6d043719f84c19205fa4570440c2a8c99ccf7cfd8dddb7672d05e6a01bef2759",
+      "fbs_wk12": "11ee811bbf09f476a56ae6c770185d545b100c5b0d0cbae4a47c5a5971b9faec",
+      "fbs_wk13": "6846f1582d7570f64185b270b3ed8c92e0585741c8afcca8d1079819af72c45a",
+      "fbs_wk14": "8781167a2b19326352f5a129b988535aa731a36eaa409feeb32129ad0531b9d0",
+      "fbs_wk15": "89315cf995c37d9244830434bcd90493ed036119e4128a74acba96722869a274",
+      "fbs_wk16": "f6b4edc278a68484c998db8b2c36680f9edb3e58b54befc50ad0b199ccd2c904",
+      "fbs_wk17": "00f9fec373b30b51f45a7f2620946ce1289a58bba489c1c7abce92d47890351f",
+      "fbs_wk18": "506a7aa9de1725414ec065cc5d27d9da69ee0d842d40569db88bb15699264fab",
+      "fbs_wk19": "0f6d40bc8f1e99cb39cdf2878a63be194871889e2f2910f9790d57a30ca2a51e",
+      "fcs_wk01": "f1c8852aaf46d814826d71c2c1415845551a77db487a7ac6052122268513e0d7",
+      "fcs_wk02": "5c8e840d4b8d1ebf540ca0751787a6cff6ae6da6258459c1ffd4eea98c99e004",
+      "fcs_wk03": "915d50a9b15426031e6841feb777df33fd6354664283793d41ca2a5c73c8d831",
+      "fcs_wk04": "476c42d543852d67a5cd9482db49171c02e4e3e6af837e39077896e56cc9dd64",
+      "fcs_wk05": "05bb0d2ab9a9bf4d4f871b90304827ebe5fb71f67893ad8b19e5b068d3ffe929",
+      "fcs_wk06": "2218ab51208b64b929b04e3f26f3d3f9cf2fb15222feea31385e21a3e69a2c87",
+      "fcs_wk07": "d2e987a0b8d9b257040cb8d11bf73d463d2db6e2425c7082b4c651f26b608dad",
+      "fcs_wk08": "6df9fca0e48f8d0ac0557b206f65196f6242af49ebf7e3b26ae477752c4bd203",
+      "fcs_wk09": "b2806fa8ba62fca358a37b0ba82e7ace1595b41c452b7c971728fd8415c6d2a7",
+      "fcs_wk10": "5dd5ab4b6d4bf16cd92fc44e6627a52add561274200df558e1f3cd390c3e59c6",
+      "fcs_wk11": "2c4baace25cada844c4c1c19451e62efd1edb91cf5971e4209a8b7cc7bcdbd49",
+      "fcs_wk12": "525ab90f6b2c062a14e7ded362bb2f974bdc1aceb973013fe536dd06e27d958e",
+      "fcs_wk14": "258eae2444c508cfc853a85ffcc945e89249c29c308b8cf13d569bf11b3ee40b",
+      "fcs_wk15": "22489eff5d14f51348a474712937fb2928c009bd8187973d01ae3f2f08f1f384"
+    },
+    "raw_responses_stored_in_repository": false,
+    "raw_responses_stored_note": "The 2020 bytes were retrieved to answer the availability question and were not mounted. Mounting a corpus is a corpus lane's action and this lane has no authority to add a governed observation source.",
+    "season_content_census": {
+      "cross_division_game_ids_present_in_both_feeds": 37,
+      "entities_appearing_in_an_fbs_only_game": 127,
+      "fbs_feed_rows": 616,
+      "fbs_feed_states": {
+        "cancelled": 1,
+        "final": 523,
+        "postponed": 92
+      },
+      "fbs_vs_fbs_final_games": 489,
+      "fcs_feed_rows": 61,
+      "games_per_team": {
+        "max": 12,
+        "median": 8,
+        "min": 3
+      },
+      "teams_at_or_above_eight_games": 70,
+      "teams_below_eight_games": 57
+    },
+    "what_the_pruning_does": {
+      "after_iterative_eight_game_floor": {
+        "games": 171,
+        "iterations": 5,
+        "teams": 38
+      },
+      "before": {
+        "games": 489,
+        "teams": 127
+      },
+      "comparison": "the same rule leaves 556 games and 105 teams in 2021"
+    },
+    "what_would_be_needed": [
+      "The full 2020 FBS scoreboard for weeks 1-15, which is where the games are; weeks 16-19 return valid empty documents.",
+      "The 2020 FCS scoreboard as the division-classification oracle, under the same rule the corpus uses: a game appears in both scoreboards exactly when it crosses divisions.",
+      "A venue enrichment pass over 2020, because the NCAA feed publishes no neutral-site indicator and the Baxter doctrine's HFA term requires one. The existing enrichment covers 2021-2024 only.",
+      "Identity resolution of the 2020 participants against whatever population authority a 2021 opening is to be standardized over."
+    ]
+  }
+}
