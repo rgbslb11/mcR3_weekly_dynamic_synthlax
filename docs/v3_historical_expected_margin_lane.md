@@ -169,19 +169,67 @@ coefficients are the *second* obstacle there, not the first.
 
 ---
 
-## 5. Weeks 1–2 are a genuine identification subset
+## 5. The identification stage graph
 
 Conditional on the anchor, and on a corpus this repository does not hold.
 
-Stage A uses only weeks 1–2, depends on no calibration coefficient and on no
-rerating formula, and could support an initial residual-dispersion estimate.
-Three honest limits: two weeks per season is a thin base; the estimate inherits
-the anchored scale directly; and opening weeks are not a random sample of a
-season — they are systematically heavy in mismatches. It bounds and informs. It
-does not settle `game_sd_points`. Nothing was estimated.
+`expected_margin.IDENTIFICATION_STAGES` is the full dependency graph, in the
+corrected resolution order of audit finding 2:
 
-The full dependency graph is `expected_margin.IDENTIFICATION_STAGES` (A opening
-weeks → B outer walk-forward → C HFA as an experimental witness → D holdout).
+| Stage | Name | Scope |
+|---|---|---|
+| **A** | `HISTORICAL_OPENING_STANDARDIZED_STATE` | per historical season, before any week is scored |
+| **B** | `WEEK_1_2_POINT_AXIS_SCALE_IDENTIFICATION` | weeks 1–2 only |
+| **C** | `OUTER_WALK_FORWARD_OVER_CANDIDATE_RERATING_PARAMETERS` | weeks 3+ |
+| **D** | `OUT_OF_SAMPLE_RESIDUAL_DISPERSION` | `game_sd_points` |
+| **E** | `HFA_AS_AN_EXPERIMENTAL_WITNESS` | diagnostic, after stage B |
+| **F** | `HOLDOUT_VALIDATION` | reserved seasons |
+
+The order is the content of the graph, not a presentational choice:
+
+```
+historical opening standardized state                (A)
+    -> week 1–2 point-scale calibration              (B)
+    -> anchored historical V3 point states
+    -> weeks 3+ candidate-vector walk-forward        (C)
+    -> out-of-sample residuals
+    -> game_sd_points / residual dispersion          (D)
+```
+
+**A** is a model *input*, consumed and not reconstructed here: an opening state
+standardized over the historical season's own population, never imported from
+the closed 2026 universe. It depends on no calibration coefficient, no governed
+weekly rerating formula, and no ruling.
+
+**B** is the genuine identification subset. Weeks 1–2 precede the first promoted
+rerating (§4), so no weekly residual coefficient is in the model to absorb a
+rescale, and the governed additive HFA `3.5` stays a fixed-length ruler in real
+football points. That is what makes the points-per-SD scale empirically
+identifiable rather than a governance question. Three honest limits: two weeks
+per season is a thin base; the estimate inherits the anchored scale directly;
+and opening weeks are systematically heavy in mismatches, so they are not a
+random sample of a season. Venue-ambiguous games are excluded rather than
+imputed, which is itself a selection effect. The stage is identified; it is not
+thereby precise.
+
+**C** is valid as a procedure and not runnable today — the formula that a
+candidate vector would parameterise does not exist in governed form
+(`rerating.BlockedGovernedRerater` raises unconditionally). It is an
+optimisation problem conditional on B, not an identification failure.
+
+**D** comes *after* the scale, never before it. `game_sd_points` is estimated
+from out-of-sample residuals once the deterministic mean model exists, never
+from `sd(actual_margin)`. Weeks 1–2 can support a preliminary estimate off B
+alone; that bounds and informs, and does not settle `game_sd_points`.
+
+**E** is a diagnostic in its own namespace. Estimating HFA jointly with the axis
+scale would weaken the ruler that makes B clean, so it is estimated only against
+an already identified scale, and the canonical V3 football-point HFA `3.5`
+stays LOCKED under `R2-HFA-3P5` and is not an estimand.
+
+**F** is scored once, never used for selection.
+
+This lane runs no stage. Nothing was estimated.
 
 ---
 
@@ -271,26 +319,75 @@ if those two drift.
 
 ## 10. What the corpus lane must supply
 
-`expected_margin.pregame_state_contract()` — deliberately **narrower** than
-`calibration_contract.REQUIRED_CONTRACT_FIELDS`, which is the superset the six
-coefficients need. This is the subset the *predictor half* needs:
+Tier A, and only tier A. `expected_margin.pregame_state_contract()` is a composed
+view over three **disjoint** contracts — A is sourced, B is generated, C is
+stamped — and a raw historical corpus owns the first of them. The whole is still
+deliberately narrower than `calibration_contract.REQUIRED_CONTRACT_FIELDS`,
+which is the superset the six coefficients need across all tiers.
 
-`game_id` · `season` · `week` · `order_key` · `subject_team` · `opponent_team` ·
-`venue` (subject-oriented) · `subject_pregame_points` ·
-`opponent_pregame_points` · `strength_domain` ·
-`state_effective_through_week` · `state_origin` · `home_field_modifier` ·
-`source`
+### A. Raw historical observation inputs — `raw_observation_contract()`
 
-Two that a supplier will not expect and that are load-bearing:
+Supplied by the historical observation corpus. Source-observed or
+deterministically source-derived football facts only:
 
+`game_id` · `season` · `week` (the week the game was **played**) · `order_key` ·
+`subject_team` · `opponent_team` · `venue` (subject-oriented) ·
+**`actual_margin`** · `source` · `observed_at` · `recorded_at`; plus
+`opponent_division` where the observed division is relevant to an exclusion.
+
+Three that a supplier will not expect and that are load-bearing:
+
+- **`actual_margin` is required here.** It is a raw observation — the outcome
+  half of every residual, and the only quantity in the reconstruction the engine
+  never produces. It is sourced, never reconstructed.
 - **`venue` must be subject-oriented.** The V3 schedule stores venue
   home-oriented (`models.Venue` is `HOME|NEUTRAL`, away-ness positional). The
-  orientation must be stated, never inferred from column order.
-- **`strength_domain` must be declared per row.** A residual computed across two
-  axes is arithmetic, not evidence.
+  orientation must be stated from named venue evidence, never inferred from
+  column order.
+- **`order_key` is not decoration.** It is the only field that can prove a state
+  pre-dates its game when two games share a week.
 
-`actual_margin` is *not* required here — it is the outcome half, needed by
-calibration, not by this construction. Neither is `game_sd_points`.
+Refused outright: postgame ratings, end-of-week ratings containing the game
+itself, season-end ratings, future opponent results, final committee rank, and
+future standings, SRS, SOS or SOR.
+
+**The corpus lane is not asked to manufacture V3 pregame ratings.** Every rating,
+point state, strength domain and expected margin is model output; a raw supplier
+producing them is how a reconstruction ends up validating itself.
+
+### B. Derived / reconstructed model state — `derived_model_state_contract()`
+
+Produced downstream by the historical replay / expected-margin layer, as a
+function of a tier-A row, an opening state and a candidate parameter vector —
+never sourced:
+
+`subject_pregame_points` · `opponent_pregame_points` · `strength_domain` ·
+`state_origin` · `state_effective_through_week` · `expected_margin` ·
+`venue_adjustment_points` (the venue term actually applied: `+H·m` at HOME,
+`−H·m` at AWAY, exactly `0.0` at NEUTRAL) · `axis_anchor` · `status`
+
+`strength_domain` must be declared per row, because a residual computed across
+two axes is arithmetic, not evidence. The layer additionally requires, as
+inputs it does not itself emit, a historical opening standardized strength
+state, a candidate rerating parameter vector for weeks ≥ 3, and the governed
+`home_field_modifier` of the home side at non-neutral venues — a governed V3
+register value, not a corpus field.
+
+### C. Experiment metadata — `experiment_metadata_contract()`
+
+Stamped by whatever harness runs the experiment; neither the corpus's job nor
+the reconstruction's:
+
+`candidate_id` · `parameter_vector_id` · `model_version` ·
+`experiment_config_sha` · `dataset_sha` · `split_sha` · `authority_id` (the
+`AxisAnchor` `anchor_id` carried on every tier-B row, so a residual can be
+attributed to the mapping that produced it) · `formula_id`
+
+`game_sd_points` is owed by none of the three: `simulate_game` consumes it for
+the stochastic draw only, and the deterministic mean does not depend on it.
+
+The tier table in §11a is the same boundary stated once more, and a test asserts
+the three field sets are disjoint.
 
 `claude/v3-historical-observation-corpus-r6` was not read, edited or waited on.
 
