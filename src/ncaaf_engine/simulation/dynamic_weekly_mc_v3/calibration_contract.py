@@ -31,13 +31,13 @@ Nothing here promotes a value, and nothing here mounts a dataset.
 
 from __future__ import annotations
 
-import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
 from . import calibration as cal
 from .errors import GovernanceBlock
+from .textio import write_json_lf
 
 CONTRACT_ID = "V3-CALIBRATION-DATA-CONTRACT-001"
 CONTRACT_STATUS = "SPECIFICATION_ONLY_NO_DATASET_MOUNTED"
@@ -427,9 +427,10 @@ def assert_contract_not_satisfied_by_repository(root: Path) -> None:
 
 
 def write_contract(path: Path) -> Path:
-    """Emit the contract as a reviewable JSON artifact."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(contract_as_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-    return path
+    """Emit the contract as a reviewable JSON artifact.
+
+    LF is pinned rather than inherited: this artifact is compared by digest
+    across machines, so a CRLF emission on Windows would read as a changed
+    contract when nothing about the contract had changed.
+    """
+    return write_json_lf(path, contract_as_dict(), trailing_newline=True)

@@ -11,6 +11,9 @@ __pycache__/
 # Test caches
 .pytest_cache/
 
+# Short Windows test temp root (repository-adjacent fallback; see conftest.py)
+.sxt/
+
 # Editor
 .vscode/
 

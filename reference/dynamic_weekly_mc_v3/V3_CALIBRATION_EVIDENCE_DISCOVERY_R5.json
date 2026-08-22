@@ -1,0 +1,386 @@
+{
+  "artifact": "V3_CALIBRATION_EVIDENCE_DISCOVERY_R5.json",
+  "artifact_status": "EVIDENCE_DISCOVERY_RECORD",
+  "authority": "EXPERIMENTAL / NOT CANONICAL / NO PARAMETER PROMOTED / NO BLOCKER RETIRED",
+  "contract": "V3-CALIBRATION-DATA-CONTRACT-001",
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "base_sha": "1a79c942386cf2441f1f64ae091f972030c713bc",
+  "branch": "claude/v3-calibration-evidence",
+  "terminal": "CALIBRATION_EVIDENCE_BLOCKED_ON_SOURCE_DATA",
+  "scope": "Phases 1-4 executed. Phases 5-8 gated closed by the Phase 1-2 result.",
+
+  "search_scope": {
+    "repository": "C:/CLAUDE-SYTHALAX-WORKTREES/v3-calibration-evidence (all 138 tracked files)",
+    "local_project_locations": [
+      "C:/Local-mcR3_calibration_staging (four staged calibration packages)",
+      "C:/Local-mcR3_audit_outputs (prior-lane discovery outputs, treated as pointers, re-verified)",
+      "C:/power-crunch-research-lab and C:/power-crunch-worktrees",
+      "C:/2026 NCAA Football, C:/2026 Synthetic NCAA, C:/CBF-26-POWERCRUNCH, C:/CFB-26-LEDGER",
+      "C:/Users/dbaxt/Downloads historical archive packages"
+    ],
+    "method": "Filesystem sweep of every csv/tsv/xlsx/xls/parquet/jsonl/db/sqlite outside system directories (11,359 files), narrowed to 6,189 football-relevant paths, then 1,250 CSVs grouped by header schema into 283 distinct schemas of which 68 carry result-like columns. Every corpus reported below was opened and profiled directly; no finding is carried over from a prior lane's report on trust.",
+    "web_data_used": false,
+    "web_data_note": "No web retrieval was performed. The instruction does not authorise it and no local gap was filled from outside."
+  },
+
+  "sources_discovered": [
+    {
+      "source_name": "NCAA_PHASE4M_VERIFIED_WEEK_BY_WEEK_2006_2011",
+      "location": "C:/Local-mcR3_calibration_staging/NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package/.../data/verified_week_by_week_2006_2011.csv",
+      "sha256": "f5c6f9460ac284fa959623983de0c549457fe2957cf68cbaf8cb37136469851f",
+      "bytes": 1367529,
+      "season_coverage": "2006, 2007, 2008, 2009, 2010, 2011",
+      "game_count": 3667,
+      "per_season": {"2006": 536, "2007": 527, "2008": 624, "2009": 625, "2010": 642, "2011": 713},
+      "fields": 52,
+      "team_identifiers": "free-text school names (team_a / team_b), no canonical id",
+      "score_result_fields": "score_a, score_b, margin_a, actual_a_win — populated on all 3667 rows",
+      "venue_fields": "neutral, a_is_home, home_team, away_team, home_away_confidence, site_validation_tier",
+      "week_date_fields": "clean_week (210 blank), clean_game_date (330 blank), chronology_sequence (complete)",
+      "source_authority": "Project synthetic-season score history: 'NCAA Football 1996-2008.xlsx' and '2006-2011 scores.xls'",
+      "source_authority_class": "RESEARCH_ONLY",
+      "existing_digest_provenance": "file_manifest.csv inside the package; archive control plane at NCAA_Historical_Seasons_Complete_Archive_2006_2011.zip",
+      "governance_class": "RESEARCH_ONLY",
+      "admissible": false,
+      "refusal_reason": "SYNTHETIC_OBSERVATION_SET",
+      "refusal_evidence": [
+        "PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md: 'This package consolidates the source-derived chronological sequence, week, and date fields for all synthetic games from 2006 through 2011. ... No external or real-world schedule was used.'",
+        "archive_scope.md, Excluded: 'Claims that historical synthetic results are real-world evidence'.",
+        "limitations.md: 'all historical conclusions remain research-only'; and the 2011 neutral-site narrative was withdrawn after 'contamination between synthetic score blocks and auxiliary real-world/TV schedule notes'.",
+        "Direct check of the data: 2006 week 1 carries BYU 17 - Florida 35, Texas 30 - California 24, Duke 7 - NC St. 56. None of these are real 2006 results."
+      ]
+    },
+    {
+      "source_name": "PHASE4H_CALIBRATION_BASE_GAMES",
+      "location": "C:/power-crunch-research-lab/04_experiments/EXP-002/EXP-002A/config/phase4h_calibration_base_games.csv",
+      "sha256": "228d67590df856216454b0e806596ea41e90ea514f06e7230a1cefd9d1da63f3",
+      "bytes": 657266,
+      "season_coverage": "2006-2011",
+      "game_count": 3667,
+      "fields": 26,
+      "source_authority": "Same synthetic score history as PHASE4M; this is the calibration-shaped projection of it",
+      "source_authority_class": "RESEARCH_ONLY",
+      "governance_class": "RESEARCH_ONLY",
+      "admissible": false,
+      "refusal_reason": "SYNTHETIC_OBSERVATION_SET (same corpus, same refusal)",
+      "note": "Row-for-row the same 3667 games. Discovering it in a second location does not make it a second corroborating source."
+    },
+    {
+      "source_name": "POWER_CRUNCH_OFFICIAL_SYNTHETIC_EVENT_STREAM_2024_2025",
+      "location": "C:/Local-mcR3_calibration_staging/Power_Crunch_Research_Lab_Phase5D_WalkForward_Package/.../02_Event_Stream/official_synthetic_event_stream_2024_2025.csv",
+      "sha256": "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6",
+      "bytes": 315087,
+      "season_coverage": "2024, 2025",
+      "game_count": 1481,
+      "fields": 35,
+      "team_identifiers": "free-text school names; a separate registry maps them to T-prefixed ids",
+      "score_result_fields": "score_a, score_b, margin_a, actual_a_win — complete",
+      "venue_fields": "a_is_home, neutral",
+      "week_date_fields": "week, week_num, event_order, game_date (date only, no kickoff time), global_sequence",
+      "source_authority": "Power Crunch Research Lab, Operation Silent Fall",
+      "source_authority_class": "MIXED",
+      "governance_class": "PARTIALLY_REAL",
+      "admissible": false,
+      "provenance_breakdown": {
+        "2024 REAL": 550,
+        "2024 SYNTH_BLOCK": 68,
+        "2024 SYNTH_FILL": 90,
+        "2024 SYNTH_POST": 16,
+        "2025 OFFICIAL_SYNTHETIC_2025_LOCKED": 757
+      },
+      "refusal_reason": "The 931 non-REAL rows are synthetic; the 550 REAL rows are genuine but fail the contract's minimum volume and lack the required pregame and timestamp fields.",
+      "note": "This is the only local corpus containing any real-world observed games. It carries its own provenance column, which is what made the separation possible."
+    },
+    {
+      "source_name": "SYNTHETIC_2025_SEASON_LOCKED_V3",
+      "location": ".../10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx",
+      "sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba",
+      "bytes": 116602,
+      "season_coverage": "2025",
+      "game_count": 757,
+      "source_authority": "Locked synthetic season canon",
+      "source_authority_class": "SIMULATED_OR_SYNTHETIC",
+      "governance_class": "REFUSED",
+      "admissible": false,
+      "refusal_reason": "SCORES_SIMULATED_BY_SELF_DECLARATION",
+      "refusal_evidence": [
+        "Certification sheet, provenance field, verbatim: 'SCHEDULE SYNTHETIC. SCORES SIMULATED. NCG result user-specified. Bowl names fictional.'",
+        "Team Season sheet carries power_rating, target_rank and delta columns: the season was generated to hit a target rating structure.",
+        "GOVERNING_RULES.md: 'Every game in the certified season ledgers is official synthetic data.'"
+      ],
+      "carries_overtime_periods": true,
+      "overtime_games": 13,
+      "note": "This is the corpus that would most improve the fit, and it is the one the contract most clearly refuses. Fitting game_sd_points to simulated margins would measure the score generator's variance and report it as football's."
+    },
+    {
+      "source_name": "POWER_CRUNCH_PREGAME_STATES_2024_2025",
+      "location": ".../03_Pregame_States/pregame_states_2024_2025.csv",
+      "sha256": "8d8822eea90ee4127ded31374c983a1ebf84c82f5851f9dbbdbb5db80d06c622",
+      "bytes": 214578,
+      "game_count": 1481,
+      "fields": "games_a_pre, games_b_pre, wins_a_pre, wins_b_pre, elo_a_pre, elo_b_pre, avg_margin_a_pre, avg_margin_b_pre, pfpg/papg pre",
+      "source_authority": "Power Crunch research Elo, walk-forward, base 1500",
+      "source_authority_class": "ENGINE_OUTPUT",
+      "governance_class": "RESEARCH_ONLY",
+      "admissible": false,
+      "refusal_reason": "MODEL_OUTPUT_ON_A_FOREIGN_SCALE",
+      "note": "Genuinely leak-free walk-forward states, and genuinely not V3. These are another engine's beliefs on an Elo scale with base 1500. Using them as pregame_team_rating would compute a residual across two scales, which the contract's rating_scale_declaration requirement exists to refuse. Their real value is that games_a_pre supplies games_played_to_date directly, if that field is ever admitted."
+    },
+    {
+      "source_name": "BAXTER_RATINGS_V1_2006_2011_2024_2025",
+      "location": "C:/Local-mcR3_calibration_staging/Baxter_v1_2006_2011_2024_2025_Complete_Package/",
+      "seasons": "2006-2011, 2024, 2025",
+      "content": "Season-final team ratings (8 CSVs, 90-146 rows each) plus Baxter_v1_complete_metrics.csv",
+      "sha256_metrics": "6603ac9d8be1105ca31a9ddf7f09936e8acba72d39846d2f9df054ea43095996",
+      "source_authority_class": "ENGINE_OUTPUT",
+      "governance_class": "RESEARCH_ONLY",
+      "admissible": false,
+      "refusal_reason": "SEASON_FINAL_RATINGS_ARE_NOT_PREGAME_STATES",
+      "note": "Ridge-fitted end-of-season ratings. The contract refuses a post-hoc rating recomputed from the full season as pregame_team_rating, because it leaks the outcome into its own predictor. README also records 'Raw rating scales are season-specific and are not directly comparable across seasons', so they cannot form one declared scale. The corpus underneath them is the synthetic 2006-2011 one."
+    },
+    {
+      "source_name": "REPOSITORY_GOVERNED_INPUTS",
+      "location": "reference/dynamic_weekly_mc_v3/inputs/",
+      "governance_class": "GOVERNED",
+      "admissible": false,
+      "refusal_reason": "NO_SCORED_OBSERVATIONS",
+      "note": "Re-checked directly rather than taken from the contract's own summary. 2026_FBS_Schedule_LOCKED_v5.xlsx carries fixtures and no score columns; the preseason ratings workbook carries predictors with no outcomes; POWER_CRUNCH master carries identity only; Model_Parameters_v2_5 carries registers; V2_1_STATIC_CONTROL is 10,000 simulated seasons. The finding of the prior lane stands."
+    }
+  ],
+
+  "real_observation_subset": {
+    "subset_id": "PC_EVENT_STREAM_2024_PROVENANCE_REAL",
+    "parent_sha256": "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6",
+    "selector": "provenance == 'REAL'",
+    "game_count": 550,
+    "seasons": ["2024"],
+    "distinct_seasons": 1,
+    "phase": "regular season only",
+    "weeks_present": "0 through 15",
+    "date_range": "2024-08-24 to 2024-12-14",
+    "distinct_teams": 110,
+    "games_per_team": {"min": 2, "p25": 10, "median": 10, "p75": 11, "max": 12},
+    "teams_below_eight_games": 11,
+    "neutral_site_games": 13,
+    "fbs_vs_fcs_games": 0,
+    "rows_with_overtime_populated": 0,
+    "rows_with_kickoff_time": 0,
+    "game_id_unique_within_subset": true,
+    "signed_margin_sd_points": 19.764,
+    "abs_margin_mean_points": 15.99,
+    "root_source": "sports-reference.com 2024 schedule & results PDF, sha256 1eb7c37fce764fcdc7be2861b064a1f3ab1ba302c7be147f9374d3bb89aef1ca, per INPUTS.md",
+    "root_source_present_in_environment": false,
+    "root_source_note": "The PDF is recorded as living in an ephemeral uploads mount. A filesystem sweep did not find it. The lineage is documented and internally hash-consistent, but its first link cannot be re-read here, so the chain cannot be closed to bytes in this environment.",
+    "lineage_independently_verified": true,
+    "lineage_verification": "INPUTS.md declares registry/teams_2024.csv at sha256 f4c3114178eebec50d8a2912613a15bfd5a831e6dfe6131b944cea161472fb97. The local file '10_Source_Rulings/teams 2024.csv' hashes to exactly that value. One link of the declared chain is therefore confirmed against bytes, which is why the rest of the declaration is treated as credible rather than merely asserted."
+  },
+
+  "minimum_volume_assessment": {
+    "evaluated_against": "the 550 real observations, the largest admissible-in-principle set found",
+    "minimum_distinct_seasons": {"required": 3, "available": 1, "pass": false},
+    "minimum_observations_total": {"required": 1500, "available": 550, "pass": false},
+    "minimum_holdout_observations": {"required": 300, "best_possible": 183, "pass": false,
+      "note": "183 is one third of 550. Any temporal three-way split of a 550-row corpus leaves a holdout below the floor; there is no partition that passes."},
+    "minimum_weeks_per_team_per_season": {"required": 8, "failing_teams": 11, "pass": false},
+    "overall": "FAIL_ON_ALL_FOUR"
+  },
+
+  "data_contract_status": {
+    "AVAILABLE_DIRECTLY": ["season", "week", "actual_margin"],
+    "DERIVABLE_DETERMINISTICALLY": [
+      "game_id (a stable key must be re-derived; see integrity_findings)",
+      "venue (from a_is_home and neutral)",
+      "game_result (from actual_a_win)",
+      "subsequent_outcomes (forward references within the same corpus)",
+      "split (temporal assignment is constructible; it cannot meet volume)",
+      "source_provenance (from INPUTS.md lineage)"
+    ],
+    "MISSING": [
+      "event_time — game_date is date-only for all 550 rows; no kickoff instant exists. The contract calls this the only field that can order two games inside one week and therefore the only field that can prove a holdout game post-dates its training data.",
+      "pregame_team_rating — no V3-scale pregame rating exists for any observed game",
+      "pregame_opponent_rating — same",
+      "expected_margin — no rating-to-margin transform is ratified; see blocked_on_unratified_transform",
+      "prior_rating_state — no V3 week-open state was ever serialized for these games",
+      "observed_at — no per-row observation timestamp",
+      "recorded_at — no per-row ingest timestamp",
+      "model_version — no V3 run produced these rows",
+      "configuration_version — same",
+      "team / opponent as canonical_team_id — see identity_reconciliation"
+    ],
+    "REQUESTED_BUT_NOT_GOVERNED": {
+      "games_played_to_date": {
+        "availability": "AVAILABLE (games_a_pre / games_b_pre in the Power Crunch pregame states)",
+        "admission_status": "STILL_REQUIRES_RULING",
+        "note": "Availability is not admission. The field is present in a research corpus; the allowlist was not widened and no ruling is claimed."
+      },
+      "game_type": {
+        "availability": "DERIVABLE (phase column: regular, CCG, R1, QF, SF, NCG, Bowl, Playoff)",
+        "admission_status": "STILL_REQUIRES_RULING",
+        "note": "Derivable only in the corpus as a whole; the 550 real rows are regular-season only, so the field would be constant and could not separate postseason from regular-season residuals."
+      },
+      "overtime_periods": {
+        "availability": "MISSING on the real subset (0 of 550 rows populated); present only on simulated rows",
+        "admission_status": "STILL_REQUIRES_RULING",
+        "note": "The field the contract wants specifically because untagged overtime inflates game_sd_points is available only where the scores are simulated."
+      },
+      "opponent_division": {
+        "availability": "DEGENERATE (all 1481 stream rows are FBS-vs-FBS; 0 FCS)",
+        "admission_status": "STILL_REQUIRES_RULING",
+        "note": "Nothing to identify. There are no FCS opponents to exclude."
+      }
+    },
+    "allowlist_widened": false,
+    "allowlist_widened_note": "No field was added to governed_allowlist. The four fields awaiting admission are reported with their availability so a ruling can be made on evidence, and are not treated as governed because they turned out to be reachable."
+  },
+
+  "identity_reconciliation": {
+    "canonical_authority": "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+    "canonical_authority_sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+    "performed": false,
+    "reason": "Deferred deliberately, not skipped. Reconciling 110 real 2024 FBS names to a 2026 canonical universe would produce a mapping that looks complete and is not meaningful: the canonical universe is the project's synthetic 2026 FBS, which includes conferences and members that do not exist in the real 2024 season, and excludes real 2024 members. A high match rate between the two would be an artifact of shared school names, not evidence that the same entities are being compared. Producing that mapping would make an inadmissible corpus look one step closer to admissible.",
+    "design_recorded": "The deterministic design is specified in docs/v3_calibration_evidence_lane.md and enforced by calibration_evidence.IdentityReconciliation, which refuses an incomplete mapping rather than dropping unresolved names."
+  },
+
+  "integrity_findings": [
+    {
+      "finding": "DUPLICATE_GAME_ID",
+      "severity": "CONTRACT_VIOLATION",
+      "detail": "game_id T073vT114 appears twice in the 2024-2025 stream. The scheme is team-pair keyed (T<a>vT<b>), so a repeated matchup collides. The two rows are Oregon State 16-24 Washington State (week 0, SYNTH_BLOCK, no date) and Oregon State 41-38 Washington State (week 13, REAL, 2024-11-24).",
+      "contract_clause": "game_id: 'Must be unique within the dataset and stable across re-ingestion.'",
+      "disposition": "Reported, not repaired. Repairing a key inside an inadmissible corpus would be work spent making a refused source look conforming."
+    },
+    {
+      "finding": "NO_KICKOFF_INSTANT",
+      "severity": "CONTRACT_VIOLATION",
+      "detail": "0 of 550 real rows carry a time component; game_date is date-only.",
+      "corroboration": "The package's own block register records B-KICKOFF-TIME-2024-SYNTH as a known gap for 174 synthetic 2024 games. The gap is wider than the register states: no row in the stream carries a kickoff time."
+    },
+    {
+      "finding": "WEEK_AND_DATE_GAPS_IN_2006_2011",
+      "severity": "RESEARCH_QUALITY",
+      "detail": "210 of 3667 rows have no clean_week and 330 have no clean_game_date; 266 rows are DATE_UNRESOLVED and 27 are sequence-only.",
+      "disposition": "Recorded for completeness. Immaterial while the corpus is refused on provenance grounds."
+    }
+  ],
+
+  "leakage_controls_designed": {
+    "future_data": "Temporal split integrity is enforced by calibration.require_temporal_split_integrity and is now a required binding in the evidence envelope, so an envelope cannot be assembled around an unordered split.",
+    "final_season_aggregate_into_preseason": "Season-final Baxter ratings are classified ENGINE_OUTPUT and refused as pregame_team_rating for exactly this reason.",
+    "postgame_information_into_pregame_margin": "expected_margin is classified MISSING rather than reconstructed. Reconstructing it from a rating fitted on the same season is the specific failure the contract names.",
+    "public_money_flow_into_belief": "calibration.FORBIDDEN_SIGNAL_PATTERNS refuses flow columns by substring at registration. No discovered corpus carried one; SYTHALAX_2026_Consolidated_Game_Odds and the Week 2 triage CSVs in Downloads do carry market fields and were not mounted.",
+    "synthetic_games_as_observed_games": "New: calibration_evidence.mount_raw_source refuses a source whose declared provenance matches SYNTHETIC_PROVENANCE_PATTERNS, and refuses any source authority class other than GOVERNED_RESULT_SOURCE.",
+    "v2_1_simulation_as_observation": "Unchanged and re-checked: the contract names the V2.1 static control workbook explicitly, and the ENGINE_OUTPUT authority class refuses it at mount."
+  },
+
+  "separation_of_layers": {
+    "OBSERVED_FACTS": "score_a, score_b, actual_margin, game_result, game_date, venue treatment — for the 550 REAL rows only",
+    "DERIVED_PREGAME_FEATURES": "games_a_pre, wins_a_pre, avg_margin_pre, pfpg/papg pre — walk-forward, leak-free, but not V3",
+    "MODEL_OUTPUTS": "elo_a_pre, elo_b_pre, p_elo, p_modern_multifeature, predicted_margin_*, Baxter season-final ratings, the entire V2.1 static control",
+    "note": "The three layers are kept distinct in this record and none was promoted across a boundary. In particular no model output was relabelled as an observation to fill a MISSING contract field."
+  },
+
+  "blocked_on_unratified_transform": {
+    "finding": "Even a perfect observation corpus would not yield expected_margin today.",
+    "detail": "The contract requires expected_margin in V3 point units together with a named rating-to-margin transform, because otherwise weekly_performance_residual_coefficient is unidentifiable: any residual can be absorbed by rescaling the transform. V3 carries no such ratified transform. sor.py records P_TO_STRENGTH_TRANSFORM and REFERENCE_HFA as unratified, and all six calibration values in config/dynamic_weekly_mc_v3/v3_experimental.json remain null.",
+    "consequence": "Source data is a necessary condition for this lane, not a sufficient one. A future lane that mounts a conforming corpus will still be blocked on the transform ruling."
+  },
+
+  "fcs_scale_findings": {
+    "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+    "fcs_elo_policy": "FIXED_ELO_1250 — not reopened, not altered",
+    "admissible_fbs_vs_fcs_observations": 0,
+    "evidence": [
+      "All 1481 rows of the 2024-2025 stream are FBS-vs-FBS; synthetic_division_a and synthetic_division_b are FBS on every row.",
+      "The 550 real 2024 observations contain no FCS opponent.",
+      "The 2006-2011 corpus contains 69 games involving an FCS side, but 63 of those fall in 2011 alone and the whole corpus is refused as synthetic and research-only."
+    ],
+    "conclusion": "Insufficient evidence. There is no set of observed FBS-vs-FCS games from which to estimate an FCS representation on the unified point axis.",
+    "algebraic_conversion_attempted": false,
+    "fcs_point_value_promoted": false,
+    "blocker_retained": true
+  },
+
+  "experiments": {
+    "experiments_run": 0,
+    "reason": "Phase 7 is gated on Phases 1-6 producing an admissible dataset. They did not.",
+    "candidate_regimes_authored": 0,
+    "parameter_surface_summary": null,
+    "baxter_oos_rmse": null,
+    "colley_witness": null,
+    "srs_witness": null,
+    "game_sd_findings": {
+      "value_promoted": false,
+      "observation": "The signed margin standard deviation of the 550 real 2024 FBS observations is 19.764 points.",
+      "why_this_is_not_evidence_for_game_sd_points": "That is the unconditional dispersion of outcomes, not the dispersion of a model's residuals. A pregame model that explains any strength difference at all must produce a residual SD below it. The figure therefore bounds game_sd_points from above under this corpus and does nothing to locate it, and the corpus is in any case one season short of three and 950 observations short of the floor. Its proximity to the recorded 20.2 is not a corroboration of 20.2; open item ENG-CAL-MARGIN is untouched."
+    },
+    "season_monte_carlo_run": false
+  },
+
+  "harness_changes": {
+    "cal_r2_addressed": true,
+    "module_added": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/calibration_evidence.py",
+    "tests_added": "tests/dynamic_weekly_mc_v3/test_r5_calibration_evidence_binding.py (26 tests)",
+    "weakness_reproduced_before_fixing": "A CalibrationDataset constructed by hand, citing a path that was never written and a digest of 00*32, binds successfully through calibration.bind_promotion_evidence and returns evidence_bound True. The probe is retained as the first test in the new file so the fix is anchored to a demonstrated defect.",
+    "fix": "Every gate on the new path re-derives evidence from bytes at binding time: the mount receipt is re-read and re-hashed, and the dataset is re-registered from disk so schema, row count, allowlist, duplicate-column, ragged-row and forbidden-signal checks all run against the bytes present now.",
+    "ten_bindings_required": [
+      "actual_bytes", "sha256", "source_authority", "retrieval_record", "schema",
+      "row_count", "team_identity_reconciliation", "temporal_split",
+      "experiment_input_digest", "experiment_output_digest"
+    ],
+    "minimum_volume_now_enforced": true,
+    "minimum_volume_note": "The contract stated the four minimums and nothing refused a corpus that failed them. require_minimum_volume now does, and is a required step in envelope assembly.",
+    "canonical_writer_created": false,
+    "strongest_possible_output": "EVIDENCE_BOUND_BYTES_REVERIFIED_AT_BINDING, which reports promotion_authorised false and writes_canonical_config false.",
+    "existing_r2_path_unchanged": true,
+    "existing_r2_path_note": "calibration.bind_promotion_evidence was not tightened. This lane has no authority to narrow ruling R2-CAL-OBJECTIVE, so the weaker path keeps its behaviour and its EVIDENCE_UNBOUND stamp; the stronger path is additive."
+  },
+
+  "promotions": {
+    "parameters_promoted": [],
+    "fcs_mapping_promoted": false,
+    "canonical_config_written": false,
+    "blockers_retired": [],
+    "allowlist_widened": false,
+    "automatic_promotion_authorised": false
+  },
+
+  "blockers": {
+    "before": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "count_before": 8,
+    "after": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "count_after": 8,
+    "opened": [],
+    "retired": []
+  },
+
+  "to_unblock": [
+    "Supply a real-world game-result corpus covering at least three seasons, at least 1500 observations, at least 300 in the holdout, and at least 8 games per team per season, with kickoff instants.",
+    "Or issue a ruling that defines a governed synthetic-universe observation authority and states explicitly that the contract's synthetic_content refusal does not reach it. This lane cannot make that ruling and did not assume it. It is the single decision that would convert roughly 4,600 locally available games from refused to reviewable.",
+    "Ratify the rating-to-margin transform (P_TO_STRENGTH_TRANSFORM) and REFERENCE_HFA, without which expected_margin cannot be constructed in V3 units.",
+    "Rule on the four fields awaiting admission, with the availability evidence in data_contract_status.REQUESTED_BUT_NOT_GOVERNED in front of the decision."
+  ],
+
+  "provenance_class": {
+    "FACT": "Byte-level properties of files opened in this environment: digests, row counts, column sets, value distributions, and text quoted verbatim from the sources' own control documents.",
+    "DERIVED": "Counts and statistics computed from those bytes, and the contract-field classification.",
+    "ASSUMPTION": "None recorded. Where a judgement was required — whether a project-synthetic universe may serve as a governed observation authority — it is raised as a ruling request rather than resolved."
+  }
+}

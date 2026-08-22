@@ -26,6 +26,7 @@ from .governance import (
     inspect_playoff_calendar,
 )
 from .phase_plan import validate_phase_plan
+from .textio import write_json_lf
 from .rulings import ALL_RULINGS
 from .models import GameObservation, Team, TeamPathState, WeeklyStrengthSnapshot
 from .rerating import BlockedGovernedRerater, WeeklyRerater
@@ -133,6 +134,11 @@ class DynamicWeeklyMCV3:
             "model_version": self.config.model_version,
             "configuration_version": self.config.configuration_version,
             "paths": self.config.paths,
+            # Recorded, not inferred. A reader of this report can tell a 500-path
+            # development run from a publish run without consulting the config
+            # that produced it, which is what stops one being read as the other.
+            "run_tier": self.config.run_tier.name,
+            "publish_freeze_eligible": self.config.publish_freeze_eligible,
             "base_seed": self.config.base_seed,
             "team_entities": len(teams),
             "fbs_members": sum(t.entity_scope == "FBS_MEMBER" for t in teams.values()),
@@ -299,8 +305,5 @@ class DynamicWeeklyMCV3:
     def validate_to_directory(self, output_dir: Path) -> dict[str, object]:
         report = self.preflight()
         write_manifest(self.config, output_dir, report["execution_blockers"])
-        import json
-        (output_dir / "preflight_report.json").write_text(
-            json.dumps(report, indent=2, sort_keys=True), encoding="utf-8"
-        )
+        write_json_lf(output_dir / "preflight_report.json", report)
         return report

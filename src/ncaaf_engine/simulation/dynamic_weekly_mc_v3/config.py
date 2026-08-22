@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from . import board_of_record, committee_policy, fcs, hfa
+from . import run_tier as tier_policy
 from .errors import GovernanceBlock
 
 
@@ -180,9 +181,28 @@ class V3Config:
         if blockers:
             raise GovernanceBlock("V3 execution blocked: " + ", ".join(blockers))
 
+    @property
+    def run_tier(self) -> tier_policy.RunTier:
+        """The governed tier this configuration executes at.
+
+        Derived from ``paths`` every time it is asked for, never stored, so a
+        tier cannot be carried over from one configuration to another.
+        """
+        return tier_policy.tier_for_paths(self.paths)
+
+    @property
+    def publish_freeze_eligible(self) -> bool:
+        """Whether a run of this configuration may be published or frozen."""
+        return self.run_tier.publish_freeze
+
+    def require_publish_freeze_tier(self) -> tier_policy.RunTier:
+        """Block unless this configuration is the publish/freeze tier."""
+        return tier_policy.require_publish_freeze_tier(self.paths)
+
     def validate_architecture(self) -> None:
-        if self.paths != 10_000:
-            raise ValueError("V3 requires exactly 10,000 independent paths")
+        # Exactly one of the three governed tiers. Not a minimum, not a range:
+        # an unapproved count is refused however close to a tier it sits.
+        tier_policy.tier_for_paths(self.paths)
         if self.first_promoted_rerating_after_week != 2:
             raise ValueError("First promoted rerating must occur after Week 2")
         if self.weeks != tuple(range(1, 17)):
