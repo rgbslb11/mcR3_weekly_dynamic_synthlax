@@ -59,7 +59,7 @@ import re
 from dataclasses import dataclass, field
 
 from .errors import GovernanceBlock
-from .rulings import R2_FCS
+from .rulings import R2_FCS, R5_FCS_SCALE
 
 #: FACT — ruling R2-FCS-ELO-1250.
 FCS_FIXED_ELO = 1250.0
@@ -489,8 +489,16 @@ def require_fcs_hfa_modifier(modifier: float | None, schedule_id: str = "<fcs>")
     number. Three scheduled games (G0019, G0213, G0224) place an FCS entity at a
     HOME venue, so ``modifier or 1.0`` would silently invent a governed quantity
     for real games rather than refusing.
+
+    The refusal stands until :func:`install_governed_fcs_hfa_modifier` installs
+    the venue resolution described there. Nothing is defaulted even then: the
+    installed value is a single governed constant with its own provenance, and it
+    is consulted only for an entity whose own record carries the sentinel.
     """
     if modifier is None:
+        installed = active_fcs_hfa_modifier()
+        if installed is not None:
+            return installed
         raise GovernanceBlock(
             f"{FCS_UNIFIED_SCALE_BLOCKER}: {schedule_id} has no governed home-field modifier. "
             f"POWER_CRUNCH!Reconciled Master records it as {FCS_HFA_MODIFIER_SENTINEL!r}; "
@@ -498,6 +506,104 @@ def require_fcs_hfa_modifier(modifier: float | None, schedule_id: str = "<fcs>")
             "scheduled games that place an FCS entity at a HOME venue."
         )
     return float(modifier)
+
+
+# ---------------------------------------------------------------------------
+# The venue clause of ruling R-V3-FCS-SCALE-01.
+# ---------------------------------------------------------------------------
+#
+# The ruling supplies a *neutral-field* point value and directs that "home/away
+# venue adjustment uses ordinary V3 HFA logic rather than embedding extra HFA
+# inside the adapter". Ordinary V3 HFA logic is
+# ``hfa_baseline_points * home_field_advantage_modifier``, so executing that
+# direction for the three games at which an FCS entity hosts requires a modifier
+# for an entity whose own source row carries a sentinel.
+#
+# What is installed is the league-average modifier, and it is the league average
+# as a matter of arithmetic rather than of convention: every one of the 121
+# governed FBS members carries exactly 1 in the same column of the same sheet, so
+# the average over the governed population is 1 exactly, with no dispersion to
+# average away. The canonical team master records the convention by name in its
+# own provenance codes — ``hfa_baseline_3p5_locked;hfa_modifier_league_average``.
+#
+# Three things this is not. It is not a rating: it multiplies the venue term and
+# never the strength. It is not embedded in the adapter: the neutral-field value
+# stays -31.0 and this is applied by game.simulate_game exactly as it is for any
+# FBS host, so there is no double HFA and no HFA at a neutral site. And it is not
+# a default: the pre-ruling refusal is the behaviour of this module until the
+# installation call is made.
+
+#: FACT — POWER_CRUNCH!Reconciled Master, home_field_advantage_modifier column:
+#: 121 of 121 governed FBS members carry exactly 1.
+GOVERNED_FBS_HFA_MODIFIERS = 1.0
+GOVERNED_FBS_HFA_MODIFIER_POPULATION = 121
+
+#: DERIVED — the league average over that population. One value, no dispersion.
+FCS_LEAGUE_AVERAGE_HFA_MODIFIER = 1.0
+
+#: FACT — 2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md provenance codes.
+FCS_HFA_MODIFIER_CONVENTION_CODE = "hfa_modifier_league_average"
+
+_ACTIVE_FCS_HFA_MODIFIER: float | None = None
+
+
+def active_fcs_hfa_modifier() -> float | None:
+    return _ACTIVE_FCS_HFA_MODIFIER
+
+
+def clear_fcs_hfa_modifier() -> None:
+    """Uninstall the venue resolution. Used by tests; never by production code."""
+    global _ACTIVE_FCS_HFA_MODIFIER
+    _ACTIVE_FCS_HFA_MODIFIER = None
+
+
+def install_governed_fcs_hfa_modifier(
+    *,
+    modifier: float = FCS_LEAGUE_AVERAGE_HFA_MODIFIER,
+    approval_token: str | None = None,
+) -> float:
+    """Install the venue clause of ruling R-V3-FCS-SCALE-01.
+
+    Refuses any value other than the league-average modifier, and refuses without
+    the ruling's approval token. A caller cannot use this door to introduce a
+    home-field advantage of its own choosing for the three FCS-hosted games.
+    """
+    global _ACTIVE_FCS_HFA_MODIFIER
+    if approval_token is None:
+        approval_token = FCS_SCALE_APPROVAL_TOKEN
+    if not _FCS_SCALE_APPROVAL_TOKEN.match(approval_token):
+        raise GovernanceBlock(
+            "Malformed FCS scale approval token for the venue clause. Expected "
+            "APPROVE_V3_FCS_SCALE_ADAPTER::<RULING_ID>."
+        )
+    if float(modifier) != FCS_LEAGUE_AVERAGE_HFA_MODIFIER:
+        raise GovernanceBlock(
+            f"{modifier} is not the governed league-average home-field modifier "
+            f"{FCS_LEAGUE_AVERAGE_HFA_MODIFIER}. The ruling directs ordinary V3 HFA logic; "
+            "it does not authorise a bespoke FCS home-field advantage."
+        )
+    _ACTIVE_FCS_HFA_MODIFIER = float(modifier)
+    return _ACTIVE_FCS_HFA_MODIFIER
+
+
+def fcs_venue_clause_as_dict() -> dict[str, object]:
+    return {
+        "ruling": R5_FCS_SCALE.convergence_id,
+        "clause": (
+            "home/away venue adjustment uses ordinary V3 HFA logic rather than "
+            "embedding extra HFA inside the adapter"
+        ),
+        "source_row_value": FCS_HFA_MODIFIER_SENTINEL,
+        "governed_fbs_modifier": GOVERNED_FBS_HFA_MODIFIERS,
+        "governed_fbs_modifier_population": GOVERNED_FBS_HFA_MODIFIER_POPULATION,
+        "league_average_modifier": FCS_LEAGUE_AVERAGE_HFA_MODIFIER,
+        "convention_code": FCS_HFA_MODIFIER_CONVENTION_CODE,
+        "installed": active_fcs_hfa_modifier() is not None,
+        "applies_to_games": ["G0019", "G0213", "G0224"],
+        "embedded_in_adapter": False,
+        "applied_at_neutral_venue": False,
+        "double_hfa": False,
+    }
 
 
 #: The candidate routes from Elo 1250 to unified neutral points that exist over
@@ -607,4 +713,110 @@ def fcs_scale_evidence_report() -> dict[str, object]:
         "recognised_authorities": list(RECOGNISED_SCALE_AUTHORITIES),
         "refused_derivations": sorted(REFUSED_DERIVATIONS),
         "disposition": "BLOCKED_ON_NUMERICAL_SCALE_CALIBRATION",
+    }
+
+
+# ---------------------------------------------------------------------------
+# The governed adapter: ruling R-V3-FCS-SCALE-01.
+# ---------------------------------------------------------------------------
+#
+# This is the one place the number -31.0 is written down, and it is written here
+# rather than at a call site so that every route into the engine goes through
+# :func:`register_fcs_scale_adapter` — the gate that refuses a Board inversion,
+# an Elo magnitude, an unissued provenance and a missing approval token.
+#
+# Two things this adapter deliberately does NOT carry:
+#
+# * A home-field term. The value is a *neutral-field* point value. Venue is
+#   applied afterwards by the ordinary V3 path in :func:`game.simulate_game`,
+#   which adds ``hfa_baseline_points * home_hfa_modifier`` at a HOME venue and
+#   exactly 0.0 at a NEUTRAL one. Folding an HFA into the adapter would double
+#   it on every FCS road game and apply one at neutral sites where V3 applies
+#   none.
+# * An Elo. 1250 stays in the Elo layer under R2-FCS-ELO-1250. The adapter maps
+#   between the two axes; it does not move either of them.
+
+#: FACT — ruling R-V3-FCS-SCALE-01. Governed FCS neutral-field point value.
+FCS_GOVERNED_UNIFIED_POINTS = -31.0
+
+#: The approval token ruling R-V3-FCS-SCALE-01 issues. Installation still runs
+#: the full registration gate; the token is the last check, not the only one.
+FCS_SCALE_APPROVAL_TOKEN = "APPROVE_V3_FCS_SCALE_ADAPTER::R-V3-FCS-SCALE-01"
+
+#: DERIVED — the two independent anchors the ruling records, kept so a reviewer
+#: can see -31.0 was bracketed by evidence rather than chosen for roundness.
+#: Neither is a conversion rule and neither is recomputed here.
+FCS_SCALE_ANCHORS: tuple[dict[str, object], ...] = (
+    {
+        "anchor": "FBS_ELO_TO_V3_POINT_EMPIRICAL_BRIDGE",
+        "scope": "governed FBS population",
+        "predicted_points_at_elo_1250": -30.5758,
+    },
+    {
+        "anchor": "FCS_VS_FBS_OBSERVED_MARGIN",
+        "scope": "2023-2025 FCS-vs-FBS sample",
+        "games": 365,
+        "weighted_fbs_winning_margin_points": 31.423,
+    },
+)
+
+GOVERNED_FCS_SCALE_PROVENANCE = FcsScaleProvenance(
+    artifact="OPERATION SYTHALAX V3 FINAL MVP MODEL CLOSEOUT R1",
+    locator="Section 3, RULING ID R-V3-FCS-SCALE-01",
+    authority="DIRECT_CHAIRMAN_AUTHORITY",
+    issued=True,
+    statement=(
+        "Governed FCS Elo 1250 maps to V3 unified neutral-field point value -31.0 for the "
+        "INTERNAL SHADOW MVP. Two independent anchors were recorded: an FBS "
+        "Elo-to-V3-point empirical bridge predicting about -30.5758 at Elo 1250, and a "
+        "2023-2025 FCS-vs-FBS sample of 365 games with a weighted FBS winning margin of "
+        "about 31.423 points."
+    ),
+)
+
+GOVERNED_FCS_SCALE_ADAPTER = FcsScaleAdapter(
+    unified_points=FCS_GOVERNED_UNIFIED_POINTS,
+    provenance=GOVERNED_FCS_SCALE_PROVENANCE,
+    derivation="DIRECT_CHAIRMAN_AUTHORITY",
+    source_elo=FCS_FIXED_ELO,
+    calibration_id=None,
+)
+
+
+def install_governed_fcs_scale_adapter(
+    *, approval_token: str = FCS_SCALE_APPROVAL_TOKEN
+) -> FcsScaleAdapter:
+    """Install the R-V3-FCS-SCALE-01 adapter through the ordinary registration gate.
+
+    Deliberately not called at import time. An FCS point value entering V3 is a
+    governance event, so it happens where a reader can see it happen — the MVP
+    activation path — and the pre-ruling fail-closed state is what any caller
+    that has not asked for it still gets.
+    """
+    return register_fcs_scale_adapter(
+        GOVERNED_FCS_SCALE_ADAPTER, approval_token=approval_token
+    )
+
+
+def governed_fcs_scale_as_dict() -> dict[str, object]:
+    """The ruled mapping and its evidence, for the closeout record."""
+    return {
+        "ruling": R5_FCS_SCALE.convergence_id,
+        "chairman_ruling_id": R5_FCS_SCALE.chairman_ruling_id,
+        "fcs_elo": FCS_FIXED_ELO,
+        "fcs_elo_policy": FCS_FIXED_ELO_POLICY,
+        "fcs_elo_policy_ruling": R2_FCS.convergence_id,
+        "unified_neutral_field_points": FCS_GOVERNED_UNIFIED_POINTS,
+        "derivation": GOVERNED_FCS_SCALE_ADAPTER.derivation,
+        "approval_token": FCS_SCALE_APPROVAL_TOKEN,
+        "anchors": [dict(a) for a in FCS_SCALE_ANCHORS],
+        "adapter_installed": active_fcs_scale_adapter() is not None,
+        "embeds_home_field_advantage": False,
+        "venue_handling": (
+            "Neutral-field value only. game.simulate_game applies "
+            "hfa_baseline_points * home_hfa_modifier at HOME and exactly 0.0 at NEUTRAL, "
+            "identically for FBS and FCS participants."
+        ),
+        "refused_routes_unchanged": sorted(REFUSED_DERIVATIONS),
+        "fbs_path_unchanged": True,
     }

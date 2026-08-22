@@ -118,6 +118,7 @@ def governance_blockers(
     a8_ecl_ordering_resolved: bool = False,
     sos_semantics_governed: bool = False,
     fcs_unified_scale_governed: bool = False,
+    game_sd_calibration_ruling_applied: bool = False,
     quarterfinal_mapping_ruling_applied: bool = False,
 ) -> list[str]:
     """Governed-evidence blockers.
@@ -135,9 +136,16 @@ def governance_blockers(
         if not hfa_ruling_applied:
             blockers.append("governance.V3_HFA_BASELINE_CONFLICT_4P0_VS_3P5")
 
-    # ENG-CAL-MARGIN stays OPEN: no ruling can substitute for calibration evidence.
+    # ENG-CAL-MARGIN stays OPEN in the register and the register is not edited.
+    # Ruling R-V3-MVP-CONTROL-CORPUS-01 authorises a control calibration that can
+    # satisfy it for INTERNAL_SHADOW_MVP scope only, and the flag defaults False so
+    # that authorisation has to be asserted by a caller that actually holds the
+    # bound evidence. A ruling quoted without the measurement clears nothing: the
+    # flag is supplied from mvp_control.game_sd_calibration_governed(), which is
+    # true only once a promotion record has passed the registration gate.
     if model_parameters["margin_sd_calibration_status"] == "OPEN":
-        blockers.append("governance.GAME_SD_CALIBRATION_OPEN")
+        if not game_sd_calibration_ruling_applied:
+            blockers.append("governance.GAME_SD_CALIBRATION_OPEN")
 
     # OI-SCHED-13 stays OPEN in the register; R2-SCHED-13GAME approves the five
     # schedules and the mounted rows must validate before it clears.

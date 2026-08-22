@@ -1,0 +1,58 @@
+{
+  "approval_token": "APPROVE_V3_CALIBRATION_PROMOTION::R-V3-MVP-CONTROL-CORPUS-01",
+  "bound_dataset_sha256": "2200a518de5b9d950495727f7f94fbc04da4f555fd713d54d196de06019c5761",
+  "bound_experiment_id": "V3-MVP-CONTROL-EXPERIMENT-R1",
+  "calibration_evidence": "SYNTHETIC_CONTROL_CALIBRATED",
+  "control_corpus_games": 745,
+  "control_corpus_sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba",
+  "control_points_per_sd": 10.046368962222704,
+  "evidence": {
+    "game_sd_points": 16.746432631877234,
+    "observations": 133,
+    "out_of_sample_baxter_rating_rmse": 16.746432631877234,
+    "split": "holdout"
+  },
+  "evidence_binding": "EVIDENCE_BOUND_TO_REGISTERED_DATASET_AND_EXPERIMENT",
+  "evidence_bound": true,
+  "evidence_domain": "GOVERNED_SYNTHETIC_CONTROL",
+  "justification": "",
+  "measured_primary_metric": 16.746432631877234,
+  "mvp_ruling": "R-V3-MVP-CONTROL-CORPUS-01",
+  "note": "Promotion authorized. Canonical config is still written by a human-reviewed change, not by this harness.",
+  "post_mvp_ruling": "R-V3-POST-MVP-REAL-VALIDATION-01",
+  "primary_metric": "out_of_sample_baxter_rating_rmse",
+  "promoted_values": {
+    "blowout_treatment": {
+      "cap_points": 35.0,
+      "exponent": null,
+      "mode": "cap_margin",
+      "threshold_points": null
+    },
+    "game_sd_points": 16.75,
+    "recent_form_weights": [
+      1.0,
+      0.7,
+      0.49,
+      0.343,
+      0.2401,
+      0.16807
+    ],
+    "sample_size_regularization": {
+      "mode": "none",
+      "prior_games": 0.0
+    },
+    "weekly_movement_cap_points": 10.0,
+    "weekly_performance_residual_coefficient": 0.3
+  },
+  "promotion_authority": "GOVERNED_CALIBRATION_EVIDENCE",
+  "real_world_validation": "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED",
+  "regime_id": "V3-MVP-CONTROL-R1",
+  "ruling": "R2-CAL-OBJECTIVE",
+  "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP",
+  "temporal_control_limitation": "SINGLE_SEASON_CONTROL__INTER_SEASON_OUT_OF_SAMPLE_NOT_ACHIEVABLE",
+  "witnesses_reported_independently": [
+    "colley_matrix",
+    "srs"
+  ],
+  "writes_canonical_config": false
+}

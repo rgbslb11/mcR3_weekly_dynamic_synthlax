@@ -1,0 +1,56 @@
+{
+  "base_seed": 20260803,
+  "configuration_version": "V3-INTERNAL-SHADOW-MVP-2026-08-22-R1-001",
+  "input_manifest_hash": "52664489bb551718c5b72db908a0d2a2882554bb68f467653a21e0f2649ba323",
+  "output_hash": "a784f5d5e8a15e8b783088fb5be62256d6a5a4a17dfcccca3d9a3ab317a42374",
+  "parameter_set_hash": "57f5474047783de1a6ee5b407d66351da04e093c111986115d74992d29d7fbb5",
+  "paths": 2000,
+  "rng": "deterministic_normal keyed by (base_seed, semantic coordinates)",
+  "status": "COMPLETE",
+  "tier": "ANALYSIS",
+  "validation": {
+    "cfp_field_size_invariant": 14,
+    "championship_probability_total": 1.0,
+    "duplicate_team_identities": 0,
+    "fbs_members": 121,
+    "findings": [],
+    "governed_column_totals": {
+      "cfp_bye_pct": {
+        "expected": 4.0,
+        "observed": 4.0
+      },
+      "cfp_pct": {
+        "expected": 14.0,
+        "observed": 14.0
+      },
+      "conference_title_pct": {
+        "expected": 9.0,
+        "observed": 9.0
+      },
+      "national_title_appearance_pct": {
+        "expected": 2.0,
+        "observed": 2.0
+      },
+      "national_title_win_pct": {
+        "expected": 1.0,
+        "observed": 1.0
+      },
+      "quarterfinal_pct": {
+        "expected": 8.0,
+        "observed": 8.0
+      },
+      "semifinal_pct": {
+        "expected": 4.0,
+        "observed": 4.0
+      }
+    },
+    "governed_column_totals_reconcile": true,
+    "passed": true,
+    "probabilities_within_unit_interval": true,
+    "probability_columns_within_unit_interval": true,
+    "schedule_entities": 134,
+    "schedule_only_fcs": 13,
+    "schedule_only_fcs_remained_non_fbs": true,
+    "team_summary_rows": 121
+  }
+}

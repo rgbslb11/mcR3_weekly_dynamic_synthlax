@@ -1,0 +1,352 @@
+{
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "base_seed": 20260803,
+  "configuration_version": "V3-INTERNAL-SHADOW-MVP-2026-08-22-R1-001",
+  "execution_blockers": [],
+  "fbs_members": 121,
+  "governed_evidence": {
+    "bracket": {
+      "ab2_original_text": "The highest-ranked team from the Group-of-5 set (Pac-12, Mountain West, American, Atlantic-8, ECL) qualifies automatically. CHAMPION STATUS IS IRRELEVANT. 1 bid.",
+      "cg8_supersession_required": true,
+      "field_rule": "2026 CFP rules, adapted to the synthetic 14-team universe",
+      "play_in": "Seeds 11-14 contest the play-in round: 11 v 14 and 12 v 13, five days before the First Round.",
+      "quarterfinal_opponent_mapping_explicit": false,
+      "round1": "First Round 5v12, 6v11, 7v10, 8v9 at the higher seed. Quarterfinals, Semifinals and Final at neutral sites.",
+      "status": "LOCKED \u2014 all five rule slots defined. DEF-5 closed.",
+      "straight_seeding": "STRAIGHT SEEDING. All 14 qualifiers are seeded 1-14 strictly by committee rank. Automatic qualification confers a BID, never a SEED.",
+      "top4_byes": "The FOUR HIGHEST-RANKED TEAMS OVERALL receive a first-round bye. Not the four highest-ranked champions."
+    },
+    "fcs_authority": {
+      "model_use_authorized": false,
+      "model_use_authorized_raw": "FALSE",
+      "ruling_applied": "R-FCS-RATING-01: FCS sim_rating = 1397.51"
+    },
+    "model_parameters": {
+      "a8_ecl_tiebreak_rule": "ECL/A8 standings-champion tiebreak: TB-1 head-to-head -> TB-2 mini round-robin -> TB-3 FINAL committee ranking (final board, not pre-CCG). Distinct from R-CCG-01 TB-3 which uses the pre-Championship-Saturday board.",
+      "aac_division_rule": "AAC carve-out: participants = American Div winner vs Athletic Div winner. R-CCG-01 does not supersede. TB chain governs intra-division ties only.",
+      "aac_divisions_source_status": "RATIFIED_BUT_ROWS_NOT_MOUNTED",
+      "ccg_rule_ids_present": [
+        "R-CCG-01",
+        "R-CCG-02",
+        "R-CCG-05",
+        "R-CCG-06",
+        "R-CCG-08",
+        "CG-8",
+        "TB-ECL/A8"
+      ],
+      "g5_bid_rule": "G5 auto-bid = highest-ranked G5 CONFERENCE CHAMPION (was: highest-ranked G5 team, champion-irrelevant). Matches real-CFP rule; resolves Lehigh anomaly.",
+      "hfa_team_master_locked_points": 3.5,
+      "hfa_v2_legacy_points": 4.0,
+      "margin_sd_calibration_status": "OPEN",
+      "schedule_13_game_exception_status": "OPEN"
+    },
+    "playoff_calendar": {
+      "army_navy_after_selection": true,
+      "army_navy_counts_to_record": true,
+      "army_navy_date": "Sat Dec 12, 2026",
+      "quarterfinal_mapping_is_generic": true,
+      "selection_day": "Sun Dec 6, 2026"
+    }
+  },
+  "model": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_INTERNAL_SHADOW_MVP",
+  "model_version": "3.0.0-internal-shadow-mvp",
+  "paths": 500,
+  "publish_freeze_eligible": false,
+  "r2_governance": {
+    "a8_ecl_ordering": {
+      "causal_sequence": [
+        "COMPLETE_SEVEN_CCGS",
+        "COMPUTE_POST_CCG_COMMITTEE_BOARD",
+        "RESOLVE_A8_CHAMPION",
+        "RESOLVE_ECL_CHAMPION",
+        "COMPARE_FIVE_G5_CHAMPIONS",
+        "APPLY_G5_AUTOMATIC_BID_SEEDING"
+      ],
+      "cross_conference_comparison_permitted": false,
+      "governed_resolution": "POST_CCG_BOARD_BEFORE_G5_SEEDING_R2",
+      "historical_candidate_options_never_selected": [
+        "PRELIMINARY_BOARD_BEFORE_CHAMPION_FLAG",
+        "CHAMPION_RESOLUTION_BEFORE_FINAL_BOARD_WITH_CHAMPION_BLIND_TIE_BOARD",
+        "EXPLICIT_SOURCE_SUPPORTED_ALTERNATIVE"
+      ],
+      "historical_cycle_path": [
+        "A8_ECL_CHAMPION",
+        "FINAL_COMMITTEE_BOARD",
+        "CONFERENCE_CHAMPION_FLAG",
+        "A8_ECL_CHAMPION"
+      ],
+      "historical_cycle_status": "SUPERSEDED_BY_R2_CAUSAL_SEQUENCING",
+      "ruling": "R2-A8-ECL-ORDER",
+      "standings_only_conferences": [
+        "Atlantic-8",
+        "ECL"
+      ],
+      "tiebreak_chain": [
+        "A8_ECL-TB1_HEAD_TO_HEAD",
+        "A8_ECL-TB2_COMMON_OPPONENT_PERFORMANCE",
+        "A8_ECL-TB3_POST_CCG_BOARD_BEFORE_G5_SEEDING"
+      ]
+    },
+    "aac_divisions_artifact": {
+      "blocker": null,
+      "identity": "aac_divisions_2026_R2_SUCCESSOR.csv",
+      "is_governed": true,
+      "legacy": {
+        "bytes": 577,
+        "custody": "NOT_MOUNTED_IN_REPOSITORY",
+        "filename": "aac_divisions_2026_RATIFIED.csv",
+        "lineage_preserved": true,
+        "reproduction_attempted": false,
+        "sha256": "e0f674b4d0bab13ff943d0ced6364c70df40d4e4a1f1a2cde2a4479a13b2cd0f"
+      },
+      "mounted_path": "/home/user/mcR3_weekly_dynamic_synthlax/config/dynamic_weekly_mc_v3/governed/aac_divisions_2026_R2_SUCCESSOR.csv",
+      "mounted_sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+      "ruling": "R2-AAC-SUCCESSOR",
+      "successor": {
+        "bytes": 554,
+        "filename": "aac_divisions_2026_R2_SUCCESSOR.csv",
+        "sha256": "92fd7f78fe3fa4cde75624a58efe2136e40e342439474435bf97c1f6b70e22ce",
+        "source_rule": "R-CCG-07",
+        "status": "GOVERNED_SUCCESSOR"
+      }
+    },
+    "board_of_record": {
+      "blocker": null,
+      "content_hash_method": "HASH-SPEC-V1 Board I-K!A3:Q124",
+      "content_sha256": "23f83a347582655986f59d69e0205349996d1c0f9db294701e8112e49a11ecde",
+      "custody": "BOARD_IK_APPROVED_ARTIFACT_VERIFIED",
+      "expected_content_sha256": "23f83a347582655986f59d69e0205349996d1c0f9db294701e8112e49a11ecde",
+      "expected_sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+      "historical_board_location": "08_BOARD_IH_TOP25",
+      "historical_board_retained": "Board I-H v2",
+      "historical_board_substitutable": false,
+      "identified_as": null,
+      "identity": "2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+      "mounted": true,
+      "package": "Board I-K R1-R3 FINAL / re-issued governance lineage",
+      "path": "/home/user/mcR3_weekly_dynamic_synthlax/reference/dynamic_weekly_mc_v3/inputs/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx",
+      "ruling": "R2-BOARD-OF-RECORD",
+      "sha256": "6b4cec1e48b34cb9eca5c224f5ef8750cca5acc40ecfd0bc42ed62976cbd4c9a",
+      "verified": true
+    },
+    "fcs": {
+      "fixed_elo": 1250.0,
+      "layer": "ELO",
+      "model_scale_adapter_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+      "model_use_authorized_by_ruling": true,
+      "policy": "FIXED_ELO_1250",
+      "rating_policy_resolved": true,
+      "requires_future_toggle": false,
+      "ruling": "R2-FCS-ELO-1250",
+      "scale_adapter": {
+        "calibration_id": null,
+        "derivation": "DIRECT_CHAIRMAN_AUTHORITY",
+        "provenance": {
+          "artifact": "OPERATION SYTHALAX V3 FINAL MVP MODEL CLOSEOUT R1",
+          "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+          "issued": true,
+          "locator": "Section 3, RULING ID R-V3-FCS-SCALE-01",
+          "statement": "Governed FCS Elo 1250 maps to V3 unified neutral-field point value -31.0 for the INTERNAL SHADOW MVP. Two independent anchors were recorded: an FBS Elo-to-V3-point empirical bridge predicting about -30.5758 at Elo 1250, and a 2023-2025 FCS-vs-FBS sample of 365 games with a weighted FBS winning margin of about 31.423 points."
+        },
+        "source_elo": 1250.0,
+        "unified_points": -31.0
+      },
+      "scale_adapter_installed": true,
+      "superseded_v2_1_bridge": "13 schedule-only opponents use the canonical R-FCS-RATING-01 operator composite translated from Board I-H equivalent to unified points.",
+      "supersedes": [
+        "POWER_CRUNCH Build Manifest 'Model use authorized: FALSE' for V3 use"
+      ],
+      "unified_points_equivalent": null
+    },
+    "hfa": {
+      "elo_layer_hfa": 65.0,
+      "elo_layer_is_separate_parameter": true,
+      "legacy_status": "HISTORICAL",
+      "legacy_v2_drive_engine_hfa": 4.0,
+      "legacy_validation_status": "NOT CURRENT",
+      "register": [
+        {
+          "governed_for_v3": true,
+          "layer": "FOOTBALL_POINTS",
+          "note": "V3 football-point HFA baseline adopted by ruling R2-HFA-3P5.",
+          "parameter_id": "SCHED-HFA-BASE",
+          "status": "LOCKED",
+          "value": 3.5
+        },
+        {
+          "governed_for_v3": false,
+          "layer": "FOOTBALL_POINTS",
+          "note": "Legacy V2 drive-engine constant, VERIFIED in ENGINE_PARAMS and HISTORICAL / NOT CURRENT in the master parameter register. Preserved unedited.",
+          "parameter_id": "ENG-HOME-FIELD",
+          "status": "HISTORICAL",
+          "value": 4.0
+        },
+        {
+          "governed_for_v3": true,
+          "layer": "ELO",
+          "note": "Elo-layer home-field advantage. A separate parameter; not a V3 point baseline.",
+          "parameter_id": "CCG-HFA_ELO",
+          "status": "LOCKED",
+          "value": 65.0
+        }
+      ],
+      "ruling": "R2-HFA-3P5",
+      "v3_football_point_hfa": 3.5
+    },
+    "rulings_applied": [
+      "R2-SCHED-V5-AUTH",
+      "R2-SCHED-13GAME",
+      "R2-BOARD-OF-RECORD",
+      "R2-HFA-3P5",
+      "R2-FCS-ELO-1250",
+      "R2-AAC-SUCCESSOR",
+      "R2-CCG-SEVEN",
+      "R2-COMMITTEE-TB",
+      "R2-SOS",
+      "R2-COMMON-OPP",
+      "R2-A8-ECL-ORDER",
+      "R2-G5-SEED5",
+      "R2-NO-RESEED",
+      "R2-SOR-REPORT",
+      "R2-SRS-WITNESS",
+      "R2-CAL-OBJECTIVE",
+      "R3-SOS-OWP-OOWP-SEMANTICS",
+      "R3-CFP-FIXED-TOPOLOGY",
+      "R4-COMMON-OPP-FORMULA",
+      "R-V3-FCS-SCALE-01",
+      "R-V3-MVP-CONTROL-CORPUS-01",
+      "R-V3-POST-MVP-REAL-VALIDATION-01"
+    ],
+    "seven_ccgs": {
+      "ccg_count": 7,
+      "conferences": [
+        "ACC",
+        "American",
+        "Big 12",
+        "Big Ten",
+        "Mountain West",
+        "Pac-12",
+        "SEC"
+      ],
+      "game_ids": [
+        "G0737",
+        "G0738",
+        "G0739",
+        "G0740",
+        "G0741",
+        "G0742",
+        "G0743"
+      ],
+      "no_ccg_conferences": [
+        "Atlantic-8",
+        "ECL"
+      ],
+      "ruling": "R2-CCG-SEVEN"
+    },
+    "sos_semantics_governed": true,
+    "thirteen_game_exceptions": {
+      "approved_teams": [
+        "ARK",
+        "GAST",
+        "UK",
+        "VAN",
+        "WVU"
+      ],
+      "ccg_template_rows_excluded": 7,
+      "duplicate_game_ids": [],
+      "duplicate_opponent_date_artifacts": [],
+      "regular_season_games_each": 13,
+      "ruling": "R2-SCHED-13GAME",
+      "teams_at_thirteen_games": [
+        "ARK",
+        "GAST",
+        "UK",
+        "VAN",
+        "WVU"
+      ],
+      "validated": true
+    }
+  },
+  "r5_internal_shadow_mvp": {
+    "calibration_evidence": "SYNTHETIC_CONTROL_CALIBRATED",
+    "calibration_promotion_installed": true,
+    "fcs_scale": {
+      "adapter_installed": true,
+      "anchors": [
+        {
+          "anchor": "FBS_ELO_TO_V3_POINT_EMPIRICAL_BRIDGE",
+          "predicted_points_at_elo_1250": -30.5758,
+          "scope": "governed FBS population"
+        },
+        {
+          "anchor": "FCS_VS_FBS_OBSERVED_MARGIN",
+          "games": 365,
+          "scope": "2023-2025 FCS-vs-FBS sample",
+          "weighted_fbs_winning_margin_points": 31.423
+        }
+      ],
+      "approval_token": "APPROVE_V3_FCS_SCALE_ADAPTER::R-V3-FCS-SCALE-01",
+      "chairman_ruling_id": "R-V3-FCS-SCALE-01",
+      "derivation": "DIRECT_CHAIRMAN_AUTHORITY",
+      "embeds_home_field_advantage": false,
+      "fbs_path_unchanged": true,
+      "fcs_elo": 1250.0,
+      "fcs_elo_policy": "FIXED_ELO_1250",
+      "fcs_elo_policy_ruling": "R2-FCS-ELO-1250",
+      "refused_routes_unchanged": [
+        "AD_HOC",
+        "BOARD_EQUIVALENT",
+        "BOARD_IH_INVERSE",
+        "ELO_AS_POINTS",
+        "TEST_FITTING",
+        "V2_1_BRIDGE_REPLAY"
+      ],
+      "ruling": "R-V3-FCS-SCALE-01",
+      "unified_neutral_field_points": -31.0,
+      "venue_handling": "Neutral-field value only. game.simulate_game applies hfa_baseline_points * home_hfa_modifier at HOME and exactly 0.0 at NEUTRAL, identically for FBS and FCS participants."
+    },
+    "real_world_validation": "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED",
+    "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP"
+  },
+  "run_tier": "DEV",
+  "schedule": {
+    "blocking_provenance_anomalies": [],
+    "ccg_templates": 7,
+    "games_total": 743,
+    "governed_binary_disposition": "ACCEPTED_SOURCE_COPY_UNDER_R2_SCHED_V5_AUTH",
+    "provenance_anomalies": [
+      "SCHEDULE_BINARY_HASH_MISMATCH_VS_MODEL_PARAMETERS_V2_5"
+    ],
+    "regular_games": 736,
+    "schedule_binary_sha256_actual": "b0f2c2cdbb3b47fa35bfcffdf4bd04850731355f3a8599a9494673ca9fcc24b8",
+    "schedule_binary_sha256_governed": "db26c3fff15a61ce8e7efa3b93100fa017e02248c96076d291495b55e855da12",
+    "schedule_games_sha256_certified": "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221",
+    "schedule_games_sha256_reproduced": "bd8089f70f6d483a75564e33438272c22daade8e53619fb21a915778975ff221",
+    "schedule_v5_authority_ruling": "R2-SCHED-V5-AUTH",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+    ]
+  },
+  "schedule_only_fcs": 13,
+  "schedule_phases": {
+    "conference_championship_templates_w15": 7,
+    "postselection_regular_w16": 1,
+    "preselection_regular_w1_w14": 735
+  },
+  "status": "STRUCTURAL_PREFLIGHT_PASS",
+  "team_entities": 134
+}

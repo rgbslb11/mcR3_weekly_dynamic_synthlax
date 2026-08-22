@@ -484,6 +484,112 @@ R4_COMMON_OPPONENT_FORMULA = ChairmanRuling(
 )
 
 
+# --- R5: INTERNAL / SHADOW / TEST_ONLY MVP model closeout ---------------------
+#
+# Three rulings issued together. Unlike R2-R4 these carry Chairman-issued
+# identifiers, so ``chairman_ruling_id`` is populated rather than None.
+#
+# The scope word matters and is carried on every one of them: they authorise an
+# INTERNAL / SHADOW / READ-ONLY / TEST_ONLY / NON-VALUE-BEARING MVP and nothing
+# wider. R-V3-POST-MVP-REAL-VALIDATION-01 exists precisely so that the other two
+# cannot be read as a real-world calibration claim.
+
+R5_INSTRUCTION = (
+    "OPERATION SYTHALAX — V3 FINAL INTERNAL / SHADOW / TEST_ONLY MVP MODEL CLOSEOUT R1"
+)
+
+#: The scope token every MVP-scoped artifact carries. Never abbreviated: a
+#: shortened form is what lets a shadow result be read as a live one later.
+INTERNAL_SHADOW_MVP_SCOPE = "INTERNAL_SHADOW_TEST_ONLY_MVP"
+
+R5_FCS_SCALE = ChairmanRuling(
+    convergence_id="R-V3-FCS-SCALE-01",
+    subject="FCS Elo 1250 to V3 unified neutral-field point scale adapter",
+    decision=(
+        "Governed FCS Elo 1250 maps to V3 unified neutral-field points -31.0 for the "
+        "INTERNAL SHADOW MVP. The value is installed through the existing fail-closed "
+        "adapter in fcs.register_fcs_scale_adapter under authority "
+        "DIRECT_CHAIRMAN_AUTHORITY; no refused route is reopened, and the FCS rating "
+        "policy R2-FCS-ELO-1250 is not disturbed. Venue handling stays ordinary V3 HFA: "
+        "the adapter supplies a neutral-field point value only and embeds no home-field "
+        "term."
+    ),
+    evidence=(
+        "FBS Elo-to-V3-point empirical bridge over the governed FBS population: "
+        "predicted V3 point value at Elo 1250 ~ -30.5758.",
+        "2023-2025 FCS-vs-FBS sample: 365 games, weighted FBS winning margin ~ 31.423 points.",
+        "fcs.UNIFIED_POINTS_OBSERVED_RANGE (-17.4576, 32.8847): -31.0 sits below the "
+        "observed FBS floor, which is the direction a schedule-only FCS entity must sit in.",
+    ),
+    retires=("model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",),
+    supersedes=(),
+    provenance="FACT",
+    chairman_ruling_id="R-V3-FCS-SCALE-01",
+    instruction=R5_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+R5_MVP_CONTROL_CORPUS = ChairmanRuling(
+    convergence_id="R-V3-MVP-CONTROL-CORPUS-01",
+    subject="Authorised MVP control calibration corpus",
+    decision=(
+        "The canonical 2025 synthetic season may be used for MVP_CONTROL_CALIBRATION_ONLY "
+        "within the INTERNAL / SHADOW / TEST_ONLY MVP. It is not authorised to be described "
+        "as REAL_WORLD_CALIBRATION, REAL_HISTORICAL_VALIDATION or PRODUCTION_VALIDATION. The "
+        "calibration status it can support is SYNTHETIC_CONTROL_CALIBRATED and no stronger "
+        "term."
+    ),
+    evidence=(
+        "2025 Synthetic Season LOCKED v3.xlsx, sha256 77bb6ecf48e805b62b8af238bbf7b3534"
+        "330df0405b8a170e48bb5c234d532ba, 116602 bytes, mounted inside "
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip.",
+        "!Certification total_games=757, overtime_games=13; Games sheet game_seq 1..757.",
+        "!Certification provenance, verbatim: 'SCHEDULE SYNTHETIC. SCORES SIMULATED. "
+        "NCG result user-specified. Bowl names fictional.' Preserved, not edited.",
+        "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip!Baxter_Ratings_2024.csv, "
+        "the accepted rating layer for the season preceding the control corpus.",
+    ),
+    retires=(
+        "calibration.weekly_performance_residual_coefficient",
+        "calibration.weekly_movement_cap_points",
+        "calibration.recent_form_weights",
+        "calibration.blowout_treatment",
+        "calibration.game_sd_points",
+        "calibration.sample_size_regularization",
+        "governance.GAME_SD_CALIBRATION_OPEN",
+    ),
+    supersedes=(),
+    provenance="FACT",
+    chairman_ruling_id="R-V3-MVP-CONTROL-CORPUS-01",
+    instruction=R5_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+R5_POST_MVP_REAL_VALIDATION = ChairmanRuling(
+    convergence_id="R-V3-POST-MVP-REAL-VALIDATION-01",
+    subject="Post-MVP real-world validation requirement",
+    decision=(
+        "Real historical calibration and validation remain REQUIRED after the MVP. The "
+        "requirement does not block the INTERNAL SHADOW TEST_ONLY MVP, and the MVP does not "
+        "discharge it. The status POST_MVP_REAL_WORLD_VALIDATION_REQUIRED is preserved for "
+        "as long as no real-world corpus has been calibrated against."
+    ),
+    evidence=(
+        "V3_CALIBRATION_EVIDENCE_DISCOVERY_R5.json: no admissible real-world observation "
+        "set is mounted; the largest real subset found was 550 games in one season, failing "
+        "all four minimum-volume floors.",
+        "calibration_contract.DATASET_PROVENANCE_REQUIREMENTS synthetic_content: REFUSED — "
+        "left unedited, because it governs the real-world lane this ruling keeps open.",
+    ),
+    retires=(),
+    supersedes=(),
+    provenance="FACT",
+    chairman_ruling_id="R-V3-POST-MVP-REAL-VALIDATION-01",
+    instruction=R5_INSTRUCTION,
+    resolution_reason="DIRECT_CHAIRMAN_AUTHORITY",
+)
+
+
 R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_SCHEDULE_V5_AUTHORITY,
     R2_THIRTEEN_GAME_EXCEPTIONS,
@@ -510,10 +616,18 @@ R3_RULINGS: tuple[ChairmanRuling, ...] = (
 
 R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
 
+R5_RULINGS: tuple[ChairmanRuling, ...] = (
+    R5_FCS_SCALE,
+    R5_MVP_CONTROL_CORPUS,
+    R5_POST_MVP_REAL_VALIDATION,
+)
+
 #: Every ruling issued across all three convergences. R2_RULINGS and R3_RULINGS
 #: stay exactly as the audited records; each later round adds to them rather than
 #: editing them, so the succession stays readable in one place.
-ALL_RULINGS: tuple[ChairmanRuling, ...] = R2_RULINGS + R3_RULINGS + R4_RULINGS
+ALL_RULINGS: tuple[ChairmanRuling, ...] = (
+    R2_RULINGS + R3_RULINGS + R4_RULINGS + R5_RULINGS
+)
 
 _BY_ID = {r.convergence_id: r for r in ALL_RULINGS}
 

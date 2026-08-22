@@ -1,0 +1,438 @@
+{
+  "adapter_id": "V3-CALIBRATION-5148-ADAPTER",
+  "adapter_version": "R1",
+  "byte_identical_members_shared_across_packages": {
+    "1dd44bb7545095f39fd39699db5230f04b61cec1cfc4631e8bbf7b550f05a05b": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2024.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/walkforward_predictions_2024.csv"
+    ],
+    "1f026be536caed9214076daf3542c9f7745eb47b8efa8ba676ce16c2d76631d3": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2025_untouched.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/walkforward_predictions_2025_untouched.csv"
+    ],
+    "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/02_Event_Stream/official_synthetic_event_stream_2024_2025.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/official_synthetic_event_stream_2024_2025.csv"
+    ],
+    "643238f05177e6f84b33d65b48a9b50ddf36bb74adf449dba68241122ec1c7c5": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/05_Scorecards/model_scorecard.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/model_scorecard.csv"
+    ],
+    "73f9650bc34c3763c7db1b0798465e05d6a930d56fef42cc13e7e24f50db3520": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/06_Q4_Transfer/q4_transfer_scorecard.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/q4_transfer_scorecard.csv"
+    ],
+    "8d8822eea90ee4127ded31374c983a1ebf84c82f5851f9dbbdbb5db80d06c622": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/03_Pregame_States/pregame_states_2024_2025.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/pregame_states_2024_2025.csv"
+    ],
+    "a0bfc92b95b05fec812be95d548d84ce391bdaf9a74616bc8b3fb57077231dcc": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/00_Control/model_parameters.json",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/model_parameters.json"
+    ],
+    "cee534465adde924d30de4c46bd47db683e51dd8eb10404401019a18ba9a6e95": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/00_Control/GOVERNING_RULES.md",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/GOVERNING_RULES.md"
+    ],
+    "daacb802e1d873adf75d1e9499cc6352b36341f315061b0960eb0bfa7101fc7c": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/07_Reports/PHASE5D_WALKFORWARD_REPORT.md",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/PHASE5D_WALKFORWARD_REPORT.md"
+    ],
+    "e526f788392f6f953239f49d0a55bbf363bf0c07530618a38e37baa856d4c7af": [
+      "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip::Power_Crunch_Research_Lab_Phase5D_WalkForward/01_Registries/modern_fbs_alignment_registry.csv",
+      "Power_Crunch_Research_Lab_Phase5E_Package.zip::Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/modern_fbs_alignment_registry.csv"
+    ]
+  },
+  "custody": "Byte-exact mount of the audited source packages. Digests are verified against the audited identities before any member is read; a mismatch fails closed. Originals are never modified and nothing is repackaged.",
+  "packages": {
+    "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip": {
+      "bytes": 1676242,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": null,
+      "members": {
+        "Baxter_Ratings_2006.csv": {
+          "bytes": 4763,
+          "sha256": "a4e3603d3c95ba51c9dfa4a3b6930091b32edb7d2132d0ce3788212c1b21de28"
+        },
+        "Baxter_Ratings_2007.csv": {
+          "bytes": 4812,
+          "sha256": "706f9dac0af93ec680ce0190bfea450d4ff1809b9bc9061fc18c4c681b95dcfa"
+        },
+        "Baxter_Ratings_2008.csv": {
+          "bytes": 5484,
+          "sha256": "b1af54ae66b1d5b41e6f622c652d66bc83148d15255cdbe6a2255853954495da"
+        },
+        "Baxter_Ratings_2009.csv": {
+          "bytes": 4810,
+          "sha256": "57ed71f0be1bd75a43962b12956d6cc98e3e6cb74efcb86c99c32901bdc3395e"
+        },
+        "Baxter_Ratings_2010.csv": {
+          "bytes": 7683,
+          "sha256": "3c72d09ef144caa9696a98b866d1b3dd2dab4dc69346036fc798a173ce056cc4"
+        },
+        "Baxter_Ratings_2011.csv": {
+          "bytes": 19320,
+          "sha256": "2a39300b79e0835fab6c05829e35034191b66a21d032929764ce7d3b00ba60cf"
+        },
+        "Baxter_Ratings_2024.csv": {
+          "bytes": 15652,
+          "sha256": "b7d3e08490a68f2cd8dd4a08312a639a2622b7ea3dbd05d262939a419863920b"
+        },
+        "Baxter_Ratings_2025.csv": {
+          "bytes": 15864,
+          "sha256": "3803d620cadc29e525a53ed8af2a614d55cbfe784e18277bc7f2f71f331cecd7"
+        },
+        "Baxter_Ratings_v1_2006_External_Validation.xlsx": {
+          "bytes": 164299,
+          "sha256": "584f8f4ca45eb6853c54f936d8610fa3fd5c67974bf21521d8b8582e799b840a"
+        },
+        "Baxter_Ratings_v1_2007_External_Validation.xlsx": {
+          "bytes": 161430,
+          "sha256": "e4182de9e64e379a56c51e6fe17c6af07b5c5e8b303bcc29f82962a6a3e0367d"
+        },
+        "Baxter_Ratings_v1_2008_External_Validation.xlsx": {
+          "bytes": 187153,
+          "sha256": "f8ef3098fa80da7a093e5e0d6eeb39b6b5c9ea7984f02e9dd8691b126857d40c"
+        },
+        "Baxter_Ratings_v1_2009_External_Validation.xlsx": {
+          "bytes": 199636,
+          "sha256": "faee14eefcb30daa5a2174b6ed9263d31c691486d3dc3d9b210c519cd4e5d514"
+        },
+        "Baxter_Ratings_v1_2010_External_Validation_CLASSIFICATION_CORRECTED.xlsx": {
+          "bytes": 256602,
+          "sha256": "b271ddf617a921201edea87d1992416c060a0e93d2c30db6c1b7ee08bb22ae50"
+        },
+        "Baxter_Ratings_v1_2011_External_Validation.xlsx": {
+          "bytes": 164645,
+          "sha256": "baba652e665f15f085b30b5c7b7b5ba08f7dd013587a3f6da43b3db90c3dd5fa"
+        },
+        "Baxter_Ratings_v1_2024_Complete_CORRECTED.xlsx": {
+          "bytes": 198607,
+          "sha256": "e78b63a3f444a5740d17a8e29688da98fff3530bf0e5fb8a790cb063790bb05b"
+        },
+        "Baxter_Ratings_v1_2025_WalkForward_Validation.xlsx": {
+          "bytes": 91096,
+          "sha256": "a7a3bbc59e160e81f4d1f921d2b5a7b94a508a5b9f39c0b44b3d3d1802eb7c01"
+        },
+        "Baxter_Ratings_v1_Joint_2024_2025_Validation_and_Freeze.xlsx": {
+          "bytes": 191791,
+          "sha256": "a2bdb8a2eeea5ab16e516925b0d5331dce274fc460c66e1d6361ffb4fe86356e"
+        },
+        "Baxter_v1_Complete_2006_2011_2024_2025_Summary.xlsx": {
+          "bytes": 88690,
+          "sha256": "8a44f032e2284982f28243c9ce5045965efdb260d8f00fc055f1e82f41ec7332"
+        },
+        "Baxter_v1_complete_metrics.csv": {
+          "bytes": 1429,
+          "sha256": "6603ac9d8be1105ca31a9ddf7f09936e8acba72d39846d2f9df054ea43095996"
+        },
+        "README.txt": {
+          "bytes": 598,
+          "sha256": "a0fbb695807b93c3c1c977f7c5fe065f7f70ab128a0da23fcc35921b824dd1b9"
+        }
+      },
+      "named_members": {
+        "metrics": "Baxter_v1_complete_metrics.csv",
+        "wf_2006": "Baxter_Ratings_v1_2006_External_Validation.xlsx",
+        "wf_2007": "Baxter_Ratings_v1_2007_External_Validation.xlsx",
+        "wf_2008": "Baxter_Ratings_v1_2008_External_Validation.xlsx",
+        "wf_2009": "Baxter_Ratings_v1_2009_External_Validation.xlsx",
+        "wf_2010": "Baxter_Ratings_v1_2010_External_Validation_CLASSIFICATION_CORRECTED.xlsx",
+        "wf_2011": "Baxter_Ratings_v1_2011_External_Validation.xlsx",
+        "wf_joint_modern": "Baxter_Ratings_v1_Joint_2024_2025_Validation_and_Freeze.xlsx"
+      },
+      "role": "primary Baxter Rating walk-forward / expected-margin evidence (BAXTER-MOV-v1.0-R)",
+      "sha256": "579931ba051067c5665eef930dab2f19c095ff014252a8c3f4c5c5b4b5086e71"
+    },
+    "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Package.zip": {
+      "bytes": 501149,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": 3667,
+      "members": {
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup_Summary.xlsx": {
+          "bytes": 266389,
+          "sha256": "35451d084ca53f6e6e0a673f004b2760681d218ef7e875567695005095496db7"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2006_week_by_week.csv": {
+          "bytes": 291587,
+          "sha256": "a512cd21655a103f901ff38901c84854adf59ed0c3a498946e2b392600d441a9"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2007_week_by_week.csv": {
+          "bytes": 302674,
+          "sha256": "76566fb1c6e0f026e984b7be149d15e1e6da923230f8e920e15d1db2916c3b84"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2008_week_by_week.csv": {
+          "bytes": 186780,
+          "sha256": "3edbe6314c6f9ec57aba53508005e2df20e070a0f28d81f6295d73a54472b121"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2009_week_by_week.csv": {
+          "bytes": 186660,
+          "sha256": "12f0089e7185d7a84d40bd7c870cc8a4cc274a0e1c91aee98602c58b3d2cb769"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2010_week_by_week.csv": {
+          "bytes": 188524,
+          "sha256": "251cde6efd77e751c745572a6842cb5cc14c176eb349883c8680dd4a538e3921"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/by_season/2011_week_by_week.csv": {
+          "bytes": 215429,
+          "sha256": "572738395bf02781bb97bd18946572bd7950d8d8a4dfbed4c4aa9967aa9078f1"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/chronology_exception_and_correction_register.csv": {
+          "bytes": 78272,
+          "sha256": "9e6326b144b77178224ae5f77aa810ad82abb50126bfa6408a74b223e3ae009d"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/coverage_summary.csv": {
+          "bytes": 318,
+          "sha256": "fff6eedd5571c964caf91a9202ff4da38dae706f5cc3b7e14f13eeaa3a6b554f"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/verified_week_by_week_2006_2011.csv": {
+          "bytes": 1367529,
+          "sha256": "f5c6f9460ac284fa959623983de0c549457fe2957cf68cbaf8cb37136469851f"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/manifest/file_manifest.csv": {
+          "bytes": 1264,
+          "sha256": "2377c33df43c17c4a02fc4e2ee286b62198835e7c0356b34246f808a87554c5b"
+        },
+        "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/reports/PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md": {
+          "bytes": 1793,
+          "sha256": "54e83f6e749cc68597fd1eb87ebf976d19743ee7c690e8e6126be2fcb6fb85fa"
+        }
+      },
+      "named_members": {
+        "coverage": "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/coverage_summary.csv",
+        "ledger": "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/data/verified_week_by_week_2006_2011.csv",
+        "report": "NCAA_Phase4M_2006_2011_Week_By_Week_Cleanup/reports/PHASE4M_WEEK_BY_WEEK_CLEANUP_REPORT.md"
+      },
+      "role": "2006-2011 factual game ledger, chronology and source classification",
+      "sha256": "c4e588dd82d0a03c99958538dc0e3b84c5b293142db33d8458e6defb850f18cc"
+    },
+    "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip": {
+      "bytes": 796268,
+      "consumed_by_this_lane": true,
+      "expected_source_universe_rows": 1481,
+      "members": {
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/00_Control/GOVERNING_RULES.md": {
+          "bytes": 718,
+          "sha256": "cee534465adde924d30de4c46bd47db683e51dd8eb10404401019a18ba9a6e95"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/00_Control/model_parameters.json": {
+          "bytes": 1331,
+          "sha256": "a0bfc92b95b05fec812be95d548d84ce391bdaf9a74616bc8b3fb57077231dcc"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/01_Registries/modern_fbs_alignment_registry.csv": {
+          "bytes": 60428,
+          "sha256": "e526f788392f6f953239f49d0a55bbf363bf0c07530618a38e37baa856d4c7af"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/02_Event_Stream/official_synthetic_event_stream_2024_2025.csv": {
+          "bytes": 315087,
+          "sha256": "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/03_Pregame_States/pregame_states_2024_2025.csv": {
+          "bytes": 214578,
+          "sha256": "8d8822eea90ee4127ded31374c983a1ebf84c82f5851f9dbbdbb5db80d06c622"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2024.csv": {
+          "bytes": 308209,
+          "sha256": "1dd44bb7545095f39fd39699db5230f04b61cec1cfc4631e8bbf7b550f05a05b"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2025_carryover_sensitivity.csv": {
+          "bytes": 346369,
+          "sha256": "fbaf9056b56720c4f1c2746c0ddda662b750c362febc76bb57c621b504ad554e"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2025_untouched.csv": {
+          "bytes": 344254,
+          "sha256": "1f026be536caed9214076daf3542c9f7745eb47b8efa8ba676ce16c2d76631d3"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/05_Scorecards/2025_failure_modes.csv": {
+          "bytes": 4371,
+          "sha256": "60e1ad3686822827bd9333ae1a31cf0b4b4f8884a6c10f0f0f8e3711ccc2ac90"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/05_Scorecards/model_scorecard.csv": {
+          "bytes": 3765,
+          "sha256": "643238f05177e6f84b33d65b48a9b50ddf36bb74adf449dba68241122ec1c7c5"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/05_Scorecards/reliability_tables.csv": {
+          "bytes": 3967,
+          "sha256": "e5f15c6d6c4bbee12a2272cefc985dc127b77f23e00eabebd882ca178b9d6670"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/06_Q4_Transfer/q4_cases_2024.csv": {
+          "bytes": 89599,
+          "sha256": "404df9f252f0333eea5d0b78025f263b14a3142cb3000733b19a7c426f708e03"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/06_Q4_Transfer/q4_cases_2025.csv": {
+          "bytes": 419636,
+          "sha256": "a49882cf2ec404684eb5b4d6ff463c58dbafa30894f8b04782f690324e2a4cde"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/06_Q4_Transfer/q4_transfer_scorecard.csv": {
+          "bytes": 505,
+          "sha256": "73f9650bc34c3763c7db1b0798465e05d6a930d56fef42cc13e7e24f50db3520"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/07_Reports/PHASE5D_WALKFORWARD_REPORT.md": {
+          "bytes": 1345,
+          "sha256": "daacb802e1d873adf75d1e9499cc6352b36341f315061b0960eb0bfa7101fc7c"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/08_Blocks/block_register.csv": {
+          "bytes": 414,
+          "sha256": "acc9e30b2bed5ce835995dbf8a4852851c7fd2632d1e970ab1b4e26c70e43f96"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/09_Manifest/file_manifest.csv": {
+          "bytes": 2297,
+          "sha256": "17f26aa7b7176a48565743e7baa2e98518ec3023c883edbd264b7040da22d922"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx": {
+          "bytes": 116602,
+          "sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/INPUTS.md": {
+          "bytes": 2070,
+          "sha256": "4bc99a54471079ccade1569d043e9a625f2b30d1c37d19ccc88706ab9b028591"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/teams 2024.csv": {
+          "bytes": 2748,
+          "sha256": "f4c3114178eebec50d8a2912613a15bfd5a831e6dfe6131b944cea161472fb97"
+        },
+        "Power_Crunch_Research_Lab_Phase5D_WalkForward/Power_Crunch_Research_Lab_Phase5D_Summary.xlsx": {
+          "bytes": 34077,
+          "sha256": "e81395db6c0e4e8fae722e0a6a0d5fa6d0bc673e5185e3d721c70be26dd00efb"
+        }
+      },
+      "named_members": {
+        "alignment_registry": "Power_Crunch_Research_Lab_Phase5D_WalkForward/01_Registries/modern_fbs_alignment_registry.csv",
+        "event_stream": "Power_Crunch_Research_Lab_Phase5D_WalkForward/02_Event_Stream/official_synthetic_event_stream_2024_2025.csv",
+        "locked_2025": "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx",
+        "pregame_states": "Power_Crunch_Research_Lab_Phase5D_WalkForward/03_Pregame_States/pregame_states_2024_2025.csv",
+        "walkforward_2024": "Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2024.csv",
+        "walkforward_2025_untouched": "Power_Crunch_Research_Lab_Phase5D_WalkForward/04_Predictions/walkforward_predictions_2025_untouched.csv"
+      },
+      "role": "2024-2025 official synthetic event stream, pregame states, walk-forward evidence",
+      "sha256": "9a018a64b17d682e8c168524937ab70697e2f57a5b3ccae77f731fa3beba4f48"
+    },
+    "Power_Crunch_Research_Lab_Phase5E_Package.zip": {
+      "bytes": 1054989,
+      "consumed_by_this_lane": false,
+      "expected_source_universe_rows": null,
+      "members": {
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/GOVERNING_RULES.md": {
+          "bytes": 718,
+          "sha256": "cee534465adde924d30de4c46bd47db683e51dd8eb10404401019a18ba9a6e95"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/PHASE5D_WALKFORWARD_REPORT.md": {
+          "bytes": 1345,
+          "sha256": "daacb802e1d873adf75d1e9499cc6352b36341f315061b0960eb0bfa7101fc7c"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/model_parameters.json": {
+          "bytes": 1331,
+          "sha256": "a0bfc92b95b05fec812be95d548d84ce391bdaf9a74616bc8b3fb57077231dcc"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/model_scorecard.csv": {
+          "bytes": 3765,
+          "sha256": "643238f05177e6f84b33d65b48a9b50ddf36bb74adf449dba68241122ec1c7c5"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/modern_fbs_alignment_registry.csv": {
+          "bytes": 60428,
+          "sha256": "e526f788392f6f953239f49d0a55bbf363bf0c07530618a38e37baa856d4c7af"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/official_synthetic_event_stream_2024_2025.csv": {
+          "bytes": 315087,
+          "sha256": "627eee633afec292811f0dcccdda5c7601327aba5245ae837eab150f321e76c6"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/pregame_states_2024_2025.csv": {
+          "bytes": 214578,
+          "sha256": "8d8822eea90ee4127ded31374c983a1ebf84c82f5851f9dbbdbb5db80d06c622"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/q4_transfer_scorecard.csv": {
+          "bytes": 505,
+          "sha256": "73f9650bc34c3763c7db1b0798465e05d6a930d56fef42cc13e7e24f50db3520"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/walkforward_predictions_2024.csv": {
+          "bytes": 308209,
+          "sha256": "1dd44bb7545095f39fd39699db5230f04b61cec1cfc4631e8bbf7b550f05a05b"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/01_Frozen_Benchmark/walkforward_predictions_2025_untouched.csv": {
+          "bytes": 344254,
+          "sha256": "1f026be536caed9214076daf3542c9f7745eb47b8efa8ba676ce16c2d76631d3"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/02_Chronology/chronology_sensitivity_summary.csv": {
+          "bytes": 424,
+          "sha256": "87fbf9eadbc2609055463d27b4bfa563174be27fab25de141ef1984d03bc1611"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/02_Chronology/randomized_within_week_metrics.csv": {
+          "bytes": 8284,
+          "sha256": "dc4ee31e5a75461b7b55e6acf6ff72f690acb67b988c80383b932f578bbc7077"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/03_Carryover/carryover_grid_scorecard.csv": {
+          "bytes": 2982,
+          "sha256": "de5515bfab444e604d873e30d8790bc3528c4423cbd9ccd1121231a6f89fe391"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/03_Carryover/selected_carryover_predictions_2025.csv": {
+          "bytes": 263216,
+          "sha256": "3cf049a35d6f29487c1210ee347267f1ffe6a36d27254d20a97417a73eb38404"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/04_Conference_Ablations/conference_and_ablation_scorecard.csv": {
+          "bytes": 1704,
+          "sha256": "e48655694405688d8f778ee1377d607ec3550b5cd3a2c241036e8a735684e9d6"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/04_Conference_Ablations/selected_probability_predictions_2025.csv": {
+          "bytes": 499919,
+          "sha256": "cce7c1f8872a937731d197d075fba620d7eaacfae1667084683dc3ef1181ecba"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/05_Regime_Models/regime_model_scorecard.csv": {
+          "bytes": 479,
+          "sha256": "4a87f1ff4a503c408fdaaaf8df05a743c3fb0654471ce89cd9d93b065b09a9e4"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/06_Margin_Uncertainty/margin_model_scorecard.csv": {
+          "bytes": 249,
+          "sha256": "275e723c4b378b45d129ebd06e3d1c196b36c008415297cc55eb0540a55fa7e0"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/06_Margin_Uncertainty/margin_predictions_2025.csv": {
+          "bytes": 576324,
+          "sha256": "37b36a59e08158245db165938abde6d615444a5a7c350b5d2745c80cc468ae78"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/07_Abstention/abstention_flags_2025.csv": {
+          "bytes": 62169,
+          "sha256": "28385807ff09909544f3862bee1cfa7fc63ed8a97984960360a905c7f58ae82f"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/07_Abstention/abstention_scorecard.csv": {
+          "bytes": 735,
+          "sha256": "4f5161969d528e14666abe0bbda3cd1e120e1bfb55ab68f29c801b5eb5c39c98"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/08_Q4_Subgroups/q4_subgroup_scorecard_2025.csv": {
+          "bytes": 4180,
+          "sha256": "60cb631e3a2596177b8603bfee2ec52488018eeb4fabd2f72400af305770f7b4"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/09_Architecture/final_research_predictions_2025.csv": {
+          "bytes": 631905,
+          "sha256": "e9e0b1aeefa965f29eb98983d16fecce2938cc4f3a4081b48b55ce8bc215ab39"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/09_Architecture/selected_research_architecture.json": {
+          "bytes": 1057,
+          "sha256": "5e20d85762017eb5735a41d781c9e82f6e12a7d32a86ef0e022291aba609c606"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/10_2026_Shadow/2026_preseason_shadow_schedule.csv": {
+          "bytes": 172438,
+          "sha256": "afffd732ce65a3adff35dfb1379ce9a1fe0834ba4f0391309cee5acdbdec93f4"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/10_2026_Shadow/2026_team_mapping_exceptions.csv": {
+          "bytes": 306,
+          "sha256": "c7cb9eda2e2e6599a86f5a5a54b59c223666aba0dc89f4844ecbbff74deb7abd"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/11_Reports/PHASE5E_REPORT.md": {
+          "bytes": 1241,
+          "sha256": "b829b74283b0b75090ca84ababb1716445503dd94cdc0b161759b9e32f7fb1e3"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/12_Blocks/block_register.csv": {
+          "bytes": 504,
+          "sha256": "29994fe1691915091a16bcf977857c6cda7ea54218d59e6956aa5df102bccc0e"
+        },
+        "Power_Crunch_Research_Lab_Phase5E_Model_Selection/13_Manifest/file_manifest.csv": {
+          "bytes": 3342,
+          "sha256": "a842c11bc85111c6a7884d02c808911971cd567a350c26bf2bbdd9cc23f11770"
+        }
+      },
+      "named_members": {},
+      "role": "supporting model-selection, chronology-sensitivity and margin-model evidence; NOT consumed as a V3 calibration model",
+      "sha256": "3980d5cf66a2588ddd094a1ce64500b08d48cbfbdfea3c37bcb011d6aa397d3f"
+    }
+  },
+  "promotion_status": "NOT_PROMOTED"
+}

@@ -511,3 +511,132 @@ def convergence_delta() -> dict[str, object]:
         ),
         "r3_retirement_reasons": dict(sorted(R3_RETIREMENT_REASONS.items())),
     }
+
+
+# --- R5: the INTERNAL_SHADOW_MVP scope -----------------------------------------
+#
+# Two scopes now exist and they are deliberately not merged.
+#
+# ``DISPOSITION_REGISTER`` above is the **formal global** register and is left
+# exactly as it was. Globally these eight are still open, because global closure
+# means a real-world calibration and ruling R-V3-POST-MVP-REAL-VALIDATION-01
+# keeps that requirement in force. Editing those entries to say RESOLVED would
+# claim something no evidence supports.
+#
+# What R5 closes is the **INTERNAL_SHADOW_MVP** scope: the same eight blockers,
+# against a control corpus that is authorised for that scope and for nothing
+# wider. The mapping below records that, with the condition each retirement
+# actually depends on, so a reader can check the retirement rather than accept it.
+#
+# Neither set is derived from the other, and the count of one is never reported
+# as the count of the other.
+
+#: The scope this retirement set belongs to. Never abbreviated.
+R5_SCOPE = "INTERNAL_SHADOW_TEST_ONLY_MVP"
+
+#: Retired for INTERNAL_SHADOW_MVP scope by the R5 rulings. Exactly the eight
+#: that were live after the Board-of-Record mount.
+R5_INTERNAL_SHADOW_MVP_RETIRED: frozenset[str] = frozenset(
+    R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
+)
+
+#: What each retirement actually depends on. A ruling is named in every row, and
+#: so is the runtime condition, because the ruling alone clears nothing: each of
+#: these is computed from a registry that checks evidence, not from a config field.
+R5_RETIREMENT_CONDITIONS: dict[str, str] = {
+    **{
+        f"calibration.{name}": (
+            "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value "
+            "promoted through calibration.promote_regime_r2 under "
+            "GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an "
+            "experiment measured on the holdout split."
+        )
+        for name in (
+            "weekly_performance_residual_coefficient",
+            "weekly_movement_cap_points",
+            "recent_form_weights",
+            "blowout_treatment",
+            "game_sd_points",
+            "sample_size_regularization",
+        )
+    },
+    "governance.GAME_SD_CALIBRATION_OPEN": (
+        "mvp_control.game_sd_calibration_governed() is true, which requires a promotion "
+        "record installed through mvp_control.install_calibration_promotion carrying "
+        "byte-bound holdout evidence and a measured game_sd_points. ENG-CAL-MARGIN itself "
+        "is left OPEN in the unedited register."
+    ),
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": (
+        "fcs.fcs_unified_scale_governed() is true, which requires an adapter installed "
+        "through fcs.register_fcs_scale_adapter with a recognised derivation, complete "
+        "issued provenance and the ruling's approval token."
+    ),
+}
+
+R5_RETIREMENT_REASONS: dict[str, str] = {
+    **{
+        blocker: "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01"
+        for blocker in R5_INTERNAL_SHADOW_MVP_RETIRED
+        if blocker != "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    },
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": (
+        "DIRECT_CHAIRMAN_AUTHORITY__R-V3-FCS-SCALE-01"
+    ),
+}
+
+#: R5 opened nothing. The MVP does not create a gate it then declines to pass.
+R5_OPENED_BLOCKERS: frozenset[str] = frozenset()
+
+#: DERIVED — the INTERNAL_SHADOW_MVP live set. Zero, and computed rather than
+#: asserted, so it can only be zero while every retirement above holds.
+R5_EXPECTED_LIVE_BLOCKERS_INTERNAL_SHADOW_MVP: frozenset[str] = (
+    R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED - R5_INTERNAL_SHADOW_MVP_RETIRED
+) | R5_OPENED_BLOCKERS
+
+#: DERIVED — the formal global live set, unchanged by R5. Still eight, because
+#: global closure requires the real-world validation that remains outstanding.
+R5_EXPECTED_LIVE_BLOCKERS_FORMAL_GLOBAL: frozenset[str] = frozenset(
+    R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED
+)
+
+#: What remains outstanding after the MVP closes, and at what scope.
+R5_CARRIED_FORWARD: dict[str, str] = {
+    "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED": (
+        "Ruling R-V3-POST-MVP-REAL-VALIDATION-01. Real historical calibration and "
+        "validation remain required; the MVP does not discharge them and the eight formal "
+        "global blockers stay live for that scope."
+    ),
+}
+
+
+def internal_shadow_mvp_delta() -> dict[str, object]:
+    """The exact before/after accounting for the INTERNAL_SHADOW_MVP scope."""
+    before = sorted(R3_EXPECTED_LIVE_BLOCKERS_IF_BOARD_MOUNTED)
+    after = sorted(R5_EXPECTED_LIVE_BLOCKERS_INTERNAL_SHADOW_MVP)
+    return {
+        "scope": R5_SCOPE,
+        "before": before,
+        "before_count": len(before),
+        "retired": sorted(R5_INTERNAL_SHADOW_MVP_RETIRED),
+        "retired_count": len(R5_INTERNAL_SHADOW_MVP_RETIRED),
+        "opened": sorted(R5_OPENED_BLOCKERS),
+        "after": after,
+        "after_count": len(after),
+        "difference": sorted(set(before) - set(after)),
+        "set_equality_before_equals_retired_plus_after": (
+            set(before) == R5_INTERNAL_SHADOW_MVP_RETIRED | set(after)
+        ),
+        "retirement_reasons": dict(sorted(R5_RETIREMENT_REASONS.items())),
+        "retirement_conditions": dict(sorted(R5_RETIREMENT_CONDITIONS.items())),
+        "formal_global_scope": {
+            "live": sorted(R5_EXPECTED_LIVE_BLOCKERS_FORMAL_GLOBAL),
+            "live_count": len(R5_EXPECTED_LIVE_BLOCKERS_FORMAL_GLOBAL),
+            "unchanged_by_r5": True,
+            "why": (
+                "Global closure means a real-world calibration. Ruling "
+                "R-V3-POST-MVP-REAL-VALIDATION-01 keeps that requirement in force, so the "
+                "formal register above is not edited and the global count does not move."
+            ),
+        },
+        "carried_forward": dict(sorted(R5_CARRIED_FORWARD.items())),
+    }

@@ -50,3 +50,10 @@
 # The Board of Record and every governed workbook. `binary` unsets text, diff
 # and merge, so no filter can alter a byte.
 *.xlsx             binary
+
+# The mounted calibration source packages. Their SHA-256 digests are registered
+# in V3_CALIBRATION_SOURCE_PACKAGE_MANIFEST_R1.json and re-verified at mount, so
+# a filter that touched one byte would fail every mount rather than degrade
+# quietly. The catch-all above already byte-preserves them; named explicitly
+# because the digest makes the guarantee load-bearing.
+*.zip              binary

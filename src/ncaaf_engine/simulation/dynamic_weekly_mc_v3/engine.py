@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from . import fcs as fcs_policy
+from . import mvp_control
 from . import (
     aac_divisions,
     board_of_record,
@@ -99,6 +100,22 @@ class DynamicWeeklyMCV3:
             "a8_ecl_ordering": ordering.resolution_as_dict(),
             "sos_semantics_governed": sos.GOVERNED_SOS_SEMANTICS is not None,
         }
+        # The MVP scope block travels with every preflight report. A reader of a
+        # run directory can then tell an INTERNAL_SHADOW_MVP result from a
+        # pre-ruling one without consulting anything outside it.
+        r5_evidence = {
+            "scope": mvp_control.MVP_SCOPE,
+            "fcs_scale": fcs_policy.governed_fcs_scale_as_dict(),
+            "calibration_promotion_installed": (
+                mvp_control.game_sd_calibration_governed()
+            ),
+            "calibration_evidence": (
+                mvp_control.MVP_CALIBRATION_STATUS
+                if mvp_control.game_sd_calibration_governed()
+                else None
+            ),
+            "real_world_validation": mvp_control.REAL_WORLD_VALIDATION_STATUS,
+        }
 
         blockers = self.config.execution_blockers() + [
             f"provenance.{x}" for x in schedule_report.get("blocking_provenance_anomalies", [])
@@ -120,6 +137,15 @@ class DynamicWeeklyMCV3:
             # provenance and authority; reading the attribute alone would let a
             # value set any other way clear the blocker unexamined.
             fcs_unified_scale_governed=fcs_policy.fcs_unified_scale_governed(),
+            # Same shape, same reason. ENG-CAL-MARGIN is still OPEN in the
+            # unedited register; ruling R-V3-MVP-CONTROL-CORPUS-01 authorises a
+            # control calibration that can satisfy it for INTERNAL_SHADOW_MVP
+            # scope, and this consults the promotion registry rather than the
+            # configuration so that writing a game_sd_points value into a config
+            # file clears nothing on its own.
+            game_sd_calibration_ruling_applied=(
+                mvp_control.game_sd_calibration_governed()
+            ),
             quarterfinal_mapping_ruling_applied=(
                 postseason.QUARTERFINAL_SLOT_EDGES_GOVERNED_BY_SUCCESSOR_AUTHORITY
             ),
@@ -147,6 +173,7 @@ class DynamicWeeklyMCV3:
             "schedule_phases": phase_counts,
             "governed_evidence": governed,
             "r2_governance": r2_evidence,
+            "r5_internal_shadow_mvp": r5_evidence,
             "execution_blockers": blockers,
             "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
         }

@@ -1,0 +1,935 @@
+{
+  "artifact": "V3_MVP_CONTROL_CALIBRATION_R1.json",
+  "authority": "EXPERIMENTAL CONTROL CALIBRATION / INTERNAL SHADOW TEST_ONLY MVP / NOT REAL-WORLD VALIDATED",
+  "control_corpus": {
+    "declared": {
+      "artifact": "Synthetic 2025 Season \u2014 HARDENED / LOCKED (v3)",
+      "integrity_sha256": "b7ae783004fcf5fd2c4a5562d2351e85a72a47e77c63e54c695e7782cc4f4ae4",
+      "overtime_games": 13,
+      "phase_counts": {
+        "Bowl": 21,
+        "Conference Championship": 9,
+        "Playoff": 13,
+        "Regular Season": 714
+      },
+      "self_declaration": "SCHEDULE SYNTHETIC. SCORES SIMULATED. NCG result user-specified. Bowl names fictional.",
+      "time_precision": "DATE_ONLY_NO_KICKOFF_INSTANT",
+      "total_games": 757
+    },
+    "exclusion_count": 12,
+    "exclusions": [
+      {
+        "game_id": "G25-0040",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0065",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0119",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0176",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0243",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0348",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0425",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0467",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0489",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0571",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0599",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      },
+      {
+        "game_id": "G25-0679",
+        "participants_without_opening_state": "Delaware",
+        "reason": "NO_PRECEDING_SEASON_RATING_FOR_PARTICIPANT"
+      }
+    ],
+    "games_in_source": 757,
+    "games_used": 745,
+    "observation_time_precision": "DATE_ONLY_NO_KICKOFF_INSTANT",
+    "opening_state_season": 2024,
+    "season": 2025,
+    "source": {
+      "corpus": {
+        "bytes": 116602,
+        "member": "Power_Crunch_Research_Lab_Phase5D_WalkForward/10_Source_Rulings/2025 Synthetic Season LOCKED v3.xlsx",
+        "member_sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba",
+        "package": "Power_Crunch_Research_Lab_Phase5D_WalkForward_Package.zip",
+        "package_sha256": "9a018a64b17d682e8c168524937ab70697e2f57a5b3ccae77f731fa3beba4f48"
+      },
+      "opening_rating_layer": {
+        "bytes": 15652,
+        "member": "Baxter_Ratings_2024.csv",
+        "member_sha256": "b7d3e08490a68f2cd8dd4a08312a639a2622b7ea3dbd05d262939a419863920b",
+        "package": "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip",
+        "package_sha256": "579931ba051067c5665eef930dab2f19c095ff014252a8c3f4c5c5b4b5086e71"
+      },
+      "witness_rating_layer": {
+        "bytes": 15864,
+        "member": "Baxter_Ratings_2025.csv",
+        "member_sha256": "3803d620cadc29e525a53ed8af2a614d55cbfe784e18277bc7f2f71f331cecd7",
+        "package": "Baxter_v1_2006_2011_2024_2025_Complete_Package.zip",
+        "package_sha256": "579931ba051067c5665eef930dab2f19c095ff014252a8c3f4c5c5b4b5086e71"
+      }
+    },
+    "teams": 118
+  },
+  "diagnostics": {
+    "blowout_sensitivity": {
+      "binding_threshold_points": 35.0,
+      "residual_binding_rate": 0.06845637583892618,
+      "residuals_above_threshold": 51
+    },
+    "home_field_consistency": {
+      "control_corpus_empirical_home_margin_points": 0.5663841807909604,
+      "control_corpus_implied_home_advantage_points": -1.0822644678576883,
+      "control_corpus_neutral_margin_points": 1.6486486486486487,
+      "governed_hfa_points": 3.5,
+      "governed_hfa_ruling": "R2-HFA-3P5",
+      "hfa_estimated_here": false,
+      "note": "The governed 3.5 is LOCKED by ruling R2-HFA-3P5 and is applied, never fitted. The control corpus carries almost no home-field effect of its own, which is a property of a synthetically generated season and not evidence about football. It is reported as a witness quantity and is the clearest single reason this corpus cannot validate the governed HFA."
+    },
+    "overtime_exposure": {
+      "admission_status": "overtime_periods still requires an allowlist ruling",
+      "effect_on_holdout_rms_points": -0.06803380664196723,
+      "overtime_games": 12
+    },
+    "residual_dispersion": {
+      "holdout_centred_sd_points": 16.741085879301288,
+      "holdout_excluding_overtime_rms_points": 16.8144664385192,
+      "holdout_mean_points": -0.42314238249266334,
+      "holdout_postseason_rms_points": 16.123527941633625,
+      "holdout_regular_season_rms_points": 17.036004093508293,
+      "holdout_rms_points": 16.746432631877234
+    },
+    "unconditional_margin_dispersion": {
+      "control_corpus_signed_margin_sd_points": 27.79390831781846,
+      "is_game_sd_points": false,
+      "why_not": "Var(actual) = Var(expected) + Var(residual) + 2*Cov. An unbiased pregame predictor that explains any strength difference leaves Var(residual) below Var(actual), so the unconditional spread bounds game_sd_points from above and locates nothing. game_sd_points is the residual dispersion under the selected model, and it is measured as such."
+    },
+    "weekly_movement_distribution": {
+      "max_applied_points": 9.282520507619354,
+      "median_applied_points": 1.4034278222411851,
+      "movement_cap_binding_rate": 0.014689265536723164,
+      "movement_cap_bindings": 26,
+      "p90_applied_points": 3.9281709258884367,
+      "p95_uncapped_points": 7.024031358140426,
+      "p99_uncapped_points": 10.5,
+      "updates": 1770
+    }
+  },
+  "expected_margin": {
+    "consumes_calibration_coefficients": false,
+    "formula": "expected_subject_margin = subject_strength_points - opponent_strength_points + subject_oriented_venue_adjustment, where the venue adjustment is +hfa_baseline_points * home_hfa_modifier at HOME, its negation at AWAY, and exactly 0.0 at NEUTRAL",
+    "formula_id": "V3-EXPECTED-MARGIN-001",
+    "free_parameters": [],
+    "hfa_estimated": false,
+    "hfa_points": 3.5,
+    "hfa_ruling": "R2-HFA-3P5",
+    "neutral_venue_adjustment": 0.0,
+    "p_to_strength_transform_used": false,
+    "reference_hfa_used": false,
+    "source": "ncaaf_engine.simulation.dynamic_weekly_mc_v3.game.simulate_game",
+    "why_not": "Both are Elo-domain SOR-B items. Neither is read by game.simulate_game or by any point-domain code path, so neither is required and neither is resurrected."
+  },
+  "experiment": {
+    "candidate_values": {
+      "blowout_treatment": {
+        "cap_points": 35.0,
+        "exponent": null,
+        "mode": "cap_margin",
+        "threshold_points": null
+      },
+      "game_sd_points": 16.75,
+      "recent_form_weights": [
+        1.0,
+        0.7,
+        0.49,
+        0.343,
+        0.2401,
+        0.16807
+      ],
+      "sample_size_regularization": {
+        "mode": "none",
+        "prior_games": 0.0
+      },
+      "weekly_movement_cap_points": 10.0,
+      "weekly_performance_residual_coefficient": 0.3
+    },
+    "configuration_version": "V3-INTERNAL-SHADOW-MVP-2026-08-22-R1-001",
+    "dataset_id": "V3_MVP_SYNTHETIC_CONTROL_OBSERVATION_SET_2025",
+    "dataset_sha256": "2200a518de5b9d950495727f7f94fbc04da4f555fd713d54d196de06019c5761",
+    "experiment_id": "V3-MVP-CONTROL-EXPERIMENT-R1",
+    "metrics": {
+      "holdout_residual_centred_sd_points": 16.741085879301288,
+      "holdout_residual_mean_points": -0.42314238249266334,
+      "out_of_sample_baxter_rating_rmse": 16.746432631877234
+    },
+    "model_version": "3.0.0-internal-shadow-mvp",
+    "objective_id": "R2-CAL-PRIMARY",
+    "regime_id": "V3-MVP-CONTROL-R1",
+    "run_timestamp": "2026-08-22",
+    "seed": 0,
+    "split": "holdout",
+    "status": "EXPERIMENTAL_RESULT_NOT_PROMOTED",
+    "v2_1_control_comparison": {
+      "compared": false,
+      "reason": "The V2.1 static control workbook is 10,000 simulated seasons of a different universe. It is not an observation set and is not a control for this corpus."
+    }
+  },
+  "folds": [
+    {
+      "control_points_per_sd": 9.991112269851516,
+      "fitted_on_stages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "observations": 98,
+      "out_of_sample_baxter_rating_rmse": 16.390762963537412,
+      "window_stages": [
+        7,
+        8
+      ]
+    },
+    {
+      "control_points_per_sd": 10.046368962222704,
+      "fitted_on_stages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "observations": 101,
+      "out_of_sample_baxter_rating_rmse": 15.917665243424446,
+      "window_stages": [
+        9,
+        10
+      ]
+    },
+    {
+      "control_points_per_sd": 10.676851572074277,
+      "fitted_on_stages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "observations": 92,
+      "out_of_sample_baxter_rating_rmse": 14.99776948942439,
+      "window_stages": [
+        11,
+        12
+      ]
+    }
+  ],
+  "game_sd": {
+    "estimand": "residual dispersion under the selected expected-margin/update model",
+    "legacy_harness_band": [
+      16.0,
+      18.0
+    ],
+    "legacy_recorded_value": 20.2,
+    "legacy_recorded_value_promoted": false,
+    "measured_holdout_rms_points": 16.746432631877234,
+    "selected_points": 16.75,
+    "selected_within_legacy_band": true,
+    "unconditional_signed_margin_sd_not_used": true
+  },
+  "governance": {
+    "calibration_evidence": "SYNTHETIC_CONTROL_CALIBRATED",
+    "control_strength_domain": "V3_UNIFIED_NEUTRAL_FIELD_POINTS__CONTROL_POPULATION_2025",
+    "evidence_domain": "GOVERNED_SYNTHETIC_CONTROL",
+    "expected_margin_formula": "expected_subject_margin = subject_strength_points - opponent_strength_points + subject_oriented_venue_adjustment, where the venue adjustment is +hfa_baseline_points * home_hfa_modifier at HOME, its negation at AWAY, and exactly 0.0 at NEUTRAL",
+    "expected_margin_formula_id": "V3-EXPECTED-MARGIN-001",
+    "hfa_points": 3.5,
+    "hfa_ruling": "R2-HFA-3P5",
+    "market_or_public_money_inputs_used": false,
+    "non_value_bearing_guarantees": [
+      "NO_MARKET_ORDER",
+      "NO_BET_PLACEMENT",
+      "NO_VALUE_BEARING_COMMAND",
+      "NO_PRODUCTION_STATE_MUTATION",
+      "NO_DEPLOYMENT"
+    ],
+    "primary_objective": "out_of_sample_baxter_rating_rmse",
+    "primary_objective_ruling": "R2-CAL-OBJECTIVE",
+    "real_world_validation": "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED",
+    "rulings": [
+      "R-V3-MVP-CONTROL-CORPUS-01",
+      "R-V3-POST-MVP-REAL-VALIDATION-01"
+    ],
+    "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP",
+    "split_assignment": "TEMPORAL_STAGE_BLOCKED",
+    "strength_domain": "V3_UNIFIED_NEUTRAL_FIELD_POINTS",
+    "temporal_control_limitation": "SINGLE_SEASON_CONTROL__INTER_SEASON_OUT_OF_SAMPLE_NOT_ACHIEVABLE",
+    "witness_composite_authorised": false,
+    "witnesses_reported_independently": [
+      "colley_matrix",
+      "srs"
+    ]
+  },
+  "identifiability": {
+    "cap_versus_coefficient": {
+      "separately_identified": true,
+      "why": "The cap changes only the tail of the update distribution and binds on a measured minority of weekly updates; the coefficient changes every update. The sensitivity table shows the two curves have different shapes \u2014 the coefficient has an interior minimum in both directions, the cap degrades sharply from below and plateaus above."
+    },
+    "coefficient_versus_sample_size_shrink": {
+      "disposition": "Both terms multiply the same weekly delta, so raising prior_games is compensated by raising the coefficient. The objective prefers the no-shrink end and the ridge is reported rather than resolved by fiat.",
+      "ridge": [
+        {
+          "best_coefficient": 0.3,
+          "prior_games": 0.0,
+          "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456
+        },
+        {
+          "best_coefficient": 0.32,
+          "prior_games": 0.5,
+          "validation_out_of_sample_baxter_rating_rmse": 15.560590844642803
+        },
+        {
+          "best_coefficient": 0.36,
+          "prior_games": 1.0,
+          "validation_out_of_sample_baxter_rating_rmse": 15.602297918522828
+        },
+        {
+          "best_coefficient": 0.4,
+          "prior_games": 2.0,
+          "validation_out_of_sample_baxter_rating_rmse": 15.668995296361084
+        }
+      ],
+      "separately_identified": false,
+      "shape": "SHALLOW_RIDGE"
+    },
+    "game_sd_separated_from_unconditional_dispersion": true,
+    "recent_form_degeneracy": {
+      "degenerate": false,
+      "why": "A one-term window and a flat window are both scored in the sensitivity table and both are materially worse than the selected decay, so the weight vector is doing work rather than being absorbed into the coefficient."
+    },
+    "scale_versus_coefficient": {
+      "separately_identified": true,
+      "why": "The confounding recorded by the prior expected-margin lane needs both the axis scale and the residual coefficient to float. Here the axis scale is fitted against observed margins in football points with the governed HFA held fixed at 3.5, so the units are pinned by the data before any coefficient is searched. Scaling the axis by k no longer leaves predictions unchanged, because the venue term does not scale with it."
+    }
+  },
+  "limitations": [
+    "The corpus declares its own scores simulated. Every parameter fitted against it measures the behaviour of a score generator, not of football. This is authorised for MVP_CONTROL_CALIBRATION_ONLY and establishes no real-world predictive validity.",
+    "One season. A training/validation/holdout partition across seasons is not constructible, so inter-season out-of-sample error is unmeasured and the holdout shares a season, a schedule and a score generator with the training block.",
+    "The control corpus carries almost no home-field effect. The governed HFA of 3.5 is applied as ruled and is not fitted, but this corpus cannot confirm it and a reader should not treat the residual behaviour as evidence about it.",
+    "The control corpus's unconditional margin dispersion is far wider than the dispersion recorded for real observed games in the prior evidence lane. game_sd_points estimated here inherits that width and is a control-scope quantity.",
+    "The corpus carries dates and no kickoff instants. Ordering within a stage comes from the source's own game sequence; no kickoff time was manufactured.",
+    "Games whose participants carry no preceding-season rating are excluded rather than seeded with an invented value. The exclusions are listed by game and by reason.",
+    "game_type, overtime_periods, opponent_division and games_played_to_date remain outside the governed observation allowlist. They are reported as diagnostics and were not admitted as fitted fields.",
+    "The FCS point scale is not exercised by this corpus: the control season contains no FBS-versus-FCS game, so the adapter installed under R-V3-FCS-SCALE-01 is bound by ruling and tested structurally, not calibrated here."
+  ],
+  "metrics": {
+    "holdout": {
+      "mean_absolute_residual_points": 13.913689284145349,
+      "observations": 133.0,
+      "out_of_sample_baxter_rating_rmse": 16.746432631877234,
+      "residual_centred_sd_points": 16.741085879301288,
+      "residual_mean_points": -0.42314238249266334
+    },
+    "training": {
+      "mean_absolute_residual_points": 16.90309900650321,
+      "observations": 419.0,
+      "out_of_sample_baxter_rating_rmse": 21.467120438877938,
+      "residual_centred_sd_points": 21.136429684778722,
+      "residual_mean_points": -3.7534784024549652
+    },
+    "validation": {
+      "mean_absolute_residual_points": 12.40366167712332,
+      "observations": 193.0,
+      "out_of_sample_baxter_rating_rmse": 15.522553647310456,
+      "residual_centred_sd_points": 15.263867800252404,
+      "residual_mean_points": -2.8220580274064213
+    }
+  },
+  "objective": {
+    "composite_with_witnesses": false,
+    "direction": "minimize",
+    "market_or_public_money_inputs": false,
+    "operational_definition": "RMSE, over scored out-of-sample observations, of (rating[team] - rating[opponent] + venue term) against the observed team-relative margin, where ratings are the state the candidate regime produced from strictly prior stages.",
+    "operational_definition_status": "OPERATIONAL_DEFINITION_NOT_YET_RULED",
+    "primary_metric": "out_of_sample_baxter_rating_rmse",
+    "ruling": "R2-CAL-OBJECTIVE"
+  },
+  "promotion": {
+    "approval_token": "APPROVE_V3_CALIBRATION_PROMOTION::R-V3-MVP-CONTROL-CORPUS-01",
+    "bound_dataset_sha256": "2200a518de5b9d950495727f7f94fbc04da4f555fd713d54d196de06019c5761",
+    "bound_experiment_id": "V3-MVP-CONTROL-EXPERIMENT-R1",
+    "calibration_evidence": "SYNTHETIC_CONTROL_CALIBRATED",
+    "control_corpus_games": 745,
+    "control_corpus_sha256": "77bb6ecf48e805b62b8af238bbf7b3534330df0405b8a170e48bb5c234d532ba",
+    "control_points_per_sd": 10.046368962222704,
+    "evidence": {
+      "game_sd_points": 16.746432631877234,
+      "observations": 133,
+      "out_of_sample_baxter_rating_rmse": 16.746432631877234,
+      "split": "holdout"
+    },
+    "evidence_binding": "EVIDENCE_BOUND_TO_REGISTERED_DATASET_AND_EXPERIMENT",
+    "evidence_bound": true,
+    "evidence_domain": "GOVERNED_SYNTHETIC_CONTROL",
+    "justification": "",
+    "measured_primary_metric": 16.746432631877234,
+    "mvp_ruling": "R-V3-MVP-CONTROL-CORPUS-01",
+    "note": "Promotion authorized. Canonical config is still written by a human-reviewed change, not by this harness.",
+    "post_mvp_ruling": "R-V3-POST-MVP-REAL-VALIDATION-01",
+    "primary_metric": "out_of_sample_baxter_rating_rmse",
+    "promoted_values": {
+      "blowout_treatment": {
+        "cap_points": 35.0,
+        "exponent": null,
+        "mode": "cap_margin",
+        "threshold_points": null
+      },
+      "game_sd_points": 16.75,
+      "recent_form_weights": [
+        1.0,
+        0.7,
+        0.49,
+        0.343,
+        0.2401,
+        0.16807
+      ],
+      "sample_size_regularization": {
+        "mode": "none",
+        "prior_games": 0.0
+      },
+      "weekly_movement_cap_points": 10.0,
+      "weekly_performance_residual_coefficient": 0.3
+    },
+    "promotion_authority": "GOVERNED_CALIBRATION_EVIDENCE",
+    "real_world_validation": "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED",
+    "regime_id": "V3-MVP-CONTROL-R1",
+    "ruling": "R2-CAL-OBJECTIVE",
+    "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP",
+    "temporal_control_limitation": "SINGLE_SEASON_CONTROL__INTER_SEASON_OUT_OF_SAMPLE_NOT_ACHIEVABLE",
+    "witnesses_reported_independently": [
+      "colley_matrix",
+      "srs"
+    ],
+    "writes_canonical_config": false
+  },
+  "registered_dataset": {
+    "columns": [
+      "game_id",
+      "season",
+      "week",
+      "team",
+      "opponent",
+      "venue",
+      "pregame_team_rating",
+      "pregame_opponent_rating",
+      "expected_margin",
+      "actual_margin",
+      "game_result",
+      "source_provenance",
+      "observed_at",
+      "recorded_at",
+      "model_version",
+      "configuration_version",
+      "split"
+    ],
+    "dataset_id": "V3_MVP_SYNTHETIC_CONTROL_OBSERVATION_SET_2025",
+    "fields_still_awaiting_admission_ruling": [
+      "games_played_to_date",
+      "game_type",
+      "overtime_periods",
+      "opponent_division"
+    ],
+    "governed_allowlist_widened": false,
+    "path": "/home/user/mcR3_weekly_dynamic_synthlax/reference/dynamic_weekly_mc_v3/mvp_control/V3_MVP_CONTROL_OBSERVATIONS_R1.csv",
+    "rows": 1490,
+    "sha256": "2200a518de5b9d950495727f7f94fbc04da4f555fd713d54d196de06019c5761"
+  },
+  "selected_regime": {
+    "definitions": {
+      "blowout_treatment": {
+        "admissible_domain": "mode in (none, cap_margin, diminishing_returns); a diminishing-returns exponent must lie in (0, 1] or large margins would count for more, not less",
+        "definition": "Transformation applied to a single-game residual before it enters the weekly mean, naming a mode and its parameters.",
+        "interactions": "Shrinks the input the coefficient scales, so a harder treatment behaves partly like a smaller coefficient. Separated by the fact that it acts only on the tail of the residual distribution.",
+        "objective_contribution": "Treatments that bind hard clearly hurt; the two mild treatments that perform best are statistically indistinguishable from each other.",
+        "role": "Bounds the influence of an outsized result on a rating.",
+        "unit": "object; thresholds and caps in V3 football points",
+        "validation_behaviour": "Shallow optimum; the simpler one-parameter mechanism is taken on the tie."
+      },
+      "game_sd_points": {
+        "admissible_domain": "strictly positive",
+        "definition": "Standard deviation of the Normal draw game.simulate_game takes around its own deterministic expected margin.",
+        "interactions": "None with the other five for the primary criterion: it does not enter the expected margin, so it cannot be selected by margin RMSE. It governs win probabilities and therefore every downstream season probability.",
+        "objective_contribution": "None by construction. Estimated from residual dispersion rather than searched.",
+        "role": "The whole stochastic content of the season simulation. It converts a deterministic expected margin into a distribution of outcomes.",
+        "unit": "V3 football points",
+        "validation_behaviour": "Measured once on the holdout, and separately on the overtime-free and postseason subsets, so its stability is visible."
+      },
+      "recent_form_weights": {
+        "admissible_domain": "non-empty, non-negative vector with positive sum; searched over geometric decays of 1 to 10 terms and several explicit non-geometric shapes",
+        "definition": "Weights applied to a team's per-stage mean treated residuals, most recent first, renormalised over the stages that exist.",
+        "interactions": "Only the normalised shape matters, so overall magnitude is absorbed by the coefficient and is not separately identified \u2014 which is why the vector is normalised before use rather than fitted in level.",
+        "objective_contribution": "A single-term window and a flat window are both materially worse than the selected decay.",
+        "role": "Sets how much of a team's history a weekly update reflects.",
+        "unit": "dimensionless relative weights",
+        "validation_behaviour": "Improves to a plateau at six terms and flattens beyond it."
+      },
+      "sample_size_regularization": {
+        "admissible_domain": "mode in (none, games_played_shrink); prior_games non-negative",
+        "definition": "Shrinkage of the weekly delta toward zero while a team has played few games, naming a mode and a prior-game count.",
+        "interactions": "Confounded with weekly_performance_residual_coefficient \u2014 both scale the same delta \u2014 and redundant with the governed preseason prior-decay schedule, which already shrinks weeks 1 to 5 toward the opening state.",
+        "objective_contribution": "Every positive prior_games degraded the objective monotonically.",
+        "role": "Damps updates computed from thin early-season samples.",
+        "unit": "object; prior_games in games",
+        "validation_behaviour": "The no-shrink end of the ridge is selected and the ridge is reported."
+      },
+      "weekly_movement_cap_points": {
+        "admissible_domain": "strictly positive; searched over 2.0 to 20.0",
+        "definition": "Hard bound on the strength change any one stage may produce.",
+        "interactions": "Binds only the tail of the coefficient's output, so it constrains weekly_performance_residual_coefficient without being confounded with it.",
+        "objective_contribution": "Sharp from below, flat above once it stops binding.",
+        "role": "Stops one anomalous stage relocating a rating.",
+        "unit": "V3 football points",
+        "validation_behaviour": "Fold argmin at the selected value, still binding on a measured minority of updates rather than sitting on the non-binding plateau."
+      },
+      "weekly_performance_residual_coefficient": {
+        "admissible_domain": "strictly positive and finite; searched over 0.15 to 0.80",
+        "definition": "Multiplier converting a team's blended recent-form residual into a strength change for the stage just completed.",
+        "interactions": "Multiplies the same delta as sample_size_regularization, so the two trace a shallow ridge. Bounded above by weekly_movement_cap_points, which truncates the largest deltas it produces.",
+        "objective_contribution": "The strongest single axis: moving it to either end of the searched range costs several RMSE points.",
+        "role": "Sets how fast the model learns within a season.",
+        "unit": "dimensionless (points of strength per point of residual)",
+        "validation_behaviour": "Interior minimum on the single split and on the fold mean; curve smooth in both directions."
+      }
+    },
+    "rationale": {
+      "blowout_treatment": "Residual cap at 35 points. Within the governed candidate mechanisms this is the simpler of the two that perform equally: cap_margin at 35 scores 15.523 and diminishing_returns at (28, 0.7) scores 15.509, a gap of 0.014 RMSE, and the one-parameter treatment is preferred over the two-parameter one on that tie. Treating nothing costs 0.06 and capping harder costs much more \u2014 a 21-point cap costs 0.78 \u2014 and 35 binds on 6.9% of residuals, so the treatment is active rather than nominal.",
+      "game_sd_points": "Estimated, not searched. It is the out-of-sample residual dispersion of the selected model on the holdout, which is the quantity game.simulate_game draws around its own deterministic mean. It cannot be selected by the primary objective because it does not enter the expected margin at all.",
+      "recent_form_weights": "Geometric decay, ratio 0.7, over six weekly terms. Structure and length were both searched: a single-term window carries no memory and costs 1.35 RMSE points, flat six-term weights cost 0.45, and a faster 0.5 decay costs 0.30. Terms beyond the sixth move the fold mean by under 0.01, so six is the shortest window that reaches the plateau.",
+      "sample_size_regularization": "No additional games-played shrink. Every positive prior_games value degraded the objective monotonically \u2014 15.52 at none, 15.61 at 0.5, 15.77 at 1.0, 16.23 at 2.0 \u2014 and the axis is partially confounded with the residual coefficient: the best coefficient rises from 0.30 to 0.40 as prior_games rises from 0 to 2, tracing a shallow ridge rather than a second optimum. The mechanism is visible in the model: the governed preseason prior-decay schedule already shrinks weeks 1-5 toward the opening state, so a second early-sample shrink is redundant. The parsimonious end of the ridge is taken and the confounding is reported rather than hidden by it.",
+      "weekly_movement_cap_points": "Identified sharply from below and only weakly from above: validation RMSE is 17.55 at a 3-point cap and 15.83 at 5, then flattens to 15.52 at the selected 10 and 15.517 at 15 and 20, where the cap has stopped binding altogether. The last 0.006 RMSE is bought by switching the parameter off, which is the degenerate solution the plateau admits; 10.0 sits at the knee, is interior to the searched range, and still binds on 1.5% of weekly updates, so it remains a real tail bound.",
+      "weekly_performance_residual_coefficient": "Interior minimum of both the single temporal split and the mean of the three rolling-origin folds. The objective rises in both directions: validation RMSE goes from 15.52 at the selected 0.30 to 16.48 at 0.20 and 16.18 at 0.40, and to 17.9 and 17.4 at the ends of the searched range. The axis is identified, not flat."
+    },
+    "regime_id": "V3-MVP-CONTROL-R1",
+    "searched_ranges": {
+      "blowout_treatment": "none; cap_margin at 21/28/35/42; diminishing_returns at thresholds 21/28/35 with exponents 0.5 and 0.7",
+      "game_sd_points": "not searched \u2014 estimated from holdout residual dispersion",
+      "recent_form_weights": "geometric decay, 1 to 10 terms, ratio 0.4 to 1.0; plus explicit non-geometric shapes [3,2,1], [3,2,1,1], [4,2,1], [4,3,2,1], [5,3,2,1,1]",
+      "sample_size_regularization": "none; games_played_shrink with prior_games 0.25 to 6.0",
+      "weekly_movement_cap_points": "2.0 to 20.0, plus an effectively unbounded 100.0 probe",
+      "weekly_performance_residual_coefficient": "0.15 to 0.80"
+    },
+    "values": {
+      "blowout_treatment": {
+        "cap_points": 35.0,
+        "exponent": null,
+        "mode": "cap_margin",
+        "threshold_points": null
+      },
+      "game_sd_points": 16.75,
+      "recent_form_weights": [
+        1.0,
+        0.7,
+        0.49,
+        0.343,
+        0.2401,
+        0.16807
+      ],
+      "sample_size_regularization": {
+        "mode": "none",
+        "prior_games": 0.0
+      },
+      "weekly_movement_cap_points": 10.0,
+      "weekly_performance_residual_coefficient": 0.3
+    }
+  },
+  "sensitivity": {
+    "blowout_treatment": [
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.586854499881952,
+        "value": {
+          "mode": "none"
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.304157180116913,
+        "value": {
+          "cap_points": 21.0,
+          "mode": "cap_margin"
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.624505912804322,
+        "value": {
+          "cap_points": 28.0,
+          "mode": "cap_margin"
+        }
+      },
+      {
+        "selected": true,
+        "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456,
+        "value": {
+          "cap_points": 35.0,
+          "mode": "cap_margin"
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.563307858541203,
+        "value": {
+          "cap_points": 42.0,
+          "mode": "cap_margin"
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.509012272247682,
+        "value": {
+          "exponent": 0.7,
+          "mode": "diminishing_returns",
+          "threshold_points": 28.0
+        }
+      }
+    ],
+    "recent_form_weights": [
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.871163688877463,
+        "value": [
+          1.0
+        ]
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.3455735663342,
+        "value": [
+          1.0,
+          0.7
+        ]
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.982230368347466,
+        "value": [
+          1.0,
+          0.7,
+          0.49
+        ]
+      },
+      {
+        "selected": true,
+        "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456,
+        "value": [
+          1.0,
+          0.7,
+          0.49,
+          0.343,
+          0.2401,
+          0.16807
+        ]
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.971287050967515,
+        "value": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.826344092202262,
+        "value": [
+          1.0,
+          0.5,
+          0.25,
+          0.125,
+          0.0625,
+          0.03125
+        ]
+      }
+    ],
+    "sample_size_regularization": [
+      {
+        "selected": true,
+        "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456,
+        "value": {
+          "mode": "none",
+          "prior_games": 0.0
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.606442618631787,
+        "value": {
+          "mode": "games_played_shrink",
+          "prior_games": 0.5
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.773143922971322,
+        "value": {
+          "mode": "games_played_shrink",
+          "prior_games": 1.0
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.227027867634316,
+        "value": {
+          "mode": "games_played_shrink",
+          "prior_games": 2.0
+        }
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 17.27878144818885,
+        "value": {
+          "mode": "games_played_shrink",
+          "prior_games": 4.0
+        }
+      }
+    ],
+    "weekly_movement_cap_points": [
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 17.55026449925587,
+        "value": 3.0
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.834020273932529,
+        "value": 5.0
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.582170877891212,
+        "value": 7.0
+      },
+      {
+        "selected": true,
+        "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456,
+        "value": 10.0
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.516864182521735,
+        "value": 15.0
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.516864182521735,
+        "value": 20.0
+      }
+    ],
+    "weekly_performance_residual_coefficient": [
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 17.940076606327366,
+        "value": 0.15
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.48484755817718,
+        "value": 0.2
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.72662995814286,
+        "value": 0.25
+      },
+      {
+        "selected": true,
+        "validation_out_of_sample_baxter_rating_rmse": 15.522553647310456,
+        "value": 0.3
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 15.724101302701772,
+        "value": 0.35
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 16.17811454873467,
+        "value": 0.4
+      },
+      {
+        "selected": false,
+        "validation_out_of_sample_baxter_rating_rmse": 17.35275822634455,
+        "value": 0.5
+      }
+    ]
+  },
+  "splits": {
+    "assignment": "TEMPORAL_STAGE_BLOCKED",
+    "holdout_stages": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "limitation": "SINGLE_SEASON_CONTROL__INTER_SEASON_OUT_OF_SAMPLE_NOT_ACHIEVABLE",
+    "limitation_detail": "The authorised corpus is one season, so a training/validation/holdout partition across seasons is not constructible and inter-season out-of-sample error is not measured. Blocks are whole stages in strictly increasing date order, which is the strongest leak-resistant design this corpus supports.",
+    "random_assignment_used": false,
+    "selection_surface": "validation folds only",
+    "temporal_integrity": {
+      "assignment": "TEMPORAL_ONLY",
+      "boundaries": {
+        "holdout": [
+          "2025-11-22",
+          "2026-01-19"
+        ],
+        "training": [
+          "2025-08-30",
+          "2025-10-18"
+        ],
+        "validation": [
+          "2025-10-25",
+          "2025-11-15"
+        ]
+      },
+      "leak_free": true,
+      "splits": {
+        "holdout": 133,
+        "training": 419,
+        "validation": 193
+      }
+    },
+    "training_stages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "validation_stages": [
+      9,
+      10,
+      11,
+      12
+    ]
+  },
+  "strength_axis": {
+    "canonical_axis_modified": false,
+    "canonical_domain": "V3_UNIFIED_NEUTRAL_FIELD_POINTS",
+    "canonical_points_per_sd": 14.0,
+    "canonical_z_population": 121,
+    "control_domain": "V3_UNIFIED_NEUTRAL_FIELD_POINTS__CONTROL_POPULATION_2025",
+    "control_points_per_sd": 10.046368962222704,
+    "control_points_per_sd_fitted_on": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "not_a_recovered_historical_scale": true,
+    "resolution": "PROJECTED_ONTO_GOVERNED_TARGET_DOMAIN_WITH_EMPIRICALLY_IDENTIFIED_CONTROL_SCALE"
+  },
+  "walk_forward": {
+    "control_season_final_ratings_used_as_feature": false,
+    "first_promoted_rerating_after_week": 2,
+    "opening_state_source": "Baxter_Ratings_2024.csv, the season-final rating layer of the season preceding the control season",
+    "opening_weeks_on_preseason_strength": [
+      1,
+      2
+    ],
+    "prior_decay": {
+      "0": 1.0,
+      "1": 0.8,
+      "2": 0.6,
+      "3": 0.4,
+      "4": 0.2,
+      "5": 0.0
+    },
+    "prior_decay_calibrated": false,
+    "strength_frozen_after_stage": 15,
+    "why_leak_free": "Every input to a game's prediction is either the preceding season's rating layer or a completed game of an earlier stage of the control season. No control-season result, final rating, standing or committee outcome reaches its own predictor."
+  },
+  "witnesses": {
+    "colley_matrix": {
+      "blended_into_primary_criterion": false,
+      "margin_information_used": false,
+      "model": "COLLEY_MATRIX",
+      "rank_correlation_with_selected_control_ratings": 0.8360449786172618,
+      "role": "INDEPENDENT_WITNESS",
+      "teams": 118
+    },
+    "external_rating_layer_2025": {
+      "model": "BAXTER_RATINGS_V1_2025_SEASON_FINAL",
+      "rank_correlation_with_selected_control_ratings": 0.890621176762752,
+      "role": "EXTERNAL_WITNESS_ONLY",
+      "used_as_pregame_feature": false
+    },
+    "srs": {
+      "blended_into_primary_criterion": false,
+      "canonical_validation_status": "NOT_VALIDATED_AGAINST_CANONICAL_ANCHORS",
+      "margin_cap_points": 24.0,
+      "model": "SRS",
+      "rank_correlation_with_selected_control_ratings": 0.873398120656346,
+      "role": "CALIBRATION_VALIDATION_WITNESS",
+      "teams": 118
+    }
+  }
+}

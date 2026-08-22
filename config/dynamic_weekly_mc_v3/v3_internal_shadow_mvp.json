@@ -1,0 +1,75 @@
+{
+  "model_name": "SYTHALAX_DYNAMIC_WEEKLY_MC_V3_INTERNAL_SHADOW_MVP",
+  "model_version": "3.0.0-internal-shadow-mvp",
+  "configuration_version": "V3-INTERNAL-SHADOW-MVP-2026-08-22-R1-001",
+  "paths": 10000,
+  "base_seed": 20260803,
+  "weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "first_promoted_rerating_after_week": 2,
+  "prior_decay": {
+    "0": 1.0,
+    "1": 0.8,
+    "2": 0.6,
+    "3": 0.4,
+    "4": 0.2,
+    "5": 0.0
+  },
+  "hfa_baseline_points": 3.5,
+  "freeze_strength_after_selection": true,
+  "write_path_level_parquet": true,
+  "fcs_translation_policy": "FIXED_ELO_1250",
+  "committee_tiebreak_strength_source": null,
+  "committee_tiebreak_policy": "DETERMINISTIC_COMMITTEE_TIEBREAK_CHAIN_R2",
+  "calibration": {
+    "weekly_performance_residual_coefficient": 0.3,
+    "weekly_movement_cap_points": 10.0,
+    "recent_form_weights": [
+      1.0,
+      0.7,
+      0.49,
+      0.343,
+      0.2401,
+      0.16807
+    ],
+    "blowout_treatment": {
+      "mode": "cap_margin",
+      "cap_points": 35.0,
+      "threshold_points": null,
+      "exponent": null
+    },
+    "game_sd_points": 16.75,
+    "sample_size_regularization": {
+      "mode": "none",
+      "prior_games": 0.0
+    }
+  },
+  "inputs": {
+    "canonical_master_md": "../../reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+    "unified_preseason_ratings_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+    "schedule_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026_FBS_Schedule_LOCKED_v5.xlsx",
+    "model_parameters_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/Model_Parameters_v2_5_APPROVED.xlsx",
+    "bracket_regime_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026 Bracket Regime LOCKED.xlsx",
+    "playoff_calendar_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026 Playoff Calendar OFFICIAL 2.xlsx",
+    "fcs_reconciled_master_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx",
+    "v2_1_control_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx",
+    "aac_divisions_csv": "governed/aac_divisions_2026_R2_SUCCESSOR.csv",
+    "board_of_record_xlsx": "../../reference/dynamic_weekly_mc_v3/inputs/2026_Board_I-K_CANONICAL_APPROVED_R1_REISSUE.xlsx"
+  }
+}

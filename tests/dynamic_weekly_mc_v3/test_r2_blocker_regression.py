@@ -54,7 +54,11 @@ def test_no_unrelated_blocker_disappeared(live_blockers):
 
 def test_every_retirement_is_claimed_by_a_ruling():
     claimed = rulings.retirable_blockers()
-    assert set(claimed) == set(br.R2_RETIRED_BLOCKERS | br.R3_RETIRED_BLOCKERS)
+    assert set(claimed) == set(
+        br.R2_RETIRED_BLOCKERS
+        | br.R3_RETIRED_BLOCKERS
+        | br.R5_INTERNAL_SHADOW_MVP_RETIRED
+    )
     for blocker, convergence_id in claimed.items():
         assert rulings.ruling(convergence_id).convergence_id == convergence_id
 
@@ -126,9 +130,24 @@ def test_v3_remains_experimental_and_no_output_is_produced(live_blockers):
 
 
 def test_every_ruling_is_recorded_with_its_provenance_class():
-    for ruling in rulings.ALL_RULINGS:
+    for ruling in rulings.R2_RULINGS + rulings.R3_RULINGS + rulings.R4_RULINGS:
         assert ruling.convergence_id.startswith(("R2-", "R3-", "R4-"))
         assert ruling.decision
         assert ruling.provenance in ("FACT", "DERIVED")
-        # No Chairman ruling IDs were supplied; none is invented.
+        # No Chairman ruling IDs were supplied for R2-R4; none is invented.
         assert ruling.chairman_ruling_id is None
+
+
+def test_the_r5_rulings_carry_the_chairman_identifiers_that_were_issued():
+    """R5 is the round where real ruling IDs arrived, so they are recorded.
+
+    The R2-R4 invariant above is unchanged and still holds: those rounds issued
+    no identifiers and none was invented for them. This is the complement, not a
+    relaxation — an R5 entry whose id went missing would fail here.
+    """
+    for ruling in rulings.R5_RULINGS:
+        assert ruling.convergence_id.startswith("R-V3-")
+        assert ruling.chairman_ruling_id == ruling.convergence_id
+        assert ruling.decision
+        assert ruling.provenance in ("FACT", "DERIVED")
+        assert ruling.instruction == rulings.R5_INSTRUCTION

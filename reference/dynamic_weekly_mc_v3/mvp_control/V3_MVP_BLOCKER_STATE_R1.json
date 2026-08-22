@@ -1,0 +1,123 @@
+{
+  "formal_global_scope_blockers": {
+    "live": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "live_count": 8,
+    "unchanged_by_r5": true,
+    "why": "Global closure means a real-world calibration. Ruling R-V3-POST-MVP-REAL-VALIDATION-01 keeps that requirement in force, so the formal register above is not edited and the global count does not move."
+  },
+  "measured_after": [],
+  "measured_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "measured_matches_register": true,
+  "measured_remaining": [],
+  "measured_retired": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "real_world_validation": "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED",
+  "register_delta": {
+    "after": [],
+    "after_count": 0,
+    "before": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "before_count": 8,
+    "carried_forward": {
+      "POST_MVP_REAL_WORLD_VALIDATION_REQUIRED": "Ruling R-V3-POST-MVP-REAL-VALIDATION-01. Real historical calibration and validation remain required; the MVP does not discharge them and the eight formal global blockers stay live for that scope."
+    },
+    "difference": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "formal_global_scope": {
+      "live": [
+        "calibration.blowout_treatment",
+        "calibration.game_sd_points",
+        "calibration.recent_form_weights",
+        "calibration.sample_size_regularization",
+        "calibration.weekly_movement_cap_points",
+        "calibration.weekly_performance_residual_coefficient",
+        "governance.GAME_SD_CALIBRATION_OPEN",
+        "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+      ],
+      "live_count": 8,
+      "unchanged_by_r5": true,
+      "why": "Global closure means a real-world calibration. Ruling R-V3-POST-MVP-REAL-VALIDATION-01 keeps that requirement in force, so the formal register above is not edited and the global count does not move."
+    },
+    "opened": [],
+    "retired": [
+      "calibration.blowout_treatment",
+      "calibration.game_sd_points",
+      "calibration.recent_form_weights",
+      "calibration.sample_size_regularization",
+      "calibration.weekly_movement_cap_points",
+      "calibration.weekly_performance_residual_coefficient",
+      "governance.GAME_SD_CALIBRATION_OPEN",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+    ],
+    "retired_count": 8,
+    "retirement_conditions": {
+      "calibration.blowout_treatment": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "calibration.game_sd_points": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "calibration.recent_form_weights": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "calibration.sample_size_regularization": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "calibration.weekly_movement_cap_points": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "calibration.weekly_performance_residual_coefficient": "The canonical INTERNAL_SHADOW_MVP configuration carries a non-null value promoted through calibration.promote_regime_r2 under GOVERNED_CALIBRATION_EVIDENCE, bound to a registered dataset and an experiment measured on the holdout split.",
+      "governance.GAME_SD_CALIBRATION_OPEN": "mvp_control.game_sd_calibration_governed() is true, which requires a promotion record installed through mvp_control.install_calibration_promotion carrying byte-bound holdout evidence and a measured game_sd_points. ENG-CAL-MARGIN itself is left OPEN in the unedited register.",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "fcs.fcs_unified_scale_governed() is true, which requires an adapter installed through fcs.register_fcs_scale_adapter with a recognised derivation, complete issued provenance and the ruling's approval token."
+    },
+    "retirement_reasons": {
+      "calibration.blowout_treatment": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "calibration.game_sd_points": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "calibration.recent_form_weights": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "calibration.sample_size_regularization": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "calibration.weekly_movement_cap_points": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "calibration.weekly_performance_residual_coefficient": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "governance.GAME_SD_CALIBRATION_OPEN": "DIRECT_CHAIRMAN_AUTHORITY__CONTROL_CALIBRATED_UNDER_R-V3-MVP-CONTROL-CORPUS-01",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "DIRECT_CHAIRMAN_AUTHORITY__R-V3-FCS-SCALE-01"
+    },
+    "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP",
+    "set_equality_before_equals_retired_plus_after": true
+  },
+  "rulings": [
+    "R-V3-FCS-SCALE-01",
+    "R-V3-MVP-CONTROL-CORPUS-01"
+  ],
+  "scope": "INTERNAL_SHADOW_TEST_ONLY_MVP"
+}
