@@ -26,6 +26,19 @@ Three separations are load-bearing and are the reason this module exists at all:
     allowlist, because "the calibration needed it" is precisely the argument by
     which an unreviewed signal enters a governed model.
 
+Ruling R6-CAL-TEMPORAL-ORDER reissues one clause of this contract as revision
+R1. ``event_time`` was unconditionally required, and the governed historical
+corpus does not carry one for every observation, so the clause as written left a
+supplier two options: withhold real evidence, or generate a kickoff time the
+source never recorded. The second is the worse failure, because a fabricated
+instant is indistinguishable from a measured one the moment it is written down.
+So ``event_time`` becomes conditional -- required wherever a timestamp exists,
+null and never synthesised where one does not -- and the causal-order guarantee
+it carried is re-established at a declared weaker granularity by
+:data:`TEMPORAL_ORDER_POLICY`. That is a substitution, not a relaxation: an
+observation admitted without ``event_time`` must carry ordering provenance a
+reviewer can re-open and re-hash.
+
 Nothing here promotes a value, and nothing here mounts a dataset.
 """
 
@@ -42,6 +55,19 @@ from .errors import GovernanceBlock
 CONTRACT_ID = "V3-CALIBRATION-DATA-CONTRACT-001"
 CONTRACT_STATUS = "SPECIFICATION_ONLY_NO_DATASET_MOUNTED"
 
+#: The contract identity is stable; its revision is not. R1 narrows exactly one
+#: clause -- the unconditional requirement for event_time -- and replaces it with
+#: the governed temporal-order successor. Nothing else in the contract moved.
+CONTRACT_REVISION = "R1-TEMPORAL-ORDER-SUCCESSOR"
+CONTRACT_REVISION_SUPERSEDES = (
+    "The first issue of this contract, in which event_time was unconditionally "
+    "required of every observation. That clause is superseded to exactly the extent "
+    "that a governed source recorded no kickoff timestamp. It is not relaxed: such "
+    "an observation must keep event_time null and carry the temporal_order provenance "
+    "ruling R6-CAL-TEMPORAL-ORDER requires. The first issue is preserved "
+    "in the repository history and was not rewritten."
+)
+
 
 @dataclass(frozen=True)
 class ContractField:
@@ -55,6 +81,10 @@ class ContractField:
     needed_by: tuple[str, ...]
     #: What makes a value of this field admissible evidence rather than a guess.
     provenance_requirement: str
+    #: Set where the field is required only under a stated condition. A field with
+    #: ``required=False`` and no condition would read as optional; every field here
+    #: that is not unconditionally required states the condition that makes it so.
+    conditional_requirement: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         payload = asdict(self)
@@ -77,6 +107,20 @@ _PREGAME = (
     "Must be the rating as it stood BEFORE kickoff, carrying its own as-of stamp. "
     "A post-hoc rating recomputed from the full season leaks the outcome into its "
     "own predictor and makes every out-of-sample number optimistic."
+)
+
+_TEMPORAL_SUCCESSOR = (
+    "REQUIRED wherever the governed source recorded a kickoff or event timestamp. "
+    "Where the source recorded none, this field MUST remain null and the observation "
+    "may instead be admitted on governed_temporal_order under ruling "
+    "R6-CAL-TEMPORAL-ORDER. It is not optional: the causal-order guarantee is "
+    "replaced by temporal_order_* provenance, never dropped."
+)
+_TEMPORAL_PROVENANCE = (
+    "REQUIRED for every observation admitted without an authentic event_time, under "
+    "ruling R6-CAL-TEMPORAL-ORDER. All four temporal_order_* fields are required "
+    "together; a partial set is refused, because a basis with no re-checkable source "
+    "establishes nothing."
 )
 
 #: The fields the six coefficients mathematically require, with the reason each
@@ -102,12 +146,58 @@ REQUIRED_CONTRACT_FIELDS: tuple[ContractField, ...] = (
         "Must be the week in which the game was PLAYED, not the week it was ingested.",
     ),
     ContractField(
-        "event_time", "iso8601", True,
-        "Kickoff instant. The only field that can order two games inside one week, "
-        "and therefore the only field that can prove a holdout game post-dates its "
-        "training data.",
+        "event_time", "iso8601|null", False,
+        "Kickoff instant, where the source recorded one. Authoritative wherever it "
+        "exists: it is the only field that can order two games inside a single day, "
+        "and where present it is what proves a holdout game post-dates its training "
+        "data.",
         ("all",),
-        _OBSERVED,
+        _OBSERVED + " A synthetic noon, midnight or other default time-of-day value is "
+        "never an observation and is refused at admission.",
+        conditional_requirement=_TEMPORAL_SUCCESSOR,
+    ),
+    ContractField(
+        "temporal_order_basis", f"enum[{'|'.join(cal.TEMPORAL_EVIDENCE_PRECEDENCE)}]", False,
+        "Which class of temporal evidence orders this observation. Precedence is "
+        "exactly EXACT_EVENT_TIME, EXACT_GAME_DATE, WEEK_STAGE_DATE, "
+        "GOVERNED_SOURCE_SEQUENCE, strongest first.",
+        ("all",),
+        "Must name the strongest basis the source actually supports and never a "
+        "stronger one. GOVERNED_SOURCE_SEQUENCE establishes relative causal order "
+        "only and is never serialized as an inferred kickoff timestamp.",
+        conditional_requirement=_TEMPORAL_PROVENANCE,
+    ),
+    ContractField(
+        "temporal_order_key", "named_fields_canonical_json", False,
+        "The ordering value, carried as named source-derived fields: any of "
+        f"{list(cal.TEMPORAL_ORDER_VALUE_FIELDS)}. Serialized as a self-describing "
+        "canonical JSON object. A bare YYYY-MM-DD is also accepted under "
+        "EXACT_GAME_DATE and a bare non-negative integer under "
+        "GOVERNED_SOURCE_SEQUENCE, because each of those directly is the evidence.",
+        ("all",),
+        "Every field must be one the governed source actually recorded. A positional "
+        "packed string is refused: no governed source states such a grammar, and "
+        "reading one would make an implementation convenience into a rule. "
+        "week_label and stage_label are verbatim provenance and are never parsed for "
+        "ordering, because the corpus carries several incompatible label sets. No "
+        "field may carry a time of day under any basis weaker than EXACT_EVENT_TIME.",
+        conditional_requirement=_TEMPORAL_PROVENANCE,
+    ),
+    ContractField(
+        "temporal_order_source", "string", False,
+        "The governed source the ordering was read from.",
+        ("all",),
+        "Must name a source a reviewer can re-open. An ordering claim whose origin "
+        "is unnamed is an assertion, not evidence.",
+        conditional_requirement=_TEMPORAL_PROVENANCE,
+    ),
+    ContractField(
+        "temporal_order_source_sha256", "sha256", False,
+        "SHA-256 of the exact source bytes the ordering was read from.",
+        ("all",),
+        "Must be a 64-character lowercase digest. An ordering claim against unpinned "
+        "bytes cannot be re-checked, so the order it asserts cannot be audited.",
+        conditional_requirement=_TEMPORAL_PROVENANCE,
     ),
     ContractField(
         "team", "canonical_team_id", True,
@@ -286,6 +376,133 @@ MINIMUM_VOLUME_REQUIREMENTS: dict[str, Any] = {
     ),
 }
 
+#: Temporal-order policy under ruling R6-CAL-TEMPORAL-ORDER.
+#:
+#: The governed corpus records no authentic time-of-day for a large part of its
+#: span, so the contract has to choose between two failures. Requiring event_time
+#: unconditionally pushes a supplier into generating a noon value that is
+#: indistinguishable from a measurement once written down. Making event_time
+#: simply optional drops the causal-order guarantee that makes the primary
+#: objective out-of-sample at all. This policy does neither: the guarantee is
+#: re-established at a weaker, declared granularity, bound to a source a reviewer
+#: can re-open and a digest they can re-check.
+TEMPORAL_ORDER_POLICY: dict[str, Any] = {
+    "ruling": cal.TEMPORAL_ORDER_RULING,
+    "chairman_ruling_id": cal.TEMPORAL_ORDER_RULING_ID,
+    "approval_token": cal.TEMPORAL_ORDER_APPROVAL_TOKEN,
+    "precedence": list(cal.TEMPORAL_EVIDENCE_PRECEDENCE),
+    "granularity": dict(cal.TEMPORAL_ORDER_GRANULARITY),
+    "event_time_authoritative_where_it_exists": True,
+    "event_time_globally_optional": False,
+    "event_time_when_source_recorded_none": "MUST_REMAIN_NULL",
+    "synthetic_time_of_day_permitted": False,
+    "synthetic_time_of_day_refusal_reason": (
+        "The historical source packages state that chronology was not invented. A "
+        "generated noon or midnight kickoff manufactures the evidence the source "
+        "declined to invent, and once serialized it cannot be told apart from a "
+        "measured instant by any reader downstream."
+    ),
+    "required_provenance_when_event_time_absent": list(
+        cal.TEMPORAL_ORDER_PROVENANCE_COLUMNS
+    ),
+    "partial_provenance_permitted": False,
+    "value_representation": "NAMED_FIELDS_CANONICAL_JSON",
+    "value_fields": list(cal.TEMPORAL_ORDER_VALUE_FIELDS),
+    "positional_packed_key_grammar_permitted": False,
+    "positional_packed_key_refusal_reason": (
+        "No governed source states a packed positional grammar, and several state "
+        "incompatible week and stage label sets. A format invented to make "
+        "serialization convenient would become a governance rule the Chairman never "
+        "issued, and it would force a supplier to supply fields the source never "
+        "recorded: the corpus holds week-ordered rows with no date at all, and "
+        "undated postseason rows carrying only a stage label and a sequence."
+    ),
+    "stage_and_week_labels_parsed_for_ordering": False,
+    "stage_and_week_label_reason": (
+        "The corpus carries at least three incompatible label sets across its span. "
+        "Ranking them would mean issuing a precedence no source states, so labels are "
+        "carried verbatim as provenance and only a source-supplied week ordinal orders "
+        "anything."
+    ),
+    "unresolved_date_treatment": "LEFT_ABSENT_NEVER_APPROXIMATED",
+    "unresolved_week_treatment": "FALLS_BACK_TO_GOVERNED_SOURCE_SEQUENCE",
+    "anti_fabrication_is_structural": True,
+    "structural_anti_fabrication_rules": list(
+        cal.temporal_order_governance_as_dict()["structural_anti_fabrication_rules"]
+    ),
+    "time_of_day_fill_detector_is_diagnostic_only": (
+        cal.TIME_OF_DAY_FILL_DETECTOR_IS_DIAGNOSTIC_ONLY
+    ),
+    "executable_use_requires_admission": True,
+    "promotion_binding_requires_admission_receipt": True,
+    "promotion_binding_refusal_reason": (
+        "A calibration result whose observations never passed the successor temporal "
+        "contract is not promotion-eligible evidence. Binding refuses rather than "
+        "returning a bound record with a caveat attached, because a caveat inside a "
+        "promotion-eligible record is read by nobody at the moment it matters. The "
+        "unbound path is preserved and is explicitly not promotion-eligible."
+    ),
+    "caller_asserted_admission_permitted": False,
+    "admission_assertion_keys_refused": list(cal.ADMISSION_ASSERTION_KEYS),
+    "digest_continuity_checked_at_binding": True,
+    "executable_chain": list(
+        cal.temporal_order_governance_as_dict()["executable_chain"]
+    ),
+    "registration_is_not_admission": (
+        "calibration.register_dataset establishes identity, digest, record count, "
+        "shape and column admissibility and reads no observation values. It is not "
+        "admission, and calibration.require_admitted_observations refuses a registered "
+        "dataset handed to a consumer in place of an admitted set."
+    ),
+    "governed_source_sequence_semantics": "RELATIVE_CAUSAL_ORDER_ONLY",
+    "governed_source_sequence_serialized_as_timestamp": False,
+    "cross_domain_ordering_proof": "SEASON_ONLY",
+    "cross_domain_ordering_reason": (
+        "A source-row ordinal and a calendar date are not comparable quantities. "
+        "Where two splits hold same-season observations ordered in different domains, "
+        "the boundary is unprovable and is refused rather than assumed."
+    ),
+    "same_day_ordering_under_day_granularity": "NOT_PROVEN",
+    "missing_chronology_may_be_fabricated_to_pass_admission": False,
+    "corpus_evidence": (
+        "The staged calibration evidence census found zero authentic time-of-day "
+        "values. 2006 and 2007 rely on canonical source-row sequence; later "
+        "historical seasons preserve date/week/source-order evidence as available; "
+        "modern 2024/2025 walk-forward evidence uses date/stage ordering."
+    ),
+    "observed_source_shapes": {
+        "2006-2011": (
+            "A per-season chronology sequence on every row; a week that is sometimes "
+            "an ordinal and sometimes a label such as P1; a game date present on some "
+            "rows and unresolved on others; and a quality flag recording which of "
+            "those the source actually resolved."
+        ),
+        "2024-2025": (
+            "A game date, an event order and a global sequence on regular-season "
+            "rows; week labels spanning 0-15 and PS; phase labels including CCG, "
+            "Bowl, QF and R1; and undated postseason rows carrying a stage label and "
+            "a sequence and no date at all."
+        ),
+        "time_of_day_columns_found": 0,
+    },
+    "row_admission_gate": "calibration.admit_temporal_order",
+    "split_gate": "calibration.require_governed_temporal_split_integrity",
+    "exact_event_time_gate": "calibration.require_temporal_split_integrity",
+    "admission_gate": cal.ADMISSION_GATE,
+    "executable_use_guard": "calibration.require_admitted_observations",
+    "executable_invariant": (
+        "registered source -> digest verified -> rows temporally admitted -> partition "
+        "proven forward-only -> calibration/scoring result -> promotion evidence binding"
+    ),
+    "promotion_binding_gate": "calibration.bind_promotion_evidence",
+    "admission_receipt_type": "calibration.AdmittedObservationSet",
+    "admission_receipt_boundary": (
+        "The receipt cannot be constructed by the public API. The boundary is a Python "
+        "one: it prevents a supported or accidental bypass, and it is not treated as a "
+        "hostile-code security boundary."
+    ),
+}
+
 #: Split policy. Stated separately from the field list because the split rule is
 #: what makes the primary objective out-of-sample rather than in-sample.
 SPLIT_POLICY: dict[str, Any] = {
@@ -298,10 +515,24 @@ SPLIT_POLICY: dict[str, Any] = {
         "measured out-of-sample error is not out-of-sample."
     ),
     "ordering_rule": (
-        "max(event_time) of training < min(event_time) of validation, and "
-        "max(event_time) of validation < min(event_time) of holdout."
+        "max(governed temporal order) of training < min of validation, and max of "
+        "validation < min of holdout, proven on the observations own ordering "
+        "evidence. Where both sides of a boundary carry an authentic event_time the "
+        "comparison is made on the instants. Where either side does not, it is made "
+        "at the coarser granularity actually available and same-day ordering is not "
+        "claimed. Observations in different ordering domains are separable only by "
+        "season."
     ),
-    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "ordering_rule_exact_event_time_datasets": (
+        "max(event_time) of training < min(event_time) of validation, and "
+        "max(event_time) of validation < min(event_time) of holdout. Unchanged, and "
+        "still enforced by calibration.require_temporal_split_integrity."
+    ),
+    "temporal_evidence_precedence": list(cal.TEMPORAL_EVIDENCE_PRECEDENCE),
+    "refused_assignment_methods": list(cal.REFUSED_SPLIT_ASSIGNMENTS),
+    "holdout_use": cal.HOLDOUT_USE,
+    "holdout_selection_use_permitted": False,
+    "selection_split": cal.SELECTION_SPLIT,
     "validation_use": "REGIME_SELECTION_AND_HYPERPARAMETER_SEARCH",
 }
 
@@ -373,6 +604,8 @@ def contract_as_dict() -> dict[str, Any]:
     """The full machine-readable ingestion contract."""
     return {
         "contract_id": CONTRACT_ID,
+        "contract_revision": CONTRACT_REVISION,
+        "contract_revision_supersedes": CONTRACT_REVISION_SUPERSEDES,
         "status": CONTRACT_STATUS,
         "primary_objective": {
             "metric": cal.PRIMARY_CALIBRATION_METRIC,
@@ -388,6 +621,7 @@ def contract_as_dict() -> dict[str, Any]:
         ],
         "governed_allowlist": list(cal.CALIBRATION_OBSERVATION_COLUMNS),
         "split_policy": dict(SPLIT_POLICY),
+        "temporal_order_policy": dict(TEMPORAL_ORDER_POLICY),
         "minimum_volume": dict(MINIMUM_VOLUME_REQUIREMENTS),
         "dataset_provenance_requirements": dict(DATASET_PROVENANCE_REQUIREMENTS),
         "supported_formats": list(cal.SUPPORTED_DATASET_FORMATS),

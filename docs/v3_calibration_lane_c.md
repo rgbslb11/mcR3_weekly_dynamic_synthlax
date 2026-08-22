@@ -211,3 +211,192 @@ Supply an observation set satisfying the contract, then:
 6. Bind promotion evidence with `bind_promotion_evidence`.
 7. Promotion remains a human-controlled gate under ruling R2-CAL-OBJECTIVE.
    Nothing above promotes anything.
+
+---
+
+## 9. Successor — ruling R6-CAL-TEMPORAL-ORDER
+
+Everything above is the lane record as issued and is not rewritten here. One
+clause of the contract has since been reissued, and this section says which and
+why, so the SHA recorded in section 3 is read as the *first issue* rather than
+as the current file.
+
+**What was wrong.** The contract required `event_time` of every observation. The
+governed historical corpus does not carry one for every observation: the staged
+calibration evidence census found zero authentic time-of-day values, 2006 and
+2007 survive only as canonical source-row sequence, later historical seasons
+carry date/week/source-order evidence as available, and the modern 2024/2025
+walk-forward evidence is ordered by date and stage. The historical source
+packages state that chronology was not invented.
+
+So the clause as written offered a supplier two options, and both were bad. One
+was to withhold real ordering evidence. The other was to generate a noon
+kickoff — and a fabricated instant cannot be told apart from a measured one once
+it is written down.
+
+**What changed.** `event_time` becomes *conditional*, not optional:
+
+- where a source recorded a timestamp, `event_time` remains authoritative;
+- where a source recorded none, `event_time` MUST stay null and no synthetic
+  noon, midnight or other default may be generated;
+- such an observation may instead be admitted on governed temporal order, with
+  precedence exactly `EXACT_EVENT_TIME` > `EXACT_GAME_DATE` > `WEEK_STAGE_DATE`
+  > `GOVERNED_SOURCE_SEQUENCE`;
+- and it must carry `temporal_order_basis`, `temporal_order_key`,
+  `temporal_order_source` and `temporal_order_source_sha256`, all four or none,
+  so the ordering claim is re-checkable against pinned bytes.
+
+The causal-order guarantee `event_time` carried is replaced rather than dropped.
+`require_temporal_split_integrity` still governs datasets that carry real kickoff
+times, and its behaviour for those datasets is unchanged; it now routes each
+supplied `event_time` through the same admission gate rather than comparing bare
+strings, so it cannot admit a value its successor would refuse. That successor,
+`require_governed_temporal_split_integrity`, proves the same forward-only
+property across mixed granularities without ever comparing across granularities
+it does not have: inside one ordering domain it compares native values at the
+coarser of the two granularities involved, and across domains it can prove
+ordering only by season. Where two splits hold same-season observations in
+different domains the boundary is unprovable and is refused rather than assumed,
+and same-day ordering is never claimed under day granularity.
+
+### 9.1 The ordering value is named fields, not a grammar
+
+The first cut of this work packed a WEEK_STAGE_DATE value into
+`<anchor-date>|<STAGE>|<WW>`. That was wrong twice over. The ruling authorised
+temporal semantics, evidence precedence, provenance and anti-fabrication
+behaviour; it did not authorise a key grammar, and a format chosen for
+serialization convenience would have become a governance rule nobody issued.
+Worse, it did not fit the evidence. The staged corpus carries:
+
+| Span | What the source actually records |
+|---|---|
+| 2006–2011 | `chronology_sequence` on every row; a week that is sometimes an ordinal and sometimes a label such as `P1`; a game date resolved on some rows and not on others; a quality flag and tier saying which |
+| 2024–2025 | `game_date`, `event_order`, `global_sequence`; week labels `0`–`15` and `PS`; phase labels including `CCG`, `Bowl`, `QF`, `R1`; **undated** postseason rows carrying a stage label and a sequence and no date at all |
+
+A mandatory anchor date could not represent a week-ordered row with no date —
+the exact 2008 shape — without inventing one, which is the thing the ruling
+forbids. And a fixed stage vocabulary would have had to rank `P1` against `PS`
+against `Bowl`, a precedence no source states.
+
+So the ordering value is `TemporalOrderValue`: named, separately validated,
+source-derived fields — `season`, `game_date`, `week_ordinal`, `week_label`,
+`stage_label`, `sequence` — serialized as a self-describing canonical JSON
+object. A positional packed string is refused rather than parsed. `week_label`
+and `stage_label` are carried verbatim as provenance and are **never** parsed for
+ordering; only a source-supplied `week_ordinal` orders anything, and a row that
+has only a label falls back to `GOVERNED_SOURCE_SEQUENCE`. A bare `YYYY-MM-DD`
+under `EXACT_GAME_DATE` and a bare integer under `GOVERNED_SOURCE_SEQUENCE` are
+still accepted, because each of those directly *is* the evidence.
+
+Ordering domains follow from what the value can actually prove: dated evidence
+lands in `CALENDAR`, dateless week evidence in a source-scoped `SEASON_WEEK`
+domain, and a source sequence in its own source-scoped domain. A
+`GOVERNED_SOURCE_SEQUENCE` value may not carry a `game_date` at all — that would
+silently upgrade sequence evidence to date-level evidence.
+
+### 9.2 One executable door
+
+`register_dataset` is registration only. It establishes identity, digest, record
+count, shape and column admissibility, and it reads no observation values, so a
+registered dataset is not an admitted one. The single executable entrypoint is
+`load_admitted_observations`, which re-verifies the registered digest, admits
+every row through the temporal gate, proves the partition forward-only, and
+returns an `AdmittedObservationSet`. That type *is* the receipt: it carries a
+private construction token, so it cannot be forged by a caller who skipped the
+gate, and no public function returns raw observation rows from a registered
+dataset. Consumers call `require_admitted_observations`, which refuses a
+`CalibrationDataset` handed over in its place. The invariant is:
+
+    executable calibration observation
+        -> temporal admission
+        -> temporal split validation
+        -> calibration use
+
+### 9.2.1 Where the chain terminates
+
+Stamping was not enough. A bound promotion record that carries
+`observations_admitted: False` is still promotion-eligible evidence, and a caveat
+inside a promotion-eligible record is read by nobody at the moment it matters. So
+`bind_promotion_evidence` fails closed: a bound result requires the
+`AdmittedObservationSet` the loader issued **for those exact bytes**. The full
+chain, and where each link is proven:
+
+| Link | Proven by |
+|---|---|
+| registered source | `register_dataset` |
+| digest verified | `load_admitted_observations`, and again by `_require_digest_continuity` at binding |
+| rows temporally admitted | `admit_observation_temporal_order` |
+| partition proven forward-only | `require_governed_temporal_split_integrity` |
+| calibration/scoring result | `ExperimentRecord` |
+| promotion evidence binding | `bind_promotion_evidence` |
+
+There is no supported route from the first link to the last that skips the middle
+three. Three things are refused by name: a bare `CalibrationDataset` handed over
+where the receipt belongs; a receipt issued for other bytes; and an evidence
+payload that *asserts* admission — `observations_admitted`, `rows_admitted` and
+their spellings are rejected outright, because admission is established by the
+receipt and by nothing else. Binding also re-hashes the file, so a receipt issued
+before the bytes changed is stale and cannot be reused.
+
+The unbound path survives exactly as it was, and is now explicitly marked
+`promotion_eligible: false`. It is the only route that works without a receipt,
+and it is the one that claims nothing.
+
+The fixture that used to exercise bound binding registered a dataset with no
+temporal columns — a shape this ruling no longer admits. It was updated rather
+than kept working: a fixture that can only be bound by skipping the gate is a
+fixture that documents the bypass. It now carries the smallest valid temporal
+evidence the contract admits, and it is a fixture, not calibration data.
+
+One boundary is worth stating plainly. `_ADMISSION_TOKEN` is module-private.
+That stops a supported or accidental bypass — the failure mode that actually
+happens, where a caller reaches for the type because it is what the consumer
+wants. It is not a hostile-code security boundary and is not treated as one.
+
+### 9.3 Anti-fabrication is structural
+
+`refuse_default_time_of_day_fill` is a diagnostic and is not the correctness
+boundary. Every required refusal is enforced one row at a time, by consistency
+between the claimed source evidence, the declared basis, the provenance and the
+supplied temporal fields:
+
+- a coarse-basis observation may not carry a time of day in any field;
+- an `event_time` may not stand beside a basis weaker than `EXACT_EVENT_TIME` —
+  one of the two must have been manufactured;
+- `EXACT_EVENT_TIME` may not be declared without an `event_time`;
+- the declared basis and the supplied value representation must agree;
+- alternate ordering requires complete, re-checkable provenance;
+- `GOVERNED_SOURCE_SEQUENCE` may not carry a `game_date`.
+
+A test neutralises the detector and shows that nothing new gets in. Note what is
+*not* claimed: nothing here proves that a timestamp asserted to be authentic is
+historically true. Software cannot infer that. What it enforces is consistency,
+which is what a fabricated value has to break — because it has to be declared as
+something.
+
+`GOVERNED_SOURCE_SEQUENCE` establishes relative causal order only. It is never
+serialized as an inferred kickoff timestamp: `ResolvedTemporalOrder.as_dict`
+emits `event_time: null` and an explicit `inferred_kickoff_time: null` for it.
+
+**What did not change.** No dataset is mounted. Random split stays prohibited,
+the holdout stays `SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION`, Baxter Rating
+RMSE stays the primary out-of-sample objective, Colley and SRS stay separate
+witnesses with no weighted composite, FLOW/public-money and injury inputs stay
+refused, margin SD 20.2 stays unapproved, all six calibration values stay
+unresolved and the execution blocker count stays at eight.
+
+The four `temporal_order_*` columns were added to the governed observation
+allowlist **because the ruling requires them**, not because a fit wanted them.
+The four fields in section 6 are unchanged and still unadmitted.
+
+Artifacts: `V3_CALIBRATION_DATA_CONTRACT.json` is reissued as contract revision
+`R1-TEMPORAL-ORDER-SUCCESSOR` under the same contract ID, so the section 3 SHA
+`d2b015be…` is the first-issue value and no longer matches the file.
+`V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.json` is the successor evidence and
+status record, and carries the audit remediation record for 9.1, 9.2 and 9.3.
+
+The whole-season partition the corpus would be split into — training 2006–2011,
+validation 2024, holdout 2025 — is proven *representable* by test, over a
+training half that mixes all three kinds of historical evidence. That is a
+structural claim only: no dataset is mounted, no adapter is built, nothing is
+scored, and it is not a promoted calibration policy.

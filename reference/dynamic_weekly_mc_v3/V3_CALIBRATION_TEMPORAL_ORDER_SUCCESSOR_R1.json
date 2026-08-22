@@ -1,0 +1,382 @@
+{
+  "approval_token": "APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+  "approval_token_field": {
+    "default": null,
+    "historical_rulings_behaviourally_unchanged": true,
+    "note": "ChairmanRuling.approval_token defaults to None, so every R2, R3 and R4 ruling constructs and reads exactly as before. as_dict gains one key whose value is null for all of them, which is why the historical R4 status artifact does not carry it and was not rewritten.",
+    "representation": "ADDITIVE_OPTIONAL"
+  },
+  "artifact": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.json",
+  "artifact_status": "SUCCESSOR_EVIDENCE_AND_STATUS_RECORD",
+  "audit_disposition": "REMEDIATED_R1_R2_R3_AND_PROMOTION_BINDING_PENDING_FREEZE",
+  "audit_remediation_final_promotion_binding": {
+    "admission_assertion_keys_refused": [
+      "observations_admitted",
+      "admitted_observation_count",
+      "admission_gate",
+      "temporally_admitted",
+      "rows_admitted"
+    ],
+    "admission_token_boundary": "_ADMISSION_TOKEN is module-private. That prevents a supported or accidental bypass, which is the failure mode that actually occurs. It is not treated as a hostile-code security boundary, and no cryptography was added to pretend otherwise.",
+    "bare_dataset_accepted_as_receipt": false,
+    "blockers_retired_by_this_remediation": [],
+    "caller_asserted_admission_permitted": false,
+    "digest_continuity_checked_at_binding": true,
+    "digest_continuity_note": "Binding re-hashes the bytes on disk against the receipt, so a receipt issued before the file changed cannot be reused. A receipt describes a sequence of bytes, not a filename.",
+    "executable_chain": [
+      "registered source",
+      "digest verified",
+      "rows temporally admitted",
+      "partition proven forward-only",
+      "calibration/scoring result",
+      "promotion evidence binding"
+    ],
+    "finding": "bind_promotion_evidence stamped observations_admitted: False and continued producing bound promotion evidence. A calibration result whose observations were never admitted under the successor temporal contract is not promotion-eligible evidence.",
+    "obsolete_fixture_updated_not_preserved": "test_fully_bound_evidence_records_what_it_was_bound_to registered a fixture carrying no temporal columns, a shape that predates this ruling. It now carries the smallest valid temporal evidence the successor contract admits: a 2006 governed source sequence and 2024/2025 resolved game dates, with complete test-only provenance. That is a fixture change and not calibration evidence; no production calibration data was added.",
+    "receipt_type": "calibration.AdmittedObservationSet",
+    "remediation": "Bound promotion evidence now requires the AdmittedObservationSet the authoritative loader issued for those exact bytes. Without it the binding refuses. The unbound path is preserved unchanged and is explicitly marked promotion_eligible: false, so the only route that survives without a receipt is the one that claims nothing."
+  },
+  "audit_remediation_r1_key_representation": {
+    "bare_forms_retained": {
+      "EXACT_GAME_DATE": "ISO YYYY-MM-DD, because it directly is the evidence.",
+      "GOVERNED_SOURCE_SEQUENCE": "A non-negative integral sequence, because it directly represents the preserved source ordering."
+    },
+    "finding": "The first implementation selected a positional packed key grammar (<anchor-date>|<STAGE>|<WW>) for WEEK_STAGE_DATE. The Chairman ruling authorized temporal semantics, evidence precedence, provenance and anti-fabrication behaviour. It did not authorize a key grammar, and an implementation convenience must not become a governance rule.",
+    "label_sets_observed_and_not_ranked": [
+      "P1 / 1..14 (2006-2011 clean_week)",
+      "0..15 / PS / W1..W15 (2024-2025 week)",
+      "regular / Regular Season / CCG / Conference Championship / Bowl / Playoff / QF / SF / R1 / NCG (2024-2025 phase)"
+    ],
+    "observed_source_shapes": {
+      "2006-2011": "chronology_sequence on every row; clean_week sometimes an ordinal and sometimes a label such as P1; clean_game_date present on some rows and unresolved on others; clean_date_quality_flag and chronology_tier recording which of those the source resolved (TIER_1_DIRECT_SOURCE_MATCH / TIER_2_ORDER_BRACKETED_WEEK / TIER_3_SEQUENCE_ONLY).",
+      "2024-2025": "game_date, event_order and global_sequence on regular-season rows; week labels 0-15 and PS; phase labels including CCG, Bowl, QF and R1; undated postseason rows carrying a stage label and a sequence and no date at all; chronology_basis EXACT_DATE_THEN_SOURCE_ORDER or SOURCE_WEEK_AND_SEQUENCE.",
+      "time_of_day_columns_found": 0
+    },
+    "remediation": "The ordering value is now a named-field structure (calibration.TemporalOrderValue) assembled from separately validated source-derived fields and serialized as a self-describing canonical JSON object. A positional packed string is refused rather than parsed.",
+    "source_sequence_may_carry_a_date": false,
+    "stage_and_week_labels_parsed_for_ordering": false,
+    "staging_corpus_copied_into_repository": false,
+    "staging_corpus_inspected_read_only": "C:\\Local-mcR3_calibration_staging",
+    "unresolved_date_treatment": "LEFT_ABSENT_NEVER_APPROXIMATED",
+    "unresolved_week_treatment": "FALLS_BACK_TO_GOVERNED_SOURCE_SEQUENCE",
+    "value_fields": [
+      "season",
+      "game_date",
+      "week_ordinal",
+      "week_label",
+      "stage_label",
+      "sequence"
+    ],
+    "value_representation": "NAMED_FIELDS_CANONICAL_JSON",
+    "week_stage_date_requires_an_anchor_date": false
+  },
+  "audit_remediation_r2_row_admission": {
+    "admission_gate": "calibration.load_admitted_observations",
+    "executable_use_guard": "calibration.require_admitted_observations",
+    "finding": "register_dataset checked shape and columns only, and no executable path forced a caller through row admission.",
+    "invariant": "executable calibration observation -> temporal admission -> temporal split validation -> calibration use",
+    "promotion_records_admission_state": true,
+    "register_dataset_scope": "REGISTRATION_ONLY_READS_NO_OBSERVATION_VALUES",
+    "registered_dataset_accepted_as_admitted": false,
+    "remediation": "load_admitted_observations is the single executable entrypoint: it re-verifies the registered digest, admits every row through the temporal gate, proves the partition forward-only, and returns an AdmittedObservationSet. That type is the receipt and cannot be constructed without the gate. No public function returns raw observation rows from a registered dataset."
+  },
+  "audit_remediation_r3_structural_anti_fabrication": {
+    "claimed_authentic_timestamps_are_not_proven_historically_true": "Software cannot infer that. The gate enforces consistency between the claimed source evidence, the declared basis, the provenance and the supplied temporal fields, which is what a fabricated value has to break.",
+    "detector_is_diagnostic_only": true,
+    "finding": "refuse_default_time_of_day_fill is a heuristic and must not be the correctness boundary.",
+    "remediation": "The heuristic is retained as a diagnostic and is explicitly not load-bearing. Every required refusal is enforced one row at a time by structural consistency rules, and a test proves that neutralising the detector opens no admission path.",
+    "structural_rules": [
+      "A coarse-basis observation may not carry a time of day in any field.",
+      "An event_time may not stand beside a basis weaker than EXACT_EVENT_TIME.",
+      "EXACT_EVENT_TIME may not be declared without an event_time.",
+      "The declared basis and the supplied value representation must agree.",
+      "Alternate ordering requires complete, re-checkable provenance.",
+      "GOVERNED_SOURCE_SEQUENCE may not carry a game_date."
+    ]
+  },
+  "authority": "EXPERIMENTAL / NOT CANONICAL / V2.1 CONTROL UNCHANGED",
+  "base_sha": "4ad03078034a3594d740dfb63ba85d073195376e",
+  "base_sha_role": "Required starting commit, verified before any edit: branch feature/v3-local-build-to-final, working tree clean, execution blockers exactly eight.",
+  "blocker_accounting": {
+    "note": "This successor states how genuine historical ordering evidence is represented. It mounts no dataset, so it resolves no calibration blocker and opens none.",
+    "unchanged": true
+  },
+  "blocker_count_before": 8,
+  "blocker_set_before": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "calibration_values_promoted": [],
+  "canonical_config_written": false,
+  "chairman_ruling": {
+    "approval_token": "APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    "chairman_ruling_id": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    "convergence_id": "R6-CAL-TEMPORAL-ORDER",
+    "decision": "Where an authentic kickoff or event timestamp exists, event_time remains authoritative. Where one does not exist, event_time MUST remain null and a synthetic noon, midnight or other default time-of-day value MUST NOT be generated; such an observation may instead be admitted on governed_temporal_order. Temporal evidence precedence is exactly EXACT_EVENT_TIME, EXACT_GAME_DATE, WEEK_STAGE_DATE, GOVERNED_SOURCE_SEQUENCE. Any observation admitted without event_time must carry temporal_order_basis, temporal_order_key, temporal_order_source and temporal_order_source_sha256, so the ordering claim is re-checkable against pinned bytes. GOVERNED_SOURCE_SEQUENCE establishes relative causal order only and must never be serialized or represented as an inferred kickoff timestamp. Training, validation and holdout partitions remain forward-only and temporally disjoint; the holdout remains SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION; random split remains prohibited. Missing chronology may never be fabricated to make an observation pass contract admission.",
+    "evidence": [
+      "OPERATION SYTHALAX \u2014 V3 CALIBRATION TEMPORAL-ORDER SUCCESSOR R1, issued with approval token APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1 and Ruling ID V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.",
+      "The instruction records the evidence established before it was issued: the historical/modern calibration corpus contains date, stage, week and/or governed source-sequence ordering, and zero authentic time-of-day values were found in the staged calibration evidence census.",
+      "The historical source packages state explicitly that chronology was not invented. 2006 and 2007 rely on canonical source-row sequence; later historical seasons preserve date/week/source-order evidence as available; modern 2024/2025 walk-forward evidence uses date/stage ordering.",
+      "V3_CALIBRATION_DATA_CONTRACT.json first issue \u2014 event_time recorded as unconditionally required. That issue predates this ruling, is preserved unedited in repository history, and is reissued as contract revision R1-TEMPORAL-ORDER-SUCCESSOR rather than rewritten."
+    ],
+    "instruction": "OPERATION SYTHALAX \u2014 V3 CALIBRATION TEMPORAL-ORDER SUCCESSOR R1",
+    "provenance": "FACT",
+    "resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+    "retires": [],
+    "subject": "Temporal ordering evidence for calibration observations that carry no authentic kickoff timestamp",
+    "supersedes": [
+      "V3-CALIBRATION-DATA-CONTRACT-001 read as requiring event_time of every observation \u2014 superseded to exactly the extent that a governed source recorded no kickoff timestamp. event_time is not made globally optional and its causal-order guarantee is replaced, not dropped.",
+      "Any reading under which an observation lacking a kickoff time could be admitted by supplying a default time-of-day value."
+    ]
+  },
+  "chairman_ruling_id_note": "This is the first round whose instruction supplied a Chairman Ruling ID. It is recorded verbatim. The approval token is kept in its own field: a token authorises an instruction, an ID names a ruling, and no historical ID was fabricated for any earlier round.",
+  "chairman_ruling_id_supplied": true,
+  "classification": "CALIBRATION_CONTRACT_SEMANTICS",
+  "configuration_version": "V3-PLACEHOLDER-2026-08-21-R2-001",
+  "contract": {
+    "artifact": "V3_CALIBRATION_DATA_CONTRACT.json",
+    "artifact_sha256_first_issue": "d2b015bef5eb2649161227c89801bee135db85439fe42b4bedecaef552b36c79",
+    "artifact_sha256_this_issue": "8c3adbdfee5189d3ad2b9548f0a3bd478d07af377d0ae4fa320883867f0ece59",
+    "contract_id": "V3-CALIBRATION-DATA-CONTRACT-001",
+    "contract_revision": "R1-TEMPORAL-ORDER-SUCCESSOR",
+    "dataset_mounted": false,
+    "first_issue_rewritten": false,
+    "status": "SPECIFICATION_ONLY_NO_DATASET_MOUNTED"
+  },
+  "convergence_id": "R6-CAL-TEMPORAL-ORDER",
+  "corpus_evidence_established_before_the_ruling": [
+    "The historical/modern calibration corpus contains date, stage, week and/or governed source-sequence ordering.",
+    "Zero authentic time-of-day values were found in the staged calibration evidence census.",
+    "Historical source packages explicitly state that chronology was not invented.",
+    "2006 and 2007 rely on canonical source-row sequence.",
+    "Later historical seasons preserve date/week/source-order evidence as available.",
+    "Modern 2024/2025 walk-forward evidence uses date/stage ordering."
+  ],
+  "event_time_made_globally_optional": false,
+  "fabricated_timestamps_permitted": false,
+  "governed_allowlist_change": {
+    "admitted_by": "R6-CAL-TEMPORAL-ORDER",
+    "admitted_by_ruling_not_by_fit": true,
+    "columns_admitted": [
+      "temporal_order_basis",
+      "temporal_order_key",
+      "temporal_order_source",
+      "temporal_order_source_sha256"
+    ],
+    "fields_still_awaiting_their_own_ruling": [
+      "games_played_to_date",
+      "game_type",
+      "overtime_periods",
+      "opponent_division"
+    ],
+    "note": "The four temporal_order_ columns are admitted because a ruling requires them of any observation admitted without an authentic timestamp. The four fields under FIELDS_REQUIRING_ADMISSION_RULING are unchanged and still unadmitted; widening the allowlist because a fit needed a column remains refused."
+  },
+  "governed_source_sequence_serialized_as_timestamp": false,
+  "head_sha": null,
+  "head_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it; the final candidate SHA belongs to the handoff receipt returned after commit, not to this file.",
+  "historical_status_records": [
+    "V3_GOVERNANCE_STATUS_R2.json",
+    "V3_GOVERNANCE_STATUS_R3.json",
+    "V3_GOVERNANCE_STATUS_R4.json",
+    "V3_BOARD_IK_MOUNT_STATUS_R1.json",
+    "V3_BUILD_MANIFEST.json"
+  ],
+  "historical_status_records_rewritten": false,
+  "instruction": "OPERATION SYTHALAX \u2014 V3 CALIBRATION TEMPORAL-ORDER SUCCESSOR R1",
+  "live_blocker_classification": {
+    "calibration.blowout_treatment": "CALIBRATION",
+    "calibration.game_sd_points": "CALIBRATION",
+    "calibration.recent_form_weights": "CALIBRATION",
+    "calibration.sample_size_regularization": "CALIBRATION",
+    "calibration.weekly_movement_cap_points": "CALIBRATION",
+    "calibration.weekly_performance_residual_coefficient": "CALIBRATION",
+    "governance.GAME_SD_CALIBRATION_OPEN": "CALIBRATION",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "ENGINEERING_MODEL_SCALE"
+  },
+  "live_blocker_count": 8,
+  "live_blockers": [
+    "calibration.blowout_treatment",
+    "calibration.game_sd_points",
+    "calibration.recent_form_weights",
+    "calibration.sample_size_regularization",
+    "calibration.weekly_movement_cap_points",
+    "calibration.weekly_performance_residual_coefficient",
+    "governance.GAME_SD_CALIBRATION_OPEN",
+    "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER"
+  ],
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "model_version": "3.0.0-experimental-harness",
+  "opened_blockers": [],
+  "output_probabilities_generated": false,
+  "preserved_unchanged": {
+    "board_i_k_governance": "UNCHANGED",
+    "calibration_values_unresolved": [
+      "weekly_performance_residual_coefficient",
+      "weekly_movement_cap_points",
+      "recent_form_weights",
+      "blowout_treatment",
+      "game_sd_points",
+      "sample_size_regularization"
+    ],
+    "fcs_elo_1250_policy": "UNCHANGED",
+    "flow_public_money_inputs_admissible": false,
+    "governance_GAME_SD_CALIBRATION_OPEN": "OPEN",
+    "independent_witnesses": [
+      "colley_matrix",
+      "srs"
+    ],
+    "injury_inputs_admissible": false,
+    "legacy_game_sd_20_2_approved": false,
+    "model_scale_FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER": "BLOCKED",
+    "primary_calibration_direction": "minimize",
+    "primary_calibration_objective": "out_of_sample_baxter_rating_rmse",
+    "schedule_hfa_cfp_common_opponent_sos_governance": "UNCHANGED",
+    "weighted_witness_composite_authorised": false
+  },
+  "problem": "The V3 calibration observation contract required event_time of every observation. The governed historical corpus does not hold one for every observation, and the staged calibration evidence census found zero authentic time-of-day values. The clause as written therefore offered a supplier two options: withhold real ordering evidence, or generate a kickoff time the source never recorded. The second is the worse failure, because a fabricated instant cannot be told apart from a measured one once it is written down.",
+  "provenance_class": {
+    "ASSUMPTION": "None recorded.",
+    "DERIVED": "Computed deterministically from FACT by code in this package.",
+    "FACT": "Issued verbatim by the Chairman, or reproduced from a mounted artifact."
+  },
+  "provenance_required_when_event_time_absent": [
+    "temporal_order_basis",
+    "temporal_order_key",
+    "temporal_order_source",
+    "temporal_order_source_sha256"
+  ],
+  "recorded_at": "2026-08-21T00:00:00+00:00",
+  "resolution": "event_time becomes conditional rather than optional. It stays authoritative wherever a source recorded one, stays null and is never synthesised where a source recorded none, and the causal-order guarantee it carried is replaced by provenance-bound ordering evidence at a declared weaker granularity.",
+  "resolution_reason": "SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+  "resolved_blockers": [],
+  "round_numbering_note": "The ruling is numbered R6 rather than R5. The R5 lane \u2014 the FCS Elo to V3 point scale adapter \u2014 issued no ruling and already owns that label in tests/dynamic_weekly_mc_v3/test_r5_fcs_scale_adapter.py, so reusing it would put two unrelated things under one round number.",
+  "ruling_id": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+  "scope": "TEMPORAL_ORDER_SEMANTICS_ONLY",
+  "simulation_run": false,
+  "synthetic_time_of_day_permitted": false,
+  "temporal_evidence_precedence": [
+    "EXACT_EVENT_TIME",
+    "EXACT_GAME_DATE",
+    "WEEK_STAGE_DATE",
+    "GOVERNED_SOURCE_SEQUENCE"
+  ],
+  "temporal_leakage_protections": {
+    "cross_domain_ordering_proof": "SEASON_ONLY",
+    "exact_event_time_gate": "calibration.require_temporal_split_integrity",
+    "exact_event_time_gate_changed": false,
+    "holdout_selection_use_permitted": false,
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "partitions_forward_only": true,
+    "partitions_temporally_disjoint": true,
+    "random_split_permitted": false,
+    "same_day_ordering_under_day_granularity": "NOT_PROVEN",
+    "selection_split": "validation",
+    "successor_gate": "calibration.require_governed_temporal_split_integrity"
+  },
+  "temporal_order_semantics": {
+    "admission_assertion_keys_refused": [
+      "observations_admitted",
+      "admitted_observation_count",
+      "admission_gate",
+      "temporally_admitted",
+      "rows_admitted"
+    ],
+    "admission_gate": "calibration.load_admitted_observations",
+    "anti_fabrication_is_structural": true,
+    "approval_token": "APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    "caller_asserted_admission_permitted": false,
+    "chairman_ruling_id": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    "cross_domain_ordering_proof": "SEASON_ONLY",
+    "default_time_of_day_fills_refused": [
+      "00:00:00",
+      "12:00:00"
+    ],
+    "event_time_authoritative_where_it_exists": true,
+    "event_time_globally_optional": false,
+    "executable_chain": [
+      "registered source",
+      "digest verified",
+      "rows temporally admitted",
+      "partition proven forward-only",
+      "calibration/scoring result",
+      "promotion evidence binding"
+    ],
+    "executable_use_requires_admission": true,
+    "governed_source_sequence_is_relative_only": true,
+    "governed_source_sequence_serialized_as_timestamp": false,
+    "granularity": {
+      "EXACT_EVENT_TIME": "INSTANT",
+      "EXACT_GAME_DATE": "DAY",
+      "GOVERNED_SOURCE_SEQUENCE": "RELATIVE_SEQUENCE",
+      "WEEK_STAGE_DATE": "WEEK"
+    },
+    "holdout_use": "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION",
+    "missing_chronology_may_be_fabricated": false,
+    "positional_packed_key_grammar_permitted": false,
+    "promotion_binding_gate": "calibration.bind_promotion_evidence",
+    "promotion_binding_requires_admission_receipt": true,
+    "random_split_permitted": false,
+    "refused_split_assignments": [
+      "RANDOM",
+      "RANDOM_SPLIT",
+      "SHUFFLE",
+      "SHUFFLED",
+      "STRATIFIED_RANDOM",
+      "KFOLD",
+      "K_FOLD",
+      "CROSS_VALIDATION",
+      "BOOTSTRAP"
+    ],
+    "required_provenance_when_event_time_absent": [
+      "temporal_order_basis",
+      "temporal_order_key",
+      "temporal_order_source",
+      "temporal_order_source_sha256"
+    ],
+    "ruling": "R6-CAL-TEMPORAL-ORDER",
+    "selection_split": "validation",
+    "split_assignment": "TEMPORAL_ONLY",
+    "stage_and_week_labels_parsed_for_ordering": false,
+    "structural_anti_fabrication_rules": [
+      "A coarse-basis observation may not carry a time of day in any field.",
+      "An event_time may not stand beside a basis weaker than EXACT_EVENT_TIME.",
+      "EXACT_EVENT_TIME may not be declared without an event_time.",
+      "The declared basis and the supplied value representation must agree.",
+      "Alternate ordering requires complete, re-checkable provenance.",
+      "GOVERNED_SOURCE_SEQUENCE may not carry a game_date."
+    ],
+    "synthetic_time_of_day_permitted": false,
+    "temporal_evidence_precedence": [
+      "EXACT_EVENT_TIME",
+      "EXACT_GAME_DATE",
+      "WEEK_STAGE_DATE",
+      "GOVERNED_SOURCE_SEQUENCE"
+    ],
+    "time_of_day_fill_detector_is_diagnostic_only": true,
+    "unbound_promotion_path_is_promotion_eligible": false,
+    "value_fields": [
+      "season",
+      "game_date",
+      "week_ordinal",
+      "week_label",
+      "stage_label",
+      "sequence"
+    ],
+    "value_representation": "NAMED_FIELDS_CANONICAL_JSON"
+  },
+  "whole_season_partition_representable": {
+    "adapter_built": false,
+    "declared_calibration_policy": false,
+    "holdout": "2025",
+    "note": "Proven representable by test, over a training half that mixes source sequence, dateless week evidence and resolved dates. This is not a promoted calibration policy, no adapter was built, no dataset was mounted and nothing was scored.",
+    "status": "STRUCTURALLY_ADMISSIBLE_ONLY",
+    "training": "2006-2011",
+    "validation": "2024"
+  }
+}

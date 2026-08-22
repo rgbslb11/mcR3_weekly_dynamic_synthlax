@@ -121,8 +121,22 @@ def test_v3_remains_experimental_and_no_output_is_produced(live_blockers):
 
 def test_every_ruling_is_recorded_with_its_provenance_class():
     for ruling in rulings.ALL_RULINGS:
-        assert ruling.convergence_id.startswith(("R2-", "R3-", "R4-"))
+        assert ruling.convergence_id.startswith(("R2-", "R3-", "R4-", "R6-"))
         assert ruling.decision
         assert ruling.provenance in ("FACT", "DERIVED")
-        # No Chairman ruling IDs were supplied; none is invented.
-        assert ruling.chairman_ruling_id is None
+
+
+def test_a_chairman_ruling_id_is_recorded_only_where_one_was_issued():
+    """No ID is invented, and the one ID that was issued is not thrown away.
+
+    R2, R3 and R4 arrived without Chairman ruling IDs, so theirs stay null. R6
+    arrived with one, so it is recorded verbatim. The approval token is kept in
+    its own field: it authorises an instruction and is not a ruling ID.
+    """
+    supplied = {
+        "R6-CAL-TEMPORAL-ORDER": "V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    }
+    for ruling in rulings.ALL_RULINGS:
+        assert ruling.chairman_ruling_id == supplied.get(ruling.convergence_id)
+        if ruling.approval_token is not None:
+            assert ruling.approval_token != ruling.chairman_ruling_id

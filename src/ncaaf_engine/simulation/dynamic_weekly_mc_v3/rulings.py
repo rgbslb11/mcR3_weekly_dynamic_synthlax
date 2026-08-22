@@ -18,12 +18,18 @@ Three provenance classes are kept distinct and must not be collapsed:
 
 Ruling identifiers
 ------------------
-The R2 governance instruction issued the rulings below but did **not** supply
-Chairman ruling IDs. Each entry therefore carries a locally assigned
-``convergence_id`` (DERIVED, stable, prefixed ``R2-``) *and* a
-``chairman_ruling_id`` that is ``None`` until a real identifier is issued. The
-local identifier is a handle for code and tests; it is not a governance ID and
-must never be cited as one.
+The R2, R3 and R4 governance instructions issued their rulings but did **not**
+supply Chairman ruling IDs. Each of those entries therefore carries a locally
+assigned ``convergence_id`` (DERIVED, stable, prefixed by its round) *and* a
+``chairman_ruling_id`` that stays ``None``. The local identifier is a handle for
+code and tests; it is not a governance ID and must never be cited as one.
+
+R6 is the first round whose instruction supplied a real identifier. Its
+``chairman_ruling_id`` is that issued ID, recorded verbatim, and its
+``approval_token`` is the approval token the instruction carried. The two are
+kept in separate fields on purpose: a token authorises an instruction and an ID
+names a ruling, and using one where the other belongs would make an
+authorisation look like a governance record.
 """
 
 from __future__ import annotations
@@ -63,11 +69,16 @@ class ChairmanRuling:
     #: means a later authority filled a gap the mounted source genuinely never stated.
     #: It is never ``SOURCE_WORKBOOK_CONTAINED_MAPPING`` — no workbook was reinterpreted.
     resolution_reason: str | None = None
+    #: The approval token the instruction carried, recorded verbatim. ``None`` where
+    #: the instruction supplied none. A token is the authorisation an instruction
+    #: arrived with; it is not a ruling ID and is never used as one.
+    approval_token: str | None = None
 
     def as_dict(self) -> dict[str, object]:
         return {
             "convergence_id": self.convergence_id,
             "chairman_ruling_id": self.chairman_ruling_id,
+            "approval_token": self.approval_token,
             "subject": self.subject,
             "decision": self.decision,
             "evidence": list(self.evidence),
@@ -484,6 +495,75 @@ R4_COMMON_OPPONENT_FORMULA = ChairmanRuling(
 )
 
 
+#: Issued as one instruction for the V3 calibration temporal-order successor.
+#: The round is numbered R6 rather than R5 because the R5 lane -- the FCS Elo to
+#: V3 point scale adapter -- issued no ruling and already owns that label in
+#: ``tests/dynamic_weekly_mc_v3/test_r5_fcs_scale_adapter.py``. Reusing it would
+#: put two unrelated things under one round number.
+R6_INSTRUCTION = "OPERATION SYTHALAX — V3 CALIBRATION TEMPORAL-ORDER SUCCESSOR R1"
+
+
+R6_CALIBRATION_TEMPORAL_ORDER = ChairmanRuling(
+    convergence_id="R6-CAL-TEMPORAL-ORDER",
+    subject=(
+        "Temporal ordering evidence for calibration observations that carry no "
+        "authentic kickoff timestamp"
+    ),
+    decision=(
+        "Where an authentic kickoff or event timestamp exists, event_time remains "
+        "authoritative. Where one does not exist, event_time MUST remain null and a "
+        "synthetic noon, midnight or other default time-of-day value MUST NOT be "
+        "generated; such an observation may instead be admitted on "
+        "governed_temporal_order. Temporal evidence precedence is exactly "
+        "EXACT_EVENT_TIME, EXACT_GAME_DATE, WEEK_STAGE_DATE, "
+        "GOVERNED_SOURCE_SEQUENCE. Any observation admitted without event_time must "
+        "carry temporal_order_basis, temporal_order_key, temporal_order_source and "
+        "temporal_order_source_sha256, so the ordering claim is re-checkable against "
+        "pinned bytes. GOVERNED_SOURCE_SEQUENCE establishes relative causal order "
+        "only and must never be serialized or represented as an inferred kickoff "
+        "timestamp. Training, validation and holdout partitions remain forward-only "
+        "and temporally disjoint; the holdout remains "
+        "SCORED_ONCE_AT_THE_END_NEVER_FOR_SELECTION; random split remains "
+        "prohibited. Missing chronology may never be fabricated to make an "
+        "observation pass contract admission."
+    ),
+    evidence=(
+        "OPERATION SYTHALAX — V3 CALIBRATION TEMPORAL-ORDER SUCCESSOR R1, issued "
+        "with approval token APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1 and "
+        "Ruling ID V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1.",
+        "The instruction records the evidence established before it was issued: the "
+        "historical/modern calibration corpus contains date, stage, week and/or "
+        "governed source-sequence ordering, and zero authentic time-of-day values "
+        "were found in the staged calibration evidence census.",
+        "The historical source packages state explicitly that chronology was not "
+        "invented. 2006 and 2007 rely on canonical source-row sequence; later "
+        "historical seasons preserve date/week/source-order evidence as available; "
+        "modern 2024/2025 walk-forward evidence uses date/stage ordering.",
+        "V3_CALIBRATION_DATA_CONTRACT.json first issue — event_time recorded as "
+        "unconditionally required. That issue predates this ruling, is preserved "
+        "unedited in repository history, and is reissued as contract revision "
+        "R1-TEMPORAL-ORDER-SUCCESSOR rather than rewritten.",
+    ),
+    # Authority representation and contract semantics only. The eight live
+    # execution blockers are calibration, governance and model-scale work that no
+    # ruling can close, and this ruling closes none of them.
+    retires=(),
+    supersedes=(
+        "V3-CALIBRATION-DATA-CONTRACT-001 read as requiring event_time of every "
+        "observation — superseded to exactly the extent that a governed source "
+        "recorded no kickoff timestamp. event_time is not made globally optional and "
+        "its causal-order guarantee is replaced, not dropped.",
+        "Any reading under which an observation lacking a kickoff time could be "
+        "admitted by supplying a default time-of-day value.",
+    ),
+    provenance="FACT",
+    chairman_ruling_id="V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+    instruction=R6_INSTRUCTION,
+    resolution_reason="SUCCESSOR_DIRECT_CHAIRMAN_AUTHORITY",
+    approval_token="APPROVE_V3_CALIBRATION_TEMPORAL_ORDER_SUCCESSOR_R1",
+)
+
+
 R2_RULINGS: tuple[ChairmanRuling, ...] = (
     R2_SCHEDULE_V5_AUTHORITY,
     R2_THIRTEEN_GAME_EXCEPTIONS,
@@ -510,10 +590,14 @@ R3_RULINGS: tuple[ChairmanRuling, ...] = (
 
 R4_RULINGS: tuple[ChairmanRuling, ...] = (R4_COMMON_OPPONENT_FORMULA,)
 
-#: Every ruling issued across all three convergences. R2_RULINGS and R3_RULINGS
-#: stay exactly as the audited records; each later round adds to them rather than
-#: editing them, so the succession stays readable in one place.
-ALL_RULINGS: tuple[ChairmanRuling, ...] = R2_RULINGS + R3_RULINGS + R4_RULINGS
+R6_RULINGS: tuple[ChairmanRuling, ...] = (R6_CALIBRATION_TEMPORAL_ORDER,)
+
+#: Every ruling issued across every convergence round. R2_RULINGS, R3_RULINGS and
+#: R4_RULINGS stay exactly as the audited records; each later round adds to them
+#: rather than editing them, so the succession stays readable in one place.
+ALL_RULINGS: tuple[ChairmanRuling, ...] = (
+    R2_RULINGS + R3_RULINGS + R4_RULINGS + R6_RULINGS
+)
 
 _BY_ID = {r.convergence_id: r for r in ALL_RULINGS}
 
