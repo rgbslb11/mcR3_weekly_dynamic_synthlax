@@ -4,6 +4,11 @@
 # Run artifacts
 output/
 
+# Autonomous supervisor run directories. The supervisor writes its state,
+# stage results, tier reports and freeze record here; a 10,000-path run's
+# outputs are not committed merely because the supervisor created them.
+artifacts/v3_autonomous_runs/
+
 # Python caches
 __pycache__/
 *.py[cod]

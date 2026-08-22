@@ -1,0 +1,19 @@
+{
+  "_disposition": "TEMPLATE_ONLY_NO_FROZEN_EVIDENCE_MOUNTED",
+  "_note_evidence_manifest": "The frozen synthetic-evidence manifest does not exist in this repository. Until it is produced and mounted at this path, plan and run both refuse, which is the correct state: the manifest is what decides which parameters may be fitted.",
+  "_note_convergence_tolerances": "Deliberately empty, and convergence_default_tolerance is deliberately null. The 2,000-path gate compares its aggregates against the 500-path run, and an undeclared tolerance stops the run for human review rather than passing or failing it. A tolerance chosen after the divergence is visible is a choice of outcome, so every compared aggregate must be declared here before the run starts.",
+  "_note_required_advisories": "Advisories do not halt a run. Naming one here is the single exception, and it is a policy decision made before the run rather than a reaction to the advisory when it arrives.",
+  "_note_base_seed": "Null until the governed run seed is set. When present it is bound into the publish and freeze gates.",
+  "_note_executor": "package.module:factory naming the model-run executor. Empty means the unmounted default, which refuses every call -- correct while the governed calibration and execution interfaces are not mounted. Named in configuration rather than on the command line so the run manifest records which interfaces the run was driven through.",
+  "label": "V3_AUTONOMOUS_MODEL_RUN_R1",
+  "evidence_manifest": "../../../reference/dynamic_weekly_mc_v3/V3_SYNTHETIC_EVIDENCE_MANIFEST.json",
+  "v3_config": "../v3_experimental.json",
+  "run_root": "../../../artifacts/v3_autonomous_runs",
+  "base_seed": null,
+  "convergence_tolerances": {},
+  "convergence_default_tolerance": null,
+  "equivalence_tolerance": 1e-06,
+  "required_advisories": [],
+  "witness_thresholds": [],
+  "executor": ""
+}
