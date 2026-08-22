@@ -1,0 +1,334 @@
+{
+  "canonical_config_written": false,
+  "entries": [
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "CURRENT_V3_FOOTBALL_STRENGTH_DOMAIN",
+      "reason": "Exact for 2026, where the values are read verbatim from the mounted workbook. Not usable historically: the axis is defined over a closed population that no historical season belongs to.",
+      "scope": "2026 closed 121-team FBS population",
+      "source": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Master Ratings!'Unified Neutral-Field Points' (loaded verbatim by inputs.load_preseason_ratings)",
+      "status": "GOVERNED_AND_IN_PRODUCTION",
+      "unit": "unified neutral-field points"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "PRESEASON_STRENGTH_TRANSFORM",
+      "reason": "Unified Neutral-Field Points = 14 x Unified Master Z, four families at 0.25 each. It is the construction of a governed *input*, not a portable transform: Z is population-relative and the 14 is marked 'initial scale pending margin calibration'. V3 never applies it at runtime \u2014 inputs.load_preseason_ratings reads the finished points column.",
+      "scope": "2026 preseason, 121-team population",
+      "source": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Data Dictionary and !Ensemble Parameters",
+      "status": "CANONICAL_INPUT_CONSTRUCTION__2026_CROSS_SECTIONAL_ONLY",
+      "unit": "points per standard deviation"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "P_TO_STRENGTH_TRANSFORM",
+      "reason": "'P' is the Poisson-binomial reference win probability, not a power index. The item is output-side of a RESEARCH_REPORT_ONLY metric and is not on the expected-margin path. Ratifying it would not produce a football point.",
+      "scope": "SOR-B research report",
+      "source": "sor.UNRATIFIED_SOR_B_ITEMS; compute_sor_b.py is not mounted",
+      "status": "UNRATIFIED__SOR_B_SCOPE_ONLY",
+      "unit": "dimensionless probability -> resume scalar"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "REFERENCE_HFA",
+      "reason": "An Elo-layer term on the 400-point logistic scale, describing the reference team's per-game expectation. Not the football-point venue term, and not read by any point-domain code path.",
+      "scope": "SOR-B reference-team win probability",
+      "source": "sor._reference_win_probability; no mounted artifact records it",
+      "status": "UNRATIFIED__SOR_B_SCOPE_ONLY",
+      "unit": "Elo points"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": true,
+      "label": "V3_HFA_3_5",
+      "reason": "The venue term of the governed transform. Usable historically *only* for strengths already on the V3 point axis, because an HFA is meaningful solely in the units of the strengths it is added to.",
+      "scope": "V3 football-point layer",
+      "source": "SCHED-HFA-BASE; ruling R2-HFA-3P5; hfa.HFA_REGISTER",
+      "status": "LOCKED",
+      "unit": "football points"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "V2_1_HFA_4_0",
+      "reason": "Preserved unedited and never applied by V3. hfa.require_governed_hfa refuses it by name, so it cannot enter a reconstruction as a plausible number.",
+      "scope": "legacy V2 drive engine",
+      "source": "ENG-HOME-FIELD in 02_PARAMETER_REGISTER; hfa.LEGACY_V2_DRIVE_ENGINE_HFA",
+      "status": "HISTORICAL / NOT CURRENT",
+      "unit": "football points"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "ELO_HFA_55",
+      "reason": "Recorded as a distinct Elo-layer parameter that must not be collapsed into any other HFA. It is not defined anywhere in this repository, so nothing here may cite it and no value is asserted for it.",
+      "scope": "Elo layer",
+      "source": "named in the lane instruction; no mounted module or register carries it",
+      "status": "NOT_PRESENT_IN_THIS_REPOSITORY",
+      "unit": "Elo points"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "CCG_MC_ELO_HFA_65",
+      "reason": "A separate parameter in a separate namespace. Adding it to a football-point difference is a unit error, not a substitution.",
+      "scope": "CCG / Monte Carlo Elo layer",
+      "source": "CCG-HFA_ELO under R-CCG-06 / DEF-CCG-6; hfa.CCG_ELO_HFA",
+      "status": "LOCKED",
+      "unit": "Elo points"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "BAXTER_DOMAIN",
+      "reason": "Governed as the primary out-of-sample criterion, not as a point scale. It enters the unified axis only after standardization, so a raw Baxter rating is not in points and needs a transform that no register issues. Mounted Baxter artifacts are season-final and classified ENGINE_OUTPUT, so they are not admissible as a pregame state either.",
+      "scope": "calibration objective",
+      "source": "ruling R2-CAL-OBJECTIVE; 'Pure Baxter' is one of the four unified Z families",
+      "status": "PRIMARY_OBJECTIVE__NOT_A_MARGIN_SCALE",
+      "unit": "Baxter rating units (undeclared here)"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "COLLEY_DOMAIN",
+      "reason": "Named as an independent witness and reported separately; no implementation exists in this repository. A Colley rating is result-based and carries no margin information at all, so it cannot form an expected margin under any transform.",
+      "scope": "calibration witness",
+      "source": "ruling R2-CAL-OBJECTIVE",
+      "status": "NAMED_WITNESS__NOT_IMPLEMENTED",
+      "unit": "dimensionless rating on (0, 1)"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "SRS_DOMAIN",
+      "reason": "Point-like and margin-derived, but not the V3 axis: the +/-24 cap deliberately compresses exactly the blowouts a margin predictor must predict, and the rating is centred on its own population. Reconstructable from prior games alone, so it is a usable *witness*; it is not an expected-margin source.",
+      "scope": "calibration witness",
+      "source": "ruling R2-SRS-WITNESS; srs.py",
+      "status": "IMPLEMENTED_WITNESS",
+      "unit": "capped-margin points (per-game cap +/-24)"
+    },
+    {
+      "governed": true,
+      "historical_calibration_usable": false,
+      "label": "FCS_ELO_1250",
+      "reason": "The FCS rating policy is settled and is not reopened. An Elo is not a point value, and no governed register maps this one onto the points axis.",
+      "scope": "13 schedule-only FCS entities",
+      "source": "ruling R2-FCS-ELO-1250; fcs.FCS_FIXED_ELO",
+      "status": "LOCKED",
+      "unit": "Elo points"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "FCS_POINT_ADAPTER",
+      "reason": "No adapter is registered. Every FBS-vs-FCS expected margin fails closed on this existing blocker; none is invented here.",
+      "scope": "13 schedule-only FCS entities",
+      "source": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER; fcs.CANDIDATE_SCALE_ROUTES",
+      "status": "OPEN_FORMAL_BLOCKER",
+      "unit": "unified neutral-field points"
+    },
+    {
+      "governed": false,
+      "historical_calibration_usable": false,
+      "label": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+      "reason": "The one authority this lane finds genuinely missing. Without it no historical strength can be placed on the V3 axis, and the axis scale stays confounded with the residual coefficient.",
+      "scope": "any season outside the closed 2026 population",
+      "source": "no mounted artifact",
+      "status": "ABSENT__HUMAN_GOVERNANCE_REQUIRED",
+      "unit": "points per standard deviation, across populations"
+    }
+  ],
+  "fcs_expected_margin": {
+    "blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+    "fixed_elo": 1250.0,
+    "point_mapping": null,
+    "status": "UNAVAILABLE"
+  },
+  "formal_blockers_opened": [],
+  "formal_blockers_retired": [],
+  "formula": {
+    "consumes_calibration_coefficients": false,
+    "expression": "expected_home_margin = home_strength_points - away_strength_points + (0.0 if venue == NEUTRAL else hfa_baseline_points * home_hfa_modifier)",
+    "formula_id": "V3-EXPECTED-MARGIN-001",
+    "free_parameters": [],
+    "orientation": "HOME_ORIENTED",
+    "source": "ncaaf_engine.simulation.dynamic_weekly_mc_v3.game.simulate_game",
+    "subject_oriented_venue_term": "+hfa at HOME, -hfa at AWAY, exactly 0.0 at NEUTRAL; the modifier always belongs to the home side",
+    "unit": "football points"
+  },
+  "game_sd_identification": {
+    "governed_open_item": "ENG-CAL-MARGIN (OPEN); 20.2 remains unpromoted.",
+    "must_be_known_first": [
+      "HISTORICAL_STRENGTH_AXIS_ANCHOR \u2014 the SD is in points, so it inherits the axis scale directly; an unanchored axis makes the number unitless.",
+      "A governed pregame expected margin per observation \u2014 the subtrahend.",
+      "game_type and overtime_periods tagging \u2014 both are contract fields awaiting an admission ruling, and both inflate an untagged residual pool.",
+      "opponent_division \u2014 FBS-vs-FCS residuals cannot be pooled while the FCS point scale is an open blocker."
+    ],
+    "residual_game_sd": {
+      "definition": "sd(actual_margin - governed_pregame_expected_margin).",
+      "is_game_sd_points": true,
+      "role_in_v3": "game.simulate_game draws simulated_home_margin ~ Normal(expected, game_sd_points), so game_sd_points is the dispersion *around* the deterministic mean, by construction."
+    },
+    "unconditional_signed_margin_sd": {
+      "definition": "sd(actual_margin) over observations, ignoring any predictor.",
+      "is_game_sd_points": false,
+      "observed_2024_corpus_value": 19.764
+    },
+    "weeks_1_2_caveat": "Conditional on the anchor, and on a corpus this repository does not hold. Not estimated here.",
+    "weeks_1_2_could_support_an_initial_estimate": true,
+    "why_19_764_is_an_upper_bound_only": "Var(actual) = Var(expected) + Var(residual) + 2*Cov(expected, residual). A pregame predictor with no systematic bias has Cov ~ 0, giving Var(residual) = Var(actual) - Var(expected) <= Var(actual). So the unconditional SD bounds the residual SD from above, strictly whenever the predictor explains any strength difference at all. It locates nothing."
+  },
+  "historical_axis_anchor_dependency": {
+    "classification": "HUMAN_GOVERNANCE_REQUIRED",
+    "dependency_id": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+    "is_formal_project_blocker": false,
+    "minimum_ruling_question": "For a historical season outside the closed 2026 121-team FBS population, is there a governed rule placing that season's pregame team strengths on the V3 unified neutral-field point axis \u2014 and if so, does it fix the points-per-SD scale independently of margin calibration, or does the provisional 14 remain subject to it?",
+    "not_bundled_with": [
+      "the synthetic-universe admissibility question already raised by the calibration-evidence lane",
+      "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+      "P_TO_STRENGTH_TRANSFORM / REFERENCE_HFA, which this lane finds out of scope"
+    ],
+    "statement": "Historical pregame strengths cannot be placed on V3_UNIFIED_NEUTRAL_FIELD_POINTS without a governed rule anchoring the axis across populations and seasons.",
+    "two_independent_reasons": {
+      "population_closure": "Unified Master Z is standardized over a closed 121-team FBS population. Another season is another population; re-standardizing produces a different axis, so point values from two seasons are not commensurable. No register issues an anchoring rule, and the canonical 2026 universe is itself synthetic \u2014 it contains members no real season had.",
+      "scale_provisionality": "The 14.0 points/SD scale is marked 'initial scale pending margin calibration' in its own source and open item ENG-CAL-MARGIN is OPEN. Fitting weekly_performance_residual_coefficient while the scale is free leaves the two exactly confounded \u2014 any residual is absorbable by rescaling the axis instead, which is the unidentifiability the data contract names under expected_margin_transform."
+    },
+    "why_not_a_formal_blocker": "No governed authority requires blocker registration for it, and it gates no V3 execution path: V3 runs the 2026 population, where the axis is fully defined. It gates only historical reconstruction, which is evidence work.",
+    "why_not_engineering_derivable": "A Z-score carries no information about the scale of the population it was taken over. Recovering an anchor from the mounted corpus would require a second governed quantity on the same axis in a second season, and there is none."
+  },
+  "identification_stages": [
+    {
+      "caveat": "Two weeks per season is a thin base, the estimate is conditional on the anchored scale, and opening weeks are not a random sample of the season \u2014 they are systematically heavy in mismatches. An estimate from them bounds and informs; it does not settle game_sd_points.",
+      "depends_on": [
+        "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+        "an admitted historical corpus"
+      ],
+      "does_not_depend_on": [
+        "calibration.weekly_performance_residual_coefficient",
+        "calibration.weekly_movement_cap_points",
+        "calibration.recent_form_weights",
+        "calibration.blowout_treatment",
+        "calibration.sample_size_regularization",
+        "a governed weekly rerating formula"
+      ],
+      "name": "GOVERNED_OPENING_WEEK_RESIDUAL_DISPERSION",
+      "scope": "Weeks 1-2 only.",
+      "stage": "A",
+      "valid": true
+    },
+    {
+      "caveat": "Valid as a procedure, not runnable: the formula the parameters would parameterise does not exist in governed form.",
+      "depends_on": [
+        "Stage A",
+        "a governed weekly rerating formula (absent today)",
+        "HISTORICAL_STRENGTH_AXIS_ANCHOR"
+      ],
+      "name": "OUTER_WALK_FORWARD_OVER_CANDIDATE_RERATING_PARAMETERS",
+      "scope": "Weeks 3+.",
+      "stage": "B",
+      "valid": true
+    },
+    {
+      "caveat": "A historically estimated HFA is a witness quantity in its own namespace. The canonical V3 football-point HFA 3.5 is LOCKED by ruling R2-HFA-3P5 and is not an estimand here. Estimating HFA jointly with the axis scale re-opens the same confounding as the coefficient, so it is estimated only against an anchored axis.",
+      "depends_on": [
+        "Stage A"
+      ],
+      "name": "HFA_AS_AN_EXPERIMENTAL_WITNESS",
+      "scope": "Any stage.",
+      "stage": "C",
+      "valid": true
+    },
+    {
+      "caveat": "Scored once, never used for selection.",
+      "depends_on": [
+        "Stages A-C",
+        "calibration_contract.SPLIT_POLICY"
+      ],
+      "name": "HOLDOUT_VALIDATION",
+      "scope": "Reserved seasons.",
+      "stage": "D",
+      "valid": true
+    }
+  ],
+  "identification_structure": {
+    "base_case": "Weeks 1 and 2 open on preseason opening strength (config.first_promoted_rerating_after_week = 2; week 1's rerating is audit-only and week 2's games precede the after-week-2 promotion), so their expected margins consume no calibration coefficient.",
+    "circularity": "NOT_CIRCULAR__PARAMETER_CONDITIONAL_RECURSION",
+    "genuine_identification_failure": {
+      "id": "SCALE_COEFFICIENT_CONFOUNDING",
+      "resolution_order": "Anchor the axis first (HISTORICAL_STRENGTH_AXIS_ANCHOR), then estimate the coefficient against it. The reverse order is not merely harder \u2014 it is unidentified.",
+      "statement": "weekly_performance_residual_coefficient and the points-per-SD scale of the strength axis are not separately identified while both are free. Scaling the axis by k and the coefficient by 1/k leaves every predicted margin unchanged, so no objective over margins can distinguish them."
+    },
+    "recursion": "For week w >= 3 the opening state is the after-week-(w-1) promoted rerating, which is a function of the candidate parameters. Given a candidate vector the trajectory is deterministic and uses only prior completed games, so an outer walk-forward loop over candidates is statistically valid. This lane does not run one.",
+    "stronger_than_unset_coefficients": "For weeks 3+ V3 carries no governed rerating *formula* at all: rerating.BlockedGovernedRerater raises unconditionally and FixtureResidualRerater is test-only and explicitly not a canonical V3 calibration formula. So even a fully specified parameter vector would not let V3 reconstruct a week-3 state."
+  },
+  "matrix_id": "V3-HISTORICAL-EXPECTED-MARGIN-AUTHORITY-MATRIX-001",
+  "parameters_promoted": [],
+  "pregame_state_contract": {
+    "contract_id": "V3-HISTORICAL-PREGAME-STATE-CONTRACT-001",
+    "first_week_requiring_promoted_rerating": 3,
+    "not_required_and_why": {
+      "actual_margin": "The outcome half of the residual. Needed by calibration, not by the predictor half this module builds.",
+      "final_committee_rank, SOS, SOR, SOR-B": "Season-end or forward-looking. None enters the transform.",
+      "game_sd_points": "simulate_game consumes it for the stochastic draw only. The deterministic mean does not depend on it.",
+      "recent_form_weights, blowout_treatment": "Rerating-formula inputs. They shape the state, and a corpus supplies the state directly."
+    },
+    "preseason_opening_weeks": [
+      1,
+      2
+    ],
+    "refused_inputs": [
+      "postgame rating",
+      "end-of-week rating containing the game itself",
+      "season-end rating",
+      "future opponent results",
+      "final committee rank",
+      "future standings, SRS, SOS or SOR"
+    ],
+    "required_fields": {
+      "game_id": "Stable unique key for the observation.",
+      "home_field_modifier": "Modifier of the team at home; null only at NEUTRAL. Never defaulted to 1.0.",
+      "opponent_pregame_points": "Opponent strength before kickoff, on the same axis.",
+      "opponent_team": "Canonical team id.",
+      "order_key": "Kickoff instant, or an equivalent total order within the week. The only field that can prove a state pre-dates its game when two games share a week.",
+      "season": "Season the game belongs to; bounds the population the axis is over.",
+      "source": "Named provenance for the row and for each point state.",
+      "state_effective_through_week": "Last completed week folded into both states. 0 for preseason. Must be strictly less than week.",
+      "state_origin": "PRESEASON_OPENING_STRENGTH | PROMOTED_WEEKLY_RERATING.",
+      "strength_domain": "Axis declaration. Must be V3_UNIFIED_NEUTRAL_FIELD_POINTS for the governed transform to apply.",
+      "subject_pregame_points": "Subject strength before kickoff, on a declared axis.",
+      "subject_team": "Canonical team id. Free-text names are refused.",
+      "venue": "HOME | AWAY | NEUTRAL, from the SUBJECT team's perspective. The V3 schedule stores venue home-oriented, so the orientation must be stated rather than inferred from column order.",
+      "week": "Week the game was PLAYED. Decides whether the state is preseason opening strength or a promoted rerating."
+    },
+    "scope": "EXPECTED_MARGIN_CONSTRUCTION_ONLY"
+  },
+  "sor_b_scope_finding": {
+    "claim_reviewed": "docs/v3_calibration_evidence_lane.md sections 9 and 14 step 3: 'V3 has no ratified rating-to-margin transform. sor.py records P_TO_STRENGTH_TRANSFORM and REFERENCE_HFA as unratified' \u2014 therefore expected_margin cannot exist in V3 units.",
+    "disposition": "NOT_SUPPORTED_BY_THE_MODULE_THAT_DEFINES_THE_TWO_LABELS",
+    "finding_id": "EM-SOR-B-SCOPE-001",
+    "opens_formal_blocker": false,
+    "residual_gap_after_the_correction": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+    "rewrites_prior_artifact": false,
+    "what_is_true_instead": "The V3 rating-to-margin transform is mounted and ratified: it is the identity on the unified neutral-field point axis plus the governed additive HFA 3.5 (ruling R2-HFA-3P5). It has no free parameter and consumes no calibration coefficient.",
+    "why": "Both labels are SOR-B items in the Elo domain. sor.UNRATIFIED_SOR_B_ITEMS is reachable only from sor.weekly_sor_row, which stamps a report whose status is 'RESEARCH_REPORT_ONLY' and which is never a committee or Monte Carlo input. 'P' is the Poisson-binomial reference win probability p_ref_ge_w, dimensionless on [0,1] \u2014 not a power index and not a point quantity. REFERENCE_HFA is an Elo-point term inside _reference_win_probability, on the 400-point logistic scale rather than the football-point scale. Neither is read by game.simulate_game, by engine, or by any point-domain code path."
+  },
+  "status": "EXPERIMENTAL_SUCCESSOR_ARTIFACT__NO_HISTORICAL_ARTIFACT_REWRITTEN",
+  "strength_domain": {
+    "definition": "Unified Neutral-Field Points = 14 x Unified Master Z",
+    "id": "V3_UNIFIED_NEUTRAL_FIELD_POINTS",
+    "points_per_sd": 14.0,
+    "scale_status": "initial scale pending margin calibration",
+    "source": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Master Ratings!'Unified Neutral-Field Points' (loaded verbatim by inputs.load_preseason_ratings)",
+    "z_population": 121
+  },
+  "week_dispositions": {
+    "week_1": "DERIVABLE",
+    "week_2": "DERIVABLE",
+    "week_3_plus": "UNAVAILABLE",
+    "week_3_plus_reason": "For weeks 3+ V3 carries no governed rerating *formula* at all: rerating.BlockedGovernedRerater raises unconditionally and FixtureResidualRerater is test-only and explicitly not a canonical V3 calibration formula. So even a fully specified parameter vector would not let V3 reconstruct a week-3 state."
+  }
+}
