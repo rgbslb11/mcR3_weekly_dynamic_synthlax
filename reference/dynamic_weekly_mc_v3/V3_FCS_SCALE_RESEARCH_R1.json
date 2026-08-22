@@ -1,0 +1,297 @@
+{
+  "artifact": "V3_FCS_SCALE_RESEARCH_R1.json",
+  "artifact_status": "RESEARCH_RESULT__EXPERIMENTAL__NOT_CANONICAL",
+  "blocked_inputs": [
+    {
+      "blocking": true,
+      "input": "governed_pregame_fbs_point_state",
+      "status": "UNAVAILABLE",
+      "substitutable_by_more_data": false,
+      "supplied_by": "HISTORICAL_STRENGTH_AXIS_ANCHOR ruling",
+      "why": "The FCS baseline is a location parameter, so it absorbs the axis offset one-for-one. Without the anchor the fitted number is not the FCS baseline."
+    },
+    {
+      "blocking": true,
+      "input": "audited_fbs_vs_fcs_corpus",
+      "status": "CANDIDATE_PRESENT_UNAUDITED",
+      "substitutable_by_more_data": false,
+      "supplied_by": "an audit of fb817a6a08df598038966c8f5fe345153dd302f3, then a binding through bind_research_corpus",
+      "why": "The candidate's own lane terminal is READY_FOR_AUDIT and it is not merged. Binding it would treat a request for review as its outcome."
+    },
+    {
+      "blocking": true,
+      "input": "venue_classification",
+      "status": "UNAVAILABLE_FOR_ALL_43",
+      "substitutable_by_more_data": false,
+      "supplied_by": "independent authoritative classification of each game's site, or explicit exclusion of the ambiguous ones",
+      "why": "The NCAA scoreboard feed publishes no neutral-site indicator, so all 43 candidate observations are designated-home and none is classified. A neutral site scored as home displaces the baseline by the full 3.5-point HFA on that share of the sample."
+    }
+  ],
+  "candidate_venue_ledger": {
+    "fcs_home_orientation_support": 0,
+    "numerically_usable": 0,
+    "structurally_ready_numerically_unavailable": 0,
+    "total": 43,
+    "usable_away": 0,
+    "usable_home": 0,
+    "usable_neutral": 0,
+    "venue_ambiguous_excluded": 43,
+    "why_every_one_is_ambiguous": "The NCAA scoreboard feed publishes no neutral-site indicator, so a designated-home game and a neutral-site game are indistinguishable in it. None of the 43 is classified, so none is usable and none is silently treated as a true home game.",
+    "why_fcs_home_support_is_zero": "All 43 place the FCS entity on the designated-away side. Even a perfect venue classification of this candidate would exercise only the FBS-home and neutral orientations, while the 2026 schedule carries three real FCS-home games."
+  },
+  "confounding": {
+    "axis_offset": {
+      "consequence": "The fitted value estimates the FCS baseline plus the offset of whatever axis the point states were expressed on. No sample size separates them, so an unanchored axis does not make the estimate imprecise \u2014 it makes it an estimate of a different quantity.",
+      "detectable_by_more_data": false,
+      "id": "FCS_BASELINE_ABSORBS_AXIS_OFFSET",
+      "resolution_order": "Anchor the historical strength axis first, then estimate the FCS baseline against it. The reverse order is not harder, it is unidentified.",
+      "statement": "The FCS baseline enters the expected margin additively, so its least-squares estimate is mean(fbs_pregame_points + venue_term - actual_margin_fbs). Adding a constant c to every historical FBS point state adds exactly c to the fitted baseline and leaves every residual, every RMSE and the whole objective surface unchanged."
+    },
+    "axis_scale": {
+      "consequence": "Unlike the offset, a scale error is visible in the data. unit_slope_witness reports the slope as a diagnostic; a slope far from 1 is evidence the axis is mis-scaled, not evidence about the FCS baseline.",
+      "detectable_by_more_data": true,
+      "id": "AXIS_SCALE_LEAVES_A_SLOPE_SIGNATURE",
+      "not_an_estimand_here": "The slope is reported and never fitted into the adapter. The governed FCS model is one fixed Elo mapped to one point value; adding a scale parameter would be a different model and this lane has no authority to propose one.",
+      "statement": "Scaling the axis by k multiplies the spread of fbs_pregame_points by k while the observed margins are fixed in real points, so the regression of (actual_margin_fbs - venue_term) on fbs_pregame_points has slope 1/k rather than 1."
+    },
+    "venue_misclassification_full_sample": {
+      "baseline_displacement_points": 3.5,
+      "direction": "A neutral-site game scored as an FBS home game inflates the venue term by the full HFA, and the fitted FCS baseline absorbs it upward by the same amount per unit of misclassified share.",
+      "fraction_misclassified": 1.0,
+      "hfa_baseline_points": 3.5
+    },
+    "venue_misclassification_per_10pct": {
+      "baseline_displacement_points": 0.35,
+      "direction": "A neutral-site game scored as an FBS home game inflates the venue term by the full HFA, and the fitted FCS baseline absorbs it upward by the same amount per unit of misclassified share.",
+      "fraction_misclassified": 0.1,
+      "hfa_baseline_points": 3.5
+    }
+  },
+  "design": {
+    "also_reported": [
+      "MAE",
+      "bias",
+      "median_residual",
+      "residual_sd",
+      "winner_accuracy"
+    ],
+    "boundary_expansion_limit": 6,
+    "equivalence_relative_tolerance": 0.005,
+    "flat_surface_tolerance": 1e-06,
+    "material_half_width_points": 4.0,
+    "objective": "OUT_OF_SAMPLE_EXPECTED_MARGIN_RMSE",
+    "observation_requirements": {
+      "fbs_pregame_points": "FBS strength before kickoff on the declared axis. Never invented; an observation without it is structurally ready and numerically unavailable.",
+      "fbs_score": "Real score, FBS side.",
+      "fbs_team": "Canonical team id of the FBS side. Free-text names are refused.",
+      "fcs_score": "Real score, FCS side.",
+      "fcs_team": "Canonical team id of the FCS side.",
+      "game_id": "Stable unique key, so a residual can be traced to one real game.",
+      "hfa_baseline_points": "Governed football-point HFA baseline. Never defaulted.",
+      "home_hfa_modifier": "Modifier of whichever side is at home. Null only at NEUTRAL, where the venue term is exactly 0.0. Never defaulted to 1.0.",
+      "order_key": "Kickoff instant. The only field that can prove a pregame state pre-dates the game it predicts when two games share a week.",
+      "season": "Bounds the population the strength axis is standardized over.",
+      "source_provenance": "Named provenance for the row and for the point state.",
+      "strength_domain": "Axis declaration. Must be V3_UNIFIED_NEUTRAL_FIELD_POINTS for the governed transform to apply.",
+      "venue": "HOME | AWAY | NEUTRAL from the FBS side's perspective. Never inferred from a designated-home column, because a neutral site is designated-home too.",
+      "venue_classification_source": "Named authority for the venue call. A venue with no source is an assumption.",
+      "week": "Decides whether the pregame state is opening strength or a rerating."
+    },
+    "promotion_standard": [
+      "source evidence admissible and byte-bound",
+      "pregame FBS point states governed on the declared axis",
+      "venue treatment defensible, with no designated-home assumption",
+      "search optimum interior, not on a boundary",
+      "sample support adequate for the reported interval",
+      "leave-season-out behaviour stable",
+      "no material residual bias",
+      "materially better supported than leaving the blocker open"
+    ],
+    "random_row_split_permitted": false,
+    "search_coarse_step": 5.0,
+    "search_final_step": 0.008,
+    "search_interval": [
+      -120.0,
+      40.0
+    ],
+    "search_refinement_factor": 5,
+    "search_refinements": 4,
+    "validation_methods": [
+      "LEAVE_SEASON_OUT",
+      "TEMPORAL_HOLDOUT_LAST_SEASON"
+    ],
+    "winner_accuracy_is_not_optimised": true
+  },
+  "governance": {
+    "adapter_registered": false,
+    "blocker_opened": false,
+    "blocker_retired": false,
+    "calibration_parameters_fitted": [],
+    "canonical_config_written": false,
+    "fcs_elo": 1250.0,
+    "fcs_elo_changed": false,
+    "fcs_translation_policy": "FIXED_ELO_1250",
+    "hfa_baseline_points": 3.5,
+    "hfa_ruling": "R2-HFA-3P5",
+    "promotion_authorised": false,
+    "rejected_as_the_fcs_translation": [
+      0.294,
+      0.297,
+      0.297514
+    ],
+    "ruling": "R2-FCS-ELO-1250",
+    "season_monte_carlo_run": false,
+    "team_specific_fcs_ratings": false
+  },
+  "identification_status": "BLOCKED_ON_INPUTS",
+  "inputs": {
+    "candidate_corpus": {
+      "assessment": "ADMISSIBLE_IN_PRINCIPLE_NOT_YET_ADMISSIBLE_IN_FACT",
+      "audited": false,
+      "bound_by_this_lane": false,
+      "candidate_id": "V3_R6_OBSERVATION_CORPUS",
+      "commit_sha": "fb817a6a08df598038966c8f5fe345153dd302f3",
+      "designated_home_side": {
+        "fbs_designated_home": 43,
+        "fcs_designated_home": 0,
+        "note": "All 43 place the FCS entity on the designated-away side. Designated home is not venue: a neutral-site game is also designated-home in this feed."
+      },
+      "distinct_fcs_participants": 10,
+      "exclusion_reason_in_source_lane": "FBS_VS_FCS_OPPONENT_DIVISION_NOT_GOVERNED",
+      "fbs_vs_fcs_admitted_to_corpus": 0,
+      "fbs_vs_fcs_identified": 43,
+      "fcs_participants": [
+        "COLG",
+        "CP",
+        "DEL",
+        "DUQ",
+        "HC",
+        "IDHO",
+        "NDSU",
+        "SAC",
+        "SUU",
+        "YALE"
+      ],
+      "fcs_wins": 7,
+      "fields_absent_that_this_lane_requires": [
+        "venue (HOME|AWAY|NEUTRAL) \u2014 the feed publishes no neutral-site indicator",
+        "venue_classification_source",
+        "fbs_pregame_points on V3_UNIFIED_NEUTRAL_FIELD_POINTS",
+        "strength_domain declaration",
+        "home_hfa_modifier"
+      ],
+      "fields_present": [
+        "season",
+        "week",
+        "event_time",
+        "fbs_side",
+        "fcs_side",
+        "source_home",
+        "source_away",
+        "source_game_id",
+        "margin_home_perspective"
+      ],
+      "inventory_artifact": "reference/dynamic_weekly_mc_v3/observation_corpus_r6/V3_R6_EXCLUSION_REPORT.json!fbs_vs_fcs_inventory",
+      "lane_terminal": "HISTORICAL_OBSERVATION_CORPUS_R6_READY_FOR_AUDIT",
+      "merged_to_main": false,
+      "producing_lane": "claude/v3-historical-observation-corpus-r6",
+      "season_counts": {
+        "2021": 11,
+        "2022": 9,
+        "2023": 12,
+        "2024": 11
+      },
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+      "source_authority_class": "GOVERNED_RESULT_SOURCE",
+      "source_authority_tier": "TIER_1_NCAA_OFFICIAL",
+      "unconditional_margin_mean_points": 23.6512,
+      "unconditional_margin_sd_points": 24.4831,
+      "week_counts": {
+        "1": 15,
+        "11": 1,
+        "2": 16,
+        "3": 7,
+        "4": 1,
+        "5": 1,
+        "7": 2
+      }
+    },
+    "corpus_bound": false,
+    "corpus_sha": null,
+    "historical_fbs_point_state": {
+      "artifact": "reference/dynamic_weekly_mc_v3/V3_HISTORICAL_EXPECTED_MARGIN_AUTHORITY_MATRIX.json",
+      "available": false,
+      "classification": "HUMAN_GOVERNANCE_REQUIRED",
+      "commit_sha": "327b65e",
+      "dependency_id": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
+      "merged_to_main": false,
+      "studying_lane": "claude/v3-historical-expected-margin",
+      "two_independent_reasons": {
+        "population_closure": "Unified Master Z is standardized over a closed 121-team FBS population. Another season is another population; re-standardizing produces a different axis, so point values from two seasons are not commensurable.",
+        "scale_provisionality": "The 14.0 points/SD scale is marked 'initial scale pending margin calibration' in its own source, and ENG-CAL-MARGIN is OPEN."
+      },
+      "why_it_matters_here": "The FCS baseline is a location parameter, so it absorbs the axis offset one-for-one. Without the anchor the fitted number is not the FCS baseline."
+    }
+  },
+  "lane": "V3-FCS-SCALE-RESEARCH-R1",
+  "model": {
+    "fbs_oriented_form": "expected_fbs_margin = fbs_pregame_points - fcs_point_baseline + venue_term, venue_term = sign * hfa_baseline_points * home_hfa_modifier with sign +1 at FBS HOME, -1 at FCS HOME and the term exactly 0.0 at NEUTRAL",
+    "fixed": "FCS Elo 1250.0, ruling R2-FCS-ELO-1250",
+    "neutral_handling": "FAILS_CLOSED_NO_HFA_FALLBACK",
+    "production_form": "hfa = 0.0 if game.venue == 'NEUTRAL' else hfa_baseline_points * home_hfa_modifier; expected = home.current_strength_points - away.current_strength_points + hfa",
+    "strength_domain": "V3_UNIFIED_NEUTRAL_FIELD_POINTS",
+    "target_axis": {
+      "observed_fbs_range": [
+        -17.4576,
+        32.8847
+      ],
+      "points_per_sd": 14.0,
+      "z_population": 121
+    },
+    "unknown": "one global FCS neutral-field point baseline",
+    "venue_orientation": "SUBJECT_IS_THE_FBS_SIDE"
+  },
+  "no_probabilities_emitted": true,
+  "no_season_simulation": true,
+  "precision_envelope_at_candidate_scale": {
+    "basis": "CANDIDATE_ASSESSMENT_NOT_A_FIT",
+    "bound_direction": "Upper bound. It uses the unconditional margin SD; conditioning on FBS strength can only reduce dispersion, so the achievable half-width is no larger than this.",
+    "half_width": 7.534786,
+    "interpretation": "Half-width of the confidence interval on the FCS point baseline that a sample of this size and dispersion supports. Computed from a dispersion and a count only; it is a property of the design, not an estimate of the baseline.",
+    "level": 0.95,
+    "n": 43,
+    "observations_required_for_material_half_width": 147,
+    "observations_required_for_two_point_half_width": 579,
+    "residual_sd_input": 24.4831,
+    "standard_error": 3.733638,
+    "t_quantile": 2.0180817028
+  },
+  "promotion_authorised": false,
+  "recommended_adapter_if_identified": null,
+  "results": {
+    "baseline_interval": null,
+    "best_point_baseline": null,
+    "bias": null,
+    "mae": null,
+    "median_residual": null,
+    "not_computed_because": "No numerically usable observation exists. The harness is complete and every gate is exercised by tests; what is absent is evidence, and this lane does not manufacture it.",
+    "residual_sd": null,
+    "rmse": null,
+    "season_sensitivity": null,
+    "validation": null,
+    "venue_sensitivity": null,
+    "winner_accuracy": null
+  },
+  "studied_blocker": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER",
+  "study": null,
+  "terminal": "FCS_SCALE_RESEARCH_READY_FOR_INPUTS",
+  "venue_ledger": {
+    "numerically_usable": 0,
+    "structurally_ready_numerically_unavailable": 0,
+    "total": 0,
+    "usable_away": 0,
+    "usable_home": 0,
+    "usable_neutral": 0,
+    "venue_ambiguous_excluded": 0
+  }
+}
