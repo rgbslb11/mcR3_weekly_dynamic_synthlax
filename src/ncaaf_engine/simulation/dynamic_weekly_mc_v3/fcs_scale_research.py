@@ -32,10 +32,13 @@ of one.
 
 **The pregame FBS point states.** Every observation needs the FBS side's
 strength *before kickoff*, on the V3 unified neutral-field axis, for a season
-that is not 2026. Placing any historical season on that axis requires a governed
-rule anchoring it across populations, because Unified Master Z is standardized
-over a closed population and another season is another population. Without it
-:func:`fit_fcs_point_baseline` refuses rather than fitting.
+that is not 2026. That axis is **empirically calibratable** — the programme
+classification is that its scale comes from real Week 1-2 margins once
+historical opening standardized states exist — so this lane waits on a
+calibration result, not on an authority. No ruling gates FCS scale estimation.
+Until that result exists :func:`fit_fcs_point_baseline` refuses rather than
+fitting, because a baseline fitted against an unestablished axis is not the FCS
+baseline; see below.
 
 The structural reason a corpus alone can never close this
 ---------------------------------------------------------
@@ -1629,9 +1632,24 @@ CANDIDATE_CORPUS_ASSESSMENT: dict[str, object] = {
     "assessment": "ADMISSIBLE_IN_PRINCIPLE_NOT_YET_ADMISSIBLE_IN_FACT",
 }
 
-#: Why the historical pregame FBS point states do not exist, in the terms the
-#: lane that studied them stated. Recorded so this lane's refusal cites a
-#: finding rather than asserting one of its own.
+#: Whether the historical pregame FBS point states this lane consumes exist yet,
+#: and by what route they arrive.
+#:
+#: The classification here was corrected by a cross-lane update. An independent
+#: audit of the historical expected-margin lane **refuted** that lane's earlier
+#: ``HUMAN_GOVERNANCE_REQUIRED`` reading of ``HISTORICAL_STRENGTH_AXIS_ANCHOR``.
+#: The programme classification is now that the historical point-axis scale is
+#: **empirically calibratable** from real Week 1-2 margins once historical
+#: opening standardized states are available. So this lane must not say, and no
+#: longer says, that a Chairman ruling gates FCS scale estimation: the axis
+#: arrives by calibration against real margins, and this lane waits on its
+#: output rather than on an authority.
+#:
+#: What does *not* change is the mathematics. The FCS baseline is a location
+#: parameter and absorbs a constant axis offset one-for-one, so the axis has to
+#: be established — by whatever route — before a fitted baseline means the FCS
+#: baseline. That is an ordering constraint on the estimation, not a governance
+#: prerequisite. See :func:`anchor_confounding_statement`.
 HISTORICAL_POINT_STATE_AVAILABILITY: dict[str, object] = {
     "available": False,
     "dependency_id": "HISTORICAL_STRENGTH_AXIS_ANCHOR",
@@ -1642,24 +1660,157 @@ HISTORICAL_POINT_STATE_AVAILABILITY: dict[str, object] = {
         "V3_HISTORICAL_EXPECTED_MARGIN_AUTHORITY_MATRIX.json"
     ),
     "merged_to_main": False,
-    "classification": "HUMAN_GOVERNANCE_REQUIRED",
-    "two_independent_reasons": {
-        "population_closure": (
-            "Unified Master Z is standardized over a closed 121-team FBS population. "
-            "Another season is another population; re-standardizing produces a "
-            "different axis, so point values from two seasons are not commensurable."
-        ),
-        "scale_provisionality": (
-            f"The {UNIFIED_NEUTRAL_POINTS_PER_SD} points/SD scale is marked 'initial "
-            "scale pending margin calibration' in its own source, and ENG-CAL-MARGIN "
-            "is OPEN."
-        ),
-    },
+    "classification": "EMPIRICALLY_CALIBRATABLE",
+    "superseded_classification": "HUMAN_GOVERNANCE_REQUIRED",
+    "superseded_by": (
+        "The independent historical expected-margin audit refuted the "
+        "HUMAN_GOVERNANCE_REQUIRED reading. The programme classification is that the "
+        "historical point-axis scale is empirically calibratable from real Week 1-2 "
+        "margins once historical opening standardized states are available."
+    ),
+    "chairman_ruling_required_for_fcs_scale_estimation": False,
+    "arrives_by": (
+        "Empirical calibration of the historical point axis against real Week 1-2 "
+        "margins, given historical opening standardized states."
+    ),
+    "why_weeks_1_2": (
+        "Opening weeks run on preseason opening strength, so their expected margins "
+        "consume no weekly rerating coefficient and the axis is not confounded with "
+        "parameters that are themselves unfitted."
+    ),
     "why_it_matters_here": (
         "The FCS baseline is a location parameter, so it absorbs the axis offset "
-        "one-for-one. Without the anchor the fitted number is not the FCS baseline."
+        "one-for-one. Until the axis is established the fitted number is not the FCS "
+        "baseline. This is an ordering constraint on the estimation, not an authority "
+        "gate."
+    ),
+    "open_scale_note": (
+        f"The {UNIFIED_NEUTRAL_POINTS_PER_SD} points/SD scale is still marked 'initial "
+        "scale pending margin calibration' in its own source, which is what the "
+        "empirical calibration resolves."
     ),
 }
+
+
+# ---------------------------------------------------------------------------
+# The freeze.
+# ---------------------------------------------------------------------------
+
+#: The harness is frozen as an input-ready research tool. Frozen means its
+#: mathematics, its refusals and its search are settled and are not to be
+#: redesigned; it does not mean sealed. Handing it the three inputs below runs
+#: the study through exactly the code that is frozen here, which is the point of
+#: freezing it in this state rather than in a half-built one.
+HARNESS_FROZEN = True
+HARNESS_STATUS = "FROZEN_READY_FOR_INPUTS"
+
+#: The three numerical inputs a fit needs, in the programme's own terms. Every
+#: one is an evidence dependency. None is an authority gate.
+REQUIRED_NUMERICAL_INPUTS: tuple[str, ...] = (
+    "governed / empirically established historical FBS pregame V3 point states",
+    "audited real FBS-vs-FCS observations",
+    "defensible venue classification for observations used",
+)
+
+#: No Chairman ruling is a prerequisite for FCS scale estimation. Recorded as a
+#: constant, and asserted by test, because the superseded classification said
+#: otherwise and a stale reading of it would misdirect the whole programme.
+CHAIRMAN_RULING_REQUIRED = False
+
+#: The mathematical findings this lane established, pinned so a later change to
+#: the harness that contradicts one of them fails a test rather than passing
+#: quietly. These are frozen; the harness may be re-run, not re-derived.
+PRESERVED_FINDINGS: tuple[dict[str, object], ...] = (
+    {
+        "id": "F_HAT_IS_A_MEAN",
+        "finding": (
+            "F_hat = mean(FBS_pregame_points + venue_adjustment - actual_margin_FBS)"
+        ),
+        "why": (
+            "The FCS baseline enters the expected margin additively, so its "
+            "least-squares estimate is an arithmetic mean and nothing more."
+        ),
+    },
+    {
+        "id": "FCS_ELO_FIXED_AT_1250",
+        "finding": "FCS Elo = 1250, fixed.",
+        "why": f"Ruling {R2_FCS.convergence_id}. Not reopened by this lane.",
+    },
+    {
+        "id": "FORTY_THREE_GIVES_RANGE_ONLY",
+        "finding": (
+            "The 43 current candidate observations provide weak, range-level "
+            "identification, not high-precision standalone identification."
+        ),
+        "why": (
+            "At the candidate's unconditional margin dispersion the 95% half-width is "
+            "at most 7.53 points, wider than the 4.0-point material threshold."
+        ),
+    },
+    {
+        "id": "ALL_FORTY_THREE_ARE_FBS_DESIGNATED_HOME",
+        "finding": "All 43 are currently FBS-designated-home.",
+        "why": (
+            "The venue term never varies sign across the candidate, so it gives the "
+            "FCS-home orientation no support at all."
+        ),
+    },
+    {
+        "id": "AXIS_OFFSET_SHIFTS_F_HAT_ONE_FOR_ONE",
+        "finding": (
+            "A constant shift in the FBS point-axis zero shifts F_hat one-for-one "
+            "while preserving every game residual."
+        ),
+        "why": (
+            "The objective surface is invariant under the joint shift, so no sample "
+            "size and no objective over margins can separate the two."
+        ),
+    },
+    {
+        "id": "VENUE_MISCLASSIFICATION_BIASES_F_HAT",
+        "finding": (
+            "Venue misclassification directly biases the fitted FCS baseline, by "
+            "misclassified_share x HFA."
+        ),
+        "why": (
+            "A neutral site scored as a home game carries a venue term of +HFA where "
+            "the truth is 0.0, and F_hat is the mean of those terms."
+        ),
+    },
+)
+
+
+def freeze_record() -> dict[str, object]:
+    """What was frozen, what it still needs, and what it does not need.
+
+    The third field is the one that earns its place: a reader who arrives with
+    the superseded ``HUMAN_GOVERNANCE_REQUIRED`` reading in mind would otherwise
+    conclude this lane is waiting on a ruling, and it is not.
+    """
+    return {
+        "harness_frozen": HARNESS_FROZEN,
+        "harness_status": HARNESS_STATUS,
+        # The lane terminal is unchanged. Freezing records that the harness
+        # phase is complete; it does not advance the research status, which
+        # still turns on inputs that do not exist.
+        "lane_terminal": READY_FOR_INPUTS,
+        "freeze_terminal": FROZEN_READY_FOR_INPUTS,
+        "required_numerical_inputs": list(REQUIRED_NUMERICAL_INPUTS),
+        "chairman_ruling_required": CHAIRMAN_RULING_REQUIRED,
+        "historical_axis_classification": (
+            HISTORICAL_POINT_STATE_AVAILABILITY["classification"]
+        ),
+        "superseded_axis_classification": (
+            HISTORICAL_POINT_STATE_AVAILABILITY["superseded_classification"]
+        ),
+        "preserved_findings": [dict(f) for f in PRESERVED_FINDINGS],
+        "research_mathematics_changed": False,
+        "numerical_fitting_performed": False,
+        "additional_observations_acquired": False,
+        "fcs_elo_changed": False,
+        "adapter_promoted": False,
+        "season_monte_carlo_run": False,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -1670,22 +1821,25 @@ READY_FOR_AUDIT = "FCS_SCALE_RESEARCH_READY_FOR_AUDIT"
 READY_FOR_INPUTS = "FCS_SCALE_RESEARCH_READY_FOR_INPUTS"
 RESEARCH_NOT_IDENTIFIED = "FCS_SCALE_RESEARCH_NOT_IDENTIFIED"
 RESEARCH_BLOCKED = "FCS_SCALE_RESEARCH_BLOCKED"
+FROZEN_READY_FOR_INPUTS = "FCS_SCALE_RESEARCH_R1_FROZEN_READY_FOR_INPUTS"
 
 
 def blocking_inputs() -> list[dict[str, object]]:
     """Exactly which inputs stop a numerical fit, most binding first.
 
-    Ordered by how hard each is to supply, not by how visible it is. The corpus
-    needs an audit that could happen tomorrow; the axis anchor needs a ruling
-    that no engineering effort can substitute for; the venue classification
-    needs evidence a result feed does not carry at all.
+    All three are *evidence* dependencies. None of them is an authority gate:
+    the point states arrive by empirical calibration of the historical axis, the
+    corpus by an audit, and the venue classification by evidence a result feed
+    does not happen to carry. Nothing here waits on a ruling.
     """
     return [
         {
             "input": "governed_pregame_fbs_point_state",
             "status": "UNAVAILABLE",
             "blocking": True,
-            "supplied_by": "HISTORICAL_STRENGTH_AXIS_ANCHOR ruling",
+            "supplied_by": HISTORICAL_POINT_STATE_AVAILABILITY["arrives_by"],
+            "classification": HISTORICAL_POINT_STATE_AVAILABILITY["classification"],
+            "chairman_ruling_required": False,
             "why": HISTORICAL_POINT_STATE_AVAILABILITY["why_it_matters_here"],
             "substitutable_by_more_data": False,
         },
@@ -1760,6 +1914,7 @@ def fcs_scale_research_result(
         "artifact_status": "RESEARCH_RESULT__EXPERIMENTAL__NOT_CANONICAL",
         "lane": RESEARCH_LANE_ID,
         "studied_blocker": STUDIED_BLOCKER,
+        "freeze": freeze_record(),
         "governance": {
             "fcs_elo": FCS_FIXED_ELO,
             "fcs_elo_changed": False,

@@ -809,6 +809,112 @@ def test_the_terminal_is_ready_for_inputs_while_any_input_is_blocking():
     assert payload["identification_status"] == research.BLOCKED_ON_INPUTS
 
 
+# ---------------------------------------------------------------------------
+# The freeze, and the cross-lane correction it carries.
+# ---------------------------------------------------------------------------
+
+def test_no_chairman_ruling_is_a_prerequisite_for_fcs_scale_estimation():
+    # The superseded HUMAN_GOVERNANCE_REQUIRED reading was refuted by an
+    # independent audit. A stale copy of it anywhere in this lane would tell the
+    # programme it is waiting on an authority when it is waiting on evidence.
+    assert research.CHAIRMAN_RULING_REQUIRED is False
+    availability = research.HISTORICAL_POINT_STATE_AVAILABILITY
+    assert availability["classification"] == "EMPIRICALLY_CALIBRATABLE"
+    assert availability["superseded_classification"] == "HUMAN_GOVERNANCE_REQUIRED"
+    assert availability["chairman_ruling_required_for_fcs_scale_estimation"] is False
+    for entry in research.blocking_inputs():
+        assert "ruling" not in str(entry["supplied_by"]).lower()
+
+
+def test_the_committed_artifact_claims_no_ruling_prerequisite():
+    payload = json.loads(ARTIFACT.read_text(encoding="utf-8"))
+    assert payload["freeze"]["chairman_ruling_required"] is False
+    assert payload["freeze"]["historical_axis_classification"] == "EMPIRICALLY_CALIBRATABLE"
+    point_state = payload["inputs"]["historical_fbs_point_state"]
+    assert point_state["classification"] == "EMPIRICALLY_CALIBRATABLE"
+
+
+def test_the_harness_is_frozen_as_an_input_ready_tool():
+    record = research.freeze_record()
+    assert record["harness_frozen"] is True
+    assert record["harness_status"] == "FROZEN_READY_FOR_INPUTS"
+    # Freezing records that the harness phase is done. It does not advance the
+    # research status, which still turns on inputs that do not exist.
+    assert record["lane_terminal"] == research.READY_FOR_INPUTS
+    assert record["freeze_terminal"] == research.FROZEN_READY_FOR_INPUTS
+    for flag in (
+        "research_mathematics_changed",
+        "numerical_fitting_performed",
+        "additional_observations_acquired",
+        "fcs_elo_changed",
+        "adapter_promoted",
+        "season_monte_carlo_run",
+    ):
+        assert record[flag] is False
+
+
+def test_the_three_required_numerical_inputs_are_stated_as_evidence():
+    inputs = research.REQUIRED_NUMERICAL_INPUTS
+    assert len(inputs) == 3
+    assert "historical FBS pregame V3 point states" in inputs[0]
+    assert "audited real FBS-vs-FCS observations" in inputs[1]
+    assert "venue classification" in inputs[2]
+    # And they line up one-for-one with what actually blocks a fit.
+    assert len(research.blocking_inputs()) == 3
+
+
+@pytest.mark.parametrize(
+    "finding_id",
+    [
+        "F_HAT_IS_A_MEAN",
+        "FCS_ELO_FIXED_AT_1250",
+        "FORTY_THREE_GIVES_RANGE_ONLY",
+        "ALL_FORTY_THREE_ARE_FBS_DESIGNATED_HOME",
+        "AXIS_OFFSET_SHIFTS_F_HAT_ONE_FOR_ONE",
+        "VENUE_MISCLASSIFICATION_BIASES_F_HAT",
+    ],
+)
+def test_every_preserved_finding_is_pinned(finding_id):
+    by_id = {f["id"]: f for f in research.PRESERVED_FINDINGS}
+    assert finding_id in by_id
+    assert str(by_id[finding_id]["finding"]).strip()
+    assert str(by_id[finding_id]["why"]).strip()
+
+
+def test_the_preserved_findings_still_hold_against_the_frozen_harness():
+    # Each of the four checkable findings, re-derived rather than trusted.
+    rows = recovery_fixture()
+
+    # F_hat is the mean of (points + venue term - margin).
+    fit = research.search_fcs_point_baseline(rows)
+    closed_form = sum(
+        float(o.fbs_pregame_points)
+        + research.venue_term(
+            venue=str(o.venue),
+            hfa_baseline_points=o.hfa_baseline_points,
+            home_hfa_modifier=o.home_hfa_modifier,
+            game_id=o.game_id,
+            fcs_is_home=o.venue == "AWAY",
+        )
+        - float(o.actual_margin_fbs)
+        for o in rows
+    ) / len(rows)
+    assert fit.best_baseline == pytest.approx(closed_form, abs=fit.final_step)
+
+    # Elo is still 1250.
+    assert research.assert_fcs_elo_invariant() == 1250.0
+
+    # 43 at the candidate dispersion is range-level only.
+    assert research.precision_envelope(24.4831, 43)["half_width"] > (
+        research.MATERIAL_HALF_WIDTH_POINTS
+    )
+
+    # Venue misclassification biases F_hat by share x HFA.
+    assert research.venue_misclassification_envelope(fraction_misclassified=1.0)[
+        "baseline_displacement_points"
+    ] == pytest.approx(V3_FOOTBALL_POINT_HFA)
+
+
 def test_no_calibration_parameter_is_touched_by_this_lane():
     from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import calibration
 

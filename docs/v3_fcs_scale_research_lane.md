@@ -3,7 +3,9 @@
 Lane: `claude/v3-fcs-scale-research-r1`
 Blocker studied: `model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER`
 Terminal: **`FCS_SCALE_RESEARCH_READY_FOR_INPUTS`**
+Harness: **`FROZEN_READY_FOR_INPUTS`**
 Promotion authorised: **false**. Blockers before 8, after 8.
+Chairman ruling required for FCS scale estimation: **no**.
 
 ## The question
 
@@ -67,16 +69,23 @@ one of those as `UNRESOLVED`, so that case routes through
 
 ## Why no number was produced
 
-### 1. The historical FBS point states do not exist
+### 1. The historical FBS point states do not exist yet
 
-The parallel expected-margin lane finds `HISTORICAL_STRENGTH_AXIS_ANCHOR` is
-`HUMAN_GOVERNANCE_REQUIRED`, for two independent reasons: Unified Master Z is
-standardized over a **closed** 121-team FBS population, so another season is
-another population and the two axes are not commensurable; and the 14 points/SD
-scale is marked "initial scale pending margin calibration" in its own source.
+`HISTORICAL_STRENGTH_AXIS_ANCHOR` is classified **`EMPIRICALLY_CALIBRATABLE`**:
+the historical point-axis scale is recoverable from real Week 1-2 margins once
+historical opening standardized states are available. Opening weeks are the
+right place for it because they run on preseason opening strength, so their
+expected margins consume no weekly rerating coefficient and the axis is not
+confounded with parameters that are themselves unfitted.
 
-This is not a precision problem. The FCS baseline enters the expected margin
-**additively**, so its least-squares estimate is
+That classification **supersedes** an earlier `HUMAN_GOVERNANCE_REQUIRED`
+reading, which an independent audit of the historical expected-margin lane
+refuted. **No Chairman ruling is a prerequisite for FCS scale estimation.** This
+lane waits on a calibration result, not on an authority.
+
+What did not change is the mathematics, and it is the reason this lane still
+refuses to fit against an unestablished axis. The FCS baseline enters the
+expected margin **additively**, so its least-squares estimate is
 
 ```
 F_hat = mean(fbs_pregame_points + venue_term - actual_margin_fbs)
@@ -87,6 +96,10 @@ exactly `c` while every residual, every RMSE and the whole objective surface sta
 identical. The fitted value therefore estimates *the FCS baseline plus the axis
 offset*, and no sample size separates them. A test checks this rather than
 asserting it.
+
+So the axis has to be established — by calibration, which is the available route
+— *before* a fitted baseline means the FCS baseline. That is an ordering
+constraint on the estimation, not a governance gate.
 
 The axis **scale** is different: it leaves a signature. Scaling the axis by `k`
 makes the regression of venue-adjusted margin on FBS strength read slope `1/k`
@@ -133,7 +146,7 @@ orientation zero support, while the 2026 schedule contains three real FCS-home
 games (G0019, G0213, G0224) that production must handle. The harness tests all
 three orientations; the candidate evidence can only ever exercise one.
 
-## What the 43 games could deliver, once the axis is anchored
+## What the 43 games could deliver, once the axis is established
 
 A design calculation, not a fit. It consumes only a dispersion and a count:
 
@@ -152,24 +165,51 @@ not a promotable point value. At the same dispersion,
 ±4-point half-width and **579** for ±2. Both are upper bounds for the same
 reason the ±7.53 is: they use the unconditional SD.
 
-## Terminal and scope
+## Freeze
 
-`FCS_SCALE_RESEARCH_READY_FOR_INPUTS`: the harness is complete and every missing
-input has a named supplier. Nothing here retires a blocker, writes canonical
-configuration, registers an adapter, introduces team-specific or season-specific
-FCS ratings, fits any calibration parameter, or runs a season simulation.
+The harness phase is complete and the harness is frozen as an **input-ready
+research tool** — `HARNESS_STATUS = FROZEN_READY_FOR_INPUTS`. Frozen means its
+mathematics, its refusals and its search are settled and are not to be
+redesigned. It does not mean sealed: handing it the three inputs below runs the
+study through exactly this code, which is why it is frozen in a runnable state
+rather than a half-built one.
 
-To run the study when the inputs arrive:
+`PRESERVED_FINDINGS` pins the six results this lane established, so a later
+change that contradicts one of them fails a test instead of passing quietly:
 
-1. Audit the corpus and bind it by exact SHA through `bind_research_corpus`.
-2. Supply governed pregame FBS point states declaring
-   `strength_domain = V3_UNIFIED_NEUTRAL_FIELD_POINTS`.
-3. Classify each game's venue from an authoritative source, or exclude the
-   ambiguous ones explicitly.
-4. Call `fit_fcs_point_baseline`, then `fcs_scale_research_result(corpus=…,
-   observations=…)`.
+1. `F_hat = mean(FBS_pregame_points + venue_adjustment − actual_margin_FBS)`.
+2. FCS Elo = 1250, fixed.
+3. The 43 candidate observations give weak, range-level identification — not
+   high-precision standalone identification.
+4. All 43 are currently FBS-designated-home.
+5. A constant shift in the FBS point-axis zero shifts `F_hat` one-for-one while
+   preserving every game residual.
+6. Venue misclassification directly biases the fitted FCS baseline.
+
+## Numerical input dependencies
+
+`FCS_SCALE_RESEARCH_READY_FOR_INPUTS`. Three inputs, all of them **evidence**
+dependencies. **None is an authority gate, and no Chairman ruling is a
+prerequisite for FCS scale estimation.**
+
+1. Governed / empirically established **historical FBS pregame V3 point
+   states**, declaring `strength_domain = V3_UNIFIED_NEUTRAL_FIELD_POINTS`.
+2. **Audited real FBS-vs-FCS observations**, bound by exact SHA through
+   `bind_research_corpus`.
+3. **Defensible venue classification** for every observation used — or explicit
+   exclusion of the ambiguous ones.
+
+Then call `fit_fcs_point_baseline`, and
+`fcs_scale_research_result(corpus=…, observations=…)` for the artifact.
+
+## Scope
+
+Nothing here retires a blocker, writes canonical configuration, registers an
+adapter, introduces team-specific or season-specific FCS ratings, fits any
+calibration parameter, or runs a season simulation. Blockers 8 before, 8 after.
 
 Even a clean run recommends at most a candidate. Installing it still requires
 `fcs.register_fcs_scale_adapter` with a `MARGIN_CALIBRATED_HOLDOUT` provenance
 and a human `APPROVE_V3_FCS_SCALE_ADAPTER::<RULING_ID>` token, neither of which
-this lane can produce.
+this lane can produce. That approval gate governs *promotion*, which is a
+different question from whether the scale can be estimated at all.
