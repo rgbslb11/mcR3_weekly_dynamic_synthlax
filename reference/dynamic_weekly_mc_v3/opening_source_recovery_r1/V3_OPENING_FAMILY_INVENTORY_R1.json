@@ -1,0 +1,164 @@
+{
+  "artifact": "V3_OPENING_FAMILY_INVENTORY_R1",
+  "artifact_version": "V3-OPENING-SOURCE-RECOVERY-R1",
+  "construction_source": {
+    "ensemble_parameters_sheet": "Ensemble Parameters",
+    "master_sheet": "Master Ratings",
+    "path": "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+    "sha256": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a"
+  },
+  "families": [
+    {
+      "externally_sourced": false,
+      "family_id": "TRUESKILL",
+      "family_name": "TrueSkill",
+      "generator": {
+        "algorithm": "Classic two-team TrueSkill, winner/loser only. mu0=25, sigma0=25/3=8.333333, beta=25/6=4.166667, tau=25/300=0.083333, draw probability 0, equal game weight, no margin, no home field. Parameter set TS-V0-2025-001; replayed in published game_seq order.",
+        "fully_specified": true,
+        "preseason_transition": "mu_2026 = 25 + 0.70 * (mu_2025 - 25); sigma_2026 = sqrt(sigma_2025^2 + 3.0^2). Parameter set P0-LAMBDA070-OMEGA300-v1.",
+        "required_input": "complete prior-season game ledger (winner/loser per game)",
+        "source_of_specification": "Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx, sheets '01 Method Register' (M-001..M-009), '10 2025 README', '21 2026 P0 Params', '24 2026 README'"
+      },
+      "master_column": "F",
+      "native_field": "TrueSkill 2026 Preseason mu",
+      "preseason_effective_date": "2026 preseason; P0 transition applied to the 2025 posterior",
+      "reproducible_algorithmically": true,
+      "standardized_column": "BM",
+      "supplying_artifact_2026": "Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx",
+      "supplying_artifact_sha256": "4b7d84d8a4b626c7f207162cb8748268d4d3f2608e41cba376a4272c6c7dfc79",
+      "upstream_evidence_class": "SYNTHETIC_2025_SEASON_LEDGER",
+      "weight": 0.25
+    },
+    {
+      "externally_sourced": false,
+      "family_id": "LITKENHOUS",
+      "family_name": "Litkenhous",
+      "generator": {
+        "algorithm": "Two layers. Layer 1 (pure carryover) = 0.60 * prior-season Litkenhous power margin, field recentered. The prior-season rating is itself SYTHLAX-LIT-V0: minimise sum_g [35*tanh(m_g/35) - (r_i - r_j + H*home_g)]^2 subject to sum_i r_i = 0, one jointly estimated home-field coefficient, equal game weights, no preseason priors. Layer 2 (the V3 input) adds clip[16 * (offseason_composite - 0.5), +/-8] and recenters to 100.",
+        "fully_specified": false,
+        "layer_2_dependency": "The offseason composite is the Board I-H component vector under the Board I-H sub-weights: returning 0.216216, movement 0.162162, talent 0.108108, coaching 0.081081, renormalized over their total 0.567567, with talent excluded for the academies. Recomputing the composite from the Board I-H v2 sheet reproduces the workbook's Litkenhous Offseason Composite column to 6.7e-16 and the Offseason Adjustment column to 1.2e-14. Layer 2 is therefore not independent of the Board family.",
+        "required_input": "complete prior-season game ledger with scores and a neutral-site indicator, plus the Board I-H component vector",
+        "source_of_specification": "2026_Synthetic_FBS_Litkenhous_Preseason_Three_Layer.xlsx sheet 'Methodology'; 2025_Synthetic_CFB_Litkenhous_Inspired_Final_Ratings.xlsx sheet 'Methodology' (model SYTHLAX-LIT-V0-2025-FINAL)"
+      },
+      "historical_name_disclaimer": "The historical Litkenhous Difference by Score system was an NCAA major selector for 1934-1984. The ingested source record SRC-LIT-001 carries its algorithm, coefficients, score transformation and schedule adjustment as BLOCKED, sets direct_production_weight to 0.0, and prohibits exact reconstruction. The programme's own model card states 'Litkenhous-inspired reconstruction; not an exact reproduction of the proprietary historical formula'. The V3 family is a contemporary implementation carrying a historical name.",
+      "master_column": "L",
+      "native_field": "Litkenhous Adjusted Power",
+      "preseason_effective_date": "2026 preseason; carryover from the 2025 final rating",
+      "reproducible_algorithmically": false,
+      "standardized_column": "BN",
+      "supplying_artifact_2026": "2026_Synthetic_FBS_Litkenhous_Preseason_Three_Layer.xlsx",
+      "supplying_artifact_sha256": "5ad5125a306601eeca67a3750c7fa8e556a5c8bdb8680f5031b6818e86ff37db",
+      "upstream_evidence_class": "SYNTHETIC_2025_SEASON_LEDGER_PLUS_CHAIRMAN_BOARD",
+      "variance_decomposition_of_adjusted_power": {
+        "board_adjustment_variance_share": 0.023,
+        "carryover_variance_share": 0.8133,
+        "covariance_share": 0.1637,
+        "note": "Recomputed over the 121 published rows. The Board-derived layer supplies a minority of the dispersion but is a hard prerequisite: without it the published Adjusted Power cannot be formed at all."
+      },
+      "weight": 0.25
+    },
+    {
+      "externally_sourced": false,
+      "family_id": "PURE_BAXTER",
+      "family_name": "Pure Baxter",
+      "generator": {
+        "algorithm": "Doctrine BAXTER-MOV-v1.0-R. Opponent-adjusted margin ridge: predicted margin A = HFA * non-neutral indicator + rating A - rating B; team ratings sum to zero within a season; margin cap 49; ridge lambda 0.3 with the HFA term unpenalized; HFA mode season_fit.",
+        "fully_specified": true,
+        "preseason_transition": "2026 Pure Baxter = 0.70 * 2025 Baxter Ridge rating; documented regression imputation for entrants with no prior-season fit.",
+        "required_input": "complete prior-season game ledger with scores and a neutral-site indicator",
+        "source_of_specification": "Baxter_Ratings_v1_Joint_2024_2025_Validation_and_Freeze.xlsx sheets 'Doctrine' and 'Executive Summary'; Baxter_v1_2006_2011_2024_2025_Complete_Package/README.txt"
+      },
+      "master_column": "AQ",
+      "native_field": "2026 Pure Baxter Rating",
+      "preseason_effective_date": "2026 preseason; carry-forward of the 2025 ridge fit",
+      "reproducible_algorithmically": true,
+      "standardized_column": "BR",
+      "supplying_artifact_2026": "2026_Synthetic_CFB_Preseason_Baxter_Carryforward.xlsx",
+      "supplying_artifact_sha256": null,
+      "upstream_evidence_class": "SYNTHETIC_2025_SEASON_LEDGER",
+      "weight": 0.25
+    },
+    {
+      "combination_rule": "Board Family Z = AVERAGE(Board I-H Z, Board J-B Z). The two members are standardized separately against their own field deviations and then averaged; this is not the Z score of an averaged native value.",
+      "externally_sourced": false,
+      "family_id": "BOARD_FAMILY",
+      "family_name": "Board Family",
+      "member_independence": {
+        "component_vectors_identical": true,
+        "distinct_component_rows": 0,
+        "pearson_r_between_member_power_series": 0.99721236,
+        "statement": "The two Board members are not two boards. They are one Chairman-governed component vector under two approved weightings; every one of the 121 rows carries identical baseline, returning, movement, talent and coaching values in both workbooks. The Board family therefore contributes one independent measurement at 25% weight, not two at 12.5%."
+      },
+      "members": [
+        {
+          "generator": {
+            "algorithm": "power_H = (16*baseline + 8*returning + 6*movement + 4*talent + 3*coaching) / 37, i.e. weights 0.432432, 0.216216, 0.162162, 0.108108, 0.081081.",
+            "component_scoring_manual": "NOT_DOCUMENTED_IN_ANY_LOCATED_ARTIFACT",
+            "fully_specified": false,
+            "solved_weights_max_residual": 9.06e-06,
+            "source_of_specification": "Board_I-K_Derivation_Methodology.md section 2, corroborated by least squares over the 118 non-academy rows of 2026_Board_I-H_v2.xlsx"
+          },
+          "master_column": "S",
+          "member_id": "BOARD_I_H",
+          "native_field": "Board I-H Power Rating (power_H)",
+          "standardized_column": "BO",
+          "supplying_artifact_2026": "2026_Board_I-H_v2.xlsx",
+          "supplying_artifact_sha256": "278701fc8e8ef62f992cf9f04f2ddddb6ba15c428cbd833a7bd14babf62b2213",
+          "weight": 0.125
+        },
+        {
+          "generator": {
+            "algorithm": "power_Run2 = 0.35*baseline + 0.20*returning + 0.25*movement + 0.10*talent + 0.10*coaching, over the SAME component vector as Board I-H v2; academies exclude talent and renormalize the remaining terms over 0.90.",
+            "component_scoring_manual": "NOT_DOCUMENTED_IN_ANY_LOCATED_ARTIFACT",
+            "fully_specified": false,
+            "reproduction_max_residual": 1.11e-16,
+            "source_of_specification": "2026_Board_J-B_Run2.xlsx sheet 'Rulings Run2', field POWER_FORMULA; scenario approved by the Chairman 2026-07-28"
+          },
+          "master_column": "W",
+          "member_id": "BOARD_J_B",
+          "native_field": "Board J-B Run2 Power Rating (power_Run2)",
+          "standardized_column": "BP",
+          "supplying_artifact_2026": "2026_Board_J-B_Run2.xlsx",
+          "supplying_artifact_sha256": "bcec6150b9bf46b9cee2fb8accb3f0a7875848d09983a5b2e0a17374d6df46aa",
+          "weight": 0.125
+        }
+      ],
+      "native_field": "mean of standardized Board I-H power_H and Board J-B power_Run2",
+      "preseason_effective_date": "2026-07-14 (I-H v2) and 2026-07-28 (J-B Run 2)",
+      "reproducible_algorithmically": false,
+      "standardized_column": "BQ",
+      "upstream_evidence_class": "CHAIRMAN_GOVERNED_HUMAN_BOARD",
+      "weight": 0.25
+    }
+  ],
+  "family_count_rule": {
+    "included_family_count_column": "BZ",
+    "renormalization_rule_exists": false,
+    "statement": "The workbook stores Included Family Count as the literal 4 on every row and its Validation sheet asserts MIN(BZ5:BZ125) = 4. Neither the workbook nor V3 source carries a rule for combining fewer than four families; combine_unified_z on the sibling historical-opening-state branch refuses a subset rather than renormalizing. No missing-family rule is invented here.",
+    "value": 4
+  },
+  "output_transforms": {
+    "family_disagreement": "STDEV(TrueSkill Z, Litkenhous Z, Board Family Z, Pure Baxter Z)",
+    "unified_master_power_index": "100 + 10 * Unified Master Z",
+    "unified_master_z": "0.25*TrueSkill Z + 0.25*Litkenhous Z + 0.25*Pure Baxter Z + 0.25*Board Family Z",
+    "unified_neutral_field_points": "14 * Unified Master Z (workbook calls this provisional)"
+  },
+  "standardization": {
+    "ddof": 1,
+    "formula": "(native - AVERAGE(population)) / STDEV(population)",
+    "note": "The workbook titles this block 'Population Statistics' but divides by Excel STDEV, the sample deviation. Confirmed independently by the sibling historical-opening-state lane, which reproduces every family Z at ddof=1 and none at ddof=0.",
+    "population": "the 121 FBS rows of the Master Ratings sheet"
+  },
+  "the_board_dependency": {
+    "board_dependent_families": [
+      "BOARD_FAMILY",
+      "LITKENHOUS"
+    ],
+    "board_dependent_weight": 0.5,
+    "board_free_families": [
+      "PURE_BAXTER",
+      "TRUESKILL"
+    ],
+    "statement": "Half the Unified Master Z weight terminates in the Board component vector: the Board family directly at 0.25, and Litkenhous through its Layer 2 offseason composite at a further 0.25. The Ensemble Parameters sheet describes Litkenhous as an independent family; against the arithmetic it is not independent of the Board."
+  }
+}

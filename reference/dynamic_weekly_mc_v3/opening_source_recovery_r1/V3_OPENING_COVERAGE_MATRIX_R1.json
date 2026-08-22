@@ -1,0 +1,136 @@
+{
+  "all_four_families_required": true,
+  "artifact": "V3_OPENING_COVERAGE_MATRIX_R1",
+  "artifact_version": "V3-OPENING-SOURCE-RECOVERY-R1",
+  "families": [
+    "TRUESKILL",
+    "LITKENHOUS",
+    "PURE_BAXTER",
+    "BOARD_FAMILY"
+  ],
+  "matrix": {
+    "2021": {
+      "BOARD_FAMILY": {
+        "authority": "CHAIRMAN_GOVERNED_2026_ONLY",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "LITKENHOUS": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "PURE_BAXTER": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "TRUESKILL": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "population_required": 130,
+      "unified_z_constructible": false
+    },
+    "2022": {
+      "BOARD_FAMILY": {
+        "authority": "CHAIRMAN_GOVERNED_2026_ONLY",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "LITKENHOUS": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "PURE_BAXTER": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "TRUESKILL": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "population_required": 131,
+      "unified_z_constructible": false
+    },
+    "2023": {
+      "BOARD_FAMILY": {
+        "authority": "CHAIRMAN_GOVERNED_2026_ONLY",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "LITKENHOUS": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "PURE_BAXTER": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "TRUESKILL": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "population_required": 133,
+      "unified_z_constructible": false
+    },
+    "2024": {
+      "BOARD_FAMILY": {
+        "authority": "CHAIRMAN_GOVERNED_2026_ONLY",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "LITKENHOUS": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "NO_HISTORICAL_COUNTERPART_FOUND",
+        "team_count": 0
+      },
+      "PURE_BAXTER": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "TRUESKILL": {
+        "authority": "NONE_LOCATED",
+        "effective_date": null,
+        "status": "ALGORITHMICALLY_RECONSTRUCTABLE",
+        "team_count": 0
+      },
+      "population_required": 134,
+      "unified_z_constructible": false
+    }
+  },
+  "missing_family_renormalization": {
+    "existing_v3_rule": null,
+    "invented_here": false,
+    "statement": "The key question this lane was asked -- whether all four families are necessary or whether existing V3 rules already permit missing-family renormalization -- resolves to: all four are necessary and no such rule exists. The workbook hardcodes Included Family Count at 4 and validates MIN = 4; combine_unified_z refuses a subset with ComponentUnavailable rather than reweighting. Two of four families being reconstructable does not yield two-thirds of a Unified Z or a rescaled one. It yields nothing, until somebody with authority rules otherwise."
+  },
+  "seasons_in_scope": [
+    2021,
+    2022,
+    2023,
+    2024
+  ]
+}

@@ -1,0 +1,752 @@
+{
+  "artifact": "V3_OPENING_SOURCE_RECOVERY_MATRIX_R1",
+  "artifact_version": "V3-OPENING-SOURCE-RECOVERY-R1",
+  "board_substitute_candidates": {
+    "adjudication_note": "Reported for later adjudication only. None is adopted, none is mounted, and none is proposed as an authority. Substituting any of them changes what the Board family measures, which is a Chairman decision and not an evidence one.",
+    "candidates": [
+      {
+        "board_component_addressed": "talent",
+        "candidate": "247Sports Team Talent Composite",
+        "coverage": "full FBS field, published annually before Week 1",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "returning",
+        "candidate": "Returning production (SP+ author's published metric)",
+        "coverage": "full FBS field, published in the offseason",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "movement",
+        "candidate": "Transfer-portal team rankings (247Sports / On3)",
+        "coverage": "full FBS field, published before Week 1",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "market",
+        "candidate": "Sportsbook preseason season win totals",
+        "coverage": "most FBS programs, posted before Week 1",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "baseline (whole-board proxy)",
+        "candidate": "SP+ preseason ratings",
+        "coverage": "full FBS field, published before Week 1",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "baseline (whole-board proxy)",
+        "candidate": "ESPN FPI preseason projections",
+        "coverage": "full FBS field, published before Week 1",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      },
+      {
+        "board_component_addressed": "whole-board proxy, ordinal only",
+        "candidate": "AP and Coaches preseason polls",
+        "coverage": "25 ranked teams plus others receiving votes; not a full-field rating and cannot be standardized over a 130+ population",
+        "seasons_available": [
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      }
+    ],
+    "coaching_component": "No published preseason index corresponds to the Board's coaching term. Coaching changes are documented facts, but the mapping from a change to a 0-1 score is the undocumented part.",
+    "fundamental_limit": "Even with every raw input above, the Board values cannot be reproduced. What is missing is not the inputs but the rubric that maps them onto the 0-1 component scale, together with the case-by-case rulings that override it. A substitute board would be a different instrument wearing the same weight."
+  },
+  "classification_vocabulary": [
+    "ALGORITHMICALLY_RECONSTRUCTABLE",
+    "AMBIGUOUS",
+    "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+    "EXACT_SOURCE_RECOVERED",
+    "NO_HISTORICAL_COUNTERPART_FOUND",
+    "POSTSEASON_ONLY",
+    "SYNTHETIC_ONLY"
+  ],
+  "exact_source_recovered_count": 0,
+  "refused_candidates": [
+    {
+      "candidate": "Baxter_Ratings_2024.csv",
+      "disposition": "POSTSEASON_ONLY",
+      "provides_families": [
+        "PURE_BAXTER"
+      ],
+      "reason": "A ridge fit over 2024's own completed games; its games column carries post-season counts. Admissible as a 2025 preseason carry-forward input, never as a 2024 preseason value.",
+      "seasons_claimed": [
+        2024
+      ]
+    },
+    {
+      "candidate": "Power_Crunch_Research_Lab_Phase5J_2024_FACT_Ratings_Package.zip",
+      "disposition": "POSTSEASON_ONLY",
+      "provides_families": [],
+      "reason": "season_config_2024.json declares season_status COMPLETE, include_postseason true and calculation_cutoff_date 2025-01-31. FACT is also not a V3 family.",
+      "seasons_claimed": [
+        2024
+      ]
+    },
+    {
+      "candidate": "Power_Crunch_Research_Lab_Phase5M_2024_CPI_Ratings_Package.zip",
+      "disposition": "POSTSEASON_ONLY",
+      "provides_families": [],
+      "reason": "Built from accepted_games_2024.csv; a 2024 rating computed from 2024 results.",
+      "seasons_claimed": [
+        2024
+      ]
+    },
+    {
+      "candidate": "pregame_states_2024_2025.csv",
+      "disposition": "SYNTHETIC_ONLY",
+      "provides_families": [],
+      "reason": "The only genuinely leak-free season-opening state located, and degenerate: every 2024 week-0 row carries elo_a_pre and elo_b_pre exactly 1500.0, so the opening population has zero dispersion and no deviation to divide by. It is also research Elo, base 1500 -- not a V3 family and a foreign scale.",
+      "seasons_claimed": [
+        2024,
+        2025
+      ]
+    },
+    {
+      "candidate": "2025_Synthetic_CFB_Litkenhous_Inspired_Final_Ratings.xlsx",
+      "disposition": "POSTSEASON_ONLY",
+      "provides_families": [
+        "LITKENHOUS"
+      ],
+      "reason": "A 2025 season-final rating, and out of the 2021-2024 scope. Registered here because its Methodology sheet is the specification that makes LITKENHOUS_PURE_CARRYOVER replayable.",
+      "seasons_claimed": [
+        2025
+      ]
+    },
+    {
+      "candidate": "2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+      "disposition": "SYNTHETIC_ONLY",
+      "provides_families": [],
+      "reason": "The canonical identity authority for a synthetic 2026 universe of 134 entities. It classifies eight real FBS programs as SCHEDULE_ONLY_FCS and nine real FCS programs as FBS_MEMBER. Usable for identity binding, never as a historical population.",
+      "seasons_claimed": [
+        2026
+      ]
+    },
+    {
+      "candidate": "Litkenhous Ratings source-ingestion package (SRC-LIT-001)",
+      "disposition": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "provides_families": [
+        "LITKENHOUS"
+      ],
+      "reason": "The genuine historical provenance record for the Litkenhous Difference by Score system. Its empirical scope is the 1934-1984 No. 1 selections; the algorithm, coefficients and score transformation are all recorded BLOCKED, and direct_production_weight is 0.0. It establishes that no historical Litkenhous rating exists for 2021-2024 and that none could be recomputed.",
+      "seasons_claimed": [
+        1934,
+        1984
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "TRUESKILL_PRESEASON_MU",
+      "effective_date": "2021 preseason",
+      "evidence": "No 2021-2024 TrueSkill artifact exists. The whole located lineage is Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx, whose 2025 season opens with pregame_mu 25 and pregame_sigma 8.333333 for every team. The generating method is nevertheless fully specified (TS-V0-2025-001 replay, then the P0-LAMBDA070-OMEGA300-v1 transition) and consumes only prior-season results, which is information available before the target season.",
+      "family": "TRUESKILL",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2020 game ledger, which is not mounted. The 2026 value derives from a SYNTHETIC 2025 season; a replay over real games is a different evidence lineage and must be labelled as one rather than presented as the same object.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "PURE_BAXTER_RATING",
+      "effective_date": "2021 preseason",
+      "evidence": "The Baxter universe is 2006-2011, 2024 and 2025; there is no 2012-2023 fit of any kind. Baxter_Ratings_2024.csv carries a 2024 label but is a ridge fit over 2024's own games -- its rows carry post-season game counts -- and is refused as a 2024 preseason value. The frozen specification BAXTER-MOV-v1.0-R is complete enough to replay over any prior-season ledger.",
+      "family": "PURE_BAXTER",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2020 game ledger with scores and a neutral-site indicator. No such ledger is mounted, and the one historical corpus in the programme classifies venue as BLOCKED.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "LITKENHOUS_PURE_CARRYOVER",
+      "effective_date": "2021 preseason",
+      "evidence": "Layer 1 only. SYTHLAX-LIT-V0 is fully specified and the carry weight 0.60 is published. This is the reconstructable half of the Litkenhous family and on its own it is not the V3 input.",
+      "family": "LITKENHOUS",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2020 game ledger with scores and a neutral-site indicator.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_OFFSEASON_COMPOSITE",
+      "effective_date": "2021 preseason",
+      "evidence": "The composite is the Board I-H component vector under the I-H sub-weights. Recomputing it from the Board sheet reproduces the published column to 6.7e-16. It inherits every Board blocker.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "No board of any letter exists for any season before 2026, and the component scoring manual is not reproduced in any located artifact.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_ADJUSTED_POWER",
+      "effective_date": "2021 preseason",
+      "evidence": "The V3 native input, master column L. It is Layer 1 plus Layer 2 and cannot be formed while Layer 2 is unavailable. The Litkenhous name does not import a historical series: the historical Litkenhous Difference by Score system was an NCAA major selector for 1934-1984 whose algorithm source record SRC-LIT-001 marks BLOCKED, and no historical Litkenhous rating exists for 2021-2024 because the historical system had long ceased publication.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "Blocked by LITKENHOUS_OFFSEASON_COMPOSITE.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_I_H_POWER_H",
+      "effective_date": "2021 preseason",
+      "evidence": "The only located artifact carrying Board I-H Power Rating (power_H) is 2026_Board_I-H_v2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_J_B_POWER_RUN2",
+      "effective_date": "2021 preseason",
+      "evidence": "The only located artifact carrying Board J-B Run2 Power Rating (power_Run2) is 2026_Board_J-B_Run2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2021,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "PRIOR_SEASON_GAME_LEDGER",
+      "effective_date": "end of the 2020 season, before the 2021 season opens",
+      "evidence": "The NCAA scoreboard feed serves 2020. Probing https://data.ncaa.com/casablanca/scoreboard/football/fbs/2020/{week}/scoreboard.json for weeks 01-15 returns HTTP 200 with 616 scheduled entries and 523 games in state 'final'; weeks 16+ are empty. 2020 was the COVID-disrupted season and the feed carries no postseason, so a replayed 2020 fit would rest on an abnormal and bowl-free schedule.",
+      "family": "SHARED_PREREQUISITE",
+      "games_available": 523,
+      "leakage_status": "PRESEASON_CLEAN_FOR_TARGET_SEASON",
+      "missing_reason": "No 2020 game ledger of any kind exists on the filesystem. The authoritative feed is reachable and unmounted.",
+      "reconstructable": true,
+      "season": 2021,
+      "source": "https://data.ncaa.com/casablanca/scoreboard/football/{division}/2020/{week}/scoreboard.json",
+      "source_effective_date": "2020 season, published weekly",
+      "team_count": null
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "HISTORICAL_FBS_POPULATION",
+      "effective_date": "settled before the 2021 season opens",
+      "evidence": "Membership is settled before a season starts, so this class is leakage-clean. Two rosters were located and both are frozen at 251 entities; see V3_OPENING_POPULATION_RECONCILIATION_R1.json.",
+      "family": "SHARED_PREREQUISITE",
+      "leakage_status": "PRESEASON_CLEAN",
+      "missing_reason": "The conference-distribution workbook reproduces the real count for this season but its named upstream, Synthetic_CFB_2021_2026_Walkover_RERUN.csv, was not located, so the lineage is documented and not closed to bytes.",
+      "reconstructable": true,
+      "season": 2021,
+      "source": "251_Team_Conference_Affiliations_2012_2026.xlsx (Conference Affiliations, 251 rows, 2012-2026, source-cited to NCAA / Sports-Reference / conference releases); Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx (Team Affiliations, per-season subdivision)",
+      "source_effective_date": "2021 membership, settled preseason",
+      "team_count": 130
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "TRUESKILL_PRESEASON_MU",
+      "effective_date": "2022 preseason",
+      "evidence": "No 2021-2024 TrueSkill artifact exists. The whole located lineage is Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx, whose 2025 season opens with pregame_mu 25 and pregame_sigma 8.333333 for every team. The generating method is nevertheless fully specified (TS-V0-2025-001 replay, then the P0-LAMBDA070-OMEGA300-v1 transition) and consumes only prior-season results, which is information available before the target season.",
+      "family": "TRUESKILL",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2021 game ledger, which is not mounted. The 2026 value derives from a SYNTHETIC 2025 season; a replay over real games is a different evidence lineage and must be labelled as one rather than presented as the same object.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "PURE_BAXTER_RATING",
+      "effective_date": "2022 preseason",
+      "evidence": "The Baxter universe is 2006-2011, 2024 and 2025; there is no 2012-2023 fit of any kind. Baxter_Ratings_2024.csv carries a 2024 label but is a ridge fit over 2024's own games -- its rows carry post-season game counts -- and is refused as a 2024 preseason value. The frozen specification BAXTER-MOV-v1.0-R is complete enough to replay over any prior-season ledger.",
+      "family": "PURE_BAXTER",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2021 game ledger with scores and a neutral-site indicator. No such ledger is mounted, and the one historical corpus in the programme classifies venue as BLOCKED.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "LITKENHOUS_PURE_CARRYOVER",
+      "effective_date": "2022 preseason",
+      "evidence": "Layer 1 only. SYTHLAX-LIT-V0 is fully specified and the carry weight 0.60 is published. This is the reconstructable half of the Litkenhous family and on its own it is not the V3 input.",
+      "family": "LITKENHOUS",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2021 game ledger with scores and a neutral-site indicator.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_OFFSEASON_COMPOSITE",
+      "effective_date": "2022 preseason",
+      "evidence": "The composite is the Board I-H component vector under the I-H sub-weights. Recomputing it from the Board sheet reproduces the published column to 6.7e-16. It inherits every Board blocker.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "No board of any letter exists for any season before 2026, and the component scoring manual is not reproduced in any located artifact.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_ADJUSTED_POWER",
+      "effective_date": "2022 preseason",
+      "evidence": "The V3 native input, master column L. It is Layer 1 plus Layer 2 and cannot be formed while Layer 2 is unavailable. The Litkenhous name does not import a historical series: the historical Litkenhous Difference by Score system was an NCAA major selector for 1934-1984 whose algorithm source record SRC-LIT-001 marks BLOCKED, and no historical Litkenhous rating exists for 2021-2024 because the historical system had long ceased publication.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "Blocked by LITKENHOUS_OFFSEASON_COMPOSITE.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_I_H_POWER_H",
+      "effective_date": "2022 preseason",
+      "evidence": "The only located artifact carrying Board I-H Power Rating (power_H) is 2026_Board_I-H_v2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_J_B_POWER_RUN2",
+      "effective_date": "2022 preseason",
+      "evidence": "The only located artifact carrying Board J-B Run2 Power Rating (power_Run2) is 2026_Board_J-B_Run2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2022,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "PRIOR_SEASON_GAME_LEDGER",
+      "effective_date": "end of the 2021 season, before the 2022 season opens",
+      "evidence": "Raw NCAA scoreboard captures for this season exist on the unmerged sibling branch claude/v3-historical-observation-corpus-r6 and its admitted corpus is materially short of the real field. The corpus also classifies venue as BLOCKED -- the feed publishes no neutral-site indicator -- and both the Baxter ridge (HFA mode season_fit) and SYTHLAX-LIT-V0 (jointly estimated home-field coefficient) require one. For 2021 the admitted corpus carries 556 games over 105 distinct teams against a real FBS field of 130.",
+      "family": "SHARED_PREREQUISITE",
+      "games_available": 556,
+      "leakage_status": "PRESEASON_CLEAN_FOR_TARGET_SEASON",
+      "missing_reason": "Unmerged, incomplete (105 of 130 programs), postseason-free, and carrying no neutral-site indicator.",
+      "reconstructable": true,
+      "season": 2022,
+      "source": "https://data.ncaa.com/casablanca/scoreboard/football/{division}/2021/{week}/scoreboard.json",
+      "source_effective_date": "2021 season, published weekly",
+      "team_count": 105
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "HISTORICAL_FBS_POPULATION",
+      "effective_date": "settled before the 2022 season opens",
+      "evidence": "Membership is settled before a season starts, so this class is leakage-clean. Two rosters were located and both are frozen at 251 entities; see V3_OPENING_POPULATION_RECONCILIATION_R1.json.",
+      "family": "SHARED_PREREQUISITE",
+      "leakage_status": "PRESEASON_CLEAN",
+      "missing_reason": "The conference-distribution workbook reproduces the real count for this season but its named upstream, Synthetic_CFB_2021_2026_Walkover_RERUN.csv, was not located, so the lineage is documented and not closed to bytes.",
+      "reconstructable": true,
+      "season": 2022,
+      "source": "251_Team_Conference_Affiliations_2012_2026.xlsx (Conference Affiliations, 251 rows, 2012-2026, source-cited to NCAA / Sports-Reference / conference releases); Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx (Team Affiliations, per-season subdivision)",
+      "source_effective_date": "2022 membership, settled preseason",
+      "team_count": 131
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "TRUESKILL_PRESEASON_MU",
+      "effective_date": "2023 preseason",
+      "evidence": "No 2021-2024 TrueSkill artifact exists. The whole located lineage is Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx, whose 2025 season opens with pregame_mu 25 and pregame_sigma 8.333333 for every team. The generating method is nevertheless fully specified (TS-V0-2025-001 replay, then the P0-LAMBDA070-OMEGA300-v1 transition) and consumes only prior-season results, which is information available before the target season.",
+      "family": "TRUESKILL",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2022 game ledger, which is not mounted. The 2026 value derives from a SYNTHETIC 2025 season; a replay over real games is a different evidence lineage and must be labelled as one rather than presented as the same object.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "PURE_BAXTER_RATING",
+      "effective_date": "2023 preseason",
+      "evidence": "The Baxter universe is 2006-2011, 2024 and 2025; there is no 2012-2023 fit of any kind. Baxter_Ratings_2024.csv carries a 2024 label but is a ridge fit over 2024's own games -- its rows carry post-season game counts -- and is refused as a 2024 preseason value. The frozen specification BAXTER-MOV-v1.0-R is complete enough to replay over any prior-season ledger.",
+      "family": "PURE_BAXTER",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2022 game ledger with scores and a neutral-site indicator. No such ledger is mounted, and the one historical corpus in the programme classifies venue as BLOCKED.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "LITKENHOUS_PURE_CARRYOVER",
+      "effective_date": "2023 preseason",
+      "evidence": "Layer 1 only. SYTHLAX-LIT-V0 is fully specified and the carry weight 0.60 is published. This is the reconstructable half of the Litkenhous family and on its own it is not the V3 input.",
+      "family": "LITKENHOUS",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2022 game ledger with scores and a neutral-site indicator.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_OFFSEASON_COMPOSITE",
+      "effective_date": "2023 preseason",
+      "evidence": "The composite is the Board I-H component vector under the I-H sub-weights. Recomputing it from the Board sheet reproduces the published column to 6.7e-16. It inherits every Board blocker.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "No board of any letter exists for any season before 2026, and the component scoring manual is not reproduced in any located artifact.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_ADJUSTED_POWER",
+      "effective_date": "2023 preseason",
+      "evidence": "The V3 native input, master column L. It is Layer 1 plus Layer 2 and cannot be formed while Layer 2 is unavailable. The Litkenhous name does not import a historical series: the historical Litkenhous Difference by Score system was an NCAA major selector for 1934-1984 whose algorithm source record SRC-LIT-001 marks BLOCKED, and no historical Litkenhous rating exists for 2021-2024 because the historical system had long ceased publication.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "Blocked by LITKENHOUS_OFFSEASON_COMPOSITE.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_I_H_POWER_H",
+      "effective_date": "2023 preseason",
+      "evidence": "The only located artifact carrying Board I-H Power Rating (power_H) is 2026_Board_I-H_v2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_J_B_POWER_RUN2",
+      "effective_date": "2023 preseason",
+      "evidence": "The only located artifact carrying Board J-B Run2 Power Rating (power_Run2) is 2026_Board_J-B_Run2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2023,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "PRIOR_SEASON_GAME_LEDGER",
+      "effective_date": "end of the 2022 season, before the 2023 season opens",
+      "evidence": "Raw NCAA scoreboard captures for this season exist on the unmerged sibling branch claude/v3-historical-observation-corpus-r6 and its admitted corpus is materially short of the real field. The corpus also classifies venue as BLOCKED -- the feed publishes no neutral-site indicator -- and both the Baxter ridge (HFA mode season_fit) and SYTHLAX-LIT-V0 (jointly estimated home-field coefficient) require one. For 2022 the admitted corpus carries 524 games over 101 distinct teams against a real FBS field of 131.",
+      "family": "SHARED_PREREQUISITE",
+      "games_available": 524,
+      "leakage_status": "PRESEASON_CLEAN_FOR_TARGET_SEASON",
+      "missing_reason": "Unmerged, incomplete (101 of 131 programs), postseason-free, and carrying no neutral-site indicator.",
+      "reconstructable": true,
+      "season": 2023,
+      "source": "https://data.ncaa.com/casablanca/scoreboard/football/{division}/2022/{week}/scoreboard.json",
+      "source_effective_date": "2022 season, published weekly",
+      "team_count": 101
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "HISTORICAL_FBS_POPULATION",
+      "effective_date": "settled before the 2023 season opens",
+      "evidence": "Membership is settled before a season starts, so this class is leakage-clean. Two rosters were located and both are frozen at 251 entities; see V3_OPENING_POPULATION_RECONCILIATION_R1.json.",
+      "family": "SHARED_PREREQUISITE",
+      "leakage_status": "PRESEASON_CLEAN",
+      "missing_reason": "The conference-distribution workbook reproduces the real count for this season but its named upstream, Synthetic_CFB_2021_2026_Walkover_RERUN.csv, was not located, so the lineage is documented and not closed to bytes.",
+      "reconstructable": true,
+      "season": 2023,
+      "source": "251_Team_Conference_Affiliations_2012_2026.xlsx (Conference Affiliations, 251 rows, 2012-2026, source-cited to NCAA / Sports-Reference / conference releases); Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx (Team Affiliations, per-season subdivision)",
+      "source_effective_date": "2023 membership, settled preseason",
+      "team_count": 133
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "TRUESKILL_PRESEASON_MU",
+      "effective_date": "2024 preseason",
+      "evidence": "No 2021-2024 TrueSkill artifact exists. The whole located lineage is Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx, whose 2025 season opens with pregame_mu 25 and pregame_sigma 8.333333 for every team. The generating method is nevertheless fully specified (TS-V0-2025-001 replay, then the P0-LAMBDA070-OMEGA300-v1 transition) and consumes only prior-season results, which is information available before the target season.",
+      "family": "TRUESKILL",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2023 game ledger, which is not mounted. The 2026 value derives from a SYNTHETIC 2025 season; a replay over real games is a different evidence lineage and must be labelled as one rather than presented as the same object.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "PURE_BAXTER_RATING",
+      "effective_date": "2024 preseason",
+      "evidence": "The Baxter universe is 2006-2011, 2024 and 2025; there is no 2012-2023 fit of any kind. Baxter_Ratings_2024.csv carries a 2024 label but is a ridge fit over 2024's own games -- its rows carry post-season game counts -- and is refused as a 2024 preseason value. The frozen specification BAXTER-MOV-v1.0-R is complete enough to replay over any prior-season ledger.",
+      "family": "PURE_BAXTER",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2023 game ledger with scores and a neutral-site indicator. No such ledger is mounted, and the one historical corpus in the programme classifies venue as BLOCKED.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "ALGORITHMICALLY_RECONSTRUCTABLE",
+      "component": "LITKENHOUS_PURE_CARRYOVER",
+      "effective_date": "2024 preseason",
+      "evidence": "Layer 1 only. SYTHLAX-LIT-V0 is fully specified and the carry weight 0.60 is published. This is the reconstructable half of the Litkenhous family and on its own it is not the V3 input.",
+      "family": "LITKENHOUS",
+      "leakage_status": "PRESEASON_CLEAN_UNDER_REPLAY",
+      "missing_reason": "Requires a complete 2023 game ledger with scores and a neutral-site indicator.",
+      "reconstructable": true,
+      "reconstruction_gate": "PRIOR_SEASON_GAME_LEDGER_WITH_NEUTRAL_FLAG",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_OFFSEASON_COMPOSITE",
+      "effective_date": "2024 preseason",
+      "evidence": "The composite is the Board I-H component vector under the I-H sub-weights. Recomputing it from the Board sheet reproduces the published column to 6.7e-16. It inherits every Board blocker.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "No board of any letter exists for any season before 2026, and the component scoring manual is not reproduced in any located artifact.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "NONE_LOCATED",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "LITKENHOUS_ADJUSTED_POWER",
+      "effective_date": "2024 preseason",
+      "evidence": "The V3 native input, master column L. It is Layer 1 plus Layer 2 and cannot be formed while Layer 2 is unavailable. The Litkenhous name does not import a historical series: the historical Litkenhous Difference by Score system was an NCAA major selector for 1934-1984 whose algorithm source record SRC-LIT-001 marks BLOCKED, and no historical Litkenhous rating exists for 2021-2024 because the historical system had long ceased publication.",
+      "family": "LITKENHOUS",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "Blocked by LITKENHOUS_OFFSEASON_COMPOSITE.",
+      "reconstructable": false,
+      "reconstruction_gate": "BOARD_COMPONENT_VECTOR",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_I_H_POWER_H",
+      "effective_date": "2024 preseason",
+      "evidence": "The only located artifact carrying Board I-H Power Rating (power_H) is 2026_Board_I-H_v2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "CHAIRMAN_GOVERNED_2026_ONLY",
+      "classification": "NO_HISTORICAL_COUNTERPART_FOUND",
+      "component": "BOARD_J_B_POWER_RUN2",
+      "effective_date": "2024 preseason",
+      "evidence": "The only located artifact carrying Board J-B Run2 Power Rating (power_Run2) is 2026_Board_J-B_Run2.xlsx, dated 2026. Every board in the series -- I, I-H, I-H v2, I-I, I-J, I-K, J-A, J-B, J-C -- is 2026. A filesystem sweep for board artifacts returned no board bearing a 2012-2025 label.",
+      "family": "BOARD_FAMILY",
+      "leakage_status": "NOT_APPLICABLE",
+      "missing_reason": "The board did not exist historically. It is a human, Chairman-governed instrument: its rulings are dated and signed, its imputations are accepted risks recorded by name (R-H4-ACCEPT, D-MARKET-NDSU), and Board_I-K_Derivation_Methodology.md section 7 states that the component-by-component scoring manual is not reproduced anywhere. Its largest term, baseline at 16/37, is defined as carry-forward from a SYNTHETIC 2025 season, which has no historical analogue by construction.",
+      "reconstructable": false,
+      "reconstruction_gate": "NONE_EXISTS",
+      "season": 2024,
+      "source": "NONE_LOCATED",
+      "source_effective_date": null,
+      "team_count": 0
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "PRIOR_SEASON_GAME_LEDGER",
+      "effective_date": "end of the 2023 season, before the 2024 season opens",
+      "evidence": "Raw NCAA scoreboard captures for this season exist on the unmerged sibling branch claude/v3-historical-observation-corpus-r6 and its admitted corpus is materially short of the real field. The corpus also classifies venue as BLOCKED -- the feed publishes no neutral-site indicator -- and both the Baxter ridge (HFA mode season_fit) and SYTHLAX-LIT-V0 (jointly estimated home-field coefficient) require one. For 2023 the admitted corpus carries 598 games over 114 distinct teams against a real FBS field of 133.",
+      "family": "SHARED_PREREQUISITE",
+      "games_available": 598,
+      "leakage_status": "PRESEASON_CLEAN_FOR_TARGET_SEASON",
+      "missing_reason": "Unmerged, incomplete (114 of 133 programs), postseason-free, and carrying no neutral-site indicator.",
+      "reconstructable": true,
+      "season": 2024,
+      "source": "https://data.ncaa.com/casablanca/scoreboard/football/{division}/2023/{week}/scoreboard.json",
+      "source_effective_date": "2023 season, published weekly",
+      "team_count": 114
+    },
+    {
+      "authority_status": "PUBLIC_ARCHIVE_UNGOVERNED",
+      "classification": "ARCHIVED_SOURCE_LOCATED_NOT_MOUNTED",
+      "component": "HISTORICAL_FBS_POPULATION",
+      "effective_date": "settled before the 2024 season opens",
+      "evidence": "Membership is settled before a season starts, so this class is leakage-clean. Two rosters were located and both are frozen at 251 entities; see V3_OPENING_POPULATION_RECONCILIATION_R1.json.",
+      "family": "SHARED_PREREQUISITE",
+      "leakage_status": "PRESEASON_CLEAN",
+      "missing_reason": "Neither located candidate states the real 2024 field of 134. The conference-distribution workbook gives 133 because Kennesaw State is absent from its frozen 251-entity roster; the Phase5J registry gives 118 because it is a synthetic universe, not a membership record.",
+      "reconstructable": true,
+      "season": 2024,
+      "source": "251_Team_Conference_Affiliations_2012_2026.xlsx (Conference Affiliations, 251 rows, 2012-2026, source-cited to NCAA / Sports-Reference / conference releases); Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx (Team Affiliations, per-season subdivision)",
+      "source_effective_date": "2024 membership, settled preseason",
+      "team_count": 134
+    }
+  ],
+  "seasons_in_scope": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "v3_point_values_emitted": 0
+}

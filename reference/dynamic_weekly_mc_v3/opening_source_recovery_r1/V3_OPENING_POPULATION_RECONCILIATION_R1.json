@@ -1,0 +1,113 @@
+{
+  "artifact": "V3_OPENING_POPULATION_RECONCILIATION_R1",
+  "artifact_version": "V3-OPENING-SOURCE-RECOVERY-R1",
+  "brief_figure_correction": {
+    "figure_in_evidence": 118,
+    "figure_in_lane_brief": 128,
+    "statement": "The lane brief describes the 2024 disagreement as 133 vs 128. No artifact on any branch or on the filesystem states a 2024 FBS population of 128. The figure in evidence is 118, from team_registry_2024.csv inside the Phase5J package, and it is what the sibling lane recorded."
+  },
+  "candidates": [
+    {
+      "candidate_id": "CONFERENCE_DISTRIBUTION_2021_2026",
+      "class": "REAL_MEMBERSHIP_RECORD_WITH_A_FROZEN_ROSTER",
+      "fbs_counts": {
+        "2021": 130,
+        "2022": 131,
+        "2023": 133,
+        "2024": 133
+      },
+      "location": "Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx",
+      "sha256": "376a6f624eea6c60794f061de27f3d875c127e89afc80ec4f81664742588e2ac",
+      "verdict": "Reproduces real FBS membership exactly for 2021, 2022 and 2023, and its season-to-season deltas are the real ones -- James Madison in 2022, Jacksonville State and Sam Houston in 2023. It is one short for 2024, for a single identifiable reason recorded under disputed_programs."
+    },
+    {
+      "candidate_id": "PHASE5J_TEAM_REGISTRY_2024",
+      "class": "SYNTHETIC_MODELLING_UNIVERSE",
+      "fbs_counts": {
+        "2024": 118
+      },
+      "location": "Power_Crunch_Research_Lab_Phase5J_2024_FACT_Ratings_Package.zip!01_Inputs/team_registry_2024.csv",
+      "sha256": "0cf7ac5704a78d56d8bbbacdaec23c0e7e4f802edbce181ad10b817f4e0e16ef",
+      "verdict": "Not a membership record at all. Its conference column carries Atlantic-8, ECL and a two-member Pac-12, none of which existed in real 2024 football. The sibling Phase5D package's GOVERNING_RULES.md declares 'ECL is a full FBS conference' and its INPUTS.md crosswalk marks the eight ECL schools OUT as 'real FCS -- do not anchor', which is the package stating in its own words that its universe is synthetic."
+    },
+    {
+      "candidate_id": "TEAM_CONFERENCE_AFFILIATIONS_2012_2026",
+      "class": "REAL_MEMBERSHIP_RECORD_WITH_A_FROZEN_ROSTER",
+      "fbs_counts": {},
+      "location": "C:/2026 Synthetic NCAA/251_Team_Conference_Affiliations_2012_2026.xlsx",
+      "sha256": null,
+      "verdict": "Newly located by this lane and not previously registered. 251 teams by season for 2012-2026 with a Sources sheet citing NCAA releases, Sports-Reference and conference announcements. It reaches back to 2012, which covers the 2020 prior season a 2021 reconstruction needs, and it is the better population candidate of the two -- but it shares the same frozen 251-entity roster and therefore the same 2024 omission. It records conference, not subdivision, so subdivision would have to be derived from the conference labels."
+    }
+  ],
+  "disputed_programs": [
+    {
+      "classification": "REAL_FBS_2024_ABSENT_FROM_EVERY_LOCATED_UNIVERSE",
+      "evidence": "Kennesaw State joined Conference USA and began FBS play on 1 July 2024, announced by the conference on 2022-10-14. It appears in neither 251-entity roster and in no registry located by this lane. It is the whole of the 133-vs-134 gap.",
+      "program": "Kennesaw State",
+      "resolution": "ADD_TO_2024_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Colgate",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Cornell",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Harvard",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Holy Cross",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Lehigh",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Penn",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Princeton",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "Carried as FBS in the ECL conference by the Phase5J registry and as FBS_MEMBER by the 2026 canonical master. Real division in 2021-2024 is FCS, and the Phase5D crosswalk marks it OUT for exactly that reason.",
+      "program": "Yale",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    },
+    {
+      "classification": "SYNTHETIC_FBS_BY_FIAT_REAL_FCS",
+      "evidence": "FBS_MEMBER in the synthetic 2026 canonical master; FCS in all four seasons in scope. Its real FBS move is 2026.",
+      "program": "North Dakota State",
+      "resolution": "EXCLUDE_FROM_HISTORICAL_POPULATION_ON_EVIDENCE"
+    }
+  ],
+  "finding": "The 2024 disagreement is not a membership dispute and does not need a Chairman ruling. The two figures describe two different objects: 133 is a real-membership count taken over a roster frozen before Kennesaw State existed as an FBS program, and 118 is the size of a synthetic modelling universe that admits eight Ivy and Patriot League schools as FBS and omits sixteen real FBS programs. Reconciled against contemporaneous evidence the real 2024 FBS field is 134, and neither candidate states it.",
+  "real_fbs_counts": {
+    "2021": 130,
+    "2022": 131,
+    "2023": 133,
+    "2024": 134
+  },
+  "ruling_requested": false,
+  "ruling_required": false
+}
