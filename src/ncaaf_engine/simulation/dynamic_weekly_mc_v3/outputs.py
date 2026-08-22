@@ -1,16 +1,26 @@
 from __future__ import annotations
 
 import csv
-import json
 from pathlib import Path
 from typing import Iterable, Mapping
 
+from .textio import write_text_lf, write_json_lf
+
 
 def write_csv(rows: Iterable[Mapping[str, object]], path: Path) -> None:
+    """Write a CSV whose bytes do not depend on the host platform.
+
+    Audited under CAL-R3 and deliberately left as it is. ``newline=""`` already
+    disables Python's translation layer, and :mod:`csv` then terminates rows
+    with its own fixed CRLF terminator — so this already emits identical bytes
+    on Windows and on Linux. Switching it to LF would be a newline policy change dressed up
+    as a portability fix, and it would alter the bytes of every CSV already
+    produced, which this lane is not permitted to do.
+    """
     rows = list(rows)
     path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
-        path.write_text("", encoding="utf-8")
+        write_text_lf(path, "")
         return
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
@@ -19,8 +29,7 @@ def write_csv(rows: Iterable[Mapping[str, object]], path: Path) -> None:
 
 
 def write_json(payload: object, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    write_json_lf(path, payload)
 
 
 def write_parquet(rows: list[Mapping[str, object]], path: Path) -> None:

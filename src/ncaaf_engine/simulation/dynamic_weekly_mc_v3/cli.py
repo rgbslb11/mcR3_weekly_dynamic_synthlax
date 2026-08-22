@@ -10,6 +10,7 @@ from .config import V3Config
 from .engine import DynamicWeeklyMCV3
 from .errors import GovernanceBlock, InputValidationError
 from .manifest import write_manifest
+from .textio import write_json_lf
 
 
 def _run_id() -> str:
@@ -53,7 +54,7 @@ def main(argv: list[str] | None = None) -> int:
         out = output_root / f"RUN_{run_id}.incomplete"
         out.mkdir(parents=True, exist_ok=False)
         write_manifest(config, out)
-        (out / "preflight_report.json").write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
+        write_json_lf(out / "preflight_report.json", report)
         # Full 10,000-path + postseason execution is intentionally unreachable until the
         # governed rerating and remaining data policies are unblocked and implemented.
         raise GovernanceBlock("Full V3 run gate reached; rerating/postseason production activation remains blocked by governance.")
@@ -76,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
             "preflight_status": None if report is None else report.get("status"),
         }
-        (blocked / "BLOCKED.json").write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+        write_json_lf(blocked / "BLOCKED.json", payload)
         print(json.dumps(payload, indent=2, sort_keys=True), file=sys.stderr)
         return 2
 
