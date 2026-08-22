@@ -1,0 +1,223 @@
+{
+  "artifact": "V3_BRIDGE_CROSS_SOURCE_AGREEMENT_2020",
+  "artifact_version": "V3-HISTORICAL-BRIDGE-CORPUS-R1",
+  "division_agreement": {
+    "agreement_rate": 1.0,
+    "agreements": 141,
+    "disagreements": [],
+    "method_a": "NCAA fbs/fcs scoreboard intersection (tier 1)",
+    "method_b": "ESPN per-season subdivision membership declaration (tier 2)",
+    "season": 2020,
+    "teams_classified_by_tier_1": 147,
+    "teams_compared": 141,
+    "teams_unbridged": [
+      "Angelo St.",
+      "Missouri Western",
+      "Pittsburg St.",
+      "West Tex. A&M",
+      "Western Caro.",
+      "Western Colo."
+    ]
+  },
+  "score_agreement": {
+    "match_rule": "unordered ESPN team-id pair, plus calendar date within one day of the NCAA published start date; NCAA names mapped through the exact folded-key name bridge",
+    "score_agreement_rate": 1.0,
+    "score_agreements": 553,
+    "score_disagreement_detail": [],
+    "score_disagreements": 0,
+    "tier_1_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+    "tier_1_final_rows": 578,
+    "tier_1_rows_matched": 553,
+    "tier_1_rows_missing_from_tier_2": 0,
+    "tier_1_rows_out_of_tier_2_scope": 14,
+    "tier_1_rows_unresolved_identity": 11,
+    "tier_2_authority": "ESPN_PUBLIC_SCOREBOARD_API",
+    "tier_2_games_corroborated": 521,
+    "tier_2_games_total": 568,
+    "unbridged_ncaa_names": [
+      "Angelo St.",
+      "Missouri Western",
+      "Pittsburg St.",
+      "West Tex. A&M",
+      "Western Caro.",
+      "Western Colo."
+    ],
+    "unmatched_tier_1_rows": [
+      {
+        "away": "Western Caro.",
+        "home": "Liberty",
+        "ncaa_game_id": "c2c0c912-a8fc-439a-b9f1-5ece132ce963",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "11-14-2020"
+      },
+      {
+        "away": "Western Caro.",
+        "home": "North Carolina",
+        "ncaa_game_id": "ea43b20e-517d-4fb5-8d0a-470cea05a35e",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "12-05-2020"
+      },
+      {
+        "away": "Austin Peay",
+        "home": "Central Ark.",
+        "ncaa_game_id": "2c9c8971-8f8d-46c7-ad9e-a6f80ce63bb0",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "08-29-2020"
+      },
+      {
+        "away": "Eastern Ky.",
+        "home": "The Citadel",
+        "ncaa_game_id": "a10bb0cf-0a73-47e0-a23a-72a75738439b",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "09-26-2020"
+      },
+      {
+        "away": "Missouri St.",
+        "home": "Central Ark.",
+        "ncaa_game_id": "807242af-e615-45c5-9fc3-30eaa64a9b22",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "09-26-2020"
+      },
+      {
+        "away": "Houston Baptist",
+        "home": "Eastern Ky.",
+        "ncaa_game_id": "fb5a6c62-4fe5-4c83-b0d0-0a5da04a2afc",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-03-2020"
+      },
+      {
+        "away": "Central Ark.",
+        "home": "North Dakota St.",
+        "ncaa_game_id": "c80b2d2d-3261-4aee-9543-6a076f555ad2",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-03-2020"
+      },
+      {
+        "away": "West Tex. A&M",
+        "home": "SFA",
+        "ncaa_game_id": "4381205a-6cf1-43cf-a13e-302837185daa",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "10-03-2020"
+      },
+      {
+        "away": "Mercer",
+        "home": "Jacksonville St.",
+        "ncaa_game_id": "cd9a0aa1-8a38-4e33-86ea-6a903cb9df6e",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-10-2020"
+      },
+      {
+        "away": "Jacksonville St.",
+        "home": "North Ala.",
+        "ncaa_game_id": "1134dda0-b36c-4efb-acc8-cf91075364f2",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-17-2020"
+      },
+      {
+        "away": "Angelo St.",
+        "home": "SFA",
+        "ncaa_game_id": "e2310c5f-8da0-4b76-b60b-f98e9245fb12",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "10-17-2020"
+      },
+      {
+        "away": "Central Ark.",
+        "home": "Missouri St.",
+        "ncaa_game_id": "8b90f701-519b-4bd5-8c5d-e0c42def5ec9",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-17-2020"
+      },
+      {
+        "away": "Abilene Christian",
+        "home": "SFA",
+        "ncaa_game_id": "5efd6489-af14-4e7a-bc54-af40d0c23d6c",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-24-2020"
+      },
+      {
+        "away": "Central Ark.",
+        "home": "Eastern Ky.",
+        "ncaa_game_id": "91b6d6db-0b16-4601-8f5f-05e80e0fc98f",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-24-2020"
+      },
+      {
+        "away": "Southeast Mo. St.",
+        "home": "Southern Ill.",
+        "ncaa_game_id": "2915ad12-9b48-4ca8-845e-74e6ad4e2a92",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-30-2020"
+      },
+      {
+        "away": "Abilene Christian",
+        "home": "Mercer",
+        "ncaa_game_id": "019d396c-0b6f-4169-a696-7862b9f70080",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "10-31-2020"
+      },
+      {
+        "away": "Western Colo.",
+        "home": "SFA",
+        "ncaa_game_id": "90448082-f693-4bca-a2ae-196579a15a80",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "10-31-2020"
+      },
+      {
+        "away": "Missouri Western",
+        "home": "Central Ark.",
+        "ncaa_game_id": "7ba704fa-22a2-44c3-8c94-9a4cb936374f",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "10-31-2020"
+      },
+      {
+        "away": "SFA",
+        "home": "Eastern Ky.",
+        "ncaa_game_id": "aca1a4d2-8c07-4967-926b-82cef6f56587",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "11-07-2020"
+      },
+      {
+        "away": "Angelo St.",
+        "home": "Abilene Christian",
+        "ncaa_game_id": "2cf93738-df72-442d-af20-c94068436643",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "11-07-2020"
+      },
+      {
+        "away": "Western Caro.",
+        "home": "Liberty",
+        "ncaa_game_id": "c2c0c912-a8fc-439a-b9f1-5ece132ce963",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "11-14-2020"
+      },
+      {
+        "away": "Eastern Ky.",
+        "home": "Central Ark.",
+        "ncaa_game_id": "e45f1a13-ad86-4bdb-8051-29aab85c3e90",
+        "reason": "OUT_OF_TIER_2_SCOPE_NO_FBS_PARTICIPANT",
+        "start_date": "11-14-2020"
+      },
+      {
+        "away": "Pittsburg St.",
+        "home": "SFA",
+        "ncaa_game_id": "a4ad2bcc-0033-48ca-babb-c850bc6f8760",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "11-14-2020"
+      },
+      {
+        "away": "Western Caro.",
+        "home": "Eastern Ky.",
+        "ncaa_game_id": "0f8ed3be-ea8c-43ca-80d7-25892a5ab0aa",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "11-21-2020"
+      },
+      {
+        "away": "Western Caro.",
+        "home": "North Carolina",
+        "ncaa_game_id": "ea43b20e-517d-4fb5-8d0a-470cea05a35e",
+        "reason": "NCAA_NAME_NOT_BRIDGED",
+        "start_date": "12-05-2020"
+      }
+    ]
+  }
+}

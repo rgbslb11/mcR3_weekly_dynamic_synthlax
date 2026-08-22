@@ -1,0 +1,46 @@
+{
+  "2020_game_count": 568,
+  "2020_real_results_status": "ACQUIRED_TIER_2_CORROBORATED_BY_TIER_1",
+  "2020_source": [
+    "ESPN_PUBLIC_SCOREBOARD_API",
+    "NCAA_OFFICIAL_SCOREBOARD_FEED"
+  ],
+  "2024_population_resolution": 134,
+  "2025_game_count": 934,
+  "2025_preseason_opening_source_status": "NO_ADMISSIBLE_2025_PRESEASON_OPENING_STATE",
+  "2025_real_results_status": "ACQUIRED_TIER_2_UNCORROBORATED_TIER_1_STALE",
+  "2025_source": [
+    "ESPN_PUBLIC_SCOREBOARD_API"
+  ],
+  "2025_week1_2_joinable_games": 0,
+  "artifact": "V3_BRIDGE_STATUS_R1",
+  "artifact_sha256": {
+    "V3_BRIDGE_2020_BACKCAST_FEASIBILITY.json": "64f7554c5c4992781b6bfbe5d58d8edac8699c6cd56f9237e94cb2b599171ac7",
+    "V3_BRIDGE_2020_RESULTS.csv": "f71e0bdb53d1cbd34dfd1a4027b4193f909b20890992bd73df84df76505bc717",
+    "V3_BRIDGE_2025_OPENING_STATE_JOIN_TEST.json": "8d6776d7a10891219a3e85bab452e5e8350159a1079b35b24b1d896d1d29bfa9",
+    "V3_BRIDGE_2025_RESULTS.csv": "08e0c9d9df163a3d1402961b814a96266cb00d273eec17c0e2f2affad9b9434b",
+    "V3_BRIDGE_CROSS_SOURCE_AGREEMENT_2020.json": "7ab0cd82dfad2e685ec7c65fab35d1528bf25b6468513e115a54ce7c94a854c7",
+    "V3_BRIDGE_HISTORICAL_MEMBERSHIP.json": "0da96a7eca96c272dffd94f3768bb86d0921154725b29f30e1bc57b9335a4607",
+    "V3_BRIDGE_ROW_RECONCILIATION.json": "755538c8441f3cda903e25f9119c4c6a8dcd007696b2648743a57ff9fb470f2f",
+    "V3_BRIDGE_SEASON_COVERAGE.json": "cee378c0ee80a9421114d8921e687a826f1dc5fcfd6ae81b3b6b1606d67b6675",
+    "V3_BRIDGE_SOURCE_CUSTODY_MANIFEST.json": "830051aa35ccfe366be96efaa668657958304475fef394a42902696501bb9c4c",
+    "V3_BRIDGE_TEAM_IDENTITY.json": "f374f87eda8a6a5612f629375a51b151c84eedf3524890f7b8624ab2447096dc",
+    "V3_BRIDGE_TIER_1_FEED_ASSESSMENT.json": "9ce63c38d043f33397e15759be48d2f819b6a5033315f534ab59f6c11f5cce34",
+    "mounted/V3_BRIDGE_2025_OPENING_COMPONENT_EXTRACT.json": "128deef65780b0ce0488ee6a8bd35f105fdbccdeb4a76f87f75b118646ca261a",
+    "mounted/V3_BRIDGE_POPULATION_CANDIDATE_EXTRACT.json": "f1a5f4f5b9ee3043d11dda384033aecf4c6f4b13c74737e807a8f567152a5cd0"
+  },
+  "artifact_version": "V3-HISTORICAL-BRIDGE-CORPUS-R1",
+  "blockers_retired": 0,
+  "canonical_config_written": false,
+  "governed_allowlist_widened": false,
+  "historical_membership_status": "DERIVED_FROM_SEASON_STRUCTURE_DECLARATION",
+  "lane": "claude/v3-historical-bridge-corpus-r1",
+  "parameters_promoted": 0,
+  "ratings_emitted": false,
+  "safe_for_2025_stage0": false,
+  "safe_for_opening_backcast": "TERMINAL_STATE_COMPUTABLE_AS_WITNESS_ONLY",
+  "seasons_in_scope": [
+    2020,
+    2025
+  ]
+}

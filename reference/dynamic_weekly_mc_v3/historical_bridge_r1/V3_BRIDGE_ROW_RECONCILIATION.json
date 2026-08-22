@@ -1,0 +1,826 @@
+{
+  "artifact": "V3_BRIDGE_ROW_RECONCILIATION",
+  "artifact_version": "V3-HISTORICAL-BRIDGE-CORPUS-R1",
+  "exclusions": {
+    "2020": [
+      {
+        "date": "2020-09-03T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207093",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "75a1453108b3610369327dde5b7e60d997d800c6609f66c16d5993dba693c8ff",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200903&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-03T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212549",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "75a1453108b3610369327dde5b7e60d997d800c6609f66c16d5993dba693c8ff",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200903&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-12T01:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401236674",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "313abb44b50929275efe46024f0610f262746cfaf8495d5d477ef3d82f2ee456",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200911&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-12T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207105",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "f48e9bce87e8f857721cf97206f4fed14ac06155900d231a08a778adead59f4d",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200912&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-12T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401236374",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "f48e9bce87e8f857721cf97206f4fed14ac06155900d231a08a778adead59f4d",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200912&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-12T16:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401240296",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "f48e9bce87e8f857721cf97206f4fed14ac06155900d231a08a778adead59f4d",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200912&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-19T16:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401245593",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "fc2967ebd8b24cc65ab0b906d14816352af16bab6bf40db483a93d841810a936",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200919&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-19T19:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207116",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "fc2967ebd8b24cc65ab0b906d14816352af16bab6bf40db483a93d841810a936",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200919&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-19T19:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401239869",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "fc2967ebd8b24cc65ab0b906d14816352af16bab6bf40db483a93d841810a936",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200919&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-19T23:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401235041",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "fc2967ebd8b24cc65ab0b906d14816352af16bab6bf40db483a93d841810a936",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200919&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-26T16:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207125",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-26T16:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234596",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-26T19:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212530",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-26T22:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207127",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-26T23:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207130",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-09-27T00:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401236381",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "94470f0716b808b5573f6e20c92cb6e2c0eb53ed1e1bc5a859eda55a6ff2d6f2",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20200926&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-03T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207137",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "1a58df7e38a4b937bb656a5a77ba858c54167d7fdb37b634b4027bfb44190df7",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201003&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-03T19:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401240124",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "1a58df7e38a4b937bb656a5a77ba858c54167d7fdb37b634b4027bfb44190df7",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201003&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-04T00:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401215306",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "1a58df7e38a4b937bb656a5a77ba858c54167d7fdb37b634b4027bfb44190df7",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201003&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-10T04:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207147",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8fbcf8fe58576eed5d53346a56a801352ca615a0e3e307d47b8ed338f3a4f16a",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201010&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-10T19:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401240117",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "8fbcf8fe58576eed5d53346a56a801352ca615a0e3e307d47b8ed338f3a4f16a",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201010&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-10T20:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207144",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8fbcf8fe58576eed5d53346a56a801352ca615a0e3e307d47b8ed338f3a4f16a",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201010&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T16:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212532",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T18:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401240034",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T20:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237110",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T23:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207152",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T23:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401236006",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-17T23:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237113",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-18T00:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207148",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-18T00:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401236382",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "2d4b06781d3ac05423560133210cf77ff739c53614fee87a149f2093e4d1dbd8",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201017&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-30T23:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207161",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "6eb233e2f0ebe6feb180691715f8c8a80edcf59422f72b76c315d6c0f5e5c5d7",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201030&groups=80&limit=400"
+      },
+      {
+        "date": "2020-10-31T18:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207164",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d92a003922d338aaff96b37a7c8eea83064d9a68f2aa61ed7b7fc84feeaa6d25",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201031&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-07T16:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207199",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-07T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212534",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-07T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207167",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-07T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207172",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-08T00:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207170",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-08T01:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234635",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "8c8232737096b8f13c7a5c146fc6cdf11f72c911ae9e0006243a1c096600e895",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201107&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401215330",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237131",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T20:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401260376",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207175",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212554",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237134",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T21:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237130",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-14T23:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237128",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-15T00:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234640",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "af1c713391fa859b03efae723fce46cd45c985e4f40757c8e011b2bd0e312638",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201114&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-21T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212492",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-21T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234644",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-21T17:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207180",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-21T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401236026",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-21T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237140",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-22T01:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212482",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-22T01:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234646",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "d98a8a3caefd269d396d667d0924c262b44b3dede7bb51bbed451e34fbd47bfc",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201121&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-28T17:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401212535",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "e824ba9bc48aeb433cf317ff00b0ed3a31272e3dee895687144bdc5a01c07f83",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201128&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-28T20:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207189",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "e824ba9bc48aeb433cf317ff00b0ed3a31272e3dee895687144bdc5a01c07f83",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201128&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-29T00:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401236031",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "e824ba9bc48aeb433cf317ff00b0ed3a31272e3dee895687144bdc5a01c07f83",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201128&groups=80&limit=400"
+      },
+      {
+        "date": "2020-11-29T01:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401234653",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "e824ba9bc48aeb433cf317ff00b0ed3a31272e3dee895687144bdc5a01c07f83",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201128&groups=80&limit=400"
+      },
+      {
+        "date": "2020-12-01T15:30Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401207187",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "4ff5c00f37b22aeb381d389152c2f79877660d2e31b44c7d2dfc73c53f89e37c",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201201&groups=80&limit=400"
+      },
+      {
+        "date": "2020-12-05T21:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401237152",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "15a657062689382197090ca3953307454a1acdfaa2d3cafa178efdf96add8154",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201205&groups=80&limit=400"
+      },
+      {
+        "date": "2020-12-06T02:00Z",
+        "detail": "STATUS_POSTPONED",
+        "event_id": "401264081",
+        "reason": "GAME_NOT_FINAL",
+        "season": 2020,
+        "source_raw_sha256": "15a657062689382197090ca3953307454a1acdfaa2d3cafa178efdf96add8154",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20201205&groups=80&limit=400"
+      },
+      {
+        "date": "2021-01-30T19:30Z",
+        "detail": "NOT_IN_ANY_DIVISION_I_DECLARATION/NOT_IN_ANY_DIVISION_I_DECLARATION",
+        "event_id": "401274137",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2020,
+        "source_raw_sha256": "412b9744734ae352f740fec94a37113ea573431aee8187fb18796ed4a05f49f7",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20210130&groups=80&limit=400"
+      }
+    ],
+    "2025": [
+      {
+        "date": "2025-08-30T16:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767509",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "79394d11a57f6bb07c663ef0d2ec6ca3177b28154fcd19e3c7f1a7d84d779b45",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250830&groups=80&limit=400"
+      },
+      {
+        "date": "2025-08-30T23:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767130",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "79394d11a57f6bb07c663ef0d2ec6ca3177b28154fcd19e3c7f1a7d84d779b45",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250830&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-06T18:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767224",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "8d0b34685ad3d57d363290160eb4f778c3696c3f306caae5450e731187159c74",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250906&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-13T19:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767217",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "d6e7ede8cf627c3c280f21fd367c979f742491b77dba9060e6724b729b89d486",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250913&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-14T01:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767131",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "d6e7ede8cf627c3c280f21fd367c979f742491b77dba9060e6724b729b89d486",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250913&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-21T01:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767132",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "00f79da97117a0fc2596b95cb9698dbaf77e89f8a6981214a570bb76bdfa1a44",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250920&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-27T18:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767510",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "65081aef6da187fdeae7f82a1c8f8edbe444a36774b1dd6875e15e22c3f89dfe",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250927&groups=80&limit=400"
+      },
+      {
+        "date": "2025-09-28T01:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767073",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "65081aef6da187fdeae7f82a1c8f8edbe444a36774b1dd6875e15e22c3f89dfe",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20250927&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-04T23:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767438",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "5bea8ecc9e124060dfe93d045c4b7bf65d92c06db840307556a67f63c0ae0415",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251004&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-11T19:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767511",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "1eeeaf8f7209c0592f51159a2770bfd6342435ccf4998553a2aed55eee987866",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251011&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-12T00:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767133",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "1eeeaf8f7209c0592f51159a2770bfd6342435ccf4998553a2aed55eee987866",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251011&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-18T17:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767449",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "5b6f59c90cdb6e4fc2d7cf281da311a3db0a590fb072ffec2711326c56008af5",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251018&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-19T01:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767123",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "5b6f59c90cdb6e4fc2d7cf281da311a3db0a590fb072ffec2711326c56008af5",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251018&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-25T02:35Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767101",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "cdb652d4245c9fade723ba9282be40d3e873fb09b16837dcbed84d3cb907525b",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251024&groups=80&limit=400"
+      },
+      {
+        "date": "2025-10-26T00:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767512",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "b9ff976d49996c7c03b72f28e74b87ab719f01a833d423818261ee6b47943889",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251025&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-01T19:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767513",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "5a43388b4bc26e40189865afc61951a44f154aff79338de804b95d536f09ee38",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251101&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-01T20:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767066",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "5a43388b4bc26e40189865afc61951a44f154aff79338de804b95d536f09ee38",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251101&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-08T19:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767507",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "3f024b9c9f6872b247165e5297ac8788dc1bb6641e3692b61b9d5599921ba81b",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251108&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-08T22:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767129",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "3f024b9c9f6872b247165e5297ac8788dc1bb6641e3692b61b9d5599921ba81b",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251108&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-15T20:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767514",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "687babae7cbf522959b15302ae23543cf662652a3d1b83167e2a260d925d8033",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251115&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-16T02:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767096",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "687babae7cbf522959b15302ae23543cf662652a3d1b83167e2a260d925d8033",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251115&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-22T20:30Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767515",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "f69f0e88af24171a47cee32cf4190cfe27cec1d652bd0d75c97d71eb7e61cf6d",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251122&groups=80&limit=400"
+      },
+      {
+        "date": "2025-11-22T21:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401767134",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "f69f0e88af24171a47cee32cf4190cfe27cec1d652bd0d75c97d71eb7e61cf6d",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251122&groups=80&limit=400"
+      },
+      {
+        "date": "2025-12-06T18:00Z",
+        "detail": "FCS/FCS",
+        "event_id": "401836198",
+        "reason": "NO_FBS_PARTICIPANT",
+        "season": 2025,
+        "source_raw_sha256": "cffb0ee434877da479b0da9f174196cb79ea389464f006ce564017decef35d04",
+        "source_url": "https://site.web.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20251206&groups=80&limit=400"
+      }
+    ]
+  },
+  "per_season": {
+    "2020": {
+      "admitted": 568,
+      "admitted_by_season_type": {
+        "POSTSEASON": 26,
+        "REGULAR_SEASON": 542
+      },
+      "admitted_cross_division": 34,
+      "admitted_neutral_site": 38,
+      "admitted_overtime": 21,
+      "corroboration": {
+        "CORROBORATED_BY_TIER_1": 521,
+        "NOT_CARRIED_BY_TIER_1_FEED": 47
+      },
+      "excluded": 62,
+      "exclusions_by_reason": {
+        "GAME_NOT_FINAL": 56,
+        "NO_FBS_PARTICIPANT": 6
+      },
+      "raw_event_rows_retrieved": 630,
+      "reconciles": true
+    },
+    "2025": {
+      "admitted": 934,
+      "admitted_by_season_type": {
+        "POSTSEASON": 46,
+        "REGULAR_SEASON": 888
+      },
+      "admitted_cross_division": 126,
+      "admitted_neutral_site": 55,
+      "admitted_overtime": 45,
+      "corroboration": {
+        "TIER_1_SOURCE_STALE_FOR_SEASON": 934
+      },
+      "excluded": 24,
+      "exclusions_by_reason": {
+        "NO_FBS_PARTICIPANT": 24
+      },
+      "raw_event_rows_retrieved": 958,
+      "reconciles": true
+    }
+  }
+}

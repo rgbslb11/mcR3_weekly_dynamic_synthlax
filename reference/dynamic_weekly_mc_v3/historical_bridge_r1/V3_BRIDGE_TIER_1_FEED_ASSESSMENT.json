@@ -1,0 +1,114 @@
+{
+  "artifact": "V3_BRIDGE_TIER_1_FEED_ASSESSMENT",
+  "artifact_version": "V3-HISTORICAL-BRIDGE-CORPUS-R1",
+  "per_season": {
+    "2020": {
+      "by_division_feed": {
+        "fbs": {
+          "game_state_counts": {
+            "cancelled": 1,
+            "final": 523,
+            "postponed": 92
+          },
+          "rows_published": 616,
+          "rows_whose_feed_update_predates_kickoff": 0
+        },
+        "fcs": {
+          "game_state_counts": {
+            "final": 55,
+            "postponed": 6
+          },
+          "rows_published": 61,
+          "rows_whose_feed_update_predates_kickoff": 0
+        }
+      },
+      "disposition": "TIER_1_SERVES_SEASON",
+      "feed_updated_at_values": [
+        "05-08-2021 12:22:33",
+        "09-08-2020 13:19:00",
+        "09-13-2020 13:02:57",
+        "09-25-2020 13:57:07",
+        "09-30-2020 13:11:03",
+        "10-04-2020 11:03:13",
+        "10-11-2020 11:03:12",
+        "10-18-2020 11:03:12",
+        "10-25-2020 14:02:56",
+        "11-01-2020 14:03:07",
+        "11-08-2020 15:29:26",
+        "11-18-2020 11:42:31",
+        "11-22-2020 14:03:11",
+        "11-29-2020 14:02:46",
+        "12-07-2020 11:03:11",
+        "12-13-2020 14:02:56"
+      ],
+      "game_state_counts": {
+        "cancelled": 1,
+        "final": 578,
+        "postponed": 98
+      },
+      "rows_published": 677,
+      "rows_whose_feed_update_predates_kickoff": 0,
+      "scored_final_rows": 578,
+      "scored_share": 0.853767,
+      "season": 2020,
+      "serves_completed_season": true,
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+      "source_authority_tier": "TIER_1_NCAA_OFFICIAL",
+      "stale_share": 0.0
+    },
+    "2025": {
+      "by_division_feed": {
+        "fbs": {
+          "game_state_counts": {
+            "final": 22,
+            "live": 4,
+            "pre": 852
+          },
+          "rows_published": 878,
+          "rows_whose_feed_update_predates_kickoff": 845
+        },
+        "fcs": {
+          "game_state_counts": {
+            "final": 22,
+            "live": 4,
+            "pre": 827
+          },
+          "rows_published": 853,
+          "rows_whose_feed_update_predates_kickoff": 824
+        }
+      },
+      "disposition": "TIER_1_FEED_STALE_REFUSED_AS_COMPLETED_HISTORY",
+      "feed_updated_at_values": [
+        "08-11-2025 15:58:47",
+        "08-29-2025 05:18:35",
+        "08-29-2025 05:18:36",
+        "08-29-2025 05:22:06",
+        "08-29-2025 10:19:33",
+        "08-29-2025 10:21:32",
+        "08-29-2025 18:52:35",
+        "08-29-2025 18:55:11",
+        "08-29-2025 18:57:49",
+        "08-29-2025 18:57:50",
+        "08-29-2025 19:14:40",
+        "08-29-2025 19:14:52",
+        "08-29-2025 19:15:05",
+        "08-29-2025 19:15:06",
+        "08-29-2025 19:15:40"
+      ],
+      "game_state_counts": {
+        "final": 44,
+        "live": 8,
+        "pre": 1679
+      },
+      "rows_published": 1731,
+      "rows_whose_feed_update_predates_kickoff": 1669,
+      "scored_final_rows": 44,
+      "scored_share": 0.025419,
+      "season": 2025,
+      "serves_completed_season": false,
+      "source_authority": "NCAA_OFFICIAL_SCOREBOARD_FEED",
+      "source_authority_tier": "TIER_1_NCAA_OFFICIAL",
+      "stale_share": 0.964183
+    }
+  }
+}

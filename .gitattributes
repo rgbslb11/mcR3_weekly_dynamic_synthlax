@@ -50,3 +50,14 @@
 # The Board of Record and every governed workbook. `binary` unsets text, diff
 # and merge, so no filter can alter a byte.
 *.xlsx             binary
+
+# Raw source captures for the historical bridge lane (2020, 2025). The `* -text`
+# rule above already byte-preserves them; the type is named because this file's
+# convention is that every type actually present is named, and because raw
+# custody depends on the rule rather than merely benefiting from it. Each
+# capture is a gzip container whose decompressed bytes carry a registered
+# SHA-256, so a checkout filter that touched one would break every digest
+# recorded against it. It is also why the captures are stored as `.json.gz` and
+# not `.json`: the `*.json` rule above normalises to LF, and a raw capture a
+# checkout can rewrite is not a raw capture.
+*.gz               binary

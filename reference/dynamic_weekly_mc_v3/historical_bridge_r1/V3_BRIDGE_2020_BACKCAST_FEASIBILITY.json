@@ -1,0 +1,42 @@
+{
+  "artifact": "V3_BRIDGE_2020_BACKCAST_FEASIBILITY",
+  "artifact_version": "V3-HISTORICAL-BRIDGE-CORPUS-R1",
+  "cross_division_games_withheld": 34,
+  "disposition": "TERMINAL_STATE_COMPUTABLE_AS_WITNESS_ONLY",
+  "historical_metadata_required_and_absent": [],
+  "input_fields_available": true,
+  "input_fields_required_by_srs": [
+    "game_id",
+    "team",
+    "opponent",
+    "margin"
+  ],
+  "postseason_required_for_connectivity": true,
+  "regular_season_only_component_sizes": [
+    87,
+    14,
+    14,
+    12
+  ],
+  "regular_season_only_components": 4,
+  "same_division_games_used": 534,
+  "same_season_preseason_derivation_attempted": false,
+  "schedule_graph_component_sizes": [
+    127
+  ],
+  "schedule_graph_components": 1,
+  "schedule_graph_connected": true,
+  "season": 2020,
+  "srs_governance": "GovernanceBlock: governance.SRS_CANONICAL_VALIDATION_ANCHORS_NOT_MOUNTED: no canonical SRS specification, reference implementation or historical validation anchor is mounted. This module solves the governed capped-margin system exactly and cross-checks against a converged iteration, but agreement with the canonical ordering cannot be demonstrated against artifacts that are not present. Mount the specification and anchors.",
+  "srs_rows_supplied": 1068,
+  "srs_solver_error": "",
+  "srs_terminal_state_computable": true,
+  "srs_values_emitted": false,
+  "teams_in_system": 127,
+  "v3_governed_rerating_obstacles": [
+    "rerating.BlockedGovernedRerater raises GovernanceBlock unconditionally",
+    "TeamPathState.preseason_strength_points requires a 2020 opening state, which no located source supplies",
+    "the residual term requires expected_margin in V3 point units, which requires the unratified P_TO_STRENGTH_TRANSFORM and REFERENCE_HFA"
+  ],
+  "v3_governed_rerating_runnable": false
+}
