@@ -1,0 +1,99 @@
+{
+  "artifact": "historical_opening_state_population_manifest",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "population_scope_note": "Historical membership follows the season being reconstructed. The synthetic 2026 canonical scope is identity metadata and is never used as historical NCAA truth.",
+  "seasons": [
+    {
+      "candidates": [
+        {
+          "basis": "2021 Subdivision == FBS over 251 affiliation rows",
+          "count": 130,
+          "population_id": "SYNTHETIC_WALKOVER_FBS_2021",
+          "scope": "FBS",
+          "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+        }
+      ],
+      "excluded_teams": [],
+      "included_teams": [],
+      "population_id": "FBS_2021_UNRESOLVED",
+      "resolved_count": null,
+      "scope": "FBS",
+      "season": 2021,
+      "source_ids": [
+        "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+      ],
+      "status": "UNRESOLVED_SOURCE_NOT_MOUNTED"
+    },
+    {
+      "candidates": [
+        {
+          "basis": "2022 Subdivision == FBS over 251 affiliation rows",
+          "count": 131,
+          "population_id": "SYNTHETIC_WALKOVER_FBS_2022",
+          "scope": "FBS",
+          "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+        }
+      ],
+      "excluded_teams": [],
+      "included_teams": [],
+      "population_id": "FBS_2022_UNRESOLVED",
+      "resolved_count": null,
+      "scope": "FBS",
+      "season": 2022,
+      "source_ids": [
+        "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+      ],
+      "status": "UNRESOLVED_SOURCE_NOT_MOUNTED"
+    },
+    {
+      "candidates": [
+        {
+          "basis": "2023 Subdivision == FBS over 251 affiliation rows",
+          "count": 133,
+          "population_id": "SYNTHETIC_WALKOVER_FBS_2023",
+          "scope": "FBS",
+          "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+        }
+      ],
+      "excluded_teams": [],
+      "included_teams": [],
+      "population_id": "FBS_2023_UNRESOLVED",
+      "resolved_count": null,
+      "scope": "FBS",
+      "season": 2023,
+      "source_ids": [
+        "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+      ],
+      "status": "UNRESOLVED_SOURCE_NOT_MOUNTED"
+    },
+    {
+      "candidates": [
+        {
+          "basis": "118 registry rows, division == FBS, universe_policy REGISTRY_ONLY",
+          "count": 118,
+          "population_id": "PHASE5J_REGISTRY_FBS_2024",
+          "scope": "FBS",
+          "source_id": "PHASE5J_TEAM_REGISTRY_2024"
+        },
+        {
+          "basis": "2024 Subdivision == FBS over 251 affiliation rows",
+          "count": 133,
+          "population_id": "SYNTHETIC_WALKOVER_FBS_2024",
+          "scope": "FBS",
+          "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+        }
+      ],
+      "excluded_teams": [],
+      "included_teams": [],
+      "population_id": "FBS_2024_UNRESOLVED",
+      "resolved_count": null,
+      "scope": "FBS",
+      "season": 2024,
+      "source_ids": [
+        "PHASE5J_TEAM_REGISTRY_2024",
+        "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+      ],
+      "status": "UNRESOLVED_CONFLICTING_CANDIDATES"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "artifact": "historical_opening_state_status",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "blockers_retired": 0,
+  "component_families_available": [],
+  "component_families_required": [
+    "TRUESKILL",
+    "LITKENHOUS",
+    "PURE_BAXTER",
+    "BOARD_FAMILY"
+  ],
+  "fcs_opening_point_status": "REFUSED_NO_POINT_STRENGTH_DERIVED_FROM_ELO_1250",
+  "future_leakage_result": "NO_SAME_SEASON_OR_POSTSEASON_SOURCE_ADMITTED",
+  "opening_unified_z_status": "NOT_PRODUCED_FOR_ANY_TEAM_SEASON",
+  "parameters_promoted": 0,
+  "point_transform_status": "UNRATIFIED_FOR_HISTORICAL_REUSE",
+  "population_status": {
+    "2021": "UNRESOLVED_SOURCE_NOT_MOUNTED",
+    "2022": "UNRESOLVED_SOURCE_NOT_MOUNTED",
+    "2023": "UNRESOLVED_SOURCE_NOT_MOUNTED",
+    "2024": "UNRESOLVED_CONFLICTING_CANDIDATES"
+  },
+  "seasons_in_scope": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "simulations_run": 0,
+  "terminal_status": "HISTORICAL_OPENING_STATE_BLOCKED",
+  "writes_canonical_config": false
+}

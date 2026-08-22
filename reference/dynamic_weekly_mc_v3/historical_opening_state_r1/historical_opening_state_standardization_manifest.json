@@ -1,0 +1,45 @@
+{
+  "artifact": "historical_opening_state_standardization_manifest",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "ddof_convention": 1,
+  "ddof_note": "Sample standard deviation. Measured from the 2026 workbook rather than read from its 'Population Statistics' label: ddof=1 reproduces every published family Z to within 1e-14 and ddof=0 reproduces none of them.",
+  "families": [
+    {
+      "directionality": "HIGHER_IS_STRONGER",
+      "family_id": "TRUESKILL",
+      "members": [],
+      "native_field_2026": "TrueSkill 2026 Preseason mu",
+      "role": "Results-based latent strength",
+      "weight": 0.25
+    },
+    {
+      "directionality": "HIGHER_IS_STRONGER",
+      "family_id": "LITKENHOUS",
+      "members": [],
+      "native_field_2026": "Litkenhous Adjusted Power",
+      "role": "Forward-looking offseason-adjusted power",
+      "weight": 0.25
+    },
+    {
+      "directionality": "HIGHER_IS_STRONGER",
+      "family_id": "PURE_BAXTER",
+      "members": [],
+      "native_field_2026": "2026 Pure Baxter Rating",
+      "role": "Margin-based results carry-forward",
+      "weight": 0.25
+    },
+    {
+      "directionality": "HIGHER_IS_STRONGER",
+      "family_id": "BOARD_FAMILY",
+      "members": [
+        "BOARD_I_H",
+        "BOARD_J_B"
+      ],
+      "native_field_2026": "Average of standardized Board I-H and Board J-B",
+      "role": "Forward-looking component family",
+      "weight": 0.25
+    }
+  ],
+  "records": [],
+  "records_present": 0
+}

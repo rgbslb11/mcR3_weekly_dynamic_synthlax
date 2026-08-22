@@ -1,0 +1,122 @@
+{
+  "artifact": "historical_opening_state_coverage_report",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "fully_reconstructed_total": 0,
+  "imputation_policy": "NONE. A team-season without a complete component set is reported as UNAVAILABLE or PARTIALLY_RECONSTRUCTED with a reason, never filled from a neighbour, a conference mean or a prior season.",
+  "missing_reason_vocabulary": [
+    "MISSING_SOURCE",
+    "INSUFFICIENT_COMPONENTS",
+    "HISTORICAL_ENTITY_UNRESOLVED",
+    "OUTSIDE_POPULATION",
+    "OTHER_EXPLICIT_REASON"
+  ],
+  "partially_reconstructed_total": 0,
+  "per_season": [
+    {
+      "fully_reconstructed": 0,
+      "missing_reason_counts": {
+        "HISTORICAL_ENTITY_UNRESOLVED": 38,
+        "MISSING_SOURCE": 130,
+        "OTHER_EXPLICIT_REASON": 130,
+        "OUTSIDE_POPULATION": 121
+      },
+      "partially_reconstructed": 0,
+      "season": 2021,
+      "team_seasons": 251,
+      "unavailable": 251,
+      "week1_2": {
+        "both_states": 0,
+        "exactly_one_state": 0,
+        "games_in_window": 0,
+        "neither_state": 0,
+        "schedule_mounted": false,
+        "schedule_status": "NO_HISTORICAL_SCHEDULE_MOUNTED_IN_THIS_LANE; the count is zero on opening-state grounds regardless of schedule, because no team-season is FULLY_RECONSTRUCTED",
+        "teams_with_opening_state": 0,
+        "weeks": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "fully_reconstructed": 0,
+      "missing_reason_counts": {
+        "HISTORICAL_ENTITY_UNRESOLVED": 39,
+        "MISSING_SOURCE": 131,
+        "OTHER_EXPLICIT_REASON": 131,
+        "OUTSIDE_POPULATION": 120
+      },
+      "partially_reconstructed": 0,
+      "season": 2022,
+      "team_seasons": 251,
+      "unavailable": 251,
+      "week1_2": {
+        "both_states": 0,
+        "exactly_one_state": 0,
+        "games_in_window": 0,
+        "neither_state": 0,
+        "schedule_mounted": false,
+        "schedule_status": "NO_HISTORICAL_SCHEDULE_MOUNTED_IN_THIS_LANE; the count is zero on opening-state grounds regardless of schedule, because no team-season is FULLY_RECONSTRUCTED",
+        "teams_with_opening_state": 0,
+        "weeks": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "fully_reconstructed": 0,
+      "missing_reason_counts": {
+        "HISTORICAL_ENTITY_UNRESOLVED": 41,
+        "MISSING_SOURCE": 133,
+        "OTHER_EXPLICIT_REASON": 133,
+        "OUTSIDE_POPULATION": 118
+      },
+      "partially_reconstructed": 0,
+      "season": 2023,
+      "team_seasons": 251,
+      "unavailable": 251,
+      "week1_2": {
+        "both_states": 0,
+        "exactly_one_state": 0,
+        "games_in_window": 0,
+        "neither_state": 0,
+        "schedule_mounted": false,
+        "schedule_status": "NO_HISTORICAL_SCHEDULE_MOUNTED_IN_THIS_LANE; the count is zero on opening-state grounds regardless of schedule, because no team-season is FULLY_RECONSTRUCTED",
+        "teams_with_opening_state": 0,
+        "weeks": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "fully_reconstructed": 0,
+      "missing_reason_counts": {
+        "HISTORICAL_ENTITY_UNRESOLVED": 41,
+        "MISSING_SOURCE": 133,
+        "OTHER_EXPLICIT_REASON": 133,
+        "OUTSIDE_POPULATION": 118
+      },
+      "partially_reconstructed": 0,
+      "season": 2024,
+      "team_seasons": 251,
+      "unavailable": 251,
+      "week1_2": {
+        "both_states": 0,
+        "exactly_one_state": 0,
+        "games_in_window": 0,
+        "neither_state": 0,
+        "schedule_mounted": false,
+        "schedule_status": "NO_HISTORICAL_SCHEDULE_MOUNTED_IN_THIS_LANE; the count is zero on opening-state grounds regardless of schedule, because no team-season is FULLY_RECONSTRUCTED",
+        "teams_with_opening_state": 0,
+        "weeks": [
+          1,
+          2
+        ]
+      }
+    }
+  ],
+  "team_season_total": 1004,
+  "unavailable_total": 1004
+}

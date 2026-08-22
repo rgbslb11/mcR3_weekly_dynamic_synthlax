@@ -1,0 +1,316 @@
+{
+  "admissible_source_classes": [
+    "PRESEASON_SOURCE"
+  ],
+  "admissible_source_count": 0,
+  "artifact": "historical_opening_state_source_manifest",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "leakage_refused_classes": [
+    "SAME_SEASON_DERIVED",
+    "POSTSEASON_DERIVED",
+    "FUTURE_SEASON_DERIVED",
+    "SEASON_FINAL_RATING"
+  ],
+  "refused_source_count": 15,
+  "seasons_in_scope": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "sources": [
+    {
+      "admissible": false,
+      "disposition": "REFUSED_SAME_SEASON_FIT",
+      "evidence": [
+        "The single most tempting artifact in this register: it carries a 2024 label and a Baxter rating, which is two of the four families' worth of shape at a glance.",
+        "It is a ridge fit over 2024's own games. Its header carries a 'games' column and its first rows read 'Notre Dame ... 14' and 'Ohio State ... 12' -- game counts only obtainable after the season.",
+        "A 2024 *preseason* Pure Baxter would have to carry forward a 2023 fit, in the way the 2026 value carries forward 2025. The package covers 2006-2011, 2024 and 2025; there is no 2020, 2021, 2022 or 2023 fit to carry forward."
+      ],
+      "location": "C:/Local-mcR3_calibration_staging/Baxter_v1_2006_2011_2024_2025_Complete_Package/Baxter_Ratings_2024.csv",
+      "provides_families": [
+        "PURE_BAXTER"
+      ],
+      "seasons_declared": [
+        2024
+      ],
+      "sha256": "b7d3e08490a68f2cd8dd4a08312a639a2622b7ea3dbd05d262939a419863920b",
+      "size_bytes": 15652,
+      "source_class": "SEASON_FINAL_RATING",
+      "source_id": "BAXTER_RATINGS_2024_SEASON_FINAL"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_COVERAGE_EVIDENCE_ONLY",
+      "evidence": [
+        "Registered for what it proves about coverage rather than for a value: its eight season rows are 2006-2011, 2024 and 2025, which is the whole Baxter universe and contains no 2021, 2022 or 2023."
+      ],
+      "location": "C:/Local-mcR3_calibration_staging/Baxter_v1_2006_2011_2024_2025_Complete_Package/Baxter_v1_complete_metrics.csv",
+      "provides_families": [
+        "PURE_BAXTER"
+      ],
+      "seasons_declared": [
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2024,
+        2025
+      ],
+      "sha256": "6603ac9d8be1105ca31a9ddf7f09936e8acba72d39846d2f9df054ea43095996",
+      "size_bytes": 1429,
+      "source_class": "POSTSEASON_DERIVED",
+      "source_id": "BAXTER_V1_COMPLETE_METRICS"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_FUTURE_SEASON",
+      "evidence": [
+        "A 2026 board. The board series (I-H, I-I, I-K, J-A, J-B, J-C) is 2026-only across every located artifact; no 2021-2024 board exists."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/2026_Board_I-H_v2.xlsx",
+      "provides_families": [
+        "BOARD_I_H"
+      ],
+      "seasons_declared": [
+        2026
+      ],
+      "sha256": "278701fc8e8ef62f992cf9f04f2ddddb6ba15c428cbd833a7bd14babf62b2213",
+      "size_bytes": 17442,
+      "source_class": "FUTURE_SEASON_DERIVED",
+      "source_id": "BOARD_I_H_V2_2026"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_FUTURE_SEASON",
+      "evidence": [
+        "A 2026 board run. Same series, same absence of history."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/2026_Board_J-B_Run2.xlsx",
+      "provides_families": [
+        "BOARD_J_B"
+      ],
+      "seasons_declared": [
+        2026
+      ],
+      "sha256": "bcec6150b9bf46b9cee2fb8accb3f0a7875848d09983a5b2e0a17374d6df46aa",
+      "size_bytes": 31394,
+      "source_class": "FUTURE_SEASON_DERIVED",
+      "source_id": "BOARD_J_B_RUN2_2026"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_SAME_SEASON_DERIVED",
+      "evidence": [
+        "Its per-season payloads are elo_game_log_<season>.csv and side-by-side rating tables built from them. Seasons 2011, 2024 and 2025 only; 2021-2023 are absent even as game logs."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Power_Crunch_Expanded_Rating_Engine_Comparison_2011_2024_2025_Package.zip",
+      "provides_families": [],
+      "seasons_declared": [
+        2011,
+        2024,
+        2025
+      ],
+      "sha256": "8eda3469d7a4790153f2715e2904b2210a935f07dc05e447a0c36aebf0ec44e3",
+      "size_bytes": 389983,
+      "source_class": "SAME_SEASON_DERIVED",
+      "source_id": "EXPANDED_ENGINE_COMPARISON_2011_2024_2025"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_SEASON_FINAL_AND_OUT_OF_SCOPE",
+      "evidence": [
+        "A 2025 season-final rating. Out of the 2021-2024 scope in any case, and a season-final value is same-season information for 2025."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/2025_Synthetic_CFB_Litkenhous_Inspired_Final_Ratings.xlsx",
+      "provides_families": [
+        "LITKENHOUS"
+      ],
+      "seasons_declared": [
+        2025
+      ],
+      "sha256": "716151059052d30b24cffe90b22f30a5d2c9a9df66cc5a5877b38527773d6708",
+      "size_bytes": 100546,
+      "source_class": "SEASON_FINAL_RATING",
+      "source_id": "LITKENHOUS_2025_FINAL_RATINGS"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_FUTURE_SEASON",
+      "evidence": [
+        "Methodology sheet: pure carryover is '60% of each team's 2025 Litkenhous power margin after recentering the 2026 field'.",
+        "Inputs and Lineage sheet names exactly one rating input, the 2025 final ratings. The Litkenhous chain has no season before 2025."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/2026_Synthetic_FBS_Litkenhous_Preseason_Three_Layer.xlsx",
+      "provides_families": [
+        "LITKENHOUS"
+      ],
+      "seasons_declared": [
+        2026
+      ],
+      "sha256": "5ad5125a306601eeca67a3750c7fa8e556a5c8bdb8680f5031b6818e86ff37db",
+      "size_bytes": 101165,
+      "source_class": "FUTURE_SEASON_DERIVED",
+      "source_id": "LITKENHOUS_2026_PRESEASON_THREE_LAYER"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_SAME_SEASON_DERIVED",
+      "evidence": [
+        "00_Control/season_config_2024.json declares season_status COMPLETE, include_postseason true, and calculation_cutoff_date 2025-01-31.",
+        "The same file declares preseason_prior false and previous_season_carryover false: the ratings are built from the season's own game ledger and from nothing that predates it.",
+        "Not a V3 family in any case. FACT is a separate rating system."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Power_Crunch_Research_Lab_Phase5J_2024_FACT_Ratings_Package.zip",
+      "provides_families": [],
+      "seasons_declared": [
+        2024
+      ],
+      "sha256": "9788d1a70481d4027a916a92c4d5463b6f6d3fb553705e31d72797939e9d6a49",
+      "size_bytes": 143786,
+      "source_class": "SAME_SEASON_DERIVED",
+      "source_id": "PHASE5J_2024_FACT_RATINGS_PACKAGE"
+    },
+    {
+      "admissible": false,
+      "disposition": "POPULATION_CANDIDATE_CONFLICTING",
+      "evidence": [
+        "118 rows, every one division FBS and active_for_rating True; the package's season_config_2024.json states expected_team_count 118 under universe_policy REGISTRY_ONLY.",
+        "It disagrees with the conference distribution's 133 for the same season, and the two disagree about membership, not merely about eligibility: the registry carries Colgate and Cornell as FBS in a conference named ECL.",
+        "Neither source is subordinate to the other, so resolve_population returns UNRESOLVED_CONFLICTING_CANDIDATES for 2024 rather than choosing."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Power_Crunch_Research_Lab_Phase5J_2024_FACT_Ratings_Package.zip!01_Inputs/team_registry_2024.csv",
+      "provides_families": [],
+      "seasons_declared": [
+        2024
+      ],
+      "sha256": "0cf7ac5704a78d56d8bbbacdaec23c0e7e4f802edbce181ad10b817f4e0e16ef",
+      "size_bytes": 5500,
+      "source_class": "MEMBERSHIP_DECLARATION",
+      "source_id": "PHASE5J_TEAM_REGISTRY_2024"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_SAME_SEASON_DERIVED",
+      "evidence": [
+        "Built from 02_Validation/accepted_games_2024.csv. Same shape as Phase5J: a 2024 rating computed from 2024 results."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Power_Crunch_Research_Lab_Phase5M_2024_CPI_Ratings_Package.zip",
+      "provides_families": [],
+      "seasons_declared": [
+        2024
+      ],
+      "sha256": "3c1276ffe4a614d57137e13467957d2aceac0ae72fed32d0bac62192beda0880",
+      "size_bytes": 106700,
+      "source_class": "SAME_SEASON_DERIVED",
+      "source_id": "PHASE5M_2024_CPI_RATINGS_PACKAGE"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_DEGENERATE_AND_FOREIGN_SCALE",
+      "evidence": [
+        "The only genuinely leak-free season-opening rating state on this filesystem, and it carries no information. Every 2024 week-0 row has elo_a_pre and elo_b_pre exactly 1500.0, and every 2025 week-0 or week-1 row likewise: 1 distinct opening value across both seasons.",
+        "A population with zero dispersion has no standard deviation to divide by, which is why population_mean_sd refuses it rather than returning zeros that would read as 'every team is average'.",
+        "It is also a foreign scale -- research Elo, base 1500 -- and not any of the four V3 families."
+      ],
+      "location": "C:/Local-mcR3_calibration_staging/Power_Crunch_Research_Lab_Phase5D_WalkForward_Package/Power_Crunch_Research_Lab_Phase5D_WalkForward/03_Pregame_States/pregame_states_2024_2025.csv",
+      "provides_families": [],
+      "seasons_declared": [
+        2024,
+        2025
+      ],
+      "sha256": "8d8822eea90ee4127ded31374c983a1ebf84c82f5851f9dbbdbb5db80d06c622",
+      "size_bytes": 214578,
+      "source_class": "UNKNOWN",
+      "source_id": "POWER_CRUNCH_PREGAME_STATES_2024_2025"
+    },
+    {
+      "admissible": false,
+      "disposition": "POPULATION_CANDIDATE_LINEAGE_OPEN",
+      "evidence": [
+        "Membership and division are settled before a season starts, so this class is leakage-clean. It is registered as a population candidate and never as a strength value.",
+        "Team Affiliations gives a per-season subdivision and conference for 251 entities; recomputing over its bytes yields FBS counts of 130 (2021), 131 (2022), 133 (2023) and 133 (2024).",
+        "Its Methodology sheet names one upstream, Synthetic_CFB_2021_2026_Walkover_RERUN.csv. A filesystem sweep did not find that file, so the chain is documented but cannot be closed to bytes here."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx",
+      "provides_families": [],
+      "seasons_declared": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "sha256": "376a6f624eea6c60794f061de27f3d875c127e89afc80ec4f81664742588e2ac",
+      "size_bytes": 22942,
+      "source_class": "MEMBERSHIP_DECLARATION",
+      "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_NO_PRE_2025_STATE_EXISTS",
+      "evidence": [
+        "Sheet '21 2026 P0 Params' records population_mu 25 and population_sigma 8.333333 as the *initial* prior; the TrueSkill chain is initialised there, not carried in from an earlier season.",
+        "Sheet '14 2025 Rating History' shows every 2025 Week 1 row with pregame_mu 25 and pregame_sigma 8.333333 for both participants, so the 2025 season opened with an equal prior for all teams.",
+        "The 2026 carryover formula 'mu_2026 = 25 + 0.70 * (mu_2025 - 25)' consumes a 2025 posterior. No 2020-2023 posterior exists to feed an equivalent 2021-2024 transition."
+      ],
+      "location": "C:/Users/dbaxt/Downloads/Operation_Sythalax_TrueSkill_2025_2026_Thread_Consolidation.xlsx",
+      "provides_families": [
+        "TRUESKILL"
+      ],
+      "seasons_declared": [
+        2025,
+        2026
+      ],
+      "sha256": "4b7d84d8a4b626c7f207162cb8748268d4d3f2608e41cba376a4272c6c7dfc79",
+      "size_bytes": 555190,
+      "source_class": "FUTURE_SEASON_DERIVED",
+      "source_id": "TRUESKILL_2025_2026_THREAD_CONSOLIDATION"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_AS_HISTORICAL_POPULATION",
+      "evidence": [
+        "The canonical identity authority, and explicitly not a historical population. Its 134 entities are a synthetic 2026 universe.",
+        "It classifies Toledo, Western Michigan, Arkansas State, Charlotte, Eastern Michigan, Louisiana, Louisiana-Monroe and Western Kentucky as SCHEDULE_ONLY_FCS, and Colgate, Cornell, Harvard, Holy Cross, Lehigh, Penn, Princeton, Yale and North Dakota State as FBS_MEMBER. Neither statement is true of 2021-2024 football.",
+        "Usable for identity binding, never as the historical division of a historical team."
+      ],
+      "location": "reference/dynamic_weekly_mc_v3/inputs/2026_TEAM_CANONICAL_MASTER_v2_LLM_GROUNDING.md",
+      "provides_families": [],
+      "seasons_declared": [
+        2026
+      ],
+      "sha256": "fd8fcb1bec40e26168d600e9cdb8fbf2de6a421fe13218face588a48c48a83a0",
+      "size_bytes": 278106,
+      "source_class": "MEMBERSHIP_DECLARATION",
+      "source_id": "V3_CANONICAL_TEAM_MASTER_2026"
+    },
+    {
+      "admissible": false,
+      "disposition": "REFUSED_FUTURE_SEASON",
+      "evidence": [
+        "This is the construction being mirrored, not a source for it. Its 121 rows are 2026 preseason states.",
+        "Ensemble Parameters sheet fixes the four weights at 0.25 each and the board family as the average of standardized I-H and J-B.",
+        "Recomputation over its 121 rows reproduces every published family Z with ddof=1 and none with ddof=0."
+      ],
+      "location": "reference/dynamic_weekly_mc_v3/inputs/2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx",
+      "provides_families": [
+        "TRUESKILL",
+        "LITKENHOUS",
+        "PURE_BAXTER",
+        "BOARD_I_H",
+        "BOARD_J_B"
+      ],
+      "seasons_declared": [
+        2026
+      ],
+      "sha256": "4b2535459ec069b8dc16edb64a90df694562746035279f961aa8f73530807a4a",
+      "size_bytes": 113260,
+      "source_class": "FUTURE_SEASON_DERIVED",
+      "source_id": "V3_UNIFIED_PRESEASON_RATINGS_2026"
+    }
+  ]
+}

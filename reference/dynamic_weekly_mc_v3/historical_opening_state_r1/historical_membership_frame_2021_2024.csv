@@ -1,0 +1,1005 @@
+season,team_key,team_name,division,conference,source_confidence_marker
+2021,Air Force,Air Force,FBS,Mountain West,N
+2021,Akron,Akron,FBS,MAC,N
+2021,Alabama,Alabama,FBS,SEC,N
+2021,Alabama A&M,Alabama A&M,FCS,SWAC,N
+2021,Alabama St.,Alabama St.,FCS,SWAC,N
+2021,Albany,Albany,FCS,CAA,N
+2021,Alcorn St.,Alcorn St.,FCS,SWAC,N
+2021,Appalachian State,Appalachian State,FBS,Sun Belt,N
+2021,Arizona,Arizona,FBS,Pac-12,N
+2021,Arizona St.,Arizona St.,FBS,Pac-12,N
+2021,Arkansas,Arkansas,FBS,SEC,N
+2021,Arkansas St.,Arkansas St.,FBS,Sun Belt,N
+2021,Arkansas-Pine Bluff,Arkansas-Pine Bluff,FCS,SWAC,N
+2021,Army,Army,FBS,FBS Independent,N
+2021,Auburn,Auburn,FBS,SEC,N
+2021,Austin Peay,Austin Peay,FCS,OVC,N
+2021,BC,BC,FBS,ACC,N
+2021,BYU,BYU,FBS,FBS Independent,N
+2021,Ball State,Ball State,FBS,MAC,N
+2021,Baylor,Baylor,FBS,Big 12,N
+2021,Bethune-Cookman,Bethune-Cookman,FCS,SWAC,N
+2021,Boise St.,Boise St.,FBS,Mountain West,N
+2021,Bowling Green,Bowling Green,FBS,MAC,N
+2021,Brown,Brown,FCS,Ivy League,N
+2021,Bryant,Bryant,FCS,NEC,N
+2021,Bucknell,Bucknell,FCS,Patriot League,N
+2021,Buffalo,Buffalo,FBS,MAC,N
+2021,Butler,Butler,FCS,Pioneer,N
+2021,Cal Poly,Cal Poly,FCS,Big Sky,N
+2021,California,California,FBS,Pac-12,N
+2021,Campbell,Campbell,FCS,Big South,N
+2021,Central Arkansas,Central Arkansas,FCS,ASUN,N
+2021,Central Connecticut,Central Connecticut,FCS,NEC,N
+2021,Central Florida,Central Florida,FBS,American,N
+2021,Central Michigan,Central Michigan,FBS,MAC,N
+2021,Charleston Southern,Charleston Southern,FCS,Big South,N
+2021,Charlotte,Charlotte,FBS,Conference USA,N
+2021,Cincinnati,Cincinnati,FBS,American,N
+2021,Clemson,Clemson,FBS,ACC,N
+2021,Coastal Carolina,Coastal Carolina,FBS,Sun Belt,N
+2021,Colgate,Colgate,FCS,Patriot League,N
+2021,Colorado,Colorado,FBS,Pac-12,N
+2021,Colorado St.,Colorado St.,FBS,Mountain West,N
+2021,Columbia,Columbia,FCS,Ivy League,N
+2021,Cornell,Cornell,FCS,Ivy League,N
+2021,Dartmouth,Dartmouth,FCS,Ivy League,N
+2021,Davidson,Davidson,FCS,Pioneer,N
+2021,Dayton,Dayton,FCS,Pioneer,N
+2021,Delaware,Delaware,FCS,CAA,N
+2021,Delaware St.,Delaware St.,FCS,MEAC,N
+2021,Drake,Drake,FCS,Pioneer,N
+2021,Duke,Duke,FBS,ACC,N
+2021,Duquesne,Duquesne,FCS,NEC,N
+2021,East Carolina,East Carolina,FBS,American,N
+2021,Eastern Illinois,Eastern Illinois,FCS,OVC,N
+2021,Eastern Kentucky,Eastern Kentucky,FCS,ASUN,N
+2021,Eastern Michigan,Eastern Michigan,FBS,MAC,N
+2021,Eastern Washington,Eastern Washington,FCS,Big Sky,N
+2021,Elon,Elon,FCS,CAA,N
+2021,Florida,Florida,FBS,SEC,N
+2021,Florida A&M,Florida A&M,FCS,SWAC,N
+2021,Florida Atlantic,Florida Atlantic,FBS,Conference USA,N
+2021,Florida International,Florida International,FBS,Conference USA,N
+2021,Florida St,Florida St,FBS,ACC,N
+2021,Fordham,Fordham,FCS,Patriot League,N
+2021,Fresno St.,Fresno St.,FBS,Mountain West,N
+2021,Furman,Furman,FCS,SoCon,N
+2021,Gardner-Webb,Gardner-Webb,FCS,Big South,N
+2021,Georgetown,Georgetown,FCS,Patriot League,N
+2021,Georgia,Georgia,FBS,SEC,N
+2021,Georgia Southern,Georgia Southern,FBS,Sun Belt,N
+2021,Georgia St.,Georgia St.,FBS,Sun Belt,N
+2021,Georgia Tech,Georgia Tech,FBS,ACC,N
+2021,Grambling,Grambling,FCS,SWAC,N
+2021,Hampton,Hampton,FCS,Big South,N
+2021,Harvard,Harvard,FCS,Ivy League,N
+2021,Hawaii,Hawaii,FBS,Mountain West,N
+2021,Holy Cross,Holy Cross,FCS,Patriot League,N
+2021,Houston,Houston,FBS,American,N
+2021,Houston-Baptist,Houston-Baptist,FCS,Southland,N
+2021,Howard,Howard,FCS,MEAC,N
+2021,Idaho,Idaho,FCS,Big Sky,N
+2021,Idaho St.,Idaho St.,FCS,Big Sky,N
+2021,Illinois,Illinois,FBS,Big Ten,N
+2021,Illinois St.,Illinois St.,FCS,MVFC,N
+2021,Indiana,Indiana,FBS,Big Ten,N
+2021,Indiana St.,Indiana St.,FCS,MVFC,N
+2021,Iowa,Iowa,FBS,Big Ten,N
+2021,Iowa St.,Iowa St.,FBS,Big 12,N
+2021,Jackson St.,Jackson St.,FCS,SWAC,N
+2021,Jacksonville,Jacksonville,Inactive / No varsity football,Program discontinued,N
+2021,Jacksonville St.,Jacksonville St.,FCS,ASUN,N
+2021,James Madison,James Madison,FCS,CAA,N
+2021,Kansas,Kansas,FBS,Big 12,N
+2021,Kansas St.,Kansas St.,FBS,Big 12,N
+2021,Kent State,Kent State,FBS,MAC,N
+2021,Kentucky,Kentucky,FBS,SEC,N
+2021,LSU,LSU,FBS,SEC,N
+2021,LaTech,LaTech,FBS,Conference USA,N
+2021,Lafayette,Lafayette,FCS,Patriot League,N
+2021,Lamar,Lamar,FCS,WAC,N
+2021,Lehigh,Lehigh,FCS,Patriot League,N
+2021,Liberty,Liberty,FBS,FBS Independent,N
+2021,Louisiana-Monroe,Louisiana-Monroe,FBS,Sun Belt,N
+2021,Louisville,Louisville,FBS,ACC,N
+2021,Maine,Maine,FCS,CAA,N
+2021,Marist,Marist,FCS,Pioneer,N
+2021,Marshall,Marshall,FBS,Conference USA,N
+2021,Maryland,Maryland,FBS,Big Ten,N
+2021,McNeese St.,McNeese St.,FCS,Southland,N
+2021,Memphis,Memphis,FBS,American,N
+2021,Mercer,Mercer,FCS,SoCon,N
+2021,Miami,Miami,FBS,ACC,N
+2021,Miami (OH),Miami (OH),FBS,MAC,N
+2021,Michigan,Michigan,FBS,Big Ten,N
+2021,Michigan St.,Michigan St.,FBS,Big Ten,N
+2021,Middle Tennessee St.,Middle Tennessee St.,FBS,Conference USA,N
+2021,Minnesota,Minnesota,FBS,Big Ten,N
+2021,Mississippi St.,Mississippi St.,FBS,SEC,N
+2021,Mississippi Valley St.,Mississippi Valley St.,FCS,SWAC,N
+2021,Missouri,Missouri,FBS,SEC,N
+2021,Missouri St.,Missouri St.,FCS,MVFC,N
+2021,Monmouth,Monmouth,FCS,Big South,N
+2021,Montana,Montana,FCS,Big Sky,N
+2021,Montana St.,Montana St.,FCS,Big Sky,N
+2021,Morehead St.,Morehead St.,FCS,Pioneer,N
+2021,Morgan St.,Morgan St.,FCS,MEAC,N
+2021,Murray St.,Murray St.,FCS,OVC,N
+2021,NC St.,NC St.,FBS,ACC,N
+2021,Navy,Navy,FBS,American,N
+2021,Nebraska,Nebraska,FBS,Big Ten,N
+2021,Nevada,Nevada,FBS,Mountain West,N
+2021,New Hampshire,New Hampshire,FCS,CAA,N
+2021,New Mexico,New Mexico,FBS,Mountain West,N
+2021,New Mexico St.,New Mexico St.,FBS,FBS Independent,N
+2021,New Orleans,New Orleans,Inactive / No varsity football,No varsity football,N
+2021,Nicholls St.,Nicholls St.,FCS,Southland,N
+2021,Norfolk St.,Norfolk St.,FCS,MEAC,N
+2021,North Carolina,North Carolina,FBS,ACC,N
+2021,North Carolina A&T St.,North Carolina A&T St.,FCS,Big South,N
+2021,North Carolina Central,North Carolina Central,FCS,MEAC,N
+2021,North Dakota,North Dakota,FCS,Big Sky,N
+2021,North Dakota St.,North Dakota St.,FCS,MVFC,N
+2021,North Texas,North Texas,FBS,Conference USA,N
+2021,Northern Arizona,Northern Arizona,FCS,Big Sky,N
+2021,Northern Colorado,Northern Colorado,FCS,Big Sky,N
+2021,Northern Illinois,Northern Illinois,FBS,MAC,N
+2021,Northern Iowa,Northern Iowa,FCS,MVFC,N
+2021,Northwestern,Northwestern,FBS,Big Ten,N
+2021,Northwestern St.,Northwestern St.,FCS,Southland,N
+2021,Notre Dame,Notre Dame,FBS,FBS Independent,N
+2021,Ohio,Ohio,FBS,MAC,N
+2021,Ohio St.,Ohio St.,FBS,Big Ten,N
+2021,Oklahoma,Oklahoma,FBS,Big 12,N
+2021,Oklahoma St.,Oklahoma St.,FBS,Big 12,N
+2021,Old Dominion,Old Dominion,FBS,Conference USA,N
+2021,Ole Miss,Ole Miss,FBS,SEC,N
+2021,Oregon,Oregon,FBS,Pac-12,N
+2021,Oregon St.,Oregon St.,FBS,Pac-12,N
+2021,Penn,Penn,FCS,Ivy League,N
+2021,Penn St.,Penn St.,FBS,Big Ten,N
+2021,Pittsburgh,Pittsburgh,FBS,ACC,N
+2021,Portland St.,Portland St.,FCS,Big Sky,N
+2021,Prairie View A&M,Prairie View A&M,FCS,SWAC,N
+2021,Presbyterian,Presbyterian,FCS,Pioneer,N
+2021,Princeton,Princeton,FCS,Ivy League,N
+2021,Purdue,Purdue,FBS,Big Ten,N
+2021,Rhode Island,Rhode Island,FCS,CAA,N
+2021,Rice,Rice,FBS,Conference USA,N
+2021,Richmond,Richmond,FCS,CAA,N
+2021,Robert Morris,Robert Morris,FCS,Big South,N
+2021,Rutgers,Rutgers,FBS,Big Ten,N
+2021,SMU,SMU,FBS,American,N
+2021,Sacramento St.,Sacramento St.,FCS,Big Sky,N
+2021,Sacred Heart,Sacred Heart,FCS,NEC,N
+2021,Sam Houston St.,Sam Houston St.,FCS,WAC,N
+2021,Samford,Samford,FCS,SoCon,N
+2021,San Diego,San Diego,FCS,Pioneer,N
+2021,San Diego St.,San Diego St.,FBS,Mountain West,N
+2021,San Jose St.,San Jose St.,FBS,Mountain West,N
+2021,Savannah St.,Savannah St.,Division II,SIAC (Division II),N
+2021,South Alabama,South Alabama,FBS,Sun Belt,N
+2021,South Carolina,South Carolina,FBS,SEC,N
+2021,South Carolina St.,South Carolina St.,FCS,MEAC,N
+2021,South Dakota,South Dakota,FCS,MVFC,N
+2021,South Dakota St.,South Dakota St.,FCS,MVFC,N
+2021,South Florida,South Florida,FBS,American,N
+2021,Southeast Missouri St.,Southeast Missouri St.,FCS,OVC,N
+2021,Southeastern Louisiana,Southeastern Louisiana,FCS,Southland,N
+2021,Southern,Southern,FCS,SWAC,N
+2021,Southern Illinois,Southern Illinois,FCS,MVFC,N
+2021,Southern Miss,Southern Miss,FBS,Conference USA,N
+2021,Southern Utah,Southern Utah,FCS,Big Sky,N
+2021,St. Francis (PA),St. Francis (PA),FCS,NEC,N
+2021,Stanford,Stanford,FBS,Pac-12,N
+2021,Stephen F. Austin,Stephen F. Austin,FCS,WAC,N
+2021,Stetson,Stetson,FCS,Pioneer,N
+2021,Stony Brook,Stony Brook,FCS,CAA,N
+2021,Syracuse,Syracuse,FBS,ACC,N
+2021,TCU,TCU,FBS,Big 12,N
+2021,Temple,Temple,FBS,American,N
+2021,Tennessee,Tennessee,FBS,SEC,N
+2021,Tennessee St.,Tennessee St.,FCS,OVC,N
+2021,Tennessee Tech,Tennessee Tech,FCS,OVC,N
+2021,Tennessee-Martin,Tennessee-Martin,FCS,OVC,N
+2021,Texas,Texas,FBS,Big 12,N
+2021,Texas A&M,Texas A&M,FBS,SEC,N
+2021,Texas Southern,Texas Southern,FCS,SWAC,N
+2021,Texas St.,Texas St.,FBS,Sun Belt,N
+2021,Texas Tech,Texas Tech,FBS,Big 12,N
+2021,Texas-San Antonio,Texas-San Antonio,FBS,Conference USA,N
+2021,The Citadel,The Citadel,FCS,SoCon,N
+2021,Toledo,Toledo,FBS,MAC,N
+2021,Towson,Towson,FCS,CAA,N
+2021,Troy,Troy,FBS,Sun Belt,N
+2021,Tulane,Tulane,FBS,American,N
+2021,Tulsa,Tulsa,FBS,American,N
+2021,UAB,UAB,FBS,Conference USA,N
+2021,UC Davis,UC Davis,FCS,Big Sky,N
+2021,UCLA,UCLA,FBS,Pac-12,N
+2021,UConn,UConn,FBS,FBS Independent,N
+2021,UL Lafayette,UL Lafayette,FBS,Sun Belt,N
+2021,UMASS,UMASS,FBS,FBS Independent,N
+2021,UNLV,UNLV,FBS,Mountain West,N
+2021,USC,USC,FBS,Pac-12,N
+2021,UT Chattanooga,UT Chattanooga,FCS,SoCon,N
+2021,UTEP,UTEP,FBS,Conference USA,N
+2021,Utah,Utah,FBS,Pac-12,N
+2021,Utah St.,Utah St.,FBS,Mountain West,N
+2021,VMI,VMI,FCS,SoCon,N
+2021,Valparaiso,Valparaiso,FCS,Pioneer,N
+2021,Vanderbilt,Vanderbilt,FBS,SEC,N
+2021,Villanova,Villanova,FCS,CAA,N
+2021,Virginia,Virginia,FBS,ACC,N
+2021,Virginia Tech,Virginia Tech,FBS,ACC,N
+2021,Wagner,Wagner,FCS,NEC,N
+2021,Wake Forest,Wake Forest,FBS,ACC,N
+2021,Washington,Washington,FBS,Pac-12,N
+2021,Washington St.,Washington St.,FBS,Pac-12,N
+2021,Weber St.,Weber St.,FCS,Big Sky,N
+2021,West Virginia,West Virginia,FBS,Big 12,N
+2021,Western Carolina,Western Carolina,FCS,SoCon,N
+2021,Western Illinois,Western Illinois,FCS,MVFC,N
+2021,Western Kentucky,Western Kentucky,FBS,Conference USA,N
+2021,Western Michigan,Western Michigan,FBS,MAC,N
+2021,William & Mary,William & Mary,FCS,CAA,N
+2021,Wisconsin,Wisconsin,FBS,Big Ten,N
+2021,Wofford,Wofford,FCS,SoCon,N
+2021,Wyoming,Wyoming,FBS,Mountain West,N
+2021,Yale,Yale,FCS,Ivy League,N
+2021,Youngstown St.,Youngstown St.,FCS,MVFC,N
+2022,Air Force,Air Force,FBS,Mountain West,N
+2022,Akron,Akron,FBS,MAC,N
+2022,Alabama,Alabama,FBS,SEC,N
+2022,Alabama A&M,Alabama A&M,FCS,SWAC,N
+2022,Alabama St.,Alabama St.,FCS,SWAC,N
+2022,Albany,Albany,FCS,CAA,N
+2022,Alcorn St.,Alcorn St.,FCS,SWAC,N
+2022,Appalachian State,Appalachian State,FBS,Sun Belt,N
+2022,Arizona,Arizona,FBS,Pac-12,N
+2022,Arizona St.,Arizona St.,FBS,Pac-12,N
+2022,Arkansas,Arkansas,FBS,SEC,N
+2022,Arkansas St.,Arkansas St.,FBS,Sun Belt,N
+2022,Arkansas-Pine Bluff,Arkansas-Pine Bluff,FCS,SWAC,N
+2022,Army,Army,FBS,FBS Independent,N
+2022,Auburn,Auburn,FBS,SEC,N
+2022,Austin Peay,Austin Peay,FCS,ASUN,N
+2022,BC,BC,FBS,ACC,N
+2022,BYU,BYU,FBS,FBS Independent,N
+2022,Ball State,Ball State,FBS,MAC,N
+2022,Baylor,Baylor,FBS,Big 12,N
+2022,Bethune-Cookman,Bethune-Cookman,FCS,SWAC,N
+2022,Boise St.,Boise St.,FBS,Mountain West,N
+2022,Bowling Green,Bowling Green,FBS,MAC,N
+2022,Brown,Brown,FCS,Ivy League,N
+2022,Bryant,Bryant,FCS,Big South,N
+2022,Bucknell,Bucknell,FCS,Patriot League,N
+2022,Buffalo,Buffalo,FBS,MAC,N
+2022,Butler,Butler,FCS,Pioneer,N
+2022,Cal Poly,Cal Poly,FCS,Big Sky,N
+2022,California,California,FBS,Pac-12,N
+2022,Campbell,Campbell,FCS,Big South,N
+2022,Central Arkansas,Central Arkansas,FCS,ASUN,N
+2022,Central Connecticut,Central Connecticut,FCS,NEC,N
+2022,Central Florida,Central Florida,FBS,American,N
+2022,Central Michigan,Central Michigan,FBS,MAC,N
+2022,Charleston Southern,Charleston Southern,FCS,Big South,N
+2022,Charlotte,Charlotte,FBS,Conference USA,N
+2022,Cincinnati,Cincinnati,FBS,American,N
+2022,Clemson,Clemson,FBS,ACC,N
+2022,Coastal Carolina,Coastal Carolina,FBS,Sun Belt,N
+2022,Colgate,Colgate,FCS,Patriot League,N
+2022,Colorado,Colorado,FBS,Pac-12,N
+2022,Colorado St.,Colorado St.,FBS,Mountain West,N
+2022,Columbia,Columbia,FCS,Ivy League,N
+2022,Cornell,Cornell,FCS,Ivy League,N
+2022,Dartmouth,Dartmouth,FCS,Ivy League,N
+2022,Davidson,Davidson,FCS,Pioneer,N
+2022,Dayton,Dayton,FCS,Pioneer,N
+2022,Delaware,Delaware,FCS,CAA,N
+2022,Delaware St.,Delaware St.,FCS,MEAC,N
+2022,Drake,Drake,FCS,Pioneer,N
+2022,Duke,Duke,FBS,ACC,N
+2022,Duquesne,Duquesne,FCS,NEC,N
+2022,East Carolina,East Carolina,FBS,American,N
+2022,Eastern Illinois,Eastern Illinois,FCS,OVC,N
+2022,Eastern Kentucky,Eastern Kentucky,FCS,ASUN,N
+2022,Eastern Michigan,Eastern Michigan,FBS,MAC,N
+2022,Eastern Washington,Eastern Washington,FCS,Big Sky,N
+2022,Elon,Elon,FCS,CAA,N
+2022,Florida,Florida,FBS,SEC,N
+2022,Florida A&M,Florida A&M,FCS,SWAC,N
+2022,Florida Atlantic,Florida Atlantic,FBS,Conference USA,N
+2022,Florida International,Florida International,FBS,Conference USA,N
+2022,Florida St,Florida St,FBS,ACC,N
+2022,Fordham,Fordham,FCS,Patriot League,N
+2022,Fresno St.,Fresno St.,FBS,Mountain West,N
+2022,Furman,Furman,FCS,SoCon,N
+2022,Gardner-Webb,Gardner-Webb,FCS,Big South,N
+2022,Georgetown,Georgetown,FCS,Patriot League,N
+2022,Georgia,Georgia,FBS,SEC,N
+2022,Georgia Southern,Georgia Southern,FBS,Sun Belt,N
+2022,Georgia St.,Georgia St.,FBS,Sun Belt,N
+2022,Georgia Tech,Georgia Tech,FBS,ACC,N
+2022,Grambling,Grambling,FCS,SWAC,N
+2022,Hampton,Hampton,FCS,CAA,N
+2022,Harvard,Harvard,FCS,Ivy League,N
+2022,Hawaii,Hawaii,FBS,Mountain West,N
+2022,Holy Cross,Holy Cross,FCS,Patriot League,N
+2022,Houston,Houston,FBS,American,N
+2022,Houston-Baptist,Houston-Baptist,FCS,Southland,N
+2022,Howard,Howard,FCS,MEAC,N
+2022,Idaho,Idaho,FCS,Big Sky,N
+2022,Idaho St.,Idaho St.,FCS,Big Sky,N
+2022,Illinois,Illinois,FBS,Big Ten,N
+2022,Illinois St.,Illinois St.,FCS,MVFC,N
+2022,Indiana,Indiana,FBS,Big Ten,N
+2022,Indiana St.,Indiana St.,FCS,MVFC,N
+2022,Iowa,Iowa,FBS,Big Ten,N
+2022,Iowa St.,Iowa St.,FBS,Big 12,N
+2022,Jackson St.,Jackson St.,FCS,SWAC,N
+2022,Jacksonville,Jacksonville,Inactive / No varsity football,Program discontinued,N
+2022,Jacksonville St.,Jacksonville St.,FCS,ASUN,N
+2022,James Madison,James Madison,FBS,Sun Belt,N
+2022,Kansas,Kansas,FBS,Big 12,N
+2022,Kansas St.,Kansas St.,FBS,Big 12,N
+2022,Kent State,Kent State,FBS,MAC,N
+2022,Kentucky,Kentucky,FBS,SEC,N
+2022,LSU,LSU,FBS,SEC,N
+2022,LaTech,LaTech,FBS,Conference USA,N
+2022,Lafayette,Lafayette,FCS,Patriot League,N
+2022,Lamar,Lamar,FCS,Southland,N
+2022,Lehigh,Lehigh,FCS,Patriot League,N
+2022,Liberty,Liberty,FBS,FBS Independent,N
+2022,Louisiana-Monroe,Louisiana-Monroe,FBS,Sun Belt,N
+2022,Louisville,Louisville,FBS,ACC,N
+2022,Maine,Maine,FCS,CAA,N
+2022,Marist,Marist,FCS,Pioneer,N
+2022,Marshall,Marshall,FBS,Sun Belt,N
+2022,Maryland,Maryland,FBS,Big Ten,N
+2022,McNeese St.,McNeese St.,FCS,Southland,N
+2022,Memphis,Memphis,FBS,American,N
+2022,Mercer,Mercer,FCS,SoCon,N
+2022,Miami,Miami,FBS,ACC,N
+2022,Miami (OH),Miami (OH),FBS,MAC,N
+2022,Michigan,Michigan,FBS,Big Ten,N
+2022,Michigan St.,Michigan St.,FBS,Big Ten,N
+2022,Middle Tennessee St.,Middle Tennessee St.,FBS,Conference USA,N
+2022,Minnesota,Minnesota,FBS,Big Ten,N
+2022,Mississippi St.,Mississippi St.,FBS,SEC,N
+2022,Mississippi Valley St.,Mississippi Valley St.,FCS,SWAC,N
+2022,Missouri,Missouri,FBS,SEC,N
+2022,Missouri St.,Missouri St.,FCS,MVFC,N
+2022,Monmouth,Monmouth,FCS,CAA,N
+2022,Montana,Montana,FCS,Big Sky,N
+2022,Montana St.,Montana St.,FCS,Big Sky,N
+2022,Morehead St.,Morehead St.,FCS,Pioneer,N
+2022,Morgan St.,Morgan St.,FCS,MEAC,N
+2022,Murray St.,Murray St.,FCS,OVC,N
+2022,NC St.,NC St.,FBS,ACC,N
+2022,Navy,Navy,FBS,American,N
+2022,Nebraska,Nebraska,FBS,Big Ten,N
+2022,Nevada,Nevada,FBS,Mountain West,N
+2022,New Hampshire,New Hampshire,FCS,CAA,N
+2022,New Mexico,New Mexico,FBS,Mountain West,N
+2022,New Mexico St.,New Mexico St.,FBS,FBS Independent,N
+2022,New Orleans,New Orleans,Inactive / No varsity football,No varsity football,N
+2022,Nicholls St.,Nicholls St.,FCS,Southland,N
+2022,Norfolk St.,Norfolk St.,FCS,MEAC,N
+2022,North Carolina,North Carolina,FBS,ACC,N
+2022,North Carolina A&T St.,North Carolina A&T St.,FCS,Big South,N
+2022,North Carolina Central,North Carolina Central,FCS,MEAC,N
+2022,North Dakota,North Dakota,FCS,Big Sky,N
+2022,North Dakota St.,North Dakota St.,FCS,MVFC,N
+2022,North Texas,North Texas,FBS,Conference USA,N
+2022,Northern Arizona,Northern Arizona,FCS,Big Sky,N
+2022,Northern Colorado,Northern Colorado,FCS,Big Sky,N
+2022,Northern Illinois,Northern Illinois,FBS,MAC,N
+2022,Northern Iowa,Northern Iowa,FCS,MVFC,N
+2022,Northwestern,Northwestern,FBS,Big Ten,N
+2022,Northwestern St.,Northwestern St.,FCS,Southland,N
+2022,Notre Dame,Notre Dame,FBS,FBS Independent,N
+2022,Ohio,Ohio,FBS,MAC,N
+2022,Ohio St.,Ohio St.,FBS,Big Ten,N
+2022,Oklahoma,Oklahoma,FBS,Big 12,N
+2022,Oklahoma St.,Oklahoma St.,FBS,Big 12,N
+2022,Old Dominion,Old Dominion,FBS,Sun Belt,N
+2022,Ole Miss,Ole Miss,FBS,SEC,N
+2022,Oregon,Oregon,FBS,Pac-12,N
+2022,Oregon St.,Oregon St.,FBS,Pac-12,N
+2022,Penn,Penn,FCS,Ivy League,N
+2022,Penn St.,Penn St.,FBS,Big Ten,N
+2022,Pittsburgh,Pittsburgh,FBS,ACC,N
+2022,Portland St.,Portland St.,FCS,Big Sky,N
+2022,Prairie View A&M,Prairie View A&M,FCS,SWAC,N
+2022,Presbyterian,Presbyterian,FCS,Pioneer,N
+2022,Princeton,Princeton,FCS,Ivy League,N
+2022,Purdue,Purdue,FBS,Big Ten,N
+2022,Rhode Island,Rhode Island,FCS,CAA,N
+2022,Rice,Rice,FBS,Conference USA,N
+2022,Richmond,Richmond,FCS,CAA,N
+2022,Robert Morris,Robert Morris,FCS,Big South,N
+2022,Rutgers,Rutgers,FBS,Big Ten,N
+2022,SMU,SMU,FBS,American,N
+2022,Sacramento St.,Sacramento St.,FCS,Big Sky,N
+2022,Sacred Heart,Sacred Heart,FCS,NEC,N
+2022,Sam Houston St.,Sam Houston St.,FCS,WAC,N
+2022,Samford,Samford,FCS,SoCon,N
+2022,San Diego,San Diego,FCS,Pioneer,N
+2022,San Diego St.,San Diego St.,FBS,Mountain West,N
+2022,San Jose St.,San Jose St.,FBS,Mountain West,N
+2022,Savannah St.,Savannah St.,Division II,SIAC (Division II),N
+2022,South Alabama,South Alabama,FBS,Sun Belt,N
+2022,South Carolina,South Carolina,FBS,SEC,N
+2022,South Carolina St.,South Carolina St.,FCS,MEAC,N
+2022,South Dakota,South Dakota,FCS,MVFC,N
+2022,South Dakota St.,South Dakota St.,FCS,MVFC,N
+2022,South Florida,South Florida,FBS,American,N
+2022,Southeast Missouri St.,Southeast Missouri St.,FCS,OVC,N
+2022,Southeastern Louisiana,Southeastern Louisiana,FCS,Southland,N
+2022,Southern,Southern,FCS,SWAC,N
+2022,Southern Illinois,Southern Illinois,FCS,MVFC,N
+2022,Southern Miss,Southern Miss,FBS,Sun Belt,N
+2022,Southern Utah,Southern Utah,FCS,WAC,N
+2022,St. Francis (PA),St. Francis (PA),FCS,NEC,N
+2022,Stanford,Stanford,FBS,Pac-12,N
+2022,Stephen F. Austin,Stephen F. Austin,FCS,WAC,N
+2022,Stetson,Stetson,FCS,Pioneer,N
+2022,Stony Brook,Stony Brook,FCS,CAA,N
+2022,Syracuse,Syracuse,FBS,ACC,N
+2022,TCU,TCU,FBS,Big 12,N
+2022,Temple,Temple,FBS,American,N
+2022,Tennessee,Tennessee,FBS,SEC,N
+2022,Tennessee St.,Tennessee St.,FCS,OVC,N
+2022,Tennessee Tech,Tennessee Tech,FCS,OVC,N
+2022,Tennessee-Martin,Tennessee-Martin,FCS,OVC,N
+2022,Texas,Texas,FBS,Big 12,N
+2022,Texas A&M,Texas A&M,FBS,SEC,N
+2022,Texas Southern,Texas Southern,FCS,SWAC,N
+2022,Texas St.,Texas St.,FBS,Sun Belt,N
+2022,Texas Tech,Texas Tech,FBS,Big 12,N
+2022,Texas-San Antonio,Texas-San Antonio,FBS,Conference USA,N
+2022,The Citadel,The Citadel,FCS,SoCon,N
+2022,Toledo,Toledo,FBS,MAC,N
+2022,Towson,Towson,FCS,CAA,N
+2022,Troy,Troy,FBS,Sun Belt,N
+2022,Tulane,Tulane,FBS,American,N
+2022,Tulsa,Tulsa,FBS,American,N
+2022,UAB,UAB,FBS,Conference USA,N
+2022,UC Davis,UC Davis,FCS,Big Sky,N
+2022,UCLA,UCLA,FBS,Pac-12,N
+2022,UConn,UConn,FBS,FBS Independent,N
+2022,UL Lafayette,UL Lafayette,FBS,Sun Belt,N
+2022,UMASS,UMASS,FBS,FBS Independent,N
+2022,UNLV,UNLV,FBS,Mountain West,N
+2022,USC,USC,FBS,Pac-12,N
+2022,UT Chattanooga,UT Chattanooga,FCS,SoCon,N
+2022,UTEP,UTEP,FBS,Conference USA,N
+2022,Utah,Utah,FBS,Pac-12,N
+2022,Utah St.,Utah St.,FBS,Mountain West,N
+2022,VMI,VMI,FCS,SoCon,N
+2022,Valparaiso,Valparaiso,FCS,Pioneer,N
+2022,Vanderbilt,Vanderbilt,FBS,SEC,N
+2022,Villanova,Villanova,FCS,CAA,N
+2022,Virginia,Virginia,FBS,ACC,N
+2022,Virginia Tech,Virginia Tech,FBS,ACC,N
+2022,Wagner,Wagner,FCS,NEC,N
+2022,Wake Forest,Wake Forest,FBS,ACC,N
+2022,Washington,Washington,FBS,Pac-12,N
+2022,Washington St.,Washington St.,FBS,Pac-12,N
+2022,Weber St.,Weber St.,FCS,Big Sky,N
+2022,West Virginia,West Virginia,FBS,Big 12,N
+2022,Western Carolina,Western Carolina,FCS,SoCon,N
+2022,Western Illinois,Western Illinois,FCS,MVFC,N
+2022,Western Kentucky,Western Kentucky,FBS,Conference USA,N
+2022,Western Michigan,Western Michigan,FBS,MAC,N
+2022,William & Mary,William & Mary,FCS,CAA,N
+2022,Wisconsin,Wisconsin,FBS,Big Ten,N
+2022,Wofford,Wofford,FCS,SoCon,N
+2022,Wyoming,Wyoming,FBS,Mountain West,N
+2022,Yale,Yale,FCS,Ivy League,N
+2022,Youngstown St.,Youngstown St.,FCS,MVFC,N
+2023,Air Force,Air Force,FBS,Mountain West,N
+2023,Akron,Akron,FBS,MAC,N
+2023,Alabama,Alabama,FBS,SEC,N
+2023,Alabama A&M,Alabama A&M,FCS,SWAC,N
+2023,Alabama St.,Alabama St.,FCS,SWAC,N
+2023,Albany,Albany,FCS,CAA,N
+2023,Alcorn St.,Alcorn St.,FCS,SWAC,N
+2023,Appalachian State,Appalachian State,FBS,Sun Belt,N
+2023,Arizona,Arizona,FBS,Pac-12,N
+2023,Arizona St.,Arizona St.,FBS,Pac-12,N
+2023,Arkansas,Arkansas,FBS,SEC,N
+2023,Arkansas St.,Arkansas St.,FBS,Sun Belt,N
+2023,Arkansas-Pine Bluff,Arkansas-Pine Bluff,FCS,SWAC,N
+2023,Army,Army,FBS,FBS Independent,N
+2023,Auburn,Auburn,FBS,SEC,N
+2023,Austin Peay,Austin Peay,FCS,UAC,N
+2023,BC,BC,FBS,ACC,N
+2023,BYU,BYU,FBS,Big 12,N
+2023,Ball State,Ball State,FBS,MAC,N
+2023,Baylor,Baylor,FBS,Big 12,N
+2023,Bethune-Cookman,Bethune-Cookman,FCS,SWAC,N
+2023,Boise St.,Boise St.,FBS,Mountain West,N
+2023,Bowling Green,Bowling Green,FBS,MAC,N
+2023,Brown,Brown,FCS,Ivy League,N
+2023,Bryant,Bryant,FCS,Big South–OVC,N
+2023,Bucknell,Bucknell,FCS,Patriot League,N
+2023,Buffalo,Buffalo,FBS,MAC,N
+2023,Butler,Butler,FCS,Pioneer,N
+2023,Cal Poly,Cal Poly,FCS,Big Sky,N
+2023,California,California,FBS,Pac-12,N
+2023,Campbell,Campbell,FCS,CAA,N
+2023,Central Arkansas,Central Arkansas,FCS,UAC,N
+2023,Central Connecticut,Central Connecticut,FCS,NEC,N
+2023,Central Florida,Central Florida,FBS,Big 12,N
+2023,Central Michigan,Central Michigan,FBS,MAC,N
+2023,Charleston Southern,Charleston Southern,FCS,Big South–OVC,N
+2023,Charlotte,Charlotte,FBS,American,N
+2023,Cincinnati,Cincinnati,FBS,Big 12,N
+2023,Clemson,Clemson,FBS,ACC,N
+2023,Coastal Carolina,Coastal Carolina,FBS,Sun Belt,N
+2023,Colgate,Colgate,FCS,Patriot League,N
+2023,Colorado,Colorado,FBS,Pac-12,N
+2023,Colorado St.,Colorado St.,FBS,Mountain West,N
+2023,Columbia,Columbia,FCS,Ivy League,N
+2023,Cornell,Cornell,FCS,Ivy League,N
+2023,Dartmouth,Dartmouth,FCS,Ivy League,N
+2023,Davidson,Davidson,FCS,Pioneer,N
+2023,Dayton,Dayton,FCS,Pioneer,N
+2023,Delaware,Delaware,FCS,CAA,N
+2023,Delaware St.,Delaware St.,FCS,MEAC,N
+2023,Drake,Drake,FCS,Pioneer,N
+2023,Duke,Duke,FBS,ACC,N
+2023,Duquesne,Duquesne,FCS,NEC,N
+2023,East Carolina,East Carolina,FBS,American,N
+2023,Eastern Illinois,Eastern Illinois,FCS,Big South–OVC,N
+2023,Eastern Kentucky,Eastern Kentucky,FCS,UAC,N
+2023,Eastern Michigan,Eastern Michigan,FBS,MAC,N
+2023,Eastern Washington,Eastern Washington,FCS,Big Sky,N
+2023,Elon,Elon,FCS,CAA,N
+2023,Florida,Florida,FBS,SEC,N
+2023,Florida A&M,Florida A&M,FCS,SWAC,N
+2023,Florida Atlantic,Florida Atlantic,FBS,American,N
+2023,Florida International,Florida International,FBS,Conference USA,N
+2023,Florida St,Florida St,FBS,ACC,N
+2023,Fordham,Fordham,FCS,Patriot League,N
+2023,Fresno St.,Fresno St.,FBS,Mountain West,N
+2023,Furman,Furman,FCS,SoCon,N
+2023,Gardner-Webb,Gardner-Webb,FCS,Big South–OVC,N
+2023,Georgetown,Georgetown,FCS,Patriot League,N
+2023,Georgia,Georgia,FBS,SEC,N
+2023,Georgia Southern,Georgia Southern,FBS,Sun Belt,N
+2023,Georgia St.,Georgia St.,FBS,Sun Belt,N
+2023,Georgia Tech,Georgia Tech,FBS,ACC,N
+2023,Grambling,Grambling,FCS,SWAC,N
+2023,Hampton,Hampton,FCS,CAA,N
+2023,Harvard,Harvard,FCS,Ivy League,N
+2023,Hawaii,Hawaii,FBS,Mountain West,N
+2023,Holy Cross,Holy Cross,FCS,Patriot League,N
+2023,Houston,Houston,FBS,Big 12,N
+2023,Houston-Baptist,Houston-Baptist,FCS,Southland,N
+2023,Howard,Howard,FCS,MEAC,N
+2023,Idaho,Idaho,FCS,Big Sky,N
+2023,Idaho St.,Idaho St.,FCS,Big Sky,N
+2023,Illinois,Illinois,FBS,Big Ten,N
+2023,Illinois St.,Illinois St.,FCS,MVFC,N
+2023,Indiana,Indiana,FBS,Big Ten,N
+2023,Indiana St.,Indiana St.,FCS,MVFC,N
+2023,Iowa,Iowa,FBS,Big Ten,N
+2023,Iowa St.,Iowa St.,FBS,Big 12,N
+2023,Jackson St.,Jackson St.,FCS,SWAC,N
+2023,Jacksonville,Jacksonville,Inactive / No varsity football,Program discontinued,N
+2023,Jacksonville St.,Jacksonville St.,FBS,Conference USA,N
+2023,James Madison,James Madison,FBS,Sun Belt,N
+2023,Kansas,Kansas,FBS,Big 12,N
+2023,Kansas St.,Kansas St.,FBS,Big 12,N
+2023,Kent State,Kent State,FBS,MAC,N
+2023,Kentucky,Kentucky,FBS,SEC,N
+2023,LSU,LSU,FBS,SEC,N
+2023,LaTech,LaTech,FBS,Conference USA,N
+2023,Lafayette,Lafayette,FCS,Patriot League,N
+2023,Lamar,Lamar,FCS,Southland,N
+2023,Lehigh,Lehigh,FCS,Patriot League,N
+2023,Liberty,Liberty,FBS,Conference USA,N
+2023,Louisiana-Monroe,Louisiana-Monroe,FBS,Sun Belt,N
+2023,Louisville,Louisville,FBS,ACC,N
+2023,Maine,Maine,FCS,CAA,N
+2023,Marist,Marist,FCS,Pioneer,N
+2023,Marshall,Marshall,FBS,Sun Belt,N
+2023,Maryland,Maryland,FBS,Big Ten,N
+2023,McNeese St.,McNeese St.,FCS,Southland,N
+2023,Memphis,Memphis,FBS,American,N
+2023,Mercer,Mercer,FCS,SoCon,N
+2023,Miami,Miami,FBS,ACC,N
+2023,Miami (OH),Miami (OH),FBS,MAC,N
+2023,Michigan,Michigan,FBS,Big Ten,N
+2023,Michigan St.,Michigan St.,FBS,Big Ten,N
+2023,Middle Tennessee St.,Middle Tennessee St.,FBS,Conference USA,N
+2023,Minnesota,Minnesota,FBS,Big Ten,N
+2023,Mississippi St.,Mississippi St.,FBS,SEC,N
+2023,Mississippi Valley St.,Mississippi Valley St.,FCS,SWAC,N
+2023,Missouri,Missouri,FBS,SEC,N
+2023,Missouri St.,Missouri St.,FCS,MVFC,N
+2023,Monmouth,Monmouth,FCS,CAA,N
+2023,Montana,Montana,FCS,Big Sky,N
+2023,Montana St.,Montana St.,FCS,Big Sky,N
+2023,Morehead St.,Morehead St.,FCS,Pioneer,N
+2023,Morgan St.,Morgan St.,FCS,MEAC,N
+2023,Murray St.,Murray St.,FCS,MVFC,N
+2023,NC St.,NC St.,FBS,ACC,N
+2023,Navy,Navy,FBS,American,N
+2023,Nebraska,Nebraska,FBS,Big Ten,N
+2023,Nevada,Nevada,FBS,Mountain West,N
+2023,New Hampshire,New Hampshire,FCS,CAA,N
+2023,New Mexico,New Mexico,FBS,Mountain West,N
+2023,New Mexico St.,New Mexico St.,FBS,Conference USA,N
+2023,New Orleans,New Orleans,Inactive / No varsity football,No varsity football,N
+2023,Nicholls St.,Nicholls St.,FCS,Southland,N
+2023,Norfolk St.,Norfolk St.,FCS,MEAC,N
+2023,North Carolina,North Carolina,FBS,ACC,N
+2023,North Carolina A&T St.,North Carolina A&T St.,FCS,CAA,N
+2023,North Carolina Central,North Carolina Central,FCS,MEAC,N
+2023,North Dakota,North Dakota,FCS,Big Sky,N
+2023,North Dakota St.,North Dakota St.,FCS,MVFC,N
+2023,North Texas,North Texas,FBS,American,N
+2023,Northern Arizona,Northern Arizona,FCS,Big Sky,N
+2023,Northern Colorado,Northern Colorado,FCS,Big Sky,N
+2023,Northern Illinois,Northern Illinois,FBS,MAC,N
+2023,Northern Iowa,Northern Iowa,FCS,MVFC,N
+2023,Northwestern,Northwestern,FBS,Big Ten,N
+2023,Northwestern St.,Northwestern St.,FCS,Southland,N
+2023,Notre Dame,Notre Dame,FBS,FBS Independent,N
+2023,Ohio,Ohio,FBS,MAC,N
+2023,Ohio St.,Ohio St.,FBS,Big Ten,N
+2023,Oklahoma,Oklahoma,FBS,Big 12,N
+2023,Oklahoma St.,Oklahoma St.,FBS,Big 12,N
+2023,Old Dominion,Old Dominion,FBS,Sun Belt,N
+2023,Ole Miss,Ole Miss,FBS,SEC,N
+2023,Oregon,Oregon,FBS,Pac-12,N
+2023,Oregon St.,Oregon St.,FBS,Pac-12,N
+2023,Penn,Penn,FCS,Ivy League,N
+2023,Penn St.,Penn St.,FBS,Big Ten,N
+2023,Pittsburgh,Pittsburgh,FBS,ACC,N
+2023,Portland St.,Portland St.,FCS,Big Sky,N
+2023,Prairie View A&M,Prairie View A&M,FCS,SWAC,N
+2023,Presbyterian,Presbyterian,FCS,Pioneer,N
+2023,Princeton,Princeton,FCS,Ivy League,N
+2023,Purdue,Purdue,FBS,Big Ten,N
+2023,Rhode Island,Rhode Island,FCS,CAA,N
+2023,Rice,Rice,FBS,American,N
+2023,Richmond,Richmond,FCS,CAA,N
+2023,Robert Morris,Robert Morris,FCS,Big South–OVC,N
+2023,Rutgers,Rutgers,FBS,Big Ten,N
+2023,SMU,SMU,FBS,American,N
+2023,Sacramento St.,Sacramento St.,FCS,Big Sky,N
+2023,Sacred Heart,Sacred Heart,FCS,NEC,N
+2023,Sam Houston St.,Sam Houston St.,FBS,Conference USA,N
+2023,Samford,Samford,FCS,SoCon,N
+2023,San Diego,San Diego,FCS,Pioneer,N
+2023,San Diego St.,San Diego St.,FBS,Mountain West,N
+2023,San Jose St.,San Jose St.,FBS,Mountain West,N
+2023,Savannah St.,Savannah St.,Division II,SIAC (Division II),N
+2023,South Alabama,South Alabama,FBS,Sun Belt,N
+2023,South Carolina,South Carolina,FBS,SEC,N
+2023,South Carolina St.,South Carolina St.,FCS,MEAC,N
+2023,South Dakota,South Dakota,FCS,MVFC,N
+2023,South Dakota St.,South Dakota St.,FCS,MVFC,N
+2023,South Florida,South Florida,FBS,American,N
+2023,Southeast Missouri St.,Southeast Missouri St.,FCS,Big South–OVC,N
+2023,Southeastern Louisiana,Southeastern Louisiana,FCS,Southland,N
+2023,Southern,Southern,FCS,SWAC,N
+2023,Southern Illinois,Southern Illinois,FCS,MVFC,N
+2023,Southern Miss,Southern Miss,FBS,Sun Belt,N
+2023,Southern Utah,Southern Utah,FCS,UAC,N
+2023,St. Francis (PA),St. Francis (PA),FCS,NEC,N
+2023,Stanford,Stanford,FBS,Pac-12,N
+2023,Stephen F. Austin,Stephen F. Austin,FCS,UAC,N
+2023,Stetson,Stetson,FCS,Pioneer,N
+2023,Stony Brook,Stony Brook,FCS,CAA,N
+2023,Syracuse,Syracuse,FBS,ACC,N
+2023,TCU,TCU,FBS,Big 12,N
+2023,Temple,Temple,FBS,American,N
+2023,Tennessee,Tennessee,FBS,SEC,N
+2023,Tennessee St.,Tennessee St.,FCS,Big South–OVC,N
+2023,Tennessee Tech,Tennessee Tech,FCS,Big South–OVC,N
+2023,Tennessee-Martin,Tennessee-Martin,FCS,Big South–OVC,N
+2023,Texas,Texas,FBS,Big 12,N
+2023,Texas A&M,Texas A&M,FBS,SEC,N
+2023,Texas Southern,Texas Southern,FCS,SWAC,N
+2023,Texas St.,Texas St.,FBS,Sun Belt,N
+2023,Texas Tech,Texas Tech,FBS,Big 12,N
+2023,Texas-San Antonio,Texas-San Antonio,FBS,American,N
+2023,The Citadel,The Citadel,FCS,SoCon,N
+2023,Toledo,Toledo,FBS,MAC,N
+2023,Towson,Towson,FCS,CAA,N
+2023,Troy,Troy,FBS,Sun Belt,N
+2023,Tulane,Tulane,FBS,American,N
+2023,Tulsa,Tulsa,FBS,American,N
+2023,UAB,UAB,FBS,American,N
+2023,UC Davis,UC Davis,FCS,Big Sky,N
+2023,UCLA,UCLA,FBS,Pac-12,N
+2023,UConn,UConn,FBS,FBS Independent,N
+2023,UL Lafayette,UL Lafayette,FBS,Sun Belt,N
+2023,UMASS,UMASS,FBS,FBS Independent,N
+2023,UNLV,UNLV,FBS,Mountain West,N
+2023,USC,USC,FBS,Pac-12,N
+2023,UT Chattanooga,UT Chattanooga,FCS,SoCon,N
+2023,UTEP,UTEP,FBS,Conference USA,N
+2023,Utah,Utah,FBS,Pac-12,N
+2023,Utah St.,Utah St.,FBS,Mountain West,N
+2023,VMI,VMI,FCS,SoCon,N
+2023,Valparaiso,Valparaiso,FCS,Pioneer,N
+2023,Vanderbilt,Vanderbilt,FBS,SEC,N
+2023,Villanova,Villanova,FCS,CAA,N
+2023,Virginia,Virginia,FBS,ACC,N
+2023,Virginia Tech,Virginia Tech,FBS,ACC,N
+2023,Wagner,Wagner,FCS,NEC,N
+2023,Wake Forest,Wake Forest,FBS,ACC,N
+2023,Washington,Washington,FBS,Pac-12,N
+2023,Washington St.,Washington St.,FBS,Pac-12,N
+2023,Weber St.,Weber St.,FCS,Big Sky,N
+2023,West Virginia,West Virginia,FBS,Big 12,N
+2023,Western Carolina,Western Carolina,FCS,SoCon,N
+2023,Western Illinois,Western Illinois,FCS,MVFC,N
+2023,Western Kentucky,Western Kentucky,FBS,Conference USA,N
+2023,Western Michigan,Western Michigan,FBS,MAC,N
+2023,William & Mary,William & Mary,FCS,CAA,N
+2023,Wisconsin,Wisconsin,FBS,Big Ten,N
+2023,Wofford,Wofford,FCS,SoCon,N
+2023,Wyoming,Wyoming,FBS,Mountain West,N
+2023,Yale,Yale,FCS,Ivy League,N
+2023,Youngstown St.,Youngstown St.,FCS,MVFC,N
+2024,Air Force,Air Force,FBS,Mountain West,N
+2024,Akron,Akron,FBS,MAC,N
+2024,Alabama,Alabama,FBS,SEC,N
+2024,Alabama A&M,Alabama A&M,FCS,SWAC,N
+2024,Alabama St.,Alabama St.,FCS,SWAC,N
+2024,Albany,Albany,FCS,CAA,N
+2024,Alcorn St.,Alcorn St.,FCS,SWAC,N
+2024,Appalachian State,Appalachian State,FBS,Sun Belt,N
+2024,Arizona,Arizona,FBS,Big 12,N
+2024,Arizona St.,Arizona St.,FBS,Big 12,N
+2024,Arkansas,Arkansas,FBS,SEC,N
+2024,Arkansas St.,Arkansas St.,FBS,Sun Belt,N
+2024,Arkansas-Pine Bluff,Arkansas-Pine Bluff,FCS,SWAC,N
+2024,Army,Army,FBS,American,N
+2024,Auburn,Auburn,FBS,SEC,N
+2024,Austin Peay,Austin Peay,FCS,UAC,N
+2024,BC,BC,FBS,ACC,N
+2024,BYU,BYU,FBS,Big 12,N
+2024,Ball State,Ball State,FBS,MAC,N
+2024,Baylor,Baylor,FBS,Big 12,N
+2024,Bethune-Cookman,Bethune-Cookman,FCS,SWAC,N
+2024,Boise St.,Boise St.,FBS,Mountain West,N
+2024,Bowling Green,Bowling Green,FBS,MAC,N
+2024,Brown,Brown,FCS,Ivy League,N
+2024,Bryant,Bryant,FCS,CAA,N
+2024,Bucknell,Bucknell,FCS,Patriot League,N
+2024,Buffalo,Buffalo,FBS,Atlantic-8,N
+2024,Butler,Butler,FCS,Pioneer,N
+2024,Cal Poly,Cal Poly,FCS,Big Sky,N
+2024,California,California,FBS,ACC,N
+2024,Campbell,Campbell,FCS,CAA,N
+2024,Central Arkansas,Central Arkansas,FCS,UAC,N
+2024,Central Connecticut,Central Connecticut,FCS,NEC,N
+2024,Central Florida,Central Florida,FBS,Big 12,N
+2024,Central Michigan,Central Michigan,FBS,MAC,N
+2024,Charleston Southern,Charleston Southern,FCS,Big South–OVC,N
+2024,Charlotte,Charlotte,FBS,American,N
+2024,Cincinnati,Cincinnati,FBS,Big 12,N
+2024,Clemson,Clemson,FBS,ACC,N
+2024,Coastal Carolina,Coastal Carolina,FBS,Atlantic-8,N
+2024,Colgate,Colgate,FCS,ECL,N
+2024,Colorado,Colorado,FBS,Big 12,N
+2024,Colorado St.,Colorado St.,FBS,Mountain West,N
+2024,Columbia,Columbia,FCS,Ivy League,N
+2024,Cornell,Cornell,FCS,ECL,N
+2024,Dartmouth,Dartmouth,FCS,Ivy League,N
+2024,Davidson,Davidson,FCS,Pioneer,N
+2024,Dayton,Dayton,FCS,Pioneer,N
+2024,Delaware,Delaware,FCS,CAA,N
+2024,Delaware St.,Delaware St.,FCS,MEAC,N
+2024,Drake,Drake,FCS,Pioneer,N
+2024,Duke,Duke,FBS,ACC,N
+2024,Duquesne,Duquesne,FCS,NEC,N
+2024,East Carolina,East Carolina,FBS,American,N
+2024,Eastern Illinois,Eastern Illinois,FCS,Big South–OVC,N
+2024,Eastern Kentucky,Eastern Kentucky,FCS,UAC,N
+2024,Eastern Michigan,Eastern Michigan,FBS,MAC,N
+2024,Eastern Washington,Eastern Washington,FCS,Big Sky,N
+2024,Elon,Elon,FCS,CAA,N
+2024,Florida,Florida,FBS,SEC,N
+2024,Florida A&M,Florida A&M,FCS,SWAC,N
+2024,Florida Atlantic,Florida Atlantic,FBS,American,N
+2024,Florida International,Florida International,FBS,CUSA,N
+2024,Florida St,Florida St,FBS,ACC,N
+2024,Fordham,Fordham,FCS,Patriot League,N
+2024,Fresno St.,Fresno St.,FBS,Mountain West,N
+2024,Furman,Furman,FCS,SoCon,N
+2024,Gardner-Webb,Gardner-Webb,FCS,Big South–OVC,N
+2024,Georgetown,Georgetown,FCS,Patriot League,N
+2024,Georgia,Georgia,FBS,SEC,N
+2024,Georgia Southern,Georgia Southern,FBS,Atlantic-8,N
+2024,Georgia St.,Georgia St.,FBS,Atlantic-8,N
+2024,Georgia Tech,Georgia Tech,FBS,ACC,N
+2024,Grambling,Grambling,FCS,SWAC,N
+2024,Hampton,Hampton,FCS,CAA,N
+2024,Harvard,Harvard,FCS,ECL,N
+2024,Hawaii,Hawaii,FBS,Mountain West,N
+2024,Holy Cross,Holy Cross,FCS,ECL,N
+2024,Houston,Houston,FBS,Big 12,N
+2024,Houston-Baptist,Houston-Baptist,FCS,Southland,N
+2024,Howard,Howard,FCS,MEAC,N
+2024,Idaho,Idaho,FCS,Big Sky,N
+2024,Idaho St.,Idaho St.,FCS,Big Sky,N
+2024,Illinois,Illinois,FBS,Big Ten,N
+2024,Illinois St.,Illinois St.,FCS,MVFC,N
+2024,Indiana,Indiana,FBS,Big Ten,N
+2024,Indiana St.,Indiana St.,FCS,MVFC,N
+2024,Iowa,Iowa,FBS,Big Ten,N
+2024,Iowa St.,Iowa St.,FBS,Big 12,N
+2024,Jackson St.,Jackson St.,FCS,SWAC,N
+2024,Jacksonville,Jacksonville,Inactive / No varsity football,Program discontinued,N
+2024,Jacksonville St.,Jacksonville St.,FBS,Conference USA,N
+2024,James Madison,James Madison,FBS,Sun Belt,N
+2024,Kansas,Kansas,FBS,Big 12,N
+2024,Kansas St.,Kansas St.,FBS,Big 12,N
+2024,Kent State,Kent State,FBS,MAC,N
+2024,Kentucky,Kentucky,FBS,SEC,N
+2024,LSU,LSU,FBS,SEC,N
+2024,LaTech,LaTech,FBS,CUSA,N
+2024,Lafayette,Lafayette,FCS,Patriot League,N
+2024,Lamar,Lamar,FCS,Southland,N
+2024,Lehigh,Lehigh,FCS,ECL,N
+2024,Liberty,Liberty,FBS,Conference USA,N
+2024,Louisiana-Monroe,Louisiana-Monroe,FBS,Sun Belt,N
+2024,Louisville,Louisville,FBS,ACC,N
+2024,Maine,Maine,FCS,CAA,N
+2024,Marist,Marist,FCS,Pioneer,N
+2024,Marshall,Marshall,FBS,Atlantic-8,N
+2024,Maryland,Maryland,FBS,Big Ten,N
+2024,McNeese St.,McNeese St.,FCS,Southland,N
+2024,Memphis,Memphis,FBS,American,N
+2024,Mercer,Mercer,FCS,SoCon,N
+2024,Miami,Miami,FBS,ACC,N
+2024,Miami (OH),Miami (OH),FBS,MAC,N
+2024,Michigan,Michigan,FBS,Big Ten,N
+2024,Michigan St.,Michigan St.,FBS,Big Ten,N
+2024,Middle Tennessee St.,Middle Tennessee St.,FBS,Atlantic-8,N
+2024,Minnesota,Minnesota,FBS,Big Ten,N
+2024,Mississippi St.,Mississippi St.,FBS,SEC,N
+2024,Mississippi Valley St.,Mississippi Valley St.,FCS,SWAC,N
+2024,Missouri,Missouri,FBS,SEC,N
+2024,Missouri St.,Missouri St.,FCS,MVFC,N
+2024,Monmouth,Monmouth,FCS,CAA,N
+2024,Montana,Montana,FCS,Big Sky,N
+2024,Montana St.,Montana St.,FCS,Big Sky,N
+2024,Morehead St.,Morehead St.,FCS,Pioneer,N
+2024,Morgan St.,Morgan St.,FCS,MEAC,N
+2024,Murray St.,Murray St.,FCS,MVFC,N
+2024,NC St.,NC St.,FBS,ACC,N
+2024,Navy,Navy,FBS,American,N
+2024,Nebraska,Nebraska,FBS,Big Ten,N
+2024,Nevada,Nevada,FBS,Mountain West,N
+2024,New Hampshire,New Hampshire,FCS,CAA,N
+2024,New Mexico,New Mexico,FBS,Mountain West,N
+2024,New Mexico St.,New Mexico St.,FBS,CUSA,N
+2024,New Orleans,New Orleans,Inactive / No varsity football,No varsity football,N
+2024,Nicholls St.,Nicholls St.,FCS,Southland,N
+2024,Norfolk St.,Norfolk St.,FCS,MEAC,N
+2024,North Carolina,North Carolina,FBS,ACC,N
+2024,North Carolina A&T St.,North Carolina A&T St.,FCS,CAA,N
+2024,North Carolina Central,North Carolina Central,FCS,MEAC,N
+2024,North Dakota,North Dakota,FCS,Big Sky,N
+2024,North Dakota St.,North Dakota St.,FCS,MVFC,N
+2024,North Texas,North Texas,FBS,CUSA,N
+2024,Northern Arizona,Northern Arizona,FCS,Big Sky,N
+2024,Northern Colorado,Northern Colorado,FCS,Big Sky,N
+2024,Northern Illinois,Northern Illinois,FBS,MAC,N
+2024,Northern Iowa,Northern Iowa,FCS,MVFC,N
+2024,Northwestern,Northwestern,FBS,Big Ten,N
+2024,Northwestern St.,Northwestern St.,FCS,Southland,N
+2024,Notre Dame,Notre Dame,FBS,Independent,N
+2024,Ohio,Ohio,FBS,MAC,N
+2024,Ohio St.,Ohio St.,FBS,Big Ten,N
+2024,Oklahoma,Oklahoma,FBS,SEC,N
+2024,Oklahoma St.,Oklahoma St.,FBS,Big 12,N
+2024,Old Dominion,Old Dominion,FBS,Atlantic-8,N
+2024,Ole Miss,Ole Miss,FBS,SEC,N
+2024,Oregon,Oregon,FBS,Big Ten,N
+2024,Oregon St.,Oregon St.,FBS,Pac-12,N
+2024,Penn,Penn,FCS,ECL,N
+2024,Penn St.,Penn St.,FBS,Big Ten,N
+2024,Pittsburgh,Pittsburgh,FBS,ACC,N
+2024,Portland St.,Portland St.,FCS,Big Sky,N
+2024,Prairie View A&M,Prairie View A&M,FCS,SWAC,N
+2024,Presbyterian,Presbyterian,FCS,Pioneer,N
+2024,Princeton,Princeton,FCS,ECL,N
+2024,Purdue,Purdue,FBS,Big Ten,N
+2024,Rhode Island,Rhode Island,FCS,CAA,N
+2024,Rice,Rice,FBS,CUSA,N
+2024,Richmond,Richmond,FCS,CAA,N
+2024,Robert Morris,Robert Morris,FCS,NEC,N
+2024,Rutgers,Rutgers,FBS,Big Ten,N
+2024,SMU,SMU,FBS,ACC,N
+2024,Sacramento St.,Sacramento St.,FCS,Big Sky,N
+2024,Sacred Heart,Sacred Heart,FCS,FCS Independent,N
+2024,Sam Houston St.,Sam Houston St.,FBS,Conference USA,N
+2024,Samford,Samford,FCS,SoCon,N
+2024,San Diego,San Diego,FCS,Pioneer,N
+2024,San Diego St.,San Diego St.,FBS,Mountain West,N
+2024,San Jose St.,San Jose St.,FBS,Mountain West,N
+2024,Savannah St.,Savannah St.,Division II,SIAC (Division II),N
+2024,South Alabama,South Alabama,FBS,Sun Belt,N
+2024,South Carolina,South Carolina,FBS,SEC,N
+2024,South Carolina St.,South Carolina St.,FCS,MEAC,N
+2024,South Dakota,South Dakota,FCS,MVFC,N
+2024,South Dakota St.,South Dakota St.,FCS,MVFC,N
+2024,South Florida,South Florida,FBS,American,N
+2024,Southeast Missouri St.,Southeast Missouri St.,FCS,Big South–OVC,N
+2024,Southeastern Louisiana,Southeastern Louisiana,FCS,Southland,N
+2024,Southern,Southern,FCS,SWAC,N
+2024,Southern Illinois,Southern Illinois,FCS,MVFC,N
+2024,Southern Miss,Southern Miss,FBS,CUSA,N
+2024,Southern Utah,Southern Utah,FCS,UAC,N
+2024,St. Francis (PA),St. Francis (PA),FCS,NEC,N
+2024,Stanford,Stanford,FBS,ACC,N
+2024,Stephen F. Austin,Stephen F. Austin,FCS,Southland,N
+2024,Stetson,Stetson,FCS,Pioneer,N
+2024,Stony Brook,Stony Brook,FCS,CAA,N
+2024,Syracuse,Syracuse,FBS,ACC,N
+2024,TCU,TCU,FBS,Big 12,N
+2024,Temple,Temple,FBS,American,N
+2024,Tennessee,Tennessee,FBS,SEC,N
+2024,Tennessee St.,Tennessee St.,FCS,Big South–OVC,N
+2024,Tennessee Tech,Tennessee Tech,FCS,Big South–OVC,N
+2024,Tennessee-Martin,Tennessee-Martin,FCS,Big South–OVC,N
+2024,Texas,Texas,FBS,SEC,N
+2024,Texas A&M,Texas A&M,FBS,SEC,N
+2024,Texas Southern,Texas Southern,FCS,SWAC,N
+2024,Texas St.,Texas St.,FBS,Atlantic-8,N
+2024,Texas Tech,Texas Tech,FBS,Big 12,N
+2024,Texas-San Antonio,Texas-San Antonio,FBS,CUSA,N
+2024,The Citadel,The Citadel,FCS,SoCon,N
+2024,Toledo,Toledo,FBS,MAC,N
+2024,Towson,Towson,FCS,CAA,N
+2024,Troy,Troy,FBS,Atlantic-8,N
+2024,Tulane,Tulane,FBS,American,N
+2024,Tulsa,Tulsa,FBS,American,N
+2024,UAB,UAB,FBS,CUSA,N
+2024,UC Davis,UC Davis,FCS,Big Sky,N
+2024,UCLA,UCLA,FBS,Big Ten,N
+2024,UConn,UConn,FBS,Independent,N
+2024,UL Lafayette,UL Lafayette,FBS,Sun Belt,N
+2024,UMASS,UMASS,FBS,FBS Independent,N
+2024,UNLV,UNLV,FBS,Mountain West,N
+2024,USC,USC,FBS,Big Ten,N
+2024,UT Chattanooga,UT Chattanooga,FCS,SoCon,N
+2024,UTEP,UTEP,FBS,CUSA,N
+2024,Utah,Utah,FBS,Big 12,N
+2024,Utah St.,Utah St.,FBS,Mountain West,N
+2024,VMI,VMI,FCS,SoCon,N
+2024,Valparaiso,Valparaiso,FCS,Pioneer,N
+2024,Vanderbilt,Vanderbilt,FBS,SEC,N
+2024,Villanova,Villanova,FCS,CAA,N
+2024,Virginia,Virginia,FBS,ACC,N
+2024,Virginia Tech,Virginia Tech,FBS,ACC,N
+2024,Wagner,Wagner,FCS,NEC,N
+2024,Wake Forest,Wake Forest,FBS,ACC,N
+2024,Washington,Washington,FBS,Big Ten,N
+2024,Washington St.,Washington St.,FBS,Pac-12,N
+2024,Weber St.,Weber St.,FCS,Big Sky,N
+2024,West Virginia,West Virginia,FBS,Big 12,N
+2024,Western Carolina,Western Carolina,FCS,SoCon,N
+2024,Western Illinois,Western Illinois,FCS,Big South–OVC,N
+2024,Western Kentucky,Western Kentucky,FBS,Conference USA,N
+2024,Western Michigan,Western Michigan,FBS,MAC,N
+2024,William & Mary,William & Mary,FCS,CAA,N
+2024,Wisconsin,Wisconsin,FBS,Big Ten,N
+2024,Wofford,Wofford,FCS,SoCon,N
+2024,Wyoming,Wyoming,FBS,Mountain West,N
+2024,Yale,Yale,FCS,ECL,N
+2024,Youngstown St.,Youngstown St.,FCS,MVFC,N

@@ -1,0 +1,47 @@
+{
+  "artifact": "historical_membership_frame_2021_2024.csv",
+  "artifact_version": "V3-HISTORICAL-OPENING-STATE-R1",
+  "authority": "CANDIDATE_FRAME_NOT_AUTHORITY",
+  "authority_note": "This file fixes which team-seasons the reconstruction reports on. It is not a ratified historical population and no Z score is computed over it. resolve_population returns UNRESOLVED for every season in scope precisely because this frame's source is not mounted.",
+  "derived_from": {
+    "source_id": "SYNTHETIC_NCAA_CONFERENCE_DISTRIBUTION_2021_2026",
+    "location": "C:/Users/dbaxt/Downloads/Synthetic_NCAA_Conference_Distribution_2021_2026.xlsx",
+    "sha256": "376a6f624eea6c60794f061de27f3d875c127e89afc80ec4f81664742588e2ac",
+    "size_bytes": 22942,
+    "sheet": "Team Affiliations",
+    "source_class": "MEMBERSHIP_DECLARATION"
+  },
+  "derivation": {
+    "rule": "For each season in 2021-2024, one row per source team, carrying that season's subdivision and conference verbatim.",
+    "caret_handling": "The source marks lower-confidence affiliations with a caret. The caret is stripped from the division and conference values and recorded separately in source_confidence_marker, so the marker is preserved rather than discarded. Zero rows in the 2021-2024 window carry one.",
+    "ordering": "Sorted by (season, team_key). Deterministic and stable across regeneration.",
+    "encoding": "UTF-8, LF line endings, header row, no trailing blank line."
+  },
+  "content": {
+    "rows": 1004,
+    "bytes": 41573,
+    "sha256": "ad93c7c71131c59947d5f84677d10679461e3239e5028ceb03fd04f774c4d08b",
+    "distinct_entities": 251,
+    "seasons": [2021, 2022, 2023, 2024],
+    "division_counts": {
+      "2021": {"FBS": 130, "FCS": 118, "Division II": 1, "Inactive / No varsity football": 2},
+      "2022": {"FBS": 131, "FCS": 117, "Division II": 1, "Inactive / No varsity football": 2},
+      "2023": {"FBS": 133, "FCS": 115, "Division II": 1, "Inactive / No varsity football": 2},
+      "2024": {"FBS": 133, "FCS": 115, "Division II": 1, "Inactive / No varsity football": 2}
+    }
+  },
+  "open_lineage": {
+    "declared_upstream": "Synthetic_CFB_2021_2026_Walkover_RERUN.csv",
+    "declared_by": "Methodology sheet of the source workbook",
+    "status": "NOT_FOUND_ON_THIS_FILESYSTEM",
+    "consequence": "The chain is documented and cannot be closed to bytes here. That is why the source is registered POPULATION_CANDIDATE_LINEAGE_OPEN and is not mounted."
+  },
+  "conflicting_statement": {
+    "season": 2024,
+    "competing_source_id": "PHASE5J_TEAM_REGISTRY_2024",
+    "competing_count": 118,
+    "this_frame_count": 133,
+    "note": "The two disagree about membership, not merely about rating eligibility. Neither is subordinate to the other, so 2024 resolves to UNRESOLVED_CONFLICTING_CANDIDATES."
+  },
+  "non_2026_scope_note": "Division here is the division of the season being reconstructed. The synthetic 2026 canonical master is identity metadata only; it classifies real FBS programs as schedule-only FCS and real FCS programs as FBS members, and neither statement is used as a historical division."
+}
