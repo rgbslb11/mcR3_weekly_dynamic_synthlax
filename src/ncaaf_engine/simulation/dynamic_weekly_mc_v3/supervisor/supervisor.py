@@ -26,15 +26,40 @@ aspirational: a supervisor restarted after a crash rehydrates from the same file
 an auditor would read, so a resumed run and a fresh one that reached the same
 state are the same run in every respect that matters.
 
+Two authorities, and only one of them is a filename
+----------------------------------------------------
+
+What may be fitted is read out of two artifacts, not one. The run-local frozen
+manifest in :mod:`.evidence` classifies parameters; the Agent-12 R2 evidence
+manifest in :mod:`.domain_manifest`, resolved from a pinned commit through the
+git object store, classifies *sources* by the digest of their bytes and is the
+authority on domain and on parameter eligibility. Where the two disagree the R2
+manifest wins, by :mod:`.authority`'s supersession rank, and the disagreement is
+recorded rather than smoothed over. Nothing decides a domain question from a
+file name; the naming patterns still run, second, as defence in depth.
+
+Mixed dispositions, one gate, no second stop
+---------------------------------------------
+
+A parameter no longer has to be fitted for the run to continue. Every governed
+parameter reaches the recommendation carrying one of the nine dispositions in
+:mod:`.dispositions`, and where production reads a value this run could not
+produce, the recommendation asks the approver for one. That question is asked at
+the single human gate and nowhere else: after the approval the machine has no
+edge to :data:`~.states.HALTED_FOR_HUMAN_REVIEW` at all, and the tier gates
+diagnose convergence from the run samples rather than from a tolerance somebody
+would otherwise have to supply mid-run.
+
 What it will not do
 --------------------
 
-It does not choose parameter values -- a search runs only where the frozen
-manifest says :data:`~.evidence.FIT_ALLOWED`, and refuses otherwise. It does not
-implement model mathematics -- every numerical act goes through
+It does not choose parameter values -- a search runs only where both authorities
+say :data:`~.evidence.FIT_ALLOWED`, and refuses otherwise. It does not implement
+model mathematics -- every numerical act goes through
 :class:`~.execution.ModelRunExecutor`, whose default refuses everything because
-the frozen evidence bundle does not exist yet. It does not approve anything. And
-it never lets the real-football witness change the vector it just selected.
+the frozen evidence bundle does not exist yet. It does not approve anything. It
+does not invent a value for a parameter nobody measured. And it never lets the
+real-football witness change the vector it just selected.
 """
 
 from __future__ import annotations
@@ -46,9 +71,24 @@ from typing import Any, Callable, Mapping, Sequence
 
 from .. import run_tier as tier_policy
 from ..errors import GovernanceBlock, InputValidationError
+from . import convergence as CV
+from . import dispositions as D
 from . import evidence as EV
 from . import gates
 from . import states as S
+from . import wave1 as W1
+from .authority import (
+    AuthorityBinding,
+    CURRENT_AUTHORITY_GENERATION,
+    EligibilityClaim,
+    resolve_authority,
+    supersession_report,
+)
+from .domain_manifest import (
+    EvidenceDomainManifest,
+    FILENAME_CHECKS_ROLE,
+    load_domain_manifest_from_authority,
+)
 from .approval import (
     APPROVAL_ACTION,
     ApprovalRecord,
@@ -184,8 +224,21 @@ class SupervisorConfig:
     run_root: Path = DEFAULT_RUN_ROOT
     v3_config_path: Path | None = None
     base_seed: int | None = None
-    convergence_tolerances: dict[str, float] = field(default_factory=dict)
-    convergence_default_tolerance: float | None = None
+    #: Where the Agent-12 R2 evidence manifest lives, as a ref, a path within
+    #: that ref's tree and an optional pinned commit. The authoritative
+    #: primary-domain gate reads it out of the object store; without it the run
+    #: fails closed at the first stage, which is correct while the manifest does
+    #: not exist.
+    evidence_authority: AuthorityBinding | None = None
+    #: Repository used purely as a ``git -C`` target for object reads. No path
+    #: inside another worktree is ever constructed from it.
+    repo: Path | None = None
+    #: Where the Wave-1 calibration result will be, when there is one.
+    wave1: W1.Wave1Binding = field(default_factory=W1.Wave1Binding)
+    #: The predeclared headline quantities for the convergence diagnostic. The
+    #: only judgement configuration supplies -- which outputs matter -- rather
+    #: than how much divergence is acceptable, which is derived from the samples.
+    headline_quantities: tuple[str, ...] = ()
     equivalence_tolerance: float = 1e-6
     witness_thresholds: tuple[WitnessThreshold, ...] = ()
     required_advisories: tuple[str, ...] = ()
@@ -229,18 +282,38 @@ class SupervisorConfig:
             for entry in raw.get("witness_thresholds", [])
         )
         run_root = _path(raw.get("run_root")) or DEFAULT_RUN_ROOT
+        repo = _path(raw.get("repo"))
+        authority_raw = raw.get("evidence_authority") or {}
+        authority = (
+            AuthorityBinding(
+                ref=str(authority_raw["ref"]),
+                path=str(authority_raw["path"]),
+                generation=str(
+                    authority_raw.get("generation", CURRENT_AUTHORITY_GENERATION)
+                ),
+                commit=str(authority_raw.get("commit", "")),
+                repo=repo,
+            )
+            if authority_raw.get("ref")
+            else None
+        )
+        wave1_raw = raw.get("wave1") or {}
+        wave1 = W1.Wave1Binding(
+            ref=str(wave1_raw.get("ref", W1.WAVE1_REF)),
+            path=str(wave1_raw.get("path", "")),
+            commit=str(wave1_raw.get("commit", "")),
+            repo=repo,
+        )
         return cls(
             evidence_manifest_path=manifest_path,
+            evidence_authority=authority,
+            repo=repo,
+            wave1=wave1,
             run_root=run_root,
             v3_config_path=_path(raw.get("v3_config")),
             base_seed=(None if raw.get("base_seed") is None else int(raw["base_seed"])),
-            convergence_tolerances={
-                str(k): float(v) for k, v in raw.get("convergence_tolerances", {}).items()
-            },
-            convergence_default_tolerance=(
-                None
-                if raw.get("convergence_default_tolerance") is None
-                else float(raw["convergence_default_tolerance"])
+            headline_quantities=tuple(
+                str(x) for x in raw.get("headline_quantities", [])
             ),
             equivalence_tolerance=float(raw.get("equivalence_tolerance", 1e-6)),
             witness_thresholds=thresholds,
@@ -249,15 +322,24 @@ class SupervisorConfig:
             executor_factory=str(raw.get("executor", "")),
         )
 
+    @property
+    def convergence_policy(self) -> CV.ConvergencePolicy:
+        """The declared diagnostic policy for both tier comparisons."""
+        return CV.ConvergencePolicy(headline=tuple(self.headline_quantities))
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "label": self.label,
             "evidence_manifest": str(self.evidence_manifest_path),
+            "evidence_authority": (
+                None if self.evidence_authority is None else self.evidence_authority.as_dict()
+            ),
+            "repo": None if self.repo is None else str(self.repo),
+            "wave1": self.wave1.as_dict(),
             "run_root": str(self.run_root),
             "v3_config": None if self.v3_config_path is None else str(self.v3_config_path),
             "base_seed": self.base_seed,
-            "convergence_tolerances": dict(sorted(self.convergence_tolerances.items())),
-            "convergence_default_tolerance": self.convergence_default_tolerance,
+            "convergence_policy": self.convergence_policy.as_dict(),
             "equivalence_tolerance": self.equivalence_tolerance,
             "witness_thresholds": [t.as_dict() for t in self.witness_thresholds],
             "required_advisories": list(self.required_advisories),
@@ -318,6 +400,7 @@ class Supervisor:
         self.run_dir = run_directory(self.run_id, config.run_root)
         self.state: RunState | None = None
         self._manifest: EV.SyntheticEvidenceManifest | None = None
+        self._domain_manifest: EvidenceDomainManifest | None = None
         self._detail_cache: dict[str, dict[str, Any]] = {}
         self._guard: HoldoutGuard | None = None
         self._oracle: ScoringOracle | None = None
@@ -330,6 +413,98 @@ class Supervisor:
         if self._manifest is None:
             self._manifest = EV.load_evidence_manifest(self.config.evidence_manifest_path)
         return self._manifest
+
+    @property
+    def repo(self) -> Path:
+        """The git object store the frozen evidence is read out of.
+
+        Defaults to this package's own repository. It is a ``git -C`` target and
+        nothing else: no filesystem path into any other worktree is built from
+        it, here or in :mod:`.authority`.
+        """
+        if self.config.repo is not None:
+            return Path(self.config.repo)
+        return Path(__file__).resolve().parents[5]
+
+    def resolve_authority(self) -> dict[str, Any]:
+        """Resolve the R2 evidence authority without requiring it to exist.
+
+        Reports what the configured ref resolves to and whether the manifest is
+        present in that commit. A plan may see ``present: false``; a run may not
+        proceed on it, and :meth:`domain_manifest` is where that refusal happens.
+        """
+        binding = self.config.evidence_authority
+        if binding is None:
+            return {
+                "declared": False,
+                "present": False,
+                "reason": (
+                    "Configuration names no evidence_authority. The authoritative "
+                    "primary-domain gate reads the Agent-12 R2 manifest out of a pinned "
+                    "commit, so with no authority declared there is no gate and the run "
+                    "fails closed."
+                ),
+            }
+        try:
+            resolved = resolve_authority(binding, self.repo)
+        except GovernanceBlock as exc:
+            # An unresolvable ref is reported rather than raised, so ``plan``
+            # stays a read-only report of the world as it is -- including the
+            # world in which the evidence branch has not been published yet. The
+            # run still fails closed: :meth:`domain_manifest` raises, and no
+            # source is classified until it resolves.
+            return {
+                "declared": True,
+                **binding.as_dict(),
+                "present": False,
+                "resolved_commit": "",
+                "sha256": "",
+                "absence_reason": str(exc),
+            }
+        return {"declared": True, **resolved.as_dict()}
+
+    @property
+    def domain_manifest(self) -> EvidenceDomainManifest:
+        """The authoritative Agent-12 R2 manifest, or a fail-closed refusal."""
+        if self._domain_manifest is None:
+            binding = self.config.evidence_authority
+            if binding is None:
+                raise GovernanceBlock(
+                    "No evidence authority is configured. The primary estimation domain "
+                    "is decided by the frozen Agent-12 R2 evidence manifest, read from a "
+                    "pinned commit; with none configured no source is classified, and an "
+                    "unclassified source is refused for every purpose."
+                )
+            resolved = resolve_authority(binding, self.repo)
+            self._domain_manifest = load_domain_manifest_from_authority(resolved)
+        return self._domain_manifest
+
+    def _wave1_expectation(self) -> W1.Wave1Expectation:
+        """What this run independently holds, for a Wave-1 package to match.
+
+        The candidate universe is computed over every axis the manifest
+        authorises rather than over the axes this run will actually search, so
+        the expectation does not change depending on whether Wave 1 has already
+        settled one of them.
+        """
+        binding = self._detail(STAGE_CALIBRATION_DATASET)
+        return W1.Wave1Expectation(
+            execution_commit=self.config.wave1.commit,
+            execution_tree=code_tree_digest(),
+            evidence_manifest_sha256=self.domain_manifest.source_bytes_sha256,
+            dataset_sha256=binding["sha256"],
+            split_sha256=binding["split_sha256"],
+            candidate_universe_digest=candidate_universe_digest(
+                self._manifest_axes(), self._carry_forward_vector()
+            ),
+            scoring_oracle_digest=self._oracle_for_run().digest,
+            experiment_config_sha256=binding["experiment_config_sha256"],
+            field_admission_sha256=self.domain_manifest.manifest_digest,
+        )
+
+    def ingest_wave1(self, expectation: W1.Wave1Expectation | None = None) -> dict[str, Any]:
+        """Read the Wave-1 result package if there is one. Absence is a state."""
+        return W1.ingest(self.config.wave1, expectation, repo=self.repo)
 
     # -- plan -----------------------------------------------------------------
 
@@ -349,11 +524,13 @@ class Supervisor:
             resolution = self._plan_stage_resolution(stage, manifest)
             stages.append({"state": state, "stage": stage, **resolution})
 
+        authority = self.resolve_authority()
         parameters = {
             name: {
                 "eligibility": record.eligibility,
                 "circularity": record.circularity,
-                "disposition": _disposition_for(record.eligibility),
+                "disposition": _planned_disposition(record),
+                "production_semantics": D.PRODUCTION_VALUE_SEMANTICS[name],
                 "current_value": record.current_value,
                 "search_space": record.search_space,
                 "rationale": record.rationale,
@@ -363,6 +540,11 @@ class Supervisor:
         return {
             "mode": "PLAN_ONLY",
             "side_effects": "NONE",
+            "evidence_authority": authority,
+            "wave1": self.ingest_wave1(),
+            "convergence_policy": self.config.convergence_policy.as_dict(),
+            "filename_checks_role": FILENAME_CHECKS_ROLE,
+            "supported_parameter_statuses": list(D.DISPOSITIONS),
             "label": self.config.label,
             "run_id": self.run_id,
             "run_directory": str(self.run_dir),
@@ -393,9 +575,15 @@ class Supervisor:
                 {
                     "state": S.AWAITING_HUMAN_APPROVAL,
                     "action": APPROVAL_ACTION,
-                    "binds_to": "recommendation_sha256",
+                    "binds_to": [
+                        "recommendation_sha256",
+                        "approved_vector",
+                        "approved_dispositions",
+                    ],
                 }
             ],
+            "human_gate_count": 1,
+            "post_approval_states": list(S.POST_APPROVAL_STATES),
             "run_tiers": tier_policy.as_dict(),
             "retry_policy": RETRY_POLICY,
             "output_locations": self._output_locations(),
@@ -441,7 +629,19 @@ class Supervisor:
         return {"skipped": False, "disposition": "REQUIRED", "note": ""}
 
     def _required_inputs(self) -> list[dict[str, Any]]:
+        authority = self.config.evidence_authority
         inputs = [
+            {
+                "name": "agent12_r2_evidence_manifest",
+                "ref": None if authority is None else authority.ref,
+                "path": None if authority is None else authority.path,
+                "present": None,
+                "role": (
+                    "Authoritative primary-domain gate. Classifies every source by the "
+                    "SHA-256 of its bytes; read from a pinned commit, never from a "
+                    "working tree."
+                ),
+            },
             {
                 "name": "synthetic_evidence_manifest",
                 "path": str(self.config.evidence_manifest_path),
@@ -563,6 +763,9 @@ class Supervisor:
                 approver=raw["approver"],
                 approved_at=raw["approved_at"],
                 bindings=RunBindings(**raw["bindings"]),
+                approved_vector=dict(raw.get("approved_vector", {})),
+                approved_dispositions=dict(raw.get("approved_dispositions", {})),
+                human_answers=dict(raw.get("human_answers", {})),
                 note=raw.get("note", ""),
             )
 
@@ -647,17 +850,38 @@ class Supervisor:
         if result.status == S.FAIL:
             state.advance(S.HALTED_FAILED, result=result, reason=result.summary)
             return False
+        post_approval = state.state in S.POST_APPROVAL_STATES
         if result.status in (S.HUMAN_REVIEW_REQUIRED, S.RETRY_AUTOMATICALLY):
             # RETRY_AUTOMATICALLY reaching the driver means a stage asked for a
             # retry it did not perform. Retries are narrow and are executed
             # inside the stage that owns them, so this is a question for a human
             # rather than a loop for the driver to invent.
+            if post_approval:
+                # There is no human left to ask. The machine has no edge from
+                # here to HALTED_FOR_HUMAN_REVIEW, so a post-approval stage that
+                # asks a question is a defect in that stage, and it fails closed
+                # rather than inventing the second gate the doctrine forbids.
+                state.advance(
+                    S.HALTED_FAILED,
+                    result=result,
+                    reason=(
+                        f"{result.stage} reported {result.status} after the parameter "
+                        "approval. The run has exactly one human gate and it is "
+                        f"upstream of {S.DEV_500_REQUIRED}; a question raised here is a "
+                        f"failure. {result.summary}"
+                    ),
+                )
+                return False
             state.advance(
                 S.HALTED_FOR_HUMAN_REVIEW, result=result, reason=result.summary
             )
             return False
         required = [a for a in result.advisories if a in self.config.required_advisories]
-        if required:
+        if required and not post_approval:
+            # Run policy may promote a pre-approval advisory to a stop. It may
+            # not do so after the approval: PASS_WITH_ADVISORY continues through
+            # every execution tier, which is what makes 500 -> 2,000 -> 10,000
+            # automatic rather than merely usually automatic.
             state.advance(
                 S.HALTED_FOR_HUMAN_REVIEW,
                 result=result,
@@ -692,10 +916,77 @@ class Supervisor:
 
     # -- stages ---------------------------------------------------------------
 
+    def _authority_claims(self) -> list[EligibilityClaim]:
+        """Every generation's claim about every governed parameter's eligibility.
+
+        The run-local frozen manifest speaks for the generation it was produced
+        under; the R2 manifest speaks for the current one. Both are recorded, and
+        :func:`~.authority.resolve_claim` picks the winner by rank rather than by
+        which one happened to be read last.
+        """
+        domain = self.domain_manifest
+        claims = [
+            EligibilityClaim(
+                generation=domain.generation,
+                subject=name,
+                claim=domain.eligibility(name),
+                source=f"{domain.manifest_id}@{domain.authority_commit}",
+                rationale="Current evidence authority.",
+            )
+            for name in EV.GOVERNED_PARAMETERS
+            if name in domain.parameter_eligibility
+        ]
+        prior_generation = next(
+            (g for g in reversed(domain.supersedes) if g), ""
+        )
+        if prior_generation:
+            claims.extend(
+                EligibilityClaim(
+                    generation=prior_generation,
+                    subject=name,
+                    claim=self.manifest.parameters[name].eligibility,
+                    source=str(self.manifest.source_path),
+                    rationale=self.manifest.parameters[name].rationale,
+                )
+                for name in EV.GOVERNED_PARAMETERS
+            )
+        return claims
+
     def _stage_synthetic_evidence(self) -> S.StageResult:
         manifest = self.manifest
-        refusing = manifest.refusing_parameters()
+        domain = self.domain_manifest
+        claims = self._authority_claims()
+        supersession = supersession_report(claims) if claims else {}
+        # Where the two manifests disagree, the current authority decides and the
+        # disagreement is written down. Nothing is edited to make it go away.
+        overridden = sorted(
+            name
+            for name in EV.GOVERNED_PARAMETERS
+            if name in domain.parameter_eligibility
+            and domain.parameter_eligibility[name] != manifest.parameters[name].eligibility
+        )
+        wave1 = self.ingest_wave1()
         detail = {
+            "authority": {
+                **self.resolve_authority(),
+                "manifest_id": domain.manifest_id,
+                "generation": domain.generation,
+                "manifest_sha256": domain.source_bytes_sha256,
+                "manifest_digest": domain.manifest_digest,
+                "primary_sources": [
+                    s.source_id for s in domain.primary_sources()
+                ],
+                "witness_sources": [s.source_id for s in domain.witness_sources()],
+                "forbidden_fields": sorted(domain.forbidden_fields),
+            },
+            "manifest_domain_enforcement": "AUTHORITATIVE_BY_SOURCE_SHA256",
+            "filename_checks_role": FILENAME_CHECKS_ROLE,
+            "supersession": supersession,
+            "authority_overrides": overridden,
+            "authoritative_eligibility": {
+                name: self.eligibility_of(name) for name in EV.GOVERNED_PARAMETERS
+            },
+            "wave1": wave1,
             "manifest_id": manifest.manifest_id,
             "manifest_digest": manifest.manifest_digest,
             "source_sha256": manifest.source_sha256,
@@ -713,31 +1004,62 @@ class Supervisor:
             "synthetic_only_primary_calibration_enforced": True,
             "real_data_witness_only_enforced": True,
         }
-        if refusing:
-            return S.StageResult(
-                stage=STAGE_SYNTHETIC_EVIDENCE,
-                status=S.FAIL,
-                summary=(
-                    f"Required parameters are {EV.MISSING} or {EV.BLOCKED} in the frozen "
-                    f"manifest: {list(refusing)}."
-                ),
-                detail=detail,
+        # A required parameter with no admissible evidence no longer fails the
+        # run here. R1 refused, which was right when the only representable
+        # outcome was a fitted value; under R2 the outcome is an epistemic
+        # disposition, and MISSING_FAIL_CLOSED is one the recommendation can
+        # carry to the human. What it cannot do is authorise execution, and that
+        # refusal now lives at the approval gate where the human has answered.
+        advisories = []
+        for name in EV.GOVERNED_PARAMETERS:
+            eligibility = self.eligibility_of(name)
+            if eligibility == EV.FIT_ALLOWED:
+                continue
+            disposition = _planned_disposition(manifest.parameters[name], eligibility)
+            advisories.append(
+                f"{name} is {eligibility} -> {disposition}: "
+                f"{manifest.parameters[name].rationale}"
             )
-        advisories = tuple(
-            f"{name} is {manifest.parameters[name].eligibility}: "
-            f"{manifest.parameters[name].rationale}"
-            for name in EV.GOVERNED_PARAMETERS
-            if manifest.parameters[name].eligibility
-            in (EV.CIRCULAR_NOT_IDENTIFIABLE, EV.WITNESS_ONLY, EV.PRIOR_ONLY)
+        if overridden:
+            advisories.append(
+                f"{domain.generation} supersedes the run-local manifest on {overridden}. "
+                "The earlier record is retained unedited and no longer decides "
+                "eligibility."
+            )
+        return _pass(
+            STAGE_SYNTHETIC_EVIDENCE,
+            f"Frozen synthetic evidence accepted under {domain.generation}.",
+            detail,
+            tuple(advisories),
         )
-        return _pass(STAGE_SYNTHETIC_EVIDENCE, "Frozen synthetic evidence accepted.", detail, advisories)
+
+    def eligibility_of(self, parameter: str) -> str:
+        """The eligibility the current authority assigns, superseding older ones.
+
+        The R2 manifest wins wherever it speaks. Where it is silent about a
+        governed parameter the run-local manifest stands, which is a gap the
+        manifest should close rather than a licence -- a silent authority does
+        not make a parameter fittable, it leaves the older classification in
+        force, and the older classifications are conservative.
+        """
+        domain = self.domain_manifest
+        if parameter in domain.parameter_eligibility:
+            return domain.eligibility(parameter)
+        return self.manifest.parameters[parameter].eligibility
 
     def _stage_calibration_dataset(self) -> S.StageResult:
         binding: DatasetBinding = self.executor.calibration_dataset()
         if binding.estimation_domain:
             EV.require_synthetic_only_primary_estimation_domain(binding.estimation_domain)
+        self.domain_manifest.require_dataset_binding(
+            binding.sha256, binding.split_sha256
+        )
         shortfalls = volume_shortfalls(binding)
-        detail = {**binding.as_dict(), "volume_shortfalls": shortfalls}
+        detail = {
+            **binding.as_dict(),
+            "volume_shortfalls": shortfalls,
+            "bound_to_evidence_manifest": self.domain_manifest.manifest_id,
+        }
         if shortfalls:
             return S.StageResult(
                 stage=STAGE_CALIBRATION_DATASET,
@@ -833,16 +1155,50 @@ class Supervisor:
             STAGE_POINT_SCALE, f"Point scale identified at {outcome.get('value')}.", detail
         )
 
-    def _axes(self) -> list[SearchAxis]:
-        manifest = self.manifest
+    def _manifest_axes(self) -> list[SearchAxis]:
+        """Every scalar axis the authorities agree may be searched.
+
+        Both must agree. The run-local manifest supplies the search space and the
+        current authority supplies the permission, and a parameter the authority
+        has reclassified away from FIT_ALLOWED is dropped here regardless of what
+        search space it still carries.
+        """
         axes = []
         for name in SCALAR_SEARCH_PARAMETERS:
-            record = manifest.parameters[name]
-            if not record.fittable:
+            record = self.manifest.parameters[name]
+            if self.eligibility_of(name) != EV.FIT_ALLOWED or not record.fittable:
                 continue
-            EV.require_fit_permitted(manifest, name)
+            EV.require_fit_permitted(self.manifest, name)
+            D.require_estimator_admissible(name, D.FIT_RESULT)
             axes.append(SearchAxis.from_search_space(name, record.search_space or {}))
         return axes
+
+    def _axes(self) -> list[SearchAxis]:
+        """The axes this run will actually search.
+
+        The manifest-authorised set, minus anything a verified Wave-1 package has
+        already settled. Re-fitting a parameter Wave 1 measured would produce a
+        second answer bound to the same evidence, and there would be no principled
+        way to choose between them.
+        """
+        settled = set(self._wave1_settled())
+        return [axis for axis in self._manifest_axes() if axis.parameter not in settled]
+
+    def _wave1_results(self) -> dict[str, Any]:
+        detail = self._detail_cache.get(STAGE_COARSE_SEARCH) or self._detail_cache.get(
+            STAGE_SYNTHETIC_EVIDENCE
+        ) or {}
+        return dict((detail.get("wave1") or {}).get("results") or {})
+
+    def _wave1_settled(self) -> tuple[str, ...]:
+        """Wave-1 parameters that arrived with a verified fit result."""
+        return tuple(
+            sorted(
+                name
+                for name, entry in self._wave1_results().items()
+                if entry.get("status") == D.FIT_RESULT
+            )
+        )
 
     def _carry_forward_vector(self) -> dict[str, Any]:
         """The vector before any fitting: fixed values, and ``None`` elsewhere."""
@@ -884,25 +1240,42 @@ class Supervisor:
         return self._guard
 
     def _stage_coarse_search(self) -> S.StageResult:
+        # A pre-sealing search must never be able to read the holdout. The guard
+        # does not exist yet at this point in the run, so the oracle is wrapped
+        # against a locked one that is created here and carried forward. It is
+        # installed before anything else because the Wave-1 expectation reads the
+        # oracle digest, and an unguarded oracle must never exist at all.
+        if self._guard is None:
+            self._pre_seal_guard()
+        wave1 = self.ingest_wave1(
+            self._wave1_expectation() if self.config.wave1.declared else None
+        )
+        # Published into the cache before the axes are built, because which axes
+        # this run searches depends on what Wave 1 already settled.
+        self._detail_cache[STAGE_COARSE_SEARCH] = {"wave1": wave1}
+        settled = list(self._wave1_settled())
         axes = self._axes()
         detail: dict[str, Any] = {
+            "wave1": wave1,
+            "wave1_settled": settled,
             "axes": [a.as_dict() for a in axes],
+            # Over the manifest-authorised axis set, not the searched one, so the
+            # universe a Wave-1 package is checked against does not depend on
+            # whether that package exists.
             "candidate_universe_digest": candidate_universe_digest(
-                axes, self._carry_forward_vector()
+                self._manifest_axes(), self._carry_forward_vector()
             ),
         }
         if not axes:
             return _pass(
                 STAGE_COARSE_SEARCH,
-                "No parameter is FIT_ALLOWED; no search was run.",
-                {**detail, "outcomes": {}},
-                ("No fittable axes: the frozen manifest authorises no search.",),
+                "No parameter is FIT_ALLOWED for this run; no search was run.",
+                {**detail, "outcomes": {}, "vector": self._carry_forward_vector()},
+                (
+                    "No fittable axes: the current evidence authority authorises no "
+                    f"search here. Wave-1 settled: {settled or 'none'}.",
+                ),
             )
-        # A pre-sealing search must never be able to read the holdout. The guard
-        # does not exist yet at this point in the run, so the oracle is wrapped
-        # against a locked one that is created here and carried forward.
-        if self._guard is None:
-            self._pre_seal_guard()
         oracle = self._oracle_for_run()
         context = self._carry_forward_vector()
         outcomes: dict[str, Any] = {}
@@ -931,8 +1304,10 @@ class Supervisor:
         expanded = sorted(
             name for name, o in outcomes.items() if o["expansions_used"] > 0
         )
-        advisories = (
-            (f"Declared search range was expanded for: {expanded}.",) if expanded else ()
+        advisories = tuple(
+            [f"Declared search range was expanded for: {expanded}."] if expanded else []
+        ) + tuple(
+            [f"Wave-1 supplied a verified fit result for: {settled}."] if settled else []
         )
         return _pass(
             STAGE_COARSE_SEARCH,
@@ -964,6 +1339,21 @@ class Supervisor:
     def _stage_refinement(self) -> S.StageResult:
         coarse_detail = self._detail(STAGE_COARSE_SEARCH)
         axes = {a.parameter: a for a in self._axes()}
+        if not axes:
+            return _pass(
+                STAGE_REFINEMENT,
+                "No axis was searched, so there is nothing to refine.",
+                {
+                    "outcomes": {},
+                    "vector": dict(
+                        coarse_detail.get("vector") or self._carry_forward_vector()
+                    ),
+                    "candidate_universe_digest": coarse_detail.get(
+                        "candidate_universe_digest", ""
+                    ),
+                },
+                ("Refinement ran no axis; the vector is unchanged from carry-forward.",),
+            )
         oracle = self._oracle_for_run()
         context = dict(coarse_detail.get("vector") or self._carry_forward_vector())
         outcomes: dict[str, Any] = {}
@@ -1082,18 +1472,17 @@ class Supervisor:
 
     def _stage_game_sd(self) -> S.StageResult:
         record = self.manifest.parameters["game_sd_points"]
+        eligibility = self.eligibility_of("game_sd_points")
         vector = self._selected_vector()
         holdout_evidence = self._detail(STAGE_HOLDOUT_SCORE)["outcome"]
-        if record.eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
+        if eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
             return _pass(
                 STAGE_GAME_SD,
-                f"game_sd_points carried forward as {record.eligibility}.",
-                {"value": record.current_value, "eligibility": record.eligibility},
+                f"game_sd_points carried forward as {eligibility}.",
+                {"value": record.current_value, "eligibility": eligibility},
             )
-        if not record.fittable:
-            return _classification_result(
-                STAGE_GAME_SD, "game_sd_points", record, required_fail=True
-            )
+        if eligibility != EV.FIT_ALLOWED:
+            return _classification_result(STAGE_GAME_SD, "game_sd_points", record, eligibility)
         outcome = dict(self.executor.game_sd(vector, holdout_evidence))
         detail = {"vector": vector, "outcome": outcome}
         if outcome.get("identification_status") != IDENTIFIED:
@@ -1112,22 +1501,21 @@ class Supervisor:
 
     def _stage_fcs_adapter(self) -> S.StageResult:
         record = self.manifest.parameters["fcs_point_adapter"]
-        if record.eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
+        eligibility = self.eligibility_of("fcs_point_adapter")
+        if eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
             return _pass(
                 STAGE_FCS_ADAPTER,
-                f"FCS point adapter carried forward as {record.eligibility}.",
-                {"value": record.current_value, "eligibility": record.eligibility},
+                f"FCS point adapter carried forward as {eligibility}.",
+                {"value": record.current_value, "eligibility": eligibility},
             )
-        if not record.fittable:
+        if eligibility != EV.FIT_ALLOWED:
             # The state this stage completes into is explicitly named
-            # "COMPLETE_OR_EXPLICITLY_UNIDENTIFIED": an adapter the manifest says
-            # cannot be identified is a recorded outcome, not a failure -- unless
-            # the manifest also marks it required.
+            # "COMPLETE_OR_EXPLICITLY_UNIDENTIFIED". Under R2 an adapter with no
+            # admissible evidence is a recorded epistemic outcome that travels to
+            # the human gate; the fail-closed happens where production reads it,
+            # not by refusing to produce a recommendation at all.
             return _classification_result(
-                STAGE_FCS_ADAPTER,
-                "fcs_point_adapter",
-                record,
-                required_fail=record.eligibility in EV.REFUSING_ELIGIBILITY,
+                STAGE_FCS_ADAPTER, "fcs_point_adapter", record, eligibility
             )
         outcome = dict(self.executor.fcs_adapter(self._selected_vector()))
         detail = {"outcome": outcome, "eligibility": record.eligibility}
@@ -1221,19 +1609,35 @@ class Supervisor:
         scale = self._detail(STAGE_POINT_SCALE)
         sensitivity = dict(self.executor.sensitivity(vector))
         constraint = refinement.get("constraint_classification", {})
+        wave1_results = self._wave1_results()
 
         entries: list[ParameterRecommendation] = []
         for name in EV.GOVERNED_PARAMETERS:
             record = manifest.parameters[name]
+            eligibility = self.eligibility_of(name)
             outcome = refinement["outcomes"].get(name) or coarse["outcomes"].get(name) or {}
             value, identification, boundary = self._resolve_parameter(
-                name, record, outcome, constraint, game_sd, fcs, scale, vector
+                name,
+                record,
+                outcome,
+                constraint,
+                game_sd,
+                fcs,
+                scale,
+                vector,
+                eligibility,
+                wave1_results.get(name) or {},
+            )
+            disposition, reason = _resolve_disposition(
+                name, record, eligibility, identification, value
             )
             entries.append(
                 ParameterRecommendation(
                     parameter=name,
-                    eligibility=record.eligibility,
+                    eligibility=eligibility,
                     identification_status=identification,
+                    disposition=disposition,
+                    disposition_reason=reason,
                     boundary_status=boundary,
                     prior_value=record.prior_value,
                     current_value=record.current_value,
@@ -1250,6 +1654,9 @@ class Supervisor:
                         "projection_season": manifest.projection_season,
                         "circularity": record.circularity,
                         "evidence_fields": list(record.evidence_fields),
+                        "authority": self.domain_manifest.generation,
+                        "authority_commit": self.domain_manifest.authority_commit,
+                        "wave1": wave1_results.get(name) or {},
                     },
                     real_world_witness={
                         "status": witness_detail["status"],
@@ -1270,6 +1677,11 @@ class Supervisor:
             notes=(
                 "Primary calibration is synthetic-only; real football is "
                 f"{EV.EXTERNAL_WITNESS_ONLY}.",
+                "Domain admission is decided by the "
+                f"{self.domain_manifest.generation} evidence manifest keyed on source "
+                f"byte digests. Filename checks are {FILENAME_CHECKS_ROLE}.",
+                "Parameters carry an epistemic disposition as well as a value. "
+                "Approving this package approves both.",
                 "This artifact recommends. It does not write canonical configuration.",
             ),
         )
@@ -1281,15 +1693,27 @@ class Supervisor:
         state.recommendation_sha256 = package.recommendation_sha256
         state.bindings = package.bindings.as_dict()
         state.save()
+        requests = package.human_disposition_requests()
+        detail = {
+            "recommendation_sha256": package.recommendation_sha256,
+            "bindings": package.bindings.as_dict(),
+            "recommended_vector": package.recommended_vector(),
+            "disposition_vector": package.disposition_vector(),
+            "human_disposition_requests": [r.as_dict() for r in requests],
+            "artifact": str(self.run_dir / "recommendation" / "recommendation.json"),
+        }
+        advisories = tuple(
+            f"{r.parameter} is {r.disposition} and production reads it "
+            f"({r.production_semantics}); the approval gate must supply a disposition. "
+            f"{r.reason}"
+            for r in requests
+        )
         return _pass(
             STAGE_RECOMMENDATION,
-            f"Recommendation {package.recommendation_sha256} ready for human approval.",
-            {
-                "recommendation_sha256": package.recommendation_sha256,
-                "bindings": package.bindings.as_dict(),
-                "recommended_vector": package.recommended_vector(),
-                "artifact": str(self.run_dir / "recommendation" / "recommendation.json"),
-            },
+            f"Recommendation {package.recommendation_sha256} ready for human approval "
+            f"with {len(requests)} disposition question(s).",
+            detail,
+            advisories,
         )
 
     def _resolve_parameter(
@@ -1302,11 +1726,17 @@ class Supervisor:
         fcs: Mapping[str, Any],
         scale: Mapping[str, Any],
         vector: Mapping[str, Any],
+        eligibility: str,
+        wave1: Mapping[str, Any],
     ) -> tuple[Any, str, str]:
         """Resolve one parameter's recommended value, and how it was arrived at."""
-        if record.eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
+        if wave1.get("status") == D.FIT_RESULT:
+            return wave1.get("value"), IDENTIFIED, "WAVE1_VERIFIED"
+        if eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
             return record.current_value, EV.FIXED, "NOT_SEARCHED"
-        if record.eligibility in (EV.CIRCULAR_NOT_IDENTIFIABLE, EV.WITNESS_ONLY):
+        if eligibility in (EV.CIRCULAR_NOT_IDENTIFIABLE, EV.WITNESS_ONLY):
+            return None, PARAMETER_UNIDENTIFIED, "NOT_SEARCHED"
+        if eligibility in EV.REFUSING_ELIGIBILITY:
             return None, PARAMETER_UNIDENTIFIED, "NOT_SEARCHED"
         if name == "point_scale":
             return (
@@ -1341,9 +1771,17 @@ class Supervisor:
         recommendation_sha256: str,
         approver: str,
         action: str = APPROVAL_ACTION,
+        dispositions: Mapping[str, Mapping[str, Any]] | None = None,
         note: str = "",
     ) -> dict[str, Any]:
-        """Grant the one human approval, binding it to the recommendation digest."""
+        """Grant the one human approval.
+
+        Binds the recommendation digest, the approved value vector and the
+        approved disposition vector in one act. ``dispositions`` answers every
+        question the recommendation raised: ``{parameter: {"value": ...,
+        "status": ...}}``, where a status carrying no value -- an FCS adapter left
+        :data:`~.dispositions.MISSING_FAIL_CLOSED`, say -- passes ``None``.
+        """
         state = RunState.load(self.run_dir)
         self.state = state
         self._rehydrate()
@@ -1364,6 +1802,7 @@ class Supervisor:
                 current_state=state.state,
                 active_recommendation_sha256=state.recommendation_sha256,
                 observed_bindings=self._bindings(),
+                dispositions=dispositions,
                 note=note,
             )
             atomic_write_json(self.run_dir / "approval" / "approval.json", record.as_artifact())
@@ -1379,6 +1818,14 @@ class Supervisor:
             "approval_digest": record.approval_digest,
             "recommendation_sha256": record.recommendation_sha256,
             "approver": record.approver,
+            "approved_vector": dict(record.approved_vector),
+            "approved_dispositions": dict(record.approved_dispositions),
+            "execution_obstacles": D.execution_obstacles(
+                record.approved_vector, record.approved_dispositions
+            ),
+            "use_site_fail_closed": D.use_site_fail_closed(
+                record.approved_vector, record.approved_dispositions
+            ),
         }
 
     def _stage_approval_check(self) -> S.StageResult:
@@ -1389,18 +1836,41 @@ class Supervisor:
             recommendation_sha256=state.recommendation_sha256,
             observed_bindings=self._bindings(),
         )
+        fail_closed = D.use_site_fail_closed(
+            approval.approved_vector, approval.approved_dispositions
+        )
+        detail = {
+            "approval_digest": approval.approval_digest,
+            "recommendation_sha256": approval.recommendation_sha256,
+            "approver": approval.approver,
+            "approved_vector": dict(approval.approved_vector),
+            "approved_dispositions": dict(approval.approved_dispositions),
+            "execution_obstacles": [],
+            "use_site_fail_closed": fail_closed,
+        }
         return _pass(
             STAGE_APPROVAL_CHECK,
-            "Approval verified against re-derived bindings.",
-            {
-                "approval_digest": approval.approval_digest,
-                "recommendation_sha256": approval.recommendation_sha256,
-                "approver": approval.approver,
-            },
+            "Approval verified against re-derived bindings, values and dispositions.",
+            detail,
+            tuple(fail_closed),
         )
 
+    def _approved_vector(self) -> dict[str, Any]:
+        """What production runs with, after the human answered.
+
+        Not :meth:`_selected_vector`. The selected vector is what the search
+        produced; the approved vector is that plus every disposition a human
+        supplied at the gate, and running the first would silently discard the
+        second.
+        """
+        if self._approval is None:
+            raise GovernanceBlock(
+                "No approval is recorded, so there is no approved vector to execute."
+            )
+        return dict(self._approval.approved_vector)
+
     def _execute_tier(self, tier: tier_policy.RunTier) -> tuple[dict[str, Any], dict[str, Any]]:
-        vector = self._selected_vector()
+        vector = self._approved_vector()
         bindings = self._expected_execution_bindings()
         outcome = run_with_temp_root_retry(
             lambda basetemp: dict(
@@ -1424,8 +1894,7 @@ class Supervisor:
         result = gates.gate_analysis_2000(
             report,
             dev_report=dev_report,
-            tolerances=self.config.convergence_tolerances,
-            default_tolerance=self.config.convergence_default_tolerance,
+            policy=self.config.convergence_policy,
         )
         return _with_detail(result, {"report": report, "retry": retry})
 
@@ -1443,13 +1912,16 @@ class Supervisor:
         report, retry = self._execute_tier(tier_policy.PUBLISH)
         atomic_write_json(self.run_dir / "publish_10000" / "report.json", report)
         result = gates.gate_publish_10000(
-            report, expected_bindings=self._expected_execution_bindings()
+            report,
+            expected_bindings=self._expected_execution_bindings(),
+            analysis_report=self._detail(gates.ANALYSIS_2000_STAGE)["report"],
+            policy=self.config.convergence_policy,
         )
         return _with_detail(result, {"report": report, "retry": retry})
 
     def _stage_final_freeze(self) -> S.StageResult:
         expected = self._expected_execution_bindings()
-        report = dict(self.executor.freeze(self._selected_vector(), expected))
+        report = dict(self.executor.freeze(self._approved_vector(), expected))
         result = gates.gate_final_freeze(
             report,
             tier_paths=tier_policy.PUBLISH.paths,
@@ -1526,43 +1998,95 @@ def _classification_result(
     stage: str,
     parameter: str,
     record: EV.ParameterEvidence,
-    *,
-    required_fail: bool,
+    eligibility: str,
 ) -> S.StageResult:
-    """Report a parameter the manifest says must not be fitted here."""
+    """Report a parameter the current authority says must not be fitted here.
+
+    R1 failed the run when such a parameter was also required, because a
+    recommendation could only carry a fitted value and a required parameter
+    without one was a hole with nowhere to go. R2 gives it somewhere to go: the
+    disposition travels to the single human gate, the approver answers it, and
+    the fail-closed happens against the *approved* vector in
+    :func:`~.approval.require_approval_for_execution`. Failing here instead would
+    mean the human never sees the question that only they can answer.
+    """
+    disposition = _planned_disposition(record, eligibility)
     detail = {
         "parameter": parameter,
-        "eligibility": record.eligibility,
+        "eligibility": eligibility,
+        "disposition": disposition,
         "circularity": record.circularity,
         "rationale": record.rationale,
+        "required": record.required,
+        "production_semantics": D.PRODUCTION_VALUE_SEMANTICS[parameter],
         "value": None,
     }
-    if required_fail and record.required:
-        return S.StageResult(
-            stage=stage,
-            status=S.FAIL,
-            summary=(
-                f"{parameter} is {record.eligibility} and required. Required evidence "
-                "that cannot be produced is missing evidence, not a pass."
-            ),
-            detail=detail,
-        )
     return _pass(
         stage,
-        f"{parameter} explicitly not identified ({record.eligibility}).",
+        f"{parameter} explicitly not identified ({eligibility} -> {disposition}).",
         detail,
-        (f"{parameter} is {record.eligibility}: {record.rationale}",),
+        (
+            f"{parameter} is {eligibility} -> {disposition} and carries no value. "
+            f"Production reads it as {D.PRODUCTION_VALUE_SEMANTICS[parameter]}; the "
+            f"approval gate must dispose of it. {record.rationale}",
+        ),
     )
 
 
-def _disposition_for(eligibility: str) -> str:
+def _planned_disposition(record: EV.ParameterEvidence, eligibility: str = "") -> str:
+    """The disposition a parameter is expected to carry.
+
+    For a fittable parameter this is a *plan*: :data:`~.dispositions.FIT_RESULT`
+    is what it becomes if the search identifies a value, and
+    :func:`_resolve_disposition` is what decides afterwards whether it did. For
+    every other parameter it is the outcome, because nothing further will be
+    measured.
+
+    A manifest may declare a disposition explicitly, which is how
+    ``recent_form_weights`` arrives as :data:`~.dispositions.UNIDENTIFIED`
+    rather than as the ``MISSING_FAIL_CLOSED`` its eligibility alone would imply
+    -- "the evidence exists and does not identify this" and "there is no
+    evidence" are different findings, and the manifest is entitled to say which
+    one it means.
+    """
+    resolved = eligibility or record.eligibility
+    if resolved != EV.FIT_ALLOWED and record.declared_disposition:
+        return record.declared_disposition
+    implied = D.disposition_for_eligibility(resolved)
+    return implied if implied is not None else D.FIT_RESULT
+
+
+def _resolve_disposition(
+    name: str,
+    record: EV.ParameterEvidence,
+    eligibility: str,
+    identification: str,
+    value: Any,
+) -> tuple[str, str]:
+    """The disposition and reason one recommendation entry carries.
+
+    A fittable parameter is :data:`~.dispositions.FIT_RESULT` only if a search
+    actually identified a value. Permission plus a failed search is
+    :data:`~.dispositions.UNIDENTIFIED`, and reporting it as a fit result would
+    describe an absent measurement as a present one.
+    """
+    if eligibility != EV.FIT_ALLOWED and record.declared_disposition:
+        # Honoured only where nothing was measured. A declared disposition on a
+        # parameter that was actually searched would describe the search's
+        # result without having watched it.
+        return record.declared_disposition, (
+            record.disposition_reason or record.rationale
+        )
     if eligibility == EV.FIT_ALLOWED:
-        return "FIT"
-    if eligibility in EV.CARRY_FORWARD_ELIGIBILITY:
-        return "CARRY_FORWARD"
-    if eligibility in EV.REFUSING_ELIGIBILITY:
-        return "BLOCKED"
-    return "NOT_FITTED"
+        if identification == IDENTIFIED and value is not None:
+            return D.FIT_RESULT, ""
+        return D.UNIDENTIFIED, (
+            f"{name} was authorised for fitting and the objective did not identify a "
+            f"value ({identification}). {record.rationale}"
+        )
+    disposition = D.disposition_for_eligibility(eligibility)
+    assert disposition is not None
+    return disposition, record.rationale
 
 
 def _outcome_from_dict(payload: Mapping[str, Any]) -> SearchOutcome:
@@ -1601,6 +2125,8 @@ def _package_from_artifact(artifact: Mapping[str, Any]) -> RecommendationPackage
                 parameter=entry["parameter"],
                 eligibility=entry["eligibility"],
                 identification_status=entry["identification_status"],
+                disposition=entry.get("disposition", D.UNIDENTIFIED),
+                disposition_reason=entry.get("disposition_reason", ""),
                 boundary_status=entry["boundary_status"],
                 prior_value=entry["prior_value"],
                 current_value=entry["current_value"],

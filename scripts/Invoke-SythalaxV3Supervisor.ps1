@@ -11,6 +11,8 @@ param(
 
     [string]$Approver,
 
+    [string]$Dispositions,
+
     [string]$Note = ''
 )
 
@@ -53,6 +55,12 @@ if ($Command -eq 'approve') {
         throw 'approve requires -Approver. The parameter gate is the one step a person performs.'
     }
     $Arguments += @('--recommendation-sha', $RecommendationSha, '--approver', $Approver)
+    if ($Dispositions) {
+        # Answers to the questions the recommendation raises, as JSON or a path
+        # to JSON. Required exactly when it raises any; the CLI refuses the
+        # approval rather than proceeding with a question unanswered.
+        $Arguments += @('--dispositions', $Dispositions)
+    }
     if ($Note) {
         $Arguments += @('--note', $Note)
     }

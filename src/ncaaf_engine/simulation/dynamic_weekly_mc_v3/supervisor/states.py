@@ -16,12 +16,22 @@ edge into a later state departs from the completion of the one before it. This
 is what makes "DEV failure blocks ANALYSIS" a structural fact rather than a
 check somebody remembered to write.
 
-**Halting is always available; un-halting never is.** Any live state may fail to
-:data:`HALTED_FAILED` or stop at :data:`HALTED_FOR_HUMAN_REVIEW`, because an
-unrecoverable error is not a stage-specific event. Neither halt state has an
-outgoing edge. A halted run is re-entered by a human deciding what to do with
-it, which in this repository means a new run bound to new evidence -- not by the
-supervisor deciding the failure has aged out.
+**Failure is always available; un-halting never is.** Any live state may fail to
+:data:`HALTED_FAILED`, because an unrecoverable error is not a stage-specific
+event. Neither halt state has an outgoing edge. A halted run is re-entered by a
+human deciding what to do with it, which in this repository means a new run
+bound to new evidence -- not by the supervisor deciding the failure has aged out.
+
+**After the approval, stopping for a human is not an available move.** The
+operating doctrine is one normal human gate: the parameter recommendation is
+approved, and then 500, 2,000, 10,000 and the freeze run to completion or the
+run fails. That is enforced structurally rather than by policy --
+:data:`POST_APPROVAL_STATES` have no edge to :data:`HALTED_FOR_HUMAN_REVIEW` at
+all -- so a tier gate cannot introduce a second stop by returning
+``HUMAN_REVIEW_REQUIRED``, and a future gate cannot introduce one by forgetting
+that it must not. The tier diagnostics are built for that: they classify from
+the run samples themselves and return PASS, PASS_WITH_ADVISORY or FAIL, and
+never a question.
 
 **The approval gate is an edge, not a flag.** ``AWAITING_HUMAN_APPROVAL ->
 PARAMETERS_APPROVED`` is the only way into the execution tiers, and the only
@@ -53,6 +63,7 @@ __all__ = [
     "LEGAL_TRANSITIONS",
     "PASS",
     "PASS_WITH_ADVISORY",
+    "POST_APPROVAL_STATES",
     "RETRY_AUTOMATICALLY",
     "SPINE",
     "STATES",
@@ -272,6 +283,11 @@ SPINE: tuple[str, ...] = (
 #: The two ways a run stops without completing.
 HALT_STATES: tuple[str, ...] = (HALTED_FAILED, HALTED_FOR_HUMAN_REVIEW)
 
+#: Everything from the approval onward. Derived from the spine rather than
+#: listed, so a state inserted into the execution half joins the set by being
+#: inserted and cannot be left out of it by being forgotten.
+POST_APPROVAL_STATES: tuple[str, ...] = SPINE[SPINE.index(PARAMETERS_APPROVED):]
+
 #: Every state the machine recognises.
 STATES: tuple[str, ...] = SPINE + HALT_STATES
 
@@ -294,9 +310,14 @@ def _build_transitions() -> dict[str, frozenset[str]]:
     for name in SPINE:
         if name in TERMINAL_STATES:
             continue
-        # An unrecoverable error is not stage-specific, and neither is reaching
-        # a question the supervisor may not answer.
-        edges[name].update(HALT_STATES)
+        # An unrecoverable error is not stage-specific.
+        edges[name].add(HALTED_FAILED)
+        if name not in POST_APPROVAL_STATES:
+            # Reaching a question the supervisor may not answer is available
+            # only before the approval. After it there is nothing left to ask:
+            # the human already answered the one question this run poses, and a
+            # second stop would be a second gate.
+            edges[name].add(HALTED_FOR_HUMAN_REVIEW)
     return {name: frozenset(targets) for name, targets in edges.items()}
 
 
@@ -359,6 +380,8 @@ def transition_summary() -> dict[str, Any]:
         "spine": list(SPINE),
         "terminal_states": list(TERMINAL_STATES),
         "halt_states": list(HALT_STATES),
+        "post_approval_states": list(POST_APPROVAL_STATES),
+        "human_gate_count": 1,
         "status_classes": list(STATUS_CLASSES),
         "continuing_statuses": list(CONTINUING_STATUSES),
         "transitions": {name: sorted(t) for name, t in LEGAL_TRANSITIONS.items()},

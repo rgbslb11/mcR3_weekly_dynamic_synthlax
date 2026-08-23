@@ -31,21 +31,35 @@ it produces a PASS row that an auditor will believe. Broadly::
       "assertions": {"failed": [str]},
       "artifacts": {"required": [str], "present": [str], "hashes": {str: str}},
       "aggregates": {str: float},
+      "quantities": {str: {"kind": str, "value": float,
+                           "paths": int, "standard_error": float | None}},
       "schema":    {"required_fields": [str], "present_fields": [str]},
       "totals":    {str: float}, "totals_tolerance": float,
       "bindings":  {str: str},
     }
 
-Monte Carlo tolerance
----------------------
+Monte Carlo convergence
+-----------------------
 
-The 2,000-path gate compares against the 500-path run, and it does not demand
-equality. Two Monte Carlo runs of different sizes disagree by construction, and
-a gate that required agreement would either fail every honest run or be widened
-until it failed nothing. Instead every compared aggregate needs a *predeclared*
-tolerance. A key with no declared tolerance and no declared default is not
-passed and not failed -- it is :data:`~.states.HUMAN_REVIEW_REQUIRED`, because
-choosing a tolerance after seeing the divergence is choosing the outcome.
+The 2,000-path gate compares against the 500-path run and the 10,000-path gate
+compares against the 2,000-path run, and neither demands equality. Two Monte
+Carlo runs of different sizes disagree by construction, and a gate that required
+agreement would either fail every honest run or be widened until it failed
+nothing.
+
+R1 handled that with predeclared absolute tolerances and stopped for a human
+wherever one was missing. R2 does not need a tolerance at all: the disagreement
+two runs should show is computable from the estimates and their path counts, so
+:mod:`.convergence` derives the diagnostic from the samples and returns PASS,
+PASS_WITH_ADVISORY or FAIL. No tier gate returns
+:data:`~.states.HUMAN_REVIEW_REQUIRED`, and none can -- the post-approval states
+have no edge to :data:`~.states.HALTED_FOR_HUMAN_REVIEW`. There is one human
+gate in this run and it is upstream of all three tiers.
+
+A material model failure stops the run; a normal sampling fluctuation does not.
+The line between them, including how hundreds of simultaneously inspected
+outputs are handled without a false failure, is defined and documented in
+:mod:`.convergence`.
 
 No final-looking output after a failed validation
 -------------------------------------------------
@@ -63,6 +77,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from .. import run_tier as tier_policy
 from ..errors import GovernanceBlock
+from . import convergence as C
 from . import states as S
 
 __all__ = [
@@ -70,7 +85,7 @@ __all__ = [
     "ANALYSIS_2000_STAGE",
     "PUBLISH_10000_STAGE",
     "FINAL_FREEZE_STAGE",
-    "compare_convergence",
+    "convergence_checks",
     "gate_analysis_2000",
     "gate_dev_500",
     "gate_final_freeze",
@@ -300,110 +315,71 @@ def gate_dev_500(report: Mapping[str, Any]) -> S.StageResult:
     return _result(DEV_500_STAGE, structural_checks(report, tier_policy.DEV))
 
 
-def compare_convergence(
-    dev_aggregates: Mapping[str, float],
-    analysis_aggregates: Mapping[str, float],
-    tolerances: Mapping[str, float],
+def convergence_checks(
+    baseline_report: Mapping[str, Any],
+    candidate_report: Mapping[str, Any],
     *,
-    default_tolerance: float | None = None,
-) -> dict[str, Any]:
-    """Compare two tiers' aggregates against predeclared tolerances.
+    baseline_tier: tier_policy.RunTier,
+    candidate_tier: tier_policy.RunTier,
+    policy: C.ConvergencePolicy | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Diagnose two tiers against each other and fold it into gate form.
 
-    Returns the per-key comparison plus two lists the caller acts on:
-    ``diverged`` (a declared tolerance was exceeded -- a failure) and
-    ``undeclared`` (no tolerance was declared for a compared key -- a question
-    for a human, never a pass).
+    Returns the full diagnostic, the single check the gate records, and any
+    advisories. One check rather than one per output: a gate row per team
+    probability would bury the structural checks under three hundred rows, and
+    the outlier detail is on the diagnostic where a reader can sort it.
     """
-    comparisons: list[dict[str, Any]] = []
-    diverged: list[str] = []
-    undeclared: list[str] = []
-    missing: list[str] = []
-
-    for key in sorted(set(dev_aggregates) | set(analysis_aggregates)):
-        if key not in dev_aggregates or key not in analysis_aggregates:
-            missing.append(key)
-            comparisons.append(
-                {
-                    "key": key,
-                    "dev": dev_aggregates.get(key),
-                    "analysis": analysis_aggregates.get(key),
-                    "status": "NOT_COMPARABLE",
-                    "detail": "Reported by only one tier.",
-                }
-            )
-            continue
-        tolerance = tolerances.get(key, default_tolerance)
-        delta = abs(float(analysis_aggregates[key]) - float(dev_aggregates[key]))
-        if tolerance is None:
-            undeclared.append(key)
-            status = "TOLERANCE_NOT_DECLARED"
-        elif delta > float(tolerance):
-            diverged.append(key)
-            status = "PATHOLOGICAL_DIVERGENCE"
-        else:
-            status = "WITHIN_DECLARED_TOLERANCE"
-        comparisons.append(
-            {
-                "key": key,
-                "dev": dev_aggregates[key],
-                "analysis": analysis_aggregates[key],
-                "absolute_delta": delta,
-                "declared_tolerance": tolerance,
-                "status": status,
-            }
+    diagnostic = C.diagnose(
+        C.sample_from_report(
+            baseline_report, tier=baseline_tier.name, paths=baseline_tier.paths
+        ),
+        C.sample_from_report(
+            candidate_report, tier=candidate_tier.name, paths=candidate_tier.paths
+        ),
+        policy=policy,
+    )
+    label = f"{baseline_tier.name.lower()}_{candidate_tier.name.lower()}_convergence"
+    passed = diagnostic["classification"] != "FAIL"
+    detail = (
+        "; ".join(diagnostic["reasons"])
+        if diagnostic["reasons"]
+        else (
+            f"{diagnostic['diagnosed_count']} quantity/quantities diagnosed against "
+            f"Monte Carlo sampling error; classification "
+            f"{diagnostic['classification']}."
         )
-
-    return {
-        "comparisons": comparisons,
-        "diverged": diverged,
-        "undeclared": undeclared,
-        "not_comparable": missing,
-    }
+    )
+    return diagnostic, [_check(label, passed, detail)], list(diagnostic["advisories"])
 
 
 def gate_analysis_2000(
     report: Mapping[str, Any],
     *,
     dev_report: Mapping[str, Any],
-    tolerances: Mapping[str, float],
-    default_tolerance: float | None = None,
+    policy: C.ConvergencePolicy | None = None,
 ) -> S.StageResult:
-    """Validate the 2,000-path analysis tier, including convergence against DEV."""
+    """Validate the 2,000-path analysis tier, including convergence against DEV.
+
+    DEV must already have passed its structural invariants for this gate to be
+    reached at all -- that is the state machine's job, not a check here -- so
+    what this adds is the convergence question: did running four times as many
+    paths move anything further than sampling explains.
+    """
     checks = structural_checks(report, tier_policy.ANALYSIS)
-    convergence = compare_convergence(
-        (dev_report.get("aggregates") or {}),
-        (report.get("aggregates") or {}),
-        tolerances,
-        default_tolerance=default_tolerance,
+    diagnostic, convergence_checks_, advisories = convergence_checks(
+        dev_report,
+        report,
+        baseline_tier=tier_policy.DEV,
+        candidate_tier=tier_policy.ANALYSIS,
+        policy=policy,
     )
-    checks.append(
-        _check(
-            "dev_analysis_convergence",
-            not convergence["diverged"],
-            "Aggregates exceeding their predeclared tolerance: "
-            f"{convergence['diverged']}.",
-        )
-    )
-    advisories: list[str] = []
-    if convergence["not_comparable"]:
-        advisories.append(
-            "Aggregates reported by only one tier and therefore not compared: "
-            f"{convergence['not_comparable']}."
-        )
-    human_review: list[str] = []
-    if convergence["undeclared"]:
-        human_review.append(
-            "No tolerance was predeclared for "
-            f"{convergence['undeclared']}. A tolerance chosen after the divergence is "
-            "known is a choice of outcome, so this stops for a human rather than "
-            "passing or failing."
-        )
+    checks.extend(convergence_checks_)
     return _result(
         ANALYSIS_2000_STAGE,
         checks,
-        extra_detail={"convergence": convergence},
+        extra_detail={"convergence": diagnostic},
         advisories=advisories,
-        human_review=human_review,
     )
 
 
@@ -411,8 +387,15 @@ def gate_publish_10000(
     report: Mapping[str, Any],
     *,
     expected_bindings: Mapping[str, str],
+    analysis_report: Mapping[str, Any] | None = None,
+    policy: C.ConvergencePolicy | None = None,
 ) -> S.StageResult:
     """Validate the 10,000-path publish tier.
+
+    Five things at once, which is what "final validation" means here: the
+    structural invariants every tier must hold, probability validity, output
+    completeness, the convergence and stability diagnostic against the 2,000-path
+    run, and the input, config and approval bindings.
 
     ``expected_bindings`` is what the supervisor knows the run must be tied to --
     config, inputs, parameter approval, run seed. The report's own bindings are
@@ -421,6 +404,29 @@ def gate_publish_10000(
     the approval this run was granted.
     """
     checks = structural_checks(report, tier_policy.PUBLISH)
+    advisories: list[str] = []
+    diagnostic: dict[str, Any] = {
+        "classification": "NOT_RUN",
+        "reason": "No analysis-tier report was supplied to compare against.",
+    }
+    if analysis_report is not None:
+        diagnostic, convergence_checks_, advisories = convergence_checks(
+            analysis_report,
+            report,
+            baseline_tier=tier_policy.ANALYSIS,
+            candidate_tier=tier_policy.PUBLISH,
+            policy=policy,
+        )
+        checks.extend(convergence_checks_)
+    else:
+        checks.append(
+            _check(
+                "analysis_publish_convergence",
+                False,
+                "No 2,000-path report was supplied, so publish stability is unproven. "
+                "A freeze cannot be earned by having nothing to compare against.",
+            )
+        )
 
     schema = report.get("schema") or {}
     required_fields = set(_as_list(schema.get("required_fields")))
@@ -479,7 +485,10 @@ def gate_publish_10000(
     )
 
     return _result(
-        PUBLISH_10000_STAGE, checks, extra_detail={"binding_drift": binding_drift}
+        PUBLISH_10000_STAGE,
+        checks,
+        extra_detail={"binding_drift": binding_drift, "convergence": diagnostic},
+        advisories=advisories,
     )
 
 

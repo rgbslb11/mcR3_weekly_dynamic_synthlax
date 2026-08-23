@@ -16,13 +16,27 @@ refuses the combination outright, so the artifact cannot be skimmed into a
 number that was never measured.
 
 **Its digest covers the evidence, not just the values.** ``recommendation_sha256``
-is taken over the whole canonical package: recommended values, objective,
-validation and holdout evidence, sensitivity, boundary and identification status,
-the witness result, and the input, dataset, split, oracle, candidate-universe and
-code digests. Approval binds to that digest in :mod:`.approval`. So an approval
-is an approval of *this* number produced *this* way from *these* inputs -- and
-changing any of them produces a different digest and an approval that no longer
-applies.
+is taken over the whole canonical package: recommended values, epistemic
+dispositions, objective, validation and holdout evidence, sensitivity, boundary
+and identification status, the witness result, and the input, dataset, split,
+oracle, candidate-universe and code digests. Approval binds to that digest in
+:mod:`.approval`. So an approval is an approval of *this* number, held with
+*this* confidence, produced *this* way from *these* inputs -- and changing any of
+them produces a different digest and an approval that no longer applies.
+
+Mixed dispositions are the normal case
+---------------------------------------
+
+The R2 evidence settles that the final vector will not be uniformly fitted. Some
+parameters are circular, one is unidentified from synthetic evidence, one is
+missing outright, and one or two may carry a Wave-1 fit result. Every entry
+therefore carries a :mod:`.dispositions` value alongside its number, the package
+requires no particular disposition of anybody, and
+:meth:`RecommendationPackage.human_disposition_requests` turns "production reads
+this parameter and this run produced no value for it" into an explicit question
+asked at the single approval gate. The alternative -- refusing to build a
+recommendation until every parameter is fitted -- would mean this run could never
+reach its human at all, which is not caution, it is a deadlock.
 """
 
 from __future__ import annotations
@@ -31,6 +45,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from ..errors import GovernanceBlock, InputValidationError
+from . import dispositions as D
 from .digests import digest_mapping
 from .evidence import (
     BLOCKED,
@@ -48,11 +63,36 @@ from .search import (
 )
 
 __all__ = [
+    "HumanDispositionRequest",
     "NON_MEASURING_IDENTIFICATION_STATUSES",
     "ParameterRecommendation",
     "RecommendationPackage",
     "RunBindings",
 ]
+
+
+@dataclass(frozen=True)
+class HumanDispositionRequest:
+    """One question the recommendation puts to the approver.
+
+    Raised wherever production reads a parameter and this run produced no value
+    for it. The request carries the disposition that produced the hole and what
+    production does about it, so the approver chooses with the reason in front of
+    them rather than filling in a blank.
+    """
+
+    parameter: str
+    disposition: str
+    production_semantics: str
+    reason: str
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "parameter": self.parameter,
+            "disposition": self.disposition,
+            "production_semantics": self.production_semantics,
+            "reason": self.reason,
+        }
 
 #: Identification outcomes under which no number may be recommended. Each is a
 #: statement that the objective could not distinguish a value, and a
@@ -133,6 +173,11 @@ class ParameterRecommendation:
     current_value: Any
     recommended_value: Any
     boundary_status: str
+    #: The epistemic class of the recommendation, from :mod:`.dispositions`.
+    #: Distinct from ``eligibility``: eligibility is what the evidence permitted,
+    #: disposition is what actually came out of the stage that used it.
+    disposition: str = D.UNIDENTIFIED
+    disposition_reason: str = ""
     objective_evidence: dict[str, Any] = field(default_factory=dict)
     validation_evidence: dict[str, Any] = field(default_factory=dict)
     holdout_evidence: dict[str, Any] = field(default_factory=dict)
@@ -186,12 +231,32 @@ class ParameterRecommendation:
                 f"{self.parameter} is {FIT_ALLOWED} and {IDENTIFIED} but recommends no "
                 "value. An identified parameter has one."
             )
+        D.require_known_disposition(self.parameter, self.disposition)
+        D.require_value_consistent(
+            self.parameter, self.disposition, self.recommended_value
+        )
+        if self.disposition == D.FIT_RESULT and self.eligibility != FIT_ALLOWED:
+            raise GovernanceBlock(
+                f"{self.parameter} reports disposition {D.FIT_RESULT} while its "
+                f"eligibility is {self.eligibility}. A fit result requires permission "
+                "to have fitted, so the two cannot disagree."
+            )
+        if (
+            self.disposition in D.REQUIRES_HUMAN_DISPOSITION
+            and not self.disposition_reason.strip()
+        ):
+            raise InputValidationError(
+                f"{self.parameter} is {self.disposition}, which puts a question to a "
+                "human, and records no reason for asking it."
+            )
 
     def as_dict(self) -> dict[str, Any]:
         return {
             "parameter": self.parameter,
             "eligibility": self.eligibility,
             "identification_status": self.identification_status,
+            "disposition": self.disposition,
+            "disposition_reason": self.disposition_reason,
             "boundary_status": self.boundary_status,
             "prior_value": self.prior_value,
             "current_value": self.current_value,
@@ -255,6 +320,42 @@ class RecommendationPackage:
                 return entry
         raise InputValidationError(f"{name!r} is not in this recommendation package.")
 
+    def disposition_vector(self) -> dict[str, str]:
+        """Every parameter's epistemic class, in canonical parameter order.
+
+        Returned alongside the value vector rather than folded into it. An
+        approver approves two things -- the number and the confidence -- and a
+        structure that could express only one would make the second unapprovable.
+        """
+        return {name: self.parameter(name).disposition for name in GOVERNED_PARAMETERS}
+
+    def human_disposition_requests(self) -> tuple[HumanDispositionRequest, ...]:
+        """The questions this package puts to the approver.
+
+        One per governed parameter that production reads and this run has no
+        value for. Parameters whose semantics are
+        :data:`~.dispositions.VALUE_REQUIRED_AT_USE_SITE` are included too: the
+        approver may legitimately answer "leave it absent and fail closed", and
+        they cannot answer a question nobody asked.
+        """
+        requests: list[HumanDispositionRequest] = []
+        for name in GOVERNED_PARAMETERS:
+            entry = self.parameter(name)
+            if entry.recommended_value is not None:
+                continue
+            requests.append(
+                HumanDispositionRequest(
+                    parameter=name,
+                    disposition=entry.disposition,
+                    production_semantics=D.PRODUCTION_VALUE_SEMANTICS[name],
+                    reason=(
+                        entry.disposition_reason
+                        or f"{name} is {entry.disposition} and carries no value."
+                    ),
+                )
+            )
+        return tuple(requests)
+
     def recommended_vector(self) -> dict[str, Any]:
         """The recommended values, including the explicit ``None`` entries.
 
@@ -276,6 +377,10 @@ class RecommendationPackage:
                 p.as_dict() for p in sorted(self.parameters, key=lambda p: p.parameter)
             ],
             "recommended_vector": self.recommended_vector(),
+            "disposition_vector": self.disposition_vector(),
+            "human_disposition_requests": [
+                r.as_dict() for r in self.human_disposition_requests()
+            ],
             "real_world_witness": dict(self.real_world_witness),
             "point_scale_resolution": dict(self.point_scale_resolution),
             "notes": list(self.notes),

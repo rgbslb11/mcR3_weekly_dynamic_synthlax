@@ -6,7 +6,8 @@ Five verbs, matching what an operator actually needs to do::
     python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.supervisor run    --config <path>
     python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.supervisor status --config <path> --run-id <id>
     python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.supervisor approve --config <path> \
-        --run-id <id> --recommendation-sha <sha> --approver <name>
+        --run-id <id> --recommendation-sha <sha> --approver <name> \
+        [--dispositions <path-or-inline-json>]
     python -m ncaaf_engine.simulation.dynamic_weekly_mc_v3.supervisor resume --config <path> --run-id <id>
 
 Exit codes follow the V3 CLI's convention: ``0`` for a run that did what it was
@@ -15,6 +16,14 @@ human approval gate exits ``0`` -- it did exactly what it was supposed to do, an
 an operator scripting the pipeline should not have to treat the designed stop as
 an error. A run that halted for review or failure exits ``2``, because those are
 stops that need somebody.
+
+``--dispositions`` answers the questions the recommendation raises, as
+``{"parameter": {"value": ..., "status": "..."}}`` -- either inline JSON or a
+path to a JSON file. It is required exactly when the recommendation asks
+something, which it does whenever production reads a parameter this run produced
+no value for. Approving an absence is a legitimate answer and is recorded as one:
+``{"fcs_point_adapter": {"value": null, "status": "MISSING_FAIL_CLOSED"}}`` keeps
+the FCS use sites failing closed rather than inventing a point value for them.
 
 ``plan`` has no side effects. It creates no run directory, acquires no lock and
 calls no model interface, so it is safe to run against production configuration
@@ -85,8 +94,31 @@ def build_parser() -> argparse.ArgumentParser:
             p.add_argument("--recommendation-sha", required=True)
             p.add_argument("--approver", required=True)
             p.add_argument("--action", default=None)
+            p.add_argument(
+                "--dispositions",
+                default=None,
+                help=(
+                    "JSON, or a path to JSON: "
+                    '{"parameter": {"value": ..., "status": "..."}}'
+                ),
+            )
             p.add_argument("--note", default="")
     return parser
+
+
+def _load_dispositions(raw: str | None) -> dict | None:
+    """Read the disposition answers from inline JSON or from a file.
+
+    A path is tried first and the text is parsed as JSON only if it does not name
+    a file, so an operator who mistypes a filename gets "no such file" rather
+    than a JSON syntax error about their own path.
+    """
+    if raw is None:
+        return None
+    candidate = Path(raw)
+    if candidate.exists():
+        return json.loads(candidate.read_text(encoding="utf-8"))
+    return json.loads(raw)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -120,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
                 recommendation_sha256=args.recommendation_sha,
                 approver=args.approver,
                 action=args.action or APPROVAL_ACTION,
+                dispositions=_load_dispositions(args.dispositions),
                 note=args.note,
             )
             _emit(report)

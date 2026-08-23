@@ -16,6 +16,19 @@ whose estimation domain names a real season at all, and the real corpus is
 admitted only under :data:`EXTERNAL_WITNESS_ONLY`. A manifest that tried to pool
 them does not load, so no later stage has to remember not to.
 
+The naming checks here are the *second* line, not the first
+------------------------------------------------------------
+
+:data:`_REAL_SEASON_PATTERNS` matches season labels, and a label is a string
+somebody chose. That makes these checks defence in depth and nothing more:
+:data:`FILENAME_CHECKS_ROLE` says so, and the authoritative primary-domain gate
+is :mod:`.domain_manifest`, which classifies a source by the SHA-256 of its
+bytes and therefore cannot be defeated by renaming anything. The two run
+together and the manifest runs first; these patterns can only add a refusal the
+manifest did not already make. Keeping them is worth the duplication -- a
+mislabelled season inside an otherwise well-formed manifest is a real mistake
+and this catches it -- but nothing here is load-bearing on its own.
+
 Circularity is the second half of the doctrine and the easier one to get wrong.
 A synthetic 2024/2025 field that was produced by the same mechanism a parameter
 governs is not independent evidence about that parameter: fitting to it recovers
@@ -57,6 +70,7 @@ __all__ = [
     "CIRCULAR_NOT_IDENTIFIABLE",
     "ELIGIBILITY_CLASSES",
     "EXTERNAL_WITNESS_ONLY",
+    "FILENAME_CHECKS_ROLE",
     "FITTABLE_ELIGIBILITY",
     "GENERATED_BY_MECHANISM_UNDER_ESTIMATION",
     "GOVERNED_PARAMETERS",
@@ -83,10 +97,16 @@ PRIMARY_ESTIMATION_DOMAIN: tuple[str, ...] = ("SYNTHETIC_2024", "SYNTHETIC_2025"
 #: What the estimated vector is for.
 PRIMARY_PROJECTION_SEASON = "SYNTHETIC_2026"
 
+#: What the label-matching in this module is for. The authoritative gate is
+#: :mod:`.domain_manifest`, which keys on content digests; these patterns run
+#: alongside it and may only add a refusal.
+FILENAME_CHECKS_ROLE = "DEFENSE_IN_DEPTH_SECONDARY_NEVER_AUTHORITATIVE"
+
 #: Any season label matching this is real football. Matched case-insensitively
 #: as a prefix *and* as a bare four-digit year, because "2023" and "REAL_2023"
-#: are the same corpus wearing different labels, and a doctrine that can be
-#: sidestepped by renaming a key is not a doctrine.
+#: are the same corpus wearing different labels. This catches a mislabelled
+#: season; it does not catch a renamed file, and it is not asked to -- the
+#: manifest gate keyed on bytes does that.
 _REAL_SEASON_PATTERNS = (
     re.compile(r"^real[_\- ]", re.IGNORECASE),
     re.compile(r"^(19|20)\d{2}$"),
@@ -230,6 +250,16 @@ class ParameterEvidence:
     prior_value: Any = None
     search_space: dict[str, Any] | None = None
     required: bool = True
+    #: The epistemic disposition the evidence declares, where it is more specific
+    #: than the eligibility class. ``MISSING`` and ``BLOCKED`` each map to one
+    #: disposition by default; a manifest that knows the difference between "no
+    #: evidence exists" and "the evidence exists and does not identify this" says
+    #: so here. Empty means "derive it from the eligibility".
+    declared_disposition: str = ""
+    #: Why, as a reason code or sentence. Required whenever a disposition is
+    #: declared, because a declared disposition with no stated reason is an
+    #: assertion rather than a finding.
+    disposition_reason: str = ""
 
     def __post_init__(self) -> None:
         if self.parameter not in GOVERNED_PARAMETERS:
@@ -284,6 +314,30 @@ class ParameterEvidence:
             raise InputValidationError(
                 f"Parameter {self.parameter} records no rationale for its eligibility."
             )
+        if self.declared_disposition:
+            # Imported here rather than at module scope: :mod:`.dispositions`
+            # reads this module's eligibility constants, so a top-level import
+            # would be a cycle. By the time an instance is constructed both
+            # modules are loaded, and the check happens where the value arrives
+            # rather than at the first stage that reads it.
+            from .dispositions import ESTIMATOR_ADMISSIBLE, require_known_disposition
+
+            require_known_disposition(self.parameter, self.declared_disposition)
+            if not self.disposition_reason.strip():
+                raise InputValidationError(
+                    f"Parameter {self.parameter} declares disposition "
+                    f"{self.declared_disposition} and states no reason for it."
+                )
+            if (
+                self.declared_disposition in ESTIMATOR_ADMISSIBLE
+                and self.eligibility not in FITTABLE_ELIGIBILITY
+            ):
+                raise GovernanceBlock(
+                    f"Parameter {self.parameter} declares disposition "
+                    f"{self.declared_disposition} while its eligibility is "
+                    f"{self.eligibility}. A fit result cannot be declared by a manifest "
+                    "that did not authorise a fit."
+                )
 
     @property
     def fittable(self) -> bool:
@@ -300,6 +354,8 @@ class ParameterEvidence:
             "prior_value": self.prior_value,
             "search_space": None if self.search_space is None else dict(self.search_space),
             "required": self.required,
+            "declared_disposition": self.declared_disposition,
+            "disposition_reason": self.disposition_reason,
         }
 
 
@@ -489,12 +545,17 @@ _POINT_SCALE_ELIGIBILITY_FOR: dict[str, str] = {
 
 
 def require_synthetic_only_primary_estimation_domain(domain: tuple[str, ...]) -> None:
-    """Refuse any real season in the primary estimation domain.
+    """Refuse any real season label in the primary estimation domain.
 
     The refusal is on the domain declaration itself rather than on the rows it
     resolves to, because by the time a real observation has been pooled into the
     fitting table the contamination has already happened and every downstream
     metric is describing a different model than the one being calibrated.
+
+    This is :data:`FILENAME_CHECKS_ROLE` work: it reads labels. A real corpus
+    that arrives under a synthetic label passes here and is refused by
+    :meth:`.domain_manifest.EvidenceDomainManifest.require_primary_estimation_source`,
+    which asks what the bytes are rather than what they are called.
     """
     if not domain:
         raise InputValidationError(
@@ -558,6 +619,8 @@ def _parameter_from_raw(name: str, raw: Mapping[str, Any]) -> ParameterEvidence:
         prior_value=raw.get("prior_value"),
         search_space=None if search_space is None else dict(search_space),
         required=bool(raw.get("required", True)),
+        declared_disposition=str(raw.get("declared_disposition", "")),
+        disposition_reason=str(raw.get("disposition_reason", "")),
     )
 
 

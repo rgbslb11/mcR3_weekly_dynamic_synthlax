@@ -5,6 +5,28 @@ it is deterministic and everything after it is deterministic; the judgement
 happens here, once, and the whole point of the module is that the judgement
 cannot be reused for a different question than the one it answered.
 
+An approval covers two things: the value and the confidence
+------------------------------------------------------------
+
+The R2 evidence guarantees a mixed vector -- some parameters fitted, some
+circular, one unidentified from synthetic evidence, one missing outright. So an
+approval that recorded only numbers would be approving half of what the
+recommendation says. ``approve`` therefore binds an *approved vector* and an
+*approved disposition vector*, both inside the approval digest, and every
+question the recommendation raises under
+:meth:`~.recommendation.RecommendationPackage.human_disposition_requests` must be
+answered before the approval is granted. Answering may mean supplying a value,
+and it may mean approving the absence -- ``fcs_point_adapter`` left
+:data:`~.dispositions.MISSING_FAIL_CLOSED` is a legitimate answer, and it is
+recorded as an answer rather than as an oversight.
+
+Approving an absence is not the same as authorising execution.
+:func:`require_approval_for_execution` re-derives the execution obstacles from
+the approved vector, so a parameter production reads on every path and still has
+no value stops the tiers even though its epistemic status was approved. That is
+the fail-closed half of the doctrine, and it lives here rather than in the tier
+gates because the approved vector is the last place the two facts are together.
+
 An approval names a digest, not a run
 --------------------------------------
 
@@ -33,10 +55,13 @@ else precisely so this one step can be the thing a person actually does.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field as dcfield
 from typing import Any
 
+from typing import Mapping
+
 from ..errors import GovernanceBlock, InputValidationError
+from . import dispositions as D
 from . import states as S
 from .digests import digest_mapping
 from .recommendation import RecommendationPackage, RunBindings
@@ -46,6 +71,7 @@ __all__ = [
     "ApprovalRecord",
     "approve",
     "require_approval_for_execution",
+    "resolve_dispositions",
 ]
 
 #: The explicit action this lane recognises.
@@ -72,6 +98,15 @@ class ApprovalRecord:
     approver: str
     approved_at: str
     bindings: RunBindings
+    #: The values production will run with, after the human answered every
+    #: question the recommendation raised.
+    approved_vector: dict[str, Any] = dcfield(default_factory=dict)
+    #: The epistemic status approved for each of those values. Approving a
+    #: number without approving how confidently it is held would approve half a
+    #: claim.
+    approved_dispositions: dict[str, str] = dcfield(default_factory=dict)
+    #: What the human decided about each question raised, kept verbatim.
+    human_answers: dict[str, Any] = dcfield(default_factory=dict)
     note: str = ""
 
     @property
@@ -87,6 +122,9 @@ class ApprovalRecord:
             "approver": self.approver,
             "approved_at": self.approved_at,
             "bindings": self.bindings.as_dict(),
+            "approved_vector": dict(sorted(self.approved_vector.items())),
+            "approved_dispositions": dict(sorted(self.approved_dispositions.items())),
+            "human_answers": dict(sorted(self.human_answers.items())),
             "note": self.note,
             "writes_canonical_config": False,
         }
@@ -94,6 +132,69 @@ class ApprovalRecord:
     def as_artifact(self) -> dict[str, Any]:
         payload = self.as_dict()
         return {**payload, "approval_digest": self.approval_digest}
+
+
+def resolve_dispositions(
+    package: RecommendationPackage,
+    answers: Mapping[str, Mapping[str, Any]] | None,
+) -> tuple[dict[str, Any], dict[str, str], dict[str, Any]]:
+    """Fold the human answers into the recommended vector, or refuse.
+
+    Returns the approved value vector, the approved disposition vector, and the
+    answers as given. Four things are refused rather than absorbed:
+
+    * an answer for a parameter the recommendation did not ask about -- that
+      would silently overwrite a measured value at the approval gate, which is
+      the one place nobody is watching for a substitution;
+    * an unrecognised epistemic status;
+    * a value under a status that cannot carry one, or a missing value under a
+      status that must;
+    * any question left unanswered.
+
+    The last is the important one. A recommendation that raised a question and an
+    approval that ignored it would leave the run to discover the hole in the
+    execution tiers, which is exactly where the doctrine says it must not stop.
+    """
+    supplied = {str(k): dict(v) for k, v in dict(answers or {}).items()}
+    requests = {r.parameter: r for r in package.human_disposition_requests()}
+
+    unrequested = sorted(set(supplied) - set(requests))
+    if unrequested:
+        raise GovernanceBlock(
+            f"The approval answers for {unrequested}, which the recommendation did not "
+            "ask about. Those parameters already carry a value produced by this run; "
+            "the approval gate approves them or refuses them, and does not replace them."
+        )
+
+    vector = dict(package.recommended_vector())
+    statuses = dict(package.disposition_vector())
+    for name, answer in sorted(supplied.items()):
+        status = str(answer.get("status", "")).strip()
+        if not status:
+            raise GovernanceBlock(
+                f"The approval supplies a value for {name} without an epistemic status. "
+                "An approved number whose standing nobody stated is an unapproved claim."
+            )
+        D.require_known_disposition(name, status)
+        value = answer.get("value")
+        D.require_value_consistent(name, status, value)
+        vector[name] = value
+        statuses[name] = status
+
+    unanswered = sorted(set(requests) - set(supplied))
+    if unanswered:
+        detail = "; ".join(
+            f"{name}: {requests[name].disposition} ({requests[name].production_semantics})"
+            for name in unanswered
+        )
+        raise GovernanceBlock(
+            "Approval refused: the recommendation asks for a human disposition on "
+            f"{unanswered} and the approval answers none of them. {detail}. This is the "
+            "one gate in the run where those questions can be answered; leaving them "
+            "open would push the decision into the execution tiers, which have no "
+            "human to ask."
+        )
+    return vector, statuses, supplied
 
 
 def approve(
@@ -106,6 +207,7 @@ def approve(
     current_state: str,
     active_recommendation_sha256: str,
     observed_bindings: RunBindings,
+    dispositions: Mapping[str, Mapping[str, Any]] | None = None,
     note: str = "",
 ) -> ApprovalRecord:
     """Grant approval, or refuse and say which binding failed.
@@ -168,6 +270,7 @@ def approve(
             f"against. Drift: {drift}"
         )
 
+    vector, statuses, answers = resolve_dispositions(package, dispositions)
     return ApprovalRecord(
         run_id=package.run_id,
         action=action,
@@ -175,6 +278,9 @@ def approve(
         approver=approver,
         approved_at=approved_at,
         bindings=package.bindings,
+        approved_vector=vector,
+        approved_dispositions=statuses,
+        human_answers=answers,
         note=note,
     )
 
@@ -207,5 +313,16 @@ def require_approval_for_execution(
     if drift:
         raise GovernanceBlock(
             f"Execution refused: {sorted(drift)} changed after approval. Drift: {drift}"
+        )
+    obstacles = D.execution_obstacles(
+        approval.approved_vector, approval.approved_dispositions
+    )
+    if obstacles:
+        raise GovernanceBlock(
+            "Execution refused: the approved vector has no value where production "
+            "reads one on every path. "
+            + " ".join(obstacles)
+            + " The epistemic status was approved; that records what is known, and it "
+            "does not manufacture the number production needs."
         )
     return approval

@@ -19,6 +19,7 @@ import json
 from pathlib import Path
 
 import pytest
+import supervisor_support as SUP
 
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3 import run_tier as tier_policy
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import (
@@ -27,6 +28,7 @@ from ncaaf_engine.simulation.dynamic_weekly_mc_v3.errors import (
 )
 from ncaaf_engine.simulation.dynamic_weekly_mc_v3.supervisor import (
     cli,
+    convergence as CV,
     evidence as EV,
     gates,
     holdout as HO,
@@ -158,7 +160,15 @@ def _tier_report(paths: int, bindings, aggregates=None, **overrides):
             "present": ["summary.json"],
             "hashes": {"summary.json": "a" * 64},
         },
-        "aggregates": dict(aggregates or {"champion_probability_top1": 0.10}),
+        # R2 reports say what each number is. A binomial standard error is only
+        # correct for a path fraction, so the kind is declared rather than
+        # guessed from the value.
+        "quantities": {
+            name: {"kind": CV.BERNOULLI_PROBABILITY, "value": value, "paths": paths}
+            for name, value in dict(
+                aggregates or {"champion_probability_top1": 0.10}
+            ).items()
+        },
         "schema": {
             "required_fields": ["team", "champion_probability"],
             "present_fields": ["team", "champion_probability"],
@@ -305,12 +315,15 @@ class FakeExecutor(ModelRunExecutor):
         }
 
 
-def make_config(tmp_path: Path, manifest=None, **overrides) -> SupervisorConfig:
+def make_config(tmp_path: Path, manifest=None, authority=None, **overrides) -> SupervisorConfig:
+    repo, binding = SUP.binding_for(authority)
     kwargs = {
         "evidence_manifest_path": write_manifest(tmp_path, manifest),
+        "evidence_authority": binding,
+        "repo": repo,
         "run_root": tmp_path / "runs",
         "base_seed": 20260101,
-        "convergence_tolerances": {"champion_probability_top1": 0.05},
+        "headline_quantities": ("champion_probability_top1",),
         "equivalence_tolerance": 1e-6,
     }
     kwargs.update(overrides)
@@ -336,9 +349,21 @@ def test_state_machine_is_a_linear_spine_with_two_halt_states():
         if name in S.TERMINAL_STATES:
             assert S.LEGAL_TRANSITIONS[name] == frozenset()
             continue
+        if name in S.POST_APPROVAL_STATES:
+            # After the approval there is no human left to stop for, so the only
+            # halt available is failure. One human gate, enforced by the edge set
+            # rather than by every gate remembering not to ask.
+            assert S.LEGAL_TRANSITIONS[name] == frozenset(
+                {_successor(name), S.HALTED_FAILED}
+            )
+            continue
         assert len(S.LEGAL_TRANSITIONS[name]) == 3
     for halt in S.HALT_STATES:
         assert S.LEGAL_TRANSITIONS[halt] == frozenset()
+
+
+def _successor(state):
+    return S.SPINE[S.SPINE.index(state) + 1]
 
 
 def test_illegal_transitions_are_refused():
@@ -736,20 +761,21 @@ def test_dev_gate_checks_every_declared_structural_property():
         assert gates.gate_dev_500(broken).status == S.FAIL, mutation
 
 
-def test_analysis_gate_needs_a_predeclared_tolerance():
+def test_analysis_gate_diagnoses_convergence_without_any_declared_tolerance():
     dev = _tier_report(500, {}, {"k": 0.10})
     analysis = _tier_report(2000, {}, {"k": 0.11})
-    assert gates.gate_analysis_2000(
-        analysis, dev_report=dev, tolerances={"k": 0.05}
-    ).status == S.PASS
-    # Pathological divergence against a declared tolerance fails.
+    # No tolerance is supplied anywhere, and the gate still decides: 0.10 at 500
+    # paths and 0.11 at 2,000 are well inside their combined sampling error.
+    assert gates.gate_analysis_2000(analysis, dev_report=dev).status == S.PASS
+    # Divergence far past what sampling explains fails.
     diverged = _tier_report(2000, {}, {"k": 0.90})
-    assert gates.gate_analysis_2000(
-        diverged, dev_report=dev, tolerances={"k": 0.05}
-    ).status == S.FAIL
-    # No declared tolerance is a question, never a pass.
-    review = gates.gate_analysis_2000(analysis, dev_report=dev, tolerances={})
-    assert review.status == S.HUMAN_REVIEW_REQUIRED
+    assert gates.gate_analysis_2000(diverged, dev_report=dev).status == S.FAIL
+    # And it never asks a human, because after the approval there is none.
+    for report in (analysis, diverged):
+        assert (
+            gates.gate_analysis_2000(report, dev_report=dev).status
+            != S.HUMAN_REVIEW_REQUIRED
+        )
 
 
 def test_freeze_refuses_a_non_publish_tier_and_unpassed_upstream():
@@ -1150,6 +1176,20 @@ def test_plan_has_no_side_effects_and_resolves_the_run(tmp_path):
 # --- CLI ---------------------------------------------------------------------
 
 
+def _authority_config():
+    """The evidence-authority keys a CLI configuration needs, as JSON would."""
+    repo, binding = SUP.binding_for()
+    return {
+        "repo": str(repo),
+        "evidence_authority": {
+            "ref": binding.ref,
+            "path": binding.path,
+            "generation": binding.generation,
+            "commit": binding.commit,
+        },
+    }
+
+
 def test_cli_plan_run_status_and_approve(tmp_path, capsys):
     manifest = write_manifest(tmp_path)
     config_path = tmp_path / "supervisor.json"
@@ -1160,7 +1200,8 @@ def test_cli_plan_run_status_and_approve(tmp_path, capsys):
             "evidence_manifest": str(manifest),
             "run_root": str(tmp_path / "runs"),
             "base_seed": 20260101,
-            "convergence_tolerances": {"champion_probability_top1": 0.05},
+            "headline_quantities": ["champion_probability_top1"],
+            **_authority_config(),
         },
     )
     assert cli.main(["plan", "--config", str(config_path)]) == 0
@@ -1202,8 +1243,9 @@ def test_cli_drives_a_full_lifecycle_through_the_configured_executor(tmp_path, c
             "evidence_manifest": str(manifest),
             "run_root": str(tmp_path / "runs"),
             "base_seed": 20260101,
-            "convergence_tolerances": {"champion_probability_top1": 0.05},
+            "headline_quantities": ["champion_probability_top1"],
             "executor": f"{__name__}:build_fake_executor",
+            **_authority_config(),
         },
     )
 
