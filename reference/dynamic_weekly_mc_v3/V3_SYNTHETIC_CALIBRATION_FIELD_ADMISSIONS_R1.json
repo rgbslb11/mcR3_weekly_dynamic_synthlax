@@ -1,0 +1,57 @@
+{
+  "admitted_fields": {
+    "game_type": {
+      "admitted_by": "RULING_2",
+      "admitted_for": [
+        "blowout_treatment"
+      ],
+      "confers_promotion": false,
+      "derivation": "FROZEN_SYNTHETIC_EVIDENCE_COLUMN",
+      "information_class": "PREGAME",
+      "restrictions": [
+        "Value must be bound to the frozen synthetic evidence digest.",
+        "No future result may reach a game's pregame expected margin through this field.",
+        "Categories are taken as supplied; no undocumented category inference."
+      ]
+    },
+    "games_played_to_date": {
+      "admitted_by": "RULING_1",
+      "admitted_for": [
+        "sample_size_regularization"
+      ],
+      "confers_promotion": false,
+      "derivation": "CHRONOLOGY_DERIVED_MODEL_METADATA",
+      "information_class": "PREGAME",
+      "restrictions": [
+        "Counted only from games completed strictly before the subject game's kickoff instant.",
+        "The subject game never contributes to its own count.",
+        "No game later in the chronology may contribute.",
+        "Derived from the frozen chronology, never read from a supplied column that could have been computed with hindsight."
+      ]
+    },
+    "overtime_periods": {
+      "admitted_by": "RULING_3",
+      "admitted_for": [
+        "blowout_treatment"
+      ],
+      "confers_promotion": false,
+      "derivation": "FROZEN_SYNTHETIC_EVIDENCE_COLUMN",
+      "information_class": "POSTGAME",
+      "restrictions": [
+        "May affect only the update produced after the completed game.",
+        "May never enter that same game's pregame expected margin.",
+        "Value must be frozen and bound to the synthetic evidence digest."
+      ]
+    }
+  },
+  "artifact": "V3-SYNTHETIC-CALIBRATION-FIELD-ADMISSIONS-R1",
+  "artifact_status": "EXPERIMENTAL_FIELD_ADMISSIONS_ACTIVE",
+  "authority": "SUPERVISOR_FIELD_ADMISSION_AUTHORITY",
+  "canonical_governance_modified": false,
+  "governed_allowlist_widened": false,
+  "parameters_promoted": 0,
+  "postgame_field_rule": "A postgame field may shape the update a completed game produces and may never shape that game's own prediction. The two are separated by the week boundary the walk-forward scorer already enforces, so the admission adds no new trust in the corpus.",
+  "scope": "Synthetic continuity calibration only. Each field is admitted to the named experiment and to nothing else. Canonical parameter governance and the governed allowlist in calibration_contract are unchanged.",
+  "supersedes": null,
+  "terminal": "FIELD_ADMISSIONS_RECORDED"
+}

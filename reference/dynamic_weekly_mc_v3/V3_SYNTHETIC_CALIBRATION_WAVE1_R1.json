@@ -1,0 +1,239 @@
+{
+  "arithmetic_dependency": {
+    "blocks_blowout_treatment": [
+      "recent_form_weights",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "blocks_sample_size_regularization": [
+      "recent_form_weights",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "confounds": [
+      {
+        "eligible_family": "sample_size_regularization",
+        "statement": "The two appear only as a product. A shrinkage schedule is observationally a coefficient that varies with games played, so only the curvature in games_played separates them, and the level does not separate at all.",
+        "term": "weekly_performance_residual_coefficient * sample_size_regularization.shrinkage(games_played)",
+        "with": "weekly_performance_residual_coefficient"
+      },
+      {
+        "eligible_family": "blowout_treatment",
+        "statement": "Both are clips, applied in series. When coefficient * threshold exceeds cap, the cap binds first and the blowout threshold stops being visible in the update, so the identifiability of the family this wave may fit is a function of two levels it may not assign.",
+        "term": "clamp(coefficient * blowout_treatment.apply(residual) * shrinkage, -cap, +cap)",
+        "with": "weekly_movement_cap_points"
+      }
+    ],
+    "disposition": "STOPPED_ARITHMETIC_DEPENDENCY_ON_NON_FIT_PARAMETERS",
+    "eligible_families": [
+      "blowout_treatment",
+      "sample_size_regularization"
+    ],
+    "equation_source": "ncaaf_engine.simulation.dynamic_weekly_mc_v3.calibration_scoring._walk_forward",
+    "families_read_by_update_step": [
+      "blowout_treatment",
+      "recent_form_weights",
+      "sample_size_regularization",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "non_fit_families_required": [
+      "recent_form_weights",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "substitution_permitted": false,
+    "update_equation": "treated = blowout_treatment.apply(residual); shrunk = weekly_performance_residual_coefficient * treated * sample_size_regularization.shrinkage(games_played); capped = clamp(shrunk, -weekly_movement_cap_points, +weekly_movement_cap_points); promoted = prior_weight(week) * opening_strength_points + (1 - prior_weight(week)) * weighted_mean(update_history, recent_form_weights)"
+  },
+  "artifact": "V3-SYNTHETIC-CALIBRATION-WAVE1-R1",
+  "artifact_status": "SYNTHETIC_CALIBRATION_WAVE1_BLOCKED",
+  "blowout_treatment": {
+    "blocking_reasons": [
+      "SYNTHETIC_EVIDENCE_UNRESOLVED",
+      "ARITHMETIC_DEPENDENCY_ON_NON_FIT_PARAMETERS"
+    ],
+    "boundary_status": "NOT_REACHED_NO_SCORING_PERFORMED",
+    "candidate_universe": {
+      "boundary_expandable": false,
+      "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+      "family": "blowout_treatment",
+      "level_count": 4,
+      "levels": [
+        {
+          "policy_id": "NO_SPECIAL_TREATMENT",
+          "threshold_points": null
+        },
+        {
+          "policy_id": "RESIDUAL_CLIP",
+          "threshold_points": 21.0
+        },
+        {
+          "policy_id": "RESIDUAL_CLIP",
+          "threshold_points": 28.0
+        },
+        {
+          "policy_id": "SMOOTH_SATURATION",
+          "threshold_points": 24.0
+        }
+      ],
+      "scored": false,
+      "scored_reason": "NO_SYNTHETIC_EVIDENCE_RESOLVED",
+      "space_id": "V3-CAL-SEARCH-COARSE-001",
+      "universe_sha": "122bbfbb731c172497ed430dbf64e38738607e12f8df5168a04c4ac8fd138032"
+    },
+    "evaluation_rmse": null,
+    "failure_status": "BLOCKED",
+    "family": "blowout_treatment",
+    "identification_status": "UNIDENTIFIED_NO_EVIDENCE_RESOLVED",
+    "mae_diagnostic": null,
+    "non_fit_dependencies": [
+      "recent_form_weights",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "rmse_delta": null,
+    "runner_up": null,
+    "selected_candidate": null,
+    "sensitivity": null,
+    "training_rmse": null
+  },
+  "candidate_universe_sha": "3bbff36b6c37da6dba4c5fca17d6e63ddffa6e833f04420df7eb729aecf3c5de",
+  "dataset_sha": null,
+  "evidence_resolution": {
+    "field_classification_sha": null,
+    "finding": "The evidence lane never committed synthetic corpus bytes. Its branch is byte-identical to main and was never pushed to origin, so none of the seven required digests exists to record or re-verify.",
+    "forbidden_field_manifest_sha": null,
+    "local_ref_commit_sha": "5479f2ae7687c36c0ed4117334171289693dd5c9",
+    "local_ref_diff_vs_main": "EMPTY",
+    "local_ref_equals_main": true,
+    "local_ref_present": true,
+    "local_ref_tree_sha": "32078871363ea2537347aec32e39b6b80ccec086",
+    "parameter_eligibility_sha": null,
+    "remote": "https://github.com/rgbslb11/mcR3_weekly_dynamic_synthlax.git",
+    "remote_ref_present": false,
+    "requested_ref": "origin/claude/v3-synthetic-2024-2025-calibration-corpus-r1",
+    "resolution_status": "UNRESOLVABLE_REMOTE_REF_ABSENT",
+    "sibling_worktree_read": false,
+    "sibling_worktree_read_reason": "The directive forbids reading the sibling working tree. Only committed bytes at a resolved commit are admissible evidence, and uncommitted work in another lane's tree is exactly what freezing by commit exists to refuse.",
+    "source_digests_expected": 18,
+    "source_digests_reverified": 0,
+    "split_manifest_sha": null,
+    "synthetic_evidence_commit_sha": null,
+    "synthetic_evidence_manifest_sha": null,
+    "synthetic_evidence_tree_sha": null,
+    "synthetic_rows_available": 0
+  },
+  "execution_commit_sha": "cfa71e05e95ddfa3da9cae49181b4d34b5889a9d",
+  "execution_tree_sha": "ed0b24f963979507d52a86e33251505f975cdbb5",
+  "experiment_config_sha": "cdb993806e478d9eae1e6edc8b18963efba80b3376f2fee121b265fbef20d63b",
+  "field_admission_sha": "fc9a3c5263ff22d8b25203e7e2fb42c0c9858ebf7563f64f1c772bae04497d40",
+  "non_fit_matrix": {
+    "FCS_adapter": {
+      "disposition": "FCS_GAMES_MUST_FAIL_CLOSED",
+      "eligibility": "MISSING",
+      "reason": "model_scale.FCS_ELO_1250_TO_V3_POINT_SCALE_ADAPTER is absent, so an FCS row has no admissible translation onto the V3 point axis."
+    },
+    "game_sd_points": {
+      "disposition": "DO_NOT_FIT_IN_THIS_WAVE",
+      "eligibility": "CIRCULAR_NOT_IDENTIFIABLE_UNDER_CURRENT_SYNTHETIC_EVIDENCE",
+      "reason": "Dispersion read off synthetic residuals is the generator's dispersion. The family stays open; this wave is not the wave that closes it."
+    },
+    "point_scale": {
+      "disposition": "DO_NOT_FIT",
+      "eligibility": "CIRCULAR_NOT_IDENTIFIABLE",
+      "reason": "The synthetic corpus was generated on a point axis; recovering that axis from it measures the generator rather than the sport."
+    },
+    "recent_form_weights": {
+      "disposition": "DO_NOT_FIT",
+      "eligibility": "RECENT_FORM_UNIDENTIFIED_FROM_SYNTHETIC_EVIDENCE",
+      "reason": "The synthetic evidence does not carry a recoverable recent-form signal, so depth and decay are unidentified rather than merely noisy."
+    },
+    "weekly_movement_cap_points": {
+      "disposition": "DO_NOT_FIT",
+      "eligibility": "CIRCULAR_NOT_IDENTIFIABLE",
+      "reason": "Same circularity, compounded by the historical finding that the cap did not bind, so its level was not identified even on real data."
+    },
+    "weekly_performance_residual_coefficient": {
+      "disposition": "DO_NOT_FIT",
+      "eligibility": "CIRCULAR_NOT_IDENTIFIABLE",
+      "reason": "Same circularity. The coefficient that produced the synthetic week-to-week movement cannot be re-estimated from that movement."
+    }
+  },
+  "primary_domain": {
+    "fitting_seasons": [
+      "SYNTHETIC_2024",
+      "SYNTHETIC_2025"
+    ],
+    "projection_season": "SYNTHETIC_2026",
+    "real_corpus_role": "EXTERNAL_WITNESS_ONLY",
+    "real_rows_in_primary_fit": 0
+  },
+  "primary_objective": {
+    "direction": "minimize",
+    "mae_role": "DIAGNOSTIC_AND_TIE_BREAK_ONLY_NEVER_PRIMARY",
+    "metric": "out_of_sample_baxter_rating_rmse",
+    "ruling": "R2-CAL-OBJECTIVE",
+    "verified_against_frozen_authority": true
+  },
+  "promotions": {
+    "allowlist_widened": false,
+    "blockers_retired": 0,
+    "canonical_config_written": false,
+    "monte_carlo_tiers_run": [],
+    "parameters_promoted": 0,
+    "season_simulation_run": false
+  },
+  "safe_for_supervisor_composition": true,
+  "sample_size_regularization": {
+    "blocking_reasons": [
+      "SYNTHETIC_EVIDENCE_UNRESOLVED",
+      "ARITHMETIC_DEPENDENCY_ON_NON_FIT_PARAMETERS"
+    ],
+    "boundary_status": "NOT_REACHED_NO_SCORING_PERFORMED",
+    "candidate_universe": {
+      "boundary_expandable": true,
+      "evidence_status": "EXPERIMENT_PREDECLARED_AND_HASH_BOUND",
+      "family": "sample_size_regularization",
+      "level_count": 3,
+      "levels": [
+        {
+          "policy_id": "NONE",
+          "prior_games": null
+        },
+        {
+          "policy_id": "GAMES_PLAYED_SHRINKAGE",
+          "prior_games": 2.0
+        },
+        {
+          "policy_id": "GAMES_PLAYED_SHRINKAGE",
+          "prior_games": 5.0
+        }
+      ],
+      "scored": false,
+      "scored_reason": "NO_SYNTHETIC_EVIDENCE_RESOLVED",
+      "space_id": "V3-CAL-SEARCH-COARSE-001",
+      "universe_sha": "d17bd305631513527235091ef3d0b7d3e3e1f9e1cb3d193a91eeeeeb6a492127"
+    },
+    "evaluation_rmse": null,
+    "failure_status": "BLOCKED",
+    "family": "sample_size_regularization",
+    "identification_status": "UNIDENTIFIED_NO_EVIDENCE_RESOLVED",
+    "mae_diagnostic": null,
+    "non_fit_dependencies": [
+      "recent_form_weights",
+      "weekly_movement_cap_points",
+      "weekly_performance_residual_coefficient"
+    ],
+    "rmse_delta": null,
+    "runner_up": null,
+    "selected_candidate": null,
+    "sensitivity": null,
+    "training_rmse": null
+  },
+  "scoring_oracle_sha": null,
+  "split_sha": null,
+  "synthetic_evidence_commit_sha": null,
+  "synthetic_evidence_manifest_sha": null,
+  "terminal": "SYNTHETIC_CALIBRATION_WAVE1_BLOCKED",
+  "wave": "WAVE_1"
+}
