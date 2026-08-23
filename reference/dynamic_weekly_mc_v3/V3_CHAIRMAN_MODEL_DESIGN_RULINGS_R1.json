@@ -1,0 +1,912 @@
+{
+  "artifact": "V3_CHAIRMAN_MODEL_DESIGN_RULINGS_R1.json",
+  "artifact_status": "CHAIRMAN_MODEL_DESIGN_AUTHORITY_RECORD",
+  "authority": "DIRECT_CHAIRMAN_AUTHORITY / V3 MODEL DESIGN",
+  "blowout_policy": {
+    "actual_margin_unchanged": true,
+    "actual_score_unchanged": true,
+    "cap_points": 25.0,
+    "experimental_result_class": "DIAGNOSTIC_WITNESS",
+    "formula": "update_margin = sign(actual_margin) * min(abs(actual_margin), 25.0)",
+    "status": "FIXED_V3_POLICY",
+    "treatment": "CAP_UPDATE_DRIVING_MARGIN",
+    "worked_examples": [
+      {
+        "actual_margin": 42.0,
+        "update_margin": 25.0
+      },
+      {
+        "actual_margin": -38.0,
+        "update_margin": -25.0
+      },
+      {
+        "actual_margin": 13.0,
+        "update_margin": 13.0
+      }
+    ]
+  },
+  "chairman_ruling_id_note": "The instruction issued these decisions directly but supplied no Chairman ruling identifiers. Each entry carries a locally assigned convergence_id (DERIVED, stable, prefixed MDR1-) and a chairman_ruling_id that stays null. No historical Chairman ruling ID was fabricated.",
+  "chairman_ruling_ids_supplied": false,
+  "config_alignment_required": [
+    {
+      "current": {
+        "0": 1.0,
+        "1": 0.8,
+        "2": 0.6,
+        "3": 0.4,
+        "4": 0.2,
+        "5": 0.0
+      },
+      "promoted_by_this_lane": false,
+      "reason": "The mounted schedule decays the preseason prior to 0.00 after Week 5. Ruling MDR1-PRESEASON-DECAY sets 0.50/0.40/0.30/0.20 for weeks 3-6 and a 0.15 floor from Week 7 onward, and states the prior never reaches zero during the 2026 season.",
+      "ruled": {
+        "0": 1.0,
+        "1": 0.8,
+        "2": 0.6,
+        "3": 0.5,
+        "4": 0.4,
+        "5": 0.3,
+        "6": 0.2,
+        "7": 0.15
+      },
+      "target": "config/dynamic_weekly_mc_v3/v3_experimental.json prior_decay"
+    },
+    {
+      "current": "Mirrors the mounted placeholder schedule; returns 0.0 for week > 5.",
+      "promoted_by_this_lane": false,
+      "reason": "Runtime must not disagree with the ruled schedule once promoted.",
+      "ruled": "Must mirror MDR1_PRESEASON_PRIOR_DECAY and return the 0.15 floor for week >= 7.",
+      "target": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/config.py DEFAULT_PRIOR_DECAY and V3Config.prior_weight_after_week"
+    }
+  ],
+  "containing_commit_sha": null,
+  "containing_commit_sha_note": "Deliberately null. A committed artifact cannot contain the SHA of the commit that contains it; the candidate SHA belongs to the handoff receipt.",
+  "design_sweep": {
+    "axes": {
+      "coefficient": {
+        "candidate_slots": [
+          "LOW",
+          "MIDDLE",
+          "HIGH"
+        ],
+        "candidate_values": null,
+        "candidates_bound": false,
+        "diagnostics_required": [
+          "mean_absolute_weekly_v3_point_movement",
+          "sd_of_weekly_point_movement",
+          "maximum_weekly_point_movement",
+          "ten_slot_advisory_frequency",
+          "sign_reversals_or_oscillation",
+          "repeated_reversal_frequency",
+          "blowout_cap_hit_frequency",
+          "favorite_win_rate",
+          "upset_rate",
+          "undefeated_team_frequency",
+          "conference_title_concentration",
+          "cfp_concentration",
+          "national_title_concentration",
+          "probability_volatility"
+        ],
+        "empirically_identified": false,
+        "parameter": "weekly_performance_residual_coefficient",
+        "refusal_token": "COEFFICIENT_SEARCH_UNIVERSE_SOURCE_MISSING",
+        "selection_method": "500_PATH_RESPONSIVENESS_SWEEP",
+        "selection_objective": "MODEL_RESPONSIVENESS",
+        "selection_preference": "Choose the lowest coefficient that produces meaningful weekly responsiveness without pathological oscillation or instability.",
+        "selection_threshold_note": "Deliberately null. The qualitative preference is not converted into an arbitrary numeric threshold in this lane; the sweep exposes the diagnostics and the selection is a deterministic/Chairman review step.",
+        "selection_threshold_numeric": null,
+        "source_universe": null,
+        "source_universe_search": [
+          {
+            "finding": "regimes: []. The file's own _governance block states it 'ships with zero regimes on purpose: no candidate coefficient values have been authored, because authoring them would invent calibration data.'",
+            "location": "config/dynamic_weekly_mc_v3/experimental/calibration_regimes.json"
+          },
+          {
+            "finding": "calibration.weekly_performance_residual_coefficient is null.",
+            "location": "config/dynamic_weekly_mc_v3/v3_experimental.json"
+          },
+          {
+            "finding": "Declares the fields a fit would require and records the coefficient as unidentifiable without a named rating-to-margin transform. Declares no candidate values.",
+            "location": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_DATA_CONTRACT.json"
+          },
+          {
+            "finding": "Evidence discovery record. No candidate coefficient universe.",
+            "location": "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_EVIDENCE_DISCOVERY_R5.json"
+          },
+          {
+            "finding": "Provides the CandidateRegime/ExperimentRecord machinery and the ranking objective. Declares no coefficient values.",
+            "location": "src/ncaaf_engine/simulation/dynamic_weekly_mc_v3/calibration.py"
+          }
+        ],
+        "source_universe_status": "PREDECLARED_COEFFICIENT_UNIVERSE_NOT_PRESENT",
+        "status_after_sweep": "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+        "status_before_sweep": "DESIGN_TUNING_REQUIRED"
+      },
+      "game_sd_points": {
+        "candidate_values": {
+          "HIGH": 24.0,
+          "LOW": 16.0,
+          "MIDDLE": 20.0
+        },
+        "diagnostics_required": [
+          "favorite_win_rates",
+          "upset_rates",
+          "tail_frequency",
+          "undefeated_teams",
+          "conference_title_concentration",
+          "cfp_concentration",
+          "national_title_concentration",
+          "extreme_score_or_result_behavior",
+          "probability_dispersion"
+        ],
+        "empirically_identified": false,
+        "fallback_grid": {
+          "HIGH": 24.0,
+          "LOW": 16.0,
+          "MIDDLE": 20.0
+        },
+        "generator_game_sd_points": null,
+        "generator_multipliers": {
+          "HIGH": 1.2,
+          "LOW": 0.8,
+          "MIDDLE": 1.0
+        },
+        "generator_provenance_search": [
+          {
+            "finding": "The synthetic 2024/2025 prior enters only as rating carry-forwards \u2014 TrueSkill mu2026 = 25 + 0.70*(mu2025 - 25), 2025 Baxter ridge ratings, Litkenhous offseason adjustment. Population statistics are rating SDs per family (TrueSkill 4.359, Litkenhous 9.540, Board I-H 0.143, Board J-B 0.128, Pure Baxter 15.071). None is a game-result dispersion.",
+            "location": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Sources / !Data Dictionary / !Ensemble Parameters"
+          },
+          {
+            "finding": "The 2025 Baxter margin fit is the closest thing to a synthetic generating process, but only its derived rating columns are mounted. The fit artifact itself is not in this repository, so no residual dispersion is recoverable from bytes.",
+            "location": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Sources rows 8-9 (Baxter carry-forward / Baxter_Ratings_v1_2025_Fit.xlsx)"
+          },
+          {
+            "finding": "Game model: 'Margin = home unified neutral-field points - away points + 4.0 home advantage + Normal(0,20.2)'. This is the V2.1 static control's own 2026 dispersion, carrying the superseded 4.0 HFA. It is a 2026 control parameter, not a 2024/2025 generator SD.",
+            "location": "V2_1_STATIC_CONTROL_2026_CFB_10000_Season_Monte_Carlo.xlsx!Methodology"
+          },
+          {
+            "finding": "Margin SD achieved 20.2 against a 16-18 harness band, from a Jul 13-14 cfb_sim.py engine run. Recorded 'Above band ... Re-verify against cfb_sim.py's current constants before accepting', and carried as OPEN item ENG-CAL-MARGIN. An open, out-of-band engine diagnostic.",
+            "location": "Model_Parameters_v2_5_APPROVED.xlsx!CALIBRATION"
+          }
+        ],
+        "parameter": "game_sd_points",
+        "refused_substitutions": {
+          "68.0": "CCG-SIGMA_ELO 68 is per-iteration rating-state uncertainty in the Elo namespace, not game-level result dispersion in V3 points."
+        },
+        "source": "CHAIRMAN_FALLBACK_SENSITIVITY_GRID",
+        "status_after_sweep": "FIXED_BY_V3_SENSITIVITY_DESIGN",
+        "status_before_sweep": "DESIGN_TUNING_REQUIRED",
+        "witnesses": [
+          {
+            "class": "DIAGNOSTIC_WITNESS",
+            "note": "2026 control dispersion; OPEN calibration item, above its own 16-18 band.",
+            "source": "V2_1_STATIC_CONTROL!Methodology game model / ENG-CAL-MARGIN",
+            "value": 20.2
+          },
+          {
+            "class": "DIAGNOSTIC_WITNESS",
+            "note": "Harness target band, not a governed V3 parameter.",
+            "range": [
+              16.0,
+              18.0
+            ],
+            "source": "Model_Parameters_v2_5_APPROVED.xlsx!CALIBRATION Margin SD band",
+            "value": null
+          },
+          {
+            "class": "REFUSED_WRONG_AXIS",
+            "note": "Rating-state uncertainty in the Elo namespace. Explicitly not game SD.",
+            "source": "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER CCG-SIGMA_ELO",
+            "value": 68.0
+          }
+        ]
+      },
+      "recent_form_lambda": {
+        "basis": "PERFORMANCE_RELATIVE_TO_EXPECTATION",
+        "candidate_values": {
+          "FAST": 0.6,
+          "MEDIUM": 0.75,
+          "SLOW": 0.9
+        },
+        "definition": "performance_residual = observed_update_margin - expected_margin, where observed_update_margin carries the approved +/-25 blowout/update cap; weight(k) = lambda ** k with k = 0 the most recent completed game.",
+        "double_counting_test": "Hold the residual history fixed and vary only whether the recent-form term is applied. If the evolved in-season state already contains that residual contribution, the difference is double counting and the sweep cell is refused rather than scored.",
+        "double_counting_test_required": true,
+        "empirically_identified": false,
+        "exists_in_v3": true,
+        "intended_behavior": [
+          "Sustained positive performance residuals produce persistent positive recent-form pressure.",
+          "Sustained negative performance residuals produce persistent negative recent-form pressure.",
+          "A win over a much weaker opponent does not automatically create a strongly positive recent-form signal.",
+          "A narrow loss while massively outperforming expectation does not automatically create a strongly negative signal."
+        ],
+        "parameter": "recent_form_lambda",
+        "status_after_sweep": "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+        "status_before_sweep": "DESIGN_TUNING_REQUIRED",
+        "win_loss_substitution_permitted": false
+      }
+    },
+    "axis_sizes": {
+      "coefficient": 3,
+      "game_sd_points": 3,
+      "recent_form_lambda": 3
+    },
+    "cell_isolation": "Every cell consumes the same frozen post-Week-2 state and the same common seed schedule. Simulated outcomes from one candidate cell never feed another candidate cell and never feed the frozen rating state.",
+    "cells": 27,
+    "executable_now": false,
+    "first_promoted_rerating_after_week": 2,
+    "not_executable_because": [
+      "COEFFICIENT_SEARCH_UNIVERSE_SOURCE_MISSING",
+      "This lane records authority and specifications only; it runs no sweep."
+    ],
+    "origin_state": "FROZEN_POST_WEEK_2_STATE",
+    "paths_per_cell": 500,
+    "random_number_policy": "COMMON_RANDOM_NUMBERS_IDENTICAL_SEED_SCHEDULE",
+    "total_simulated_paths": 13500,
+    "workload_class": "EXPERIMENT_WORKLOAD_NOT_A_PRODUCTION_SEASON_RUN"
+  },
+  "empirically_identified_claims": [],
+  "fcs_adapter": {
+    "authority": "DIRECT_CHAIRMAN_AUTHORITY",
+    "blocks_other_rulings": false,
+    "fbs_elo_count": null,
+    "fbs_elo_mean": null,
+    "fbs_elo_sd": null,
+    "fbs_elo_vector_present": false,
+    "fbs_elo_vector_source": null,
+    "fcs_elo": 1250.0,
+    "fcs_elo_z": null,
+    "fcs_v3_points": null,
+    "forbidden_population_sources": {
+      "BOARD_IH_PARTIAL_AXIS_INVERSION": "Board I-H supplies 0.125 of Unified Master Z and is superseded as Board of Record by Board I-K; inverting its axis manufactures a population.",
+      "FABRICATED_ELO_BRIDGE": "An invented Elo bridge is not an authority.",
+      "HISTORICAL_2025_ELO": "2025_Preseason_Elo_CARRY_v1.xlsx is recorded REFERENCE (UNRATIFIED), 'REJECT FOR CURRENT USE', with R-ELO-01/H1 blocking automatic adoption.",
+      "PYTEST_FIXTURE": "A value chosen because a test turns green is not evidence.",
+      "REAL_WORLD_NCAA_DATA": "Real football is EXTERNAL_WITNESS_ONLY and never enters the synthetic fit."
+    },
+    "formula": "FCS_ELO_Z = (1250 - mean(FBS_2026_ELO)) / sd(FBS_2026_ELO); FCS_V3_NEUTRAL_POINTS = 14.0 * FCS_ELO_Z",
+    "method": "FCS_ELO_Z_TIMES_V3_POINT_SCALE",
+    "missing_dependency": "An authoritative, current 2026 FBS Elo vector over the governed 121-team FBS population, issued by a governed register, together with an explicit population-SD convention for that population. The mounted V3 rating axis is Unified Master Z / Unified Neutral-Field Points and contains no Elo column; the only per-team Elo in the corpus is the Board I-H forward transform in POWER_CRUNCH (model_use_authorized = FALSE), which the ruling closes.",
+    "permitted_sd_conventions": [
+      "POPULATION_SD_DDOF0",
+      "SAMPLE_SD_DDOF1"
+    ],
+    "point_scale": 14.0,
+    "sd_convention": null,
+    "sd_convention_note": "Unresolved. The convention must match the governed 2026 Elo population definition, and that definition is the missing dependency.",
+    "search": [
+      {
+        "columns_present": 78,
+        "finding": "The current V3 model state's rating source. Carries TrueSkill, Litkenhous, Board I-H, Board J-B, Baxter, Billingsley, Markov, Unified Master Z and Unified Neutral-Field Points for 121 FBS teams. It carries no Elo column at all.",
+        "location": "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Master Ratings",
+        "usable": false
+      },
+      {
+        "finding": "The only per-team Elo-shaped column in the mounted corpus. Its own Build Manifest states primary_elo = 999.986237 * board_power_H + 1099.999878, so it is the Board I-H axis re-expressed \u2014 the closed route. It also carries rating_source/rating_authority BOARD_I-H, spans 134 entities rather than the governed 121, and the same workbook records model_use_authorized = FALSE.",
+        "location": "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx!Reconciled Master.scheme_master_primary_elo",
+        "refused_as": "BOARD_IH_PARTIAL_AXIS_INVERSION",
+        "usable": false
+      },
+      {
+        "finding": "REFERENCE (UNRATIFIED), disposition 'REJECT FOR CURRENT USE / RETAIN UNRATIFIED', 'No current forward-prior authority'. Historical 2025 and not mounted in this repository in any case.",
+        "location": "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST 2025_Preseason_Elo_CARRY_v1.xlsx",
+        "refused_as": "HISTORICAL_2025_ELO",
+        "usable": false
+      },
+      {
+        "finding": "Elo-layer scalars that operate inside the Elo domain. Parameters, not a team-level population, and they convert nothing.",
+        "location": "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER CCG-HFA_ELO 65 / CCG-SIGMA_ELO 68 / CCG-R_REF 1893.3",
+        "usable": false
+      },
+      {
+        "finding": "Contains the AAC divisions CSV and its provenance. No Elo vector.",
+        "location": "config/dynamic_weekly_mc_v3/governed/",
+        "usable": false
+      }
+    ],
+    "status": "FCS_ADAPTER_INPUT_ELO_VECTOR_MISSING"
+  },
+  "fcs_entity_policy": {
+    "baseline_policy": "ONE_COMMON_V3_FCS_BASELINE_FOR_SCHEDULE_SIMULATION",
+    "becomes_evolving_rating_state_member": false,
+    "entity_class": "SCHEDULE_ONLY_FCS",
+    "fbs_update_from_fcs_game_permitted": true,
+    "fcs_elo": 1250.0,
+    "forbidden_board_equivalents": [
+      0.294,
+      0.297,
+      0.297514
+    ],
+    "in_governed_fbs_rating_population": false,
+    "prohibited_routes": {
+      "BOARD_EQUIVALENT_0P294_0P297": "The old .294/.297 equivalents are not V3 point values.",
+      "BOARD_IH_INVERSE": "The Board I-H inverse mapping is closed and is not resurrected.",
+      "ELO_1250_AS_POINTS": "Elo and V3 neutral points are different axes; 1250 is not 1250 points.",
+      "INDIVIDUAL_FCS_RATINGS": "No unsupported per-entity FCS rating is created."
+    },
+    "weekly_result_treatment": "The FCS baseline itself stays fixed unless later governance changes it. An FBS team's realized game against an FCS opponent IS a legitimate synthetic-2026 observation for that FBS team's next weekly update: expected FBS margin vs realized FBS-perspective margin -> performance residual -> normal governed FBS update, subject to the +/-25 update-driving margin cap. The schedule-only FCS entity does not become a full evolving FBS rating-state member."
+  },
+  "fcs_hfa_policy": {
+    "applies_when_home_side_is_schedule_only_fcs": true,
+    "global_home_field_advantage_points": 3.5,
+    "neutral_venue_adjustment_points": 0.0,
+    "status": "FIXED_V3_GLOBAL_POLICY",
+    "team_specific_fcs_modifier_permitted": false
+  },
+  "first_rerating": {
+    "design": "W1 and W2 begin from the preseason/opening state. After W1 an 80% preseason prior exists for audit/state tracking; after W2, 60%. The first fully promoted V3 rerating becomes effective after Week 2, and the design sweep runs from that frozen post-Week-2 state.",
+    "first_promoted_rerating_after_week": 2,
+    "sweep_origin_state": "FROZEN_POST_WEEK_2_STATE"
+  },
+  "fixed_values": {
+    "blowout_margin_cap_points": 25.0,
+    "blowout_treatment": "CAP_UPDATE_DRIVING_MARGIN",
+    "design_paths_per_cell": 500,
+    "fcs_elo": 1250.0,
+    "first_promoted_rerating_after_week": 2,
+    "game_sd_fallback_grid": {
+      "HIGH": 24.0,
+      "LOW": 16.0,
+      "MIDDLE": 20.0
+    },
+    "global_home_field_advantage_points": 3.5,
+    "neutral_venue_adjustment_points": 0.0,
+    "point_scale": 14.0,
+    "point_scale_definition": "V3_NEUTRAL_FIELD_POINTS = 14.0 * Unified_Master_Z",
+    "preseason_prior_decay": {
+      "0": 1.0,
+      "1": 0.8,
+      "2": 0.6,
+      "3": 0.5,
+      "4": 0.4,
+      "5": 0.3,
+      "6": 0.2,
+      "7": 0.15
+    },
+    "preseason_prior_floor": 0.15,
+    "recent_form_lambda_candidates": {
+      "FAST": 0.6,
+      "MEDIUM": 0.75,
+      "SLOW": 0.9
+    },
+    "weekly_rank_movement_advisory_slots": 10
+  },
+  "governing_domain": "SYNTHETIC_2024_2025_PRIOR_INFORMATION_TO_SYNTHETIC_2026",
+  "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+  "issued_by": "CHAIRMAN",
+  "lane_actions": {
+    "agent_3_results_overwritten": false,
+    "analysis_2000_run": false,
+    "blockers_opened": [],
+    "blockers_retired": [],
+    "configuration_files_edited": [],
+    "dev_500_run": false,
+    "historical_evidence_edited": false,
+    "parameters_promoted": [],
+    "publish_10000_run": false,
+    "season_simulation_run": false
+  },
+  "mc_feedback_firewall": {
+    "cycle": "Ingest realized results, update team states once, freeze the new state, run a new forward Monte Carlo from the frozen state.",
+    "future_authorisation_required_to_change": true,
+    "realized_origin_token": "REALIZED_SYNTHETIC_WEEKLY_RESULT",
+    "rule": "SIMULATED_MC_OUTCOMES_NEVER_UPDATE_THE_GOVERNED_WEEKLY_RATING_STATE",
+    "simulated_origin_token": "SIMULATED_MC_OUTCOME",
+    "simulated_outcomes_may_update_state": false
+  },
+  "model": "DYNAMIC_WEEKLY_MC_V3_EXPERIMENTAL",
+  "parameter_register": [
+    {
+      "empirically_identified": false,
+      "parameter": "blowout_treatment",
+      "ruling": "MDR1-BLOWOUT-CAP-25",
+      "status": "FIXED_V3_POLICY",
+      "value": "CAP_UPDATE_DRIVING_MARGIN"
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "blowout_margin_cap_points",
+      "ruling": "MDR1-BLOWOUT-CAP-25",
+      "status": "FIXED_V3_POLICY",
+      "value": 25.0
+    },
+    {
+      "empirically_identified": false,
+      "identification": "NOT_EMPIRICALLY_IDENTIFIED",
+      "parameter": "point_scale",
+      "ruling": "MDR1-POINT-SCALE-14",
+      "status": "FIXED_V3_SYNTHETIC_SCALE",
+      "value": 14.0
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "weekly_rank_movement_advisory_slots",
+      "ruling": "MDR1-RANK-ADVISORY-10",
+      "status": "ADVISORY_ONLY",
+      "value": 10
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "weekly_performance_residual_coefficient",
+      "ruling": "MDR1-COEFFICIENT-SWEEP",
+      "status": "DESIGN_TUNING_REQUIRED",
+      "status_after_selection": "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+      "value": null
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "game_sd_points",
+      "ruling": "MDR1-GAME-SD-SWEEP",
+      "status": "DESIGN_TUNING_REQUIRED",
+      "status_after_selection": "FIXED_BY_V3_SENSITIVITY_DESIGN",
+      "value": null
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "recent_form_lambda",
+      "ruling": "MDR1-RECENT-FORM-RESIDUAL",
+      "status": "DESIGN_TUNING_REQUIRED",
+      "status_after_selection": "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+      "value": null
+    },
+    {
+      "empirically_identified": false,
+      "floor": 0.15,
+      "parameter": "preseason_prior_decay",
+      "ruling": "MDR1-PRESEASON-DECAY",
+      "status": "FIXED_V3_POLICY",
+      "value": {
+        "0": 1.0,
+        "1": 0.8,
+        "2": 0.6,
+        "3": 0.5,
+        "4": 0.4,
+        "5": 0.3,
+        "6": 0.2,
+        "7": 0.15
+      }
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "global_home_field_advantage_points",
+      "ruling": "MDR1-FCS-HFA-3P5",
+      "status": "FIXED_V3_GLOBAL_POLICY",
+      "value": 3.5
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "neutral_venue_adjustment_points",
+      "ruling": "MDR1-FCS-HFA-3P5",
+      "status": "FIXED_V3_GLOBAL_POLICY",
+      "value": 0.0
+    },
+    {
+      "empirically_identified": false,
+      "parameter": "fcs_elo",
+      "ruling": "MDR1-FCS-ENTITY",
+      "status": "FIXED_V3_POLICY",
+      "value": 1250.0
+    },
+    {
+      "blocked_by": "FCS_ADAPTER_INPUT_ELO_VECTOR_MISSING",
+      "empirically_identified": false,
+      "parameter": "fcs_v3_neutral_points",
+      "ruling": "MDR1-FCS-ADAPTER",
+      "status": "BLOCKED_PENDING_GOVERNED_INPUT",
+      "value": null
+    },
+    {
+      "authority": "AGENT_3_SYNTHETIC_DOMAIN_EXPERIMENT",
+      "decided_by_this_ruling": false,
+      "empirically_identified": false,
+      "parameter": "sample_size_regularization",
+      "ruling": "MDR1-SAMPLE-REGULARIZATION-EXTERNAL",
+      "status": "SYNTHETIC_FIT_RESULT",
+      "value": null
+    }
+  ],
+  "permitted_statuses": [
+    "FIXED_V3_POLICY",
+    "FIXED_V3_GLOBAL_POLICY",
+    "FIXED_V3_SYNTHETIC_SCALE",
+    "ADVISORY_ONLY",
+    "DESIGN_TUNING_REQUIRED",
+    "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+    "FIXED_BY_V3_SENSITIVITY_DESIGN",
+    "SYNTHETIC_FIT_RESULT",
+    "EXTERNAL_WITNESS_ONLY",
+    "NOT_EMPIRICALLY_IDENTIFIED",
+    "BLOCKED_PENDING_GOVERNED_INPUT"
+  ],
+  "preseason_decay_policy": {
+    "double_counting_test_required": true,
+    "floor": 0.15,
+    "floor_applies_from_weeks_completed": 7,
+    "non_prior_share": "EVOLVED_IN_SEASON_STATE",
+    "reaches_zero_during_2026": false,
+    "status": "FIXED_V3_POLICY",
+    "weights_by_weeks_completed": {
+      "0": 1.0,
+      "1": 0.8,
+      "2": 0.6,
+      "3": 0.5,
+      "4": 0.4,
+      "5": 0.3,
+      "6": 0.2,
+      "7": 0.15
+    }
+  },
+  "prohibited_interpretations": [
+    "Reading point scale 14.0 as an independently estimated quantity. It is an explicit synthetic V3 model convention.",
+    "Reading the 10-slot weekly ranking rule as a state or rating cap. It is an advisory; ratings are never reordered or truncated to satisfy it.",
+    "Continuing to fit alternative blowout caps as though 25.0 were unresolved.",
+    "Letting an earlier Agent-3 experimental blowout optimum overwrite the later direct Chairman +/-25 ruling.",
+    "Substituting sigma_elo = 68, or any other rating-state uncertainty, for game_sd_points.",
+    "Defining recent form from wins and losses instead of from performance relative to expectation.",
+    "Applying a recent-form term on top of an evolved state that already carries the same residual contribution, without testing for double counting.",
+    "Letting the preseason prior decay to zero during the 2026 season.",
+    "Feeding simulated Monte Carlo outcomes back into the governed weekly rating state, or across candidate cells of the design sweep.",
+    "Using FCS Elo 1250 directly as V3 football points.",
+    "Resurrecting the Board I-H inverse mapping or the .294 / .297 equivalents.",
+    "Creating individual unsupported FCS ratings, or a team-specific FCS home-field modifier.",
+    "Obtaining the 2026 FBS Elo population from Board I-H inversion, historical 2025 Elo, real-world NCAA data, a fabricated bridge, or a pytest fixture.",
+    "Inventing a 2026 FBS Elo vector so the adapter calculation can complete.",
+    "Inventing a coefficient search universe when no governed one exists.",
+    "Overwriting or pre-empting Agent 3's sample-size regularization result.",
+    "Promoting the coefficient, game SD or recent-form lambda before the sweep has run and been reviewed.",
+    "Marking any of these parameters EMPIRICALLY_IDENTIFIED.",
+    "Using real 2021-2024 football to override a synthetic V3 design ruling.",
+    "Rewriting or editing preserved historical evidence."
+  ],
+  "rank_advisory_policy": {
+    "is_a_rating_cap": false,
+    "recorded_fields": [
+      "team",
+      "prior_rank",
+      "new_rank",
+      "slot_change",
+      "underlying_point_change",
+      "performance_residual",
+      "cap_hit"
+    ],
+    "reordering_or_truncation_permitted": false,
+    "signal": "LARGE_WEEKLY_RANK_MOVE",
+    "slots": 10,
+    "status": "ADVISORY_ONLY"
+  },
+  "real_football_status": "EXTERNAL_WITNESS_ONLY",
+  "recent_form_policy": {
+    "basis": "PERFORMANCE_RELATIVE_TO_EXPECTATION",
+    "candidate_values": {
+      "FAST": 0.6,
+      "MEDIUM": 0.75,
+      "SLOW": 0.9
+    },
+    "definition": "performance_residual = observed_update_margin - expected_margin, where observed_update_margin carries the approved +/-25 blowout/update cap; weight(k) = lambda ** k with k = 0 the most recent completed game.",
+    "double_counting_test": "Hold the residual history fixed and vary only whether the recent-form term is applied. If the evolved in-season state already contains that residual contribution, the difference is double counting and the sweep cell is refused rather than scored.",
+    "double_counting_test_required": true,
+    "empirically_identified": false,
+    "exists_in_v3": true,
+    "intended_behavior": [
+      "Sustained positive performance residuals produce persistent positive recent-form pressure.",
+      "Sustained negative performance residuals produce persistent negative recent-form pressure.",
+      "A win over a much weaker opponent does not automatically create a strongly positive recent-form signal.",
+      "A narrow loss while massively outperforming expectation does not automatically create a strongly negative signal."
+    ],
+    "parameter": "recent_form_lambda",
+    "status_after_sweep": "FIXED_BY_V3_RESPONSIVENESS_DESIGN",
+    "status_before_sweep": "DESIGN_TUNING_REQUIRED",
+    "win_loss_substitution_permitted": false
+  },
+  "rulings": [
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-DOMAIN",
+      "decision": "The production model runs SYNTHETIC 2024/2025 prior information into SYNTHETIC 2026. Real historical football remains EXTERNAL_WITNESS_ONLY: it may be cited as a witness and must never be mixed into the primary synthetic model fit or used to override a synthetic V3 design ruling.",
+      "evidence": [
+        "MDR1 instruction section 1: 'Production model: SYNTHETIC 2024 / 2025 PRIOR INFORMATION -> SYNTHETIC 2026. Real historical football remains EXTERNAL_WITNESS_ONLY.'"
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Governing domain of the production model",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-BLOWOUT-CAP-25",
+      "decision": "BLOWOUT_TREATMENT = CAP_UPDATE_DRIVING_MARGIN with BLOWOUT_MARGIN_CAP_POINTS = 25.0. The actual final score and the actual game margin are unchanged; only the margin entering the dynamic performance/update calculation is clipped: update_margin = sign(actual) * min(|actual|, 25.0). FIXED_V3_POLICY. Alternative caps are not fitted as though the value were still open, and an experimental blowout optimum is preserved as a diagnostic witness rather than allowed to override this ruling.",
+      "evidence": [
+        "MDR1 instruction section 2, worked examples: +42 -> +25, -38 -> -25, +13 -> +13.",
+        "MDR1 instruction section 17: experimental blowout result = diagnostic/witness; the Chairman +/-25 ruling is production V3 design authority."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Blowout treatment",
+      "supersedes": [
+        "Any treatment of calibration.blowout_treatment as an open fitting question for the purpose of V3 production design. The blocker itself is untouched by this lane and the configuration value stays null."
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-POINT-SCALE-14",
+      "decision": "point_scale = 14.0, defining V3_NEUTRAL_FIELD_POINTS = 14.0 * Unified_Master_Z. Status FIXED_V3_SYNTHETIC_SCALE; identification NOT_EMPIRICALLY_IDENTIFIED. It is an explicit synthetic V3 model convention and must not be described as independently estimated from historical or synthetic outcomes.",
+      "evidence": [
+        "MDR1 instruction section 3.",
+        "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Ensemble Parameters: 'Neutral-field point scale | 14 | Initial points per standard deviation; recalibrate against game margins' \u2014 the mounted artifact records the same number and describes it as provisional, which is consistent with a convention and inconsistent with an estimate."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "V3 neutral-field point scale",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-RANK-ADVISORY-10",
+      "decision": "WEEKLY_RANK_MOVEMENT_ADVISORY_SLOTS = 10, status ADVISORY_ONLY. This is not a state or rating cap: a team may legitimately move more than ten ranking positions if its underlying rating state warrants it. Whenever absolute rank movement between consecutive weekly frozen states exceeds ten slots, emit LARGE_WEEKLY_RANK_MOVE recording team, prior rank, new rank, slot change, underlying point change, performance residual and cap-hit status. Ratings are never reordered or truncated merely to satisfy the advisory.",
+      "evidence": [
+        "MDR1 instruction section 4."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Weekly ranking movement advisory",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-COEFFICIENT-SWEEP",
+      "decision": "The coefficient is NOT declared empirically identified. Status before the sweep is DESIGN_TUNING_REQUIRED; the selection method is a 500_PATH_RESPONSIVENESS_SWEEP against MODEL RESPONSIVENESS, using common random numbers across candidates, run from the frozen post-Week-2 state. The eventual selected status is FIXED_BY_V3_RESPONSIVENESS_DESIGN, never EMPIRICALLY_IDENTIFIED. The sweep must expose at minimum the fourteen declared diagnostics. The preferred reading \u2014 the lowest coefficient producing meaningful weekly responsiveness without pathological oscillation or instability \u2014 is recorded as prose and is not converted into a numeric threshold in this lane.",
+      "evidence": [
+        "MDR1 instruction section 5.",
+        "config/dynamic_weekly_mc_v3/experimental/calibration_regimes.json carries regimes: [] and states the emptiness is deliberate, so no governed or predeclared coefficient universe exists to reuse; three candidate slots are reserved and no values are bound."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Weekly performance residual coefficient",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-GAME-SD-SWEEP",
+      "decision": "game_sd_points is a game-level result dispersion and is separate from rating-state uncertainty: sigma_elo = 68 and any comparable rating-state number is refused as a substitute. The synthetic 2024/2025 generating provenance carries no explicit independent generator game SD, so the Chairman-approved fallback sensitivity grid applies: LOW 16.0 / MIDDLE 20.0 / HIGH 24.0, run under identical common seeds inside the 500-path experiment. Status before the sweep is DESIGN_TUNING_REQUIRED; the eventual selected status is FIXED_BY_V3_SENSITIVITY_DESIGN, never EMPIRICALLY_IDENTIFIED.",
+      "evidence": [
+        "MDR1 instruction section 6.",
+        "Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER CCG-SIGMA_ELO = 68, parameter_name sigma_elo, note 'Rating uncertainty per iteration'.",
+        "Generator search: the synthetic 2024/2025 prior enters only as rating carry-forwards; the 2025 Baxter margin-fit artifact is not mounted; the 20.2 in V2_1_STATIC_CONTROL!Methodology is the 2026 control's own dispersion and is carried as OPEN item ENG-CAL-MARGIN, above its own 16-18 band."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Game-level result dispersion (game_sd_points)",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-RECENT-FORM-RESIDUAL",
+      "decision": "Recent form SHALL exist in V3 and SHALL NOT be defined as wins and losses. It is defined from performance relative to expectation: performance_residual = observed_update_margin - expected_margin, where observed_update_margin carries the approved +/-25 cap. History decays exponentially, weight(k) = lambda ** k with k = 0 the most recent completed game. The experimental lambda candidates are exactly FAST 0.60, MEDIUM 0.75 and SLOW 0.90, and all three enter the 500-path responsiveness sweep. Sustained positive residuals produce persistent positive pressure and sustained negative residuals persistent negative pressure; a win over a much weaker opponent does not automatically create a strongly positive signal, and a narrow loss while massively outperforming expectation does not automatically create a strongly negative one. Eventual selected status FIXED_BY_V3_RESPONSIVENESS_DESIGN, never EMPIRICALLY_IDENTIFIED.",
+      "evidence": [
+        "MDR1 instruction section 7."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Recent-form mechanism",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-PRESEASON-DECAY",
+      "decision": "Preseason-prior weights are frozen at 1.00 opening / W0, then 0.80, 0.60, 0.50, 0.40, 0.30, 0.20 after W1-W6, and 0.15 after W7 and thereafter. The prior never decays to zero during the 2026 season. FIXED_V3_POLICY. The non-prior share is supplied by the evolved in-season state under governed V3 update mechanics, and recent form must not be double-counted where the evolved state already carries the same residual contribution \u2014 this is to be tested explicitly.",
+      "evidence": [
+        "MDR1 instruction section 8."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Preseason prior decay schedule",
+      "supersedes": [
+        "The placeholder prior_decay schedule mounted in config/dynamic_weekly_mc_v3/v3_experimental.json (1.0 / 0.8 / 0.6 / 0.4 / 0.2 / 0.0), which reaches zero after Week 5. The mounted file is left unedited by this lane; the required alignment is recorded in config_alignment_required."
+      ]
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-FIRST-RERATING-W2",
+      "decision": "The existing design is preserved: W1 and W2 begin from the preseason/opening state; an 80% preseason prior exists after W1 for audit/state tracking and 60% after W2; the first fully promoted V3 rerating becomes effective after Week 2. The coefficient x Game-SD x recent-form responsiveness sweep runs from the frozen post-Week-2 state.",
+      "evidence": [
+        "MDR1 instruction section 9."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "First full dynamic rerating",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-DESIGN-MATRIX-500",
+      "decision": "The design specification is coefficient candidates x Game-SD candidates x recent-form lambda {0.60, 0.75, 0.90} x 500 paths, under common random numbers. With three coefficient candidates and three SD candidates this is 3 x 3 x 3 x 500 = 13,500 simulated paths across the design experiment \u2014 an experiment workload, not a single 13,500-path production season run. Every cell consumes the same frozen post-W2 state and the same common seed schedule; simulated outcomes from one candidate cell never feed another cell and never feed the frozen rating state.",
+      "evidence": [
+        "MDR1 instruction section 10."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "500-path design matrix",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-MC-FIREWALL",
+      "decision": "SIMULATED_MC_OUTCOMES_NEVER_UPDATE_THE_GOVERNED_WEEKLY_RATING_STATE. Only realized synthetic weekly results may update the governed team-strength state. The Monte Carlo forecasts forward from a frozen weekly state. Each weekly cycle ingests realized results, updates team states once, freezes the new state and runs a new forward Monte Carlo. Simulation -> rating update -> simulation feedback loops are prevented unless a future separately governed methodology explicitly authorizes them.",
+      "evidence": [
+        "MDR1 instruction section 11."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Monte Carlo feedback firewall",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-FCS-ENTITY",
+      "decision": "FCS_ELO = 1250 is preserved. 1250 is not used directly as V3 football points. The Board I-H inverse mapping is not resurrected and the old .294 / .297 equivalents are not used. No individual unsupported FCS ratings are created. The canonical synthetic universe contains schedule-only FCS entities outside the governed FBS rating population, and one common V3 FCS baseline is used for schedule simulation.",
+      "evidence": [
+        "MDR1 instruction section 12.",
+        "Consistent with the pre-existing ruling R2-FCS-ELO-1250, which this ruling does not reopen."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "FCS entity policy",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-FCS-HFA-3P5",
+      "decision": "GLOBAL_HOME_FIELD_ADVANTAGE_POINTS = 3.5. For all non-neutral governed games the designated home side receives +3.5 points; for neutral games the venue adjustment is 0.0. This applies unchanged when the designated home side is a schedule-only FCS entity. No team-specific FCS home-field modifier is inferred or manufactured. FIXED_V3_GLOBAL_POLICY.",
+      "evidence": [
+        "MDR1 instruction section 13.",
+        "Numerically consistent with ruling R2-HFA-3P5 and with Model_Parameters_v2_5_APPROVED.xlsx!02_PARAMETER_REGISTER SCHED-HFA-BASE = 3.5 (LOCKED, SOURCE-VERIFIED).",
+        "POWER_CRUNCH!Reconciled Master records the FCS home_field_advantage_modifier as the sentinel UNRESOLVED, so there is nothing to infer even if inference were permitted."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Global home-field advantage, including FCS home sides",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-FCS-ADAPTER",
+      "decision": "The approved V3 adapter method is FCS_ELO_Z = (1250 - mean(FBS_2026_ELO)) / sd(FBS_2026_ELO), then FCS_V3_NEUTRAL_POINTS = 14.0 * FCS_ELO_Z, computed over the exact governed/current 2026 FBS Elo population consumed by the relevant current V3 model state, with the population SD convention explicitly recorded. The population may not be obtained from Board I-H partial-axis inversion, historical 2025 Elo, real-world NCAA data, a fabricated Elo bridge, or a pytest fixture. No such governed 2026 FBS Elo vector exists in the mounted corpus, so the numeric adapter candidate is not frozen and the status is FCS_ADAPTER_INPUT_ELO_VECTOR_MISSING. This missing calculation does not invalidate any other ruling in this round.",
+      "evidence": [
+        "MDR1 instruction section 14.",
+        "2026_CFB_2026_Preseason_Unified_Power_Ratings.xlsx!Master Ratings carries 78 columns across 121 FBS teams and no Elo column.",
+        "POWER_CRUNCH_2026_Team_Reconciled_Master_134_v2_2.xlsx!Build Manifest: 'primary_elo = 999.986237 * board_power_H + 1099.999878'; the same workbook records rating_authority BOARD_I-H and model_use_authorized = FALSE.",
+        "Model_Parameters_v2_5_APPROVED.xlsx!20_CANON_MANIFEST_INGEST records 2025_Preseason_Elo_CARRY_v1.xlsx as REFERENCE (UNRATIFIED) / REJECT FOR CURRENT USE with no current forward-prior authority."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "FCS Elo -> V3 point adapter method",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-FCS-WEEKLY-RESULT",
+      "decision": "The FCS baseline itself stays fixed unless later governance changes it. An FBS team's realized game against an FCS opponent IS a legitimate synthetic-2026 observation for that FBS team's next weekly update: expected FBS margin vs realized FBS-perspective margin -> performance residual -> normal governed FBS update, subject to the +/-25 update-driving margin cap. The schedule-only FCS entity does not become a full evolving FBS rating-state member.",
+      "evidence": [
+        "MDR1 instruction section 15."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "FCS weekly result treatment",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-SAMPLE-REGULARIZATION-EXTERNAL",
+      "decision": "Agent 3 is not overridden. Its synthetic-domain experiment may provide an experimental fit result, which is preserved as SYNTHETIC_FIT_RESULT if properly identified. If it returns boundary or unidentified instability, that status is preserved rather than a winner being manufactured. This ruling round decides nothing about sample_size_regularization.",
+      "evidence": [
+        "MDR1 instruction section 16."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Sample-size regularization authority",
+      "supersedes": []
+    },
+    {
+      "chairman_ruling_id": null,
+      "convergence_id": "MDR1-WEEKLY-LOOP",
+      "decision": "The intended weekly operation is recorded as an ordered bootstrap sequence through the frozen post-W2 state, the design sweep, parameter binding and the remaining-season Monte Carlo, followed from Week 3 onward by the steady-state sequence: ingest realized results, verify completeness and identities, compute capped update margins, compute performance residuals, update the evolved strength state, update recent-form history, apply prior decay, emit >10-slot advisories, freeze the Week-N state, run the governed remaining-season Monte Carlo, validate, freeze the weekly report, and await the next realized results.",
+      "evidence": [
+        "MDR1 instruction section 18."
+      ],
+      "instruction": "OPERATION SYTHALAX \u2014 V3 CHAIRMAN MODEL-DESIGN RULINGS R1",
+      "provenance": "FACT",
+      "resolution_reason": "DIRECT_CHAIRMAN_AUTHORITY",
+      "retires": [],
+      "subject": "Weekly operating loop",
+      "supersedes": []
+    }
+  ],
+  "sample_size_regularization": {
+    "authority": "AGENT_3_SYNTHETIC_DOMAIN_EXPERIMENT",
+    "decided_by_this_ruling": false,
+    "overwrite_permitted": false,
+    "result_class_if_identified": "SYNTHETIC_FIT_RESULT",
+    "result_class_if_unstable": "BOUNDARY_OR_UNIDENTIFIED"
+  },
+  "scope": "MODEL_DESIGN_AUTHORITY_AND_DETERMINISTIC_SWEEP_SPECIFICATION_ONLY",
+  "supersession": {
+    "per_ruling_supersessions": [
+      {
+        "ruling": "MDR1-BLOWOUT-CAP-25",
+        "supersedes": [
+          "Any treatment of calibration.blowout_treatment as an open fitting question for the purpose of V3 production design. The blocker itself is untouched by this lane and the configuration value stays null."
+        ]
+      },
+      {
+        "ruling": "MDR1-PRESEASON-DECAY",
+        "supersedes": [
+          "The placeholder prior_decay schedule mounted in config/dynamic_weekly_mc_v3/v3_experimental.json (1.0 / 0.8 / 0.6 / 0.4 / 0.2 / 0.0), which reaches zero after Week 5. The mounted file is left unedited by this lane; the required alignment is recorded in config_alignment_required."
+        ]
+      }
+    ],
+    "rule": "These rulings are later, direct model-design authority. Where an earlier experiment or placeholder disagrees, the earlier record is preserved unedited as a diagnostic witness and this ruling governs production V3 design. An earlier experimental result never silently overwrites a later direct ruling.",
+    "superseded_records_are_preserved_unedited": true,
+    "supersedes_artifacts": []
+  },
+  "weekly_loop": {
+    "bootstrap": [
+      "PRESEASON_STATE",
+      "W1_REALIZED_RESULTS",
+      "UPDATE_STATE_PRIOR_80_PCT",
+      "W2_REALIZED_RESULTS",
+      "UPDATE_STATE_PRIOR_60_PCT",
+      "FREEZE_POST_W2_STATE",
+      "RUN_500_PATH_DESIGN_SWEEP",
+      "SELECT_AND_BIND_COEFFICIENT_GAME_SD_RECENT_FORM_LAMBDA",
+      "FREEZE_V3_DYNAMIC_PARAMETER_PACKAGE",
+      "RUN_REMAINING_SEASON_MC"
+    ],
+    "steady_state": [
+      "INGEST_REALIZED_WEEK_N_RESULTS",
+      "VERIFY_COMPLETENESS_AND_IDENTITIES",
+      "COMPUTE_CAPPED_UPDATE_MARGINS",
+      "COMPUTE_PERFORMANCE_RESIDUALS",
+      "UPDATE_EVOLVED_STRENGTH_STATE",
+      "UPDATE_RECENT_FORM_HISTORY",
+      "APPLY_PRIOR_DECAY_POLICY",
+      "EMIT_LARGE_WEEKLY_RANK_MOVE_ADVISORIES",
+      "FREEZE_WEEK_N_STATE",
+      "RUN_GOVERNED_REMAINING_SEASON_MONTE_CARLO",
+      "VALIDATE",
+      "FREEZE_WEEKLY_REPORT",
+      "AWAIT_NEXT_REALIZED_RESULTS"
+    ],
+    "steady_state_first_week": 3
+  }
+}

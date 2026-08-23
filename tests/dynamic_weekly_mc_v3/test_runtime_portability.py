@@ -62,6 +62,7 @@ GOVERNED_TEXT_ARTIFACTS = (
     "reference/dynamic_weekly_mc_v3/V3_CALIBRATION_DATA_CONTRACT.json",
     "reference/dynamic_weekly_mc_v3/V3_BOARD_IK_CUSTODY.json",
     "reference/dynamic_weekly_mc_v3/V3_BUILD_MANIFEST.json",
+    "reference/dynamic_weekly_mc_v3/V3_CHAIRMAN_MODEL_DESIGN_RULINGS_R1.json",
 )
 
 
